@@ -25,8 +25,10 @@ Sitio de marca personal de **Irene**, Licenciada en Psicopedagogía y docente du
 ### Cambiar la foto principal
 Reemplazá `assets/img/irene.jpg` (retrato vertical, ideal 1200×1800 px aprox.).
 
-### Agregar la foto del aula (sección "Sobre mí")
-Subí `assets/img/irene-aula.jpg`. Mientras no exista, se muestra un placeholder elegante.
+### Cambiar las fotos del espacio (sección "Sobre mí")
+- `assets/img/consultorio.jpg` → foto principal del consultorio.
+- `assets/img/espacio-aula.jpg` → foto chica superpuesta (mesa de trabajo).
+- `assets/img/marca/` → material de marca original (cartel y logo), guardado como referencia.
 
 ### Publicar un testimonio real
 En `index.html`, buscá la sección `TESTIMONIOS` y reemplazá el texto del
