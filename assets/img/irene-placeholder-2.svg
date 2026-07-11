@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 960" role="img" aria-label="Espacio reservado para una fotografía de Irene en el aula">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4f3fb"/>
+      <stop offset=".55" stop-color="#ecf7f5"/>
+      <stop offset="1" stop-color="#bfe5e0"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="960" fill="url(#bg2)"/>
+
+  <!-- Libro abierto minimalista -->
+  <g fill="none" stroke="#1c8082" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" opacity=".4">
+    <path d="M400 330c-60-52-140-70-230-70v340c90 0 170 18 230 70 60-52 140-70 230-70V260c-90 0-170 18-230 70z"/>
+    <path d="M400 330v340"/>
+  </g>
+  <g fill="none" stroke="#8a87be" stroke-width="10" stroke-linecap="round" opacity=".45">
+    <path d="M240 350h90M240 410h70"/>
+    <path d="M470 350h90M470 410h70"/>
+  </g>
+
+  <text x="400" y="840" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="38" fill="#575387" opacity=".65">Foto del aula · próximamente</text>
+</svg>

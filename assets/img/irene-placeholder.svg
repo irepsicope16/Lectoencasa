@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1100" role="img" aria-label="Espacio reservado para la fotografía de Irene">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ecf7f5"/>
+      <stop offset=".55" stop-color="#f4f3fb"/>
+      <stop offset="1" stop-color="#ddDCf0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx=".7" cy=".25" r=".8">
+      <stop offset="0" stop-color="#bfe5e0" stop-opacity=".8"/>
+      <stop offset="1" stop-color="#bfe5e0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="900" height="1100" fill="url(#bg)"/>
+  <rect width="900" height="1100" fill="url(#glow)"/>
+
+  <!-- Silueta abstracta y serena -->
+  <g fill="#a8a5d5" opacity=".35">
+    <circle cx="450" cy="420" r="150"/>
+    <path d="M450 590c-190 0-310 130-330 330-4 40 20 60 55 60h550c35 0 59-20 55-60-20-200-140-330-330-330z"/>
+  </g>
+  <g fill="#8a87be" opacity=".18">
+    <circle cx="450" cy="410" r="118"/>
+  </g>
+
+  <!-- Marca -->
+  <text x="450" y="1000" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="42" fill="#575387" opacity=".65">Foto de Ire · próximamente</text>
+</svg>
