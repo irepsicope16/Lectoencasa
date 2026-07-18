@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { LogOut, Moon, Search, Settings, Sun } from 'lucide-react'
+import { LogOut, Menu, Moon, Search, Settings, Sun } from 'lucide-react'
 import type { UserRole } from '@/types'
 import { useAuthStore } from '@/stores/authStore'
 import { useUIStore } from '@/stores/uiStore'
@@ -20,12 +20,22 @@ export function Navbar({ role }: { role: UserRole }) {
   const theme = useUIStore((s) => s.theme)
   const setTheme = useUIStore((s) => s.setTheme)
   const setCommandOpen = useUIStore((s) => s.setCommandOpen)
+  const setMobileNavOpen = useUIStore((s) => s.setMobileNavOpen)
   const navigate = useNavigate()
 
   const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
   return (
     <header className="flex h-14 shrink-0 items-center justify-between gap-3 border-b bg-surface px-4 lg:px-6">
+      {/* menú móvil */}
+      <button
+        onClick={() => setMobileNavOpen(true)}
+        className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground lg:hidden"
+        aria-label="Abrir menú"
+      >
+        <Menu className="h-4 w-4" />
+      </button>
+
       {/* buscador */}
       <button
         onClick={() => setCommandOpen(true)}

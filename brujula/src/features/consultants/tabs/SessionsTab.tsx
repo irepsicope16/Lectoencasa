@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { EmptyState } from '@/components/shared'
+import { toast } from '@/components/ui/toast'
 import { useCreate, useSessions, useUpdate } from '@/hooks/queries'
 import { fechaHora, nombreCompleto } from '@/lib/utils'
 import { MODULES } from '@/data/modules'
@@ -89,6 +90,7 @@ export function SessionsTab({ consultant }: { consultant: Consultant }) {
     }
     if (editing) await updateSession.mutateAsync({ id: editing.id, patch: payload })
     else await createSession.mutateAsync(payload)
+    toast.success(editing ? 'Sesión actualizada' : 'Sesión registrada')
     setOpen(false)
   }
 

@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Label, NativeSelect } from '@/components/ui/input'
 import { EmptyState } from '@/components/shared'
 import { useCreate, useFiles, useRemove } from '@/hooks/queries'
+import { downloadStoredFile } from '@/lib/files'
+import { toast } from '@/components/ui/toast'
 import { fechaCorta, formatBytes } from '@/lib/utils'
 import { MODULES, MODULE_MAP } from '@/data/modules'
 import type { Consultant, ModuleId, StoredFile } from '@/types'
@@ -64,14 +66,7 @@ export function FilesTab({ consultant }: { consultant: Consultant }) {
       dataUrl,
       subidoPor: 'profesional',
     })
-  }
-
-  const download = (f: StoredFile) => {
-    if (!f.dataUrl) return
-    const a = document.createElement('a')
-    a.href = f.dataUrl
-    a.download = f.nombre
-    a.click()
+    toast.success(`«${file.name}» subido`)
   }
 
   return (
@@ -115,7 +110,7 @@ export function FilesTab({ consultant }: { consultant: Consultant }) {
               </div>
               {f.moduleId && <Badge variant="outline">{MODULE_MAP[f.moduleId].nombre}</Badge>}
               {f.dataUrl ? (
-                <Button variant="ghost" size="iconSm" onClick={() => download(f)} aria-label="Descargar">
+                <Button variant="ghost" size="iconSm" onClick={() => downloadStoredFile(f)} aria-label="Descargar">
                   <Download />
                 </Button>
               ) : (

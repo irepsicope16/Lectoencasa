@@ -37,6 +37,38 @@ export const db = {
   clearAll: () => driver.clearAll(),
 }
 
+/**
+ * Borrado en cascada: elimina al consultante y TODO su rastro
+ * (sesiones, actividades, progreso, archivos, snapshots, cuenta de acceso…).
+ * Equivalente local del ON DELETE CASCADE del esquema Supabase objetivo.
+ */
+export async function deleteConsultantCascade(consultantId: string): Promise<void> {
+  const collections = [
+    db.sessions,
+    db.observations,
+    db.moduleProgress,
+    db.activities,
+    db.videos,
+    db.files,
+    db.reflections,
+    db.evaluations,
+    db.snapshots,
+    db.events,
+    db.log,
+  ] as const
+  for (const repo of collections) {
+    const rows = (await repo.list()) as { id: string; consultantId?: string }[]
+    for (const row of rows) {
+      if (row.consultantId === consultantId) await repo.remove(row.id)
+    }
+  }
+  const users = await db.users.list()
+  for (const u of users) {
+    if (u.consultantId === consultantId) await db.users.remove(u.id)
+  }
+  await db.consultants.remove(consultantId)
+}
+
 export async function logActivity(
   entry: Omit<ActivityLogEntry, 'id' | 'createdAt' | 'updatedAt' | 'fecha'> & { fecha?: string },
 ) {

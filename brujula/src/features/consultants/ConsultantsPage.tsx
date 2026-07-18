@@ -13,6 +13,8 @@ import { overallProgress } from '@/lib/progress'
 import { CONSULTANT_STATUS } from '@/lib/constants'
 import { useAuthStore } from '@/stores/authStore'
 import type { Consultant } from '@/types'
+import { toast } from '@/components/ui/toast'
+import { ensureConsultantAccount } from '@/features/auth/accounts'
 import { ConsultantFormDialog } from './ConsultantForm'
 
 export default function ConsultantsPage() {
@@ -138,7 +140,13 @@ export default function ConsultantsPage() {
         open={open}
         onOpenChange={setOpen}
         onSubmit={async (data) => {
-          await createConsultant.mutateAsync({ ...data, profesionalId: user?.id ?? '' })
+          const created = await createConsultant.mutateAsync({ ...data, profesionalId: user?.id ?? '' })
+          const cuenta = await ensureConsultantAccount(created)
+          if (cuenta) {
+            toast.success(`Ficha creada · acceso: ${cuenta.email} / clave «${cuenta.password}»`)
+          } else {
+            toast.success('Ficha creada correctamente')
+          }
         }}
       />
     </FadeIn>

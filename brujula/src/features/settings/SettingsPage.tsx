@@ -1,5 +1,7 @@
-import { useState } from 'react'
-import { Database, Moon, Paintbrush, RefreshCcw, Sparkles, Sun } from 'lucide-react'
+import { useRef, useState } from 'react'
+import { Database, Download, Moon, Paintbrush, RefreshCcw, Sparkles, Sun, Upload } from 'lucide-react'
+import { exportBackup, importBackup } from '@/services/storage/backup'
+import { toast } from '@/components/ui/toast'
 import { FadeIn, PageHeader } from '@/components/shared'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -27,6 +29,7 @@ export default function SettingsPage() {
   const [ai, setAi] = useState(getAISettings())
   const [saved, setSaved] = useState(false)
   const [resetOpen, setResetOpen] = useState(false)
+  const importRef = useRef<HTMLInputElement>(null)
 
   return (
     <FadeIn>
@@ -141,9 +144,39 @@ export default function SettingsPage() {
               cualquier dispositivo.
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Button variant="outline" size="sm" onClick={() => setResetOpen(true)}>
-              <RefreshCcw /> Restablecer datos de demostración
+          <CardContent className="flex flex-wrap items-center gap-2">
+            <Button
+              size="sm"
+              onClick={async () => {
+                await exportBackup()
+                toast.success('Copia de seguridad descargada')
+              }}
+            >
+              <Download /> Exportar copia de seguridad
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => importRef.current?.click()}>
+              <Upload /> Importar copia
+            </Button>
+            <input
+              ref={importRef}
+              type="file"
+              accept="application/json"
+              className="hidden"
+              onChange={async (e) => {
+                const file = e.target.files?.[0]
+                e.target.value = ''
+                if (!file) return
+                const res = await importBackup(file)
+                if (res.ok) {
+                  await qc.invalidateQueries()
+                  toast.success('Copia importada correctamente')
+                } else {
+                  toast.error(res.error ?? 'No se pudo importar la copia')
+                }
+              }}
+            />
+            <Button variant="ghost" size="sm" onClick={() => setResetOpen(true)}>
+              <RefreshCcw /> Restablecer datos demo
             </Button>
           </CardContent>
         </Card>

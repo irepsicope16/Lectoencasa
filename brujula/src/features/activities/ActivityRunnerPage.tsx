@@ -7,7 +7,9 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/input'
-import { useActivities, useUpdate } from '@/hooks/queries'
+import { toast } from '@/components/ui/toast'
+import { useActivities, useCreate, useModuleProgress, useUpdate } from '@/hooks/queries'
+import type { ModuleProgress } from '@/types'
 import { useAuthStore } from '@/stores/authStore'
 import { MODULE_MAP } from '@/data/modules'
 import { cn } from '@/lib/utils'
@@ -18,6 +20,9 @@ export default function ActivityRunnerPage() {
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
   const { data: activities = [] } = useActivities()
+  const { data: progress = [] } = useModuleProgress()
+  const createProgress = useCreate<ModuleProgress>('moduleProgress')
+  const updateProgress = useUpdate<ModuleProgress>('moduleProgress')
   const activity = activities.find((a) => a.id === id)
 
   const updateActivity = useUpdate<Activity>('activities', (a) =>
@@ -62,6 +67,26 @@ export default function ActivityRunnerPage() {
       .map((q) => ({ questionId: q.id, texto: values[q.id].trim(), fecha: new Date().toISOString() }))
 
   const save = async (complete: boolean) => {
+    // Automatización: empezar a responder pone el módulo «en progreso» automáticamente.
+    const mp = progress.find(
+      (p) => p.consultantId === activity.consultantId && p.moduleId === activity.moduleId,
+    )
+    if (!mp) {
+      await createProgress.mutateAsync({
+        consultantId: activity.consultantId,
+        moduleId: activity.moduleId,
+        estado: 'en_progreso',
+        notasProfesionales: '',
+        notasConsultante: '',
+        fechaInicio: new Date().toISOString(),
+      })
+    } else if (mp.estado === 'no_iniciado') {
+      await updateProgress.mutateAsync({
+        id: mp.id,
+        patch: { estado: 'en_progreso', fechaInicio: mp.fechaInicio ?? new Date().toISOString() },
+      })
+    }
+
     await updateActivity.mutateAsync({
       id: activity.id,
       patch: {
@@ -70,8 +95,10 @@ export default function ActivityRunnerPage() {
         fechaCompletada: complete ? new Date().toISOString() : undefined,
       },
     })
-    if (complete) navigate('/mi/actividades')
-    else {
+    if (complete) {
+      toast.success('¡Actividad entregada! Tu profesional la va a revisar.')
+      navigate('/mi/actividades')
+    } else {
       setSaved(true)
       setTimeout(() => setSaved(false), 1500)
     }

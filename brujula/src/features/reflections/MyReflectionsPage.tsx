@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { toast } from '@/components/ui/toast'
 import { useCreate, useReflections } from '@/hooks/queries'
 import { useAuthStore } from '@/stores/authStore'
 import { MODULES, MODULE_MAP } from '@/data/modules'
@@ -153,6 +154,7 @@ export default function MyReflectionsPage() {
                 })
                 setForm({ titulo: '', contenido: '', moduleId: '', animo: '' })
                 setOpen(false)
+                toast.success('Reflexión guardada en tu bitácora')
               }}
             >
               Guardar reflexión

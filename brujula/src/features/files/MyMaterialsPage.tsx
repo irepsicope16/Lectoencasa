@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button'
 import { useFiles } from '@/hooks/queries'
 import { useAuthStore } from '@/stores/authStore'
 import { MODULE_MAP } from '@/data/modules'
+import { downloadStoredFile } from '@/lib/files'
 import { fechaCorta, formatBytes } from '@/lib/utils'
-import type { StoredFile } from '@/types'
 
 export default function MyMaterialsPage() {
   const user = useAuthStore((s) => s.user)
@@ -17,14 +17,6 @@ export default function MyMaterialsPage() {
   const visible = files
     .filter((f) => f.consultantId === consultantId || !f.consultantId)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
-
-  const download = (f: StoredFile) => {
-    if (!f.dataUrl) return
-    const a = document.createElement('a')
-    a.href = f.dataUrl
-    a.download = f.nombre
-    a.click()
-  }
 
   return (
     <FadeIn>
@@ -53,7 +45,7 @@ export default function MyMaterialsPage() {
               {!f.consultantId && <Badge variant="lavanda">General</Badge>}
               {f.moduleId && <Badge variant="outline">{MODULE_MAP[f.moduleId].nombre}</Badge>}
               {f.dataUrl ? (
-                <Button variant="outline" size="sm" onClick={() => download(f)}>
+                <Button variant="outline" size="sm" onClick={() => downloadStoredFile(f)}>
                   <Download /> Descargar
                 </Button>
               ) : (

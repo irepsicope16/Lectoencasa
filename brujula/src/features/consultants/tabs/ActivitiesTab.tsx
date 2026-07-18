@@ -12,11 +12,12 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { EmptyState } from '@/components/shared'
+import { toast } from '@/components/ui/toast'
 import { useActivities, useCreate, useUpdate, useVideos } from '@/hooks/queries'
 import { fechaCorta, nombreCompleto } from '@/lib/utils'
 import { MODULES, MODULE_MAP } from '@/data/modules'
 import { ACTIVITY_STATUS } from '@/lib/constants'
-import type { Activity, AssignedVideo, Consultant, ModuleId } from '@/types'
+import type { Activity, AssignedVideo, CalendarEvent, Consultant, ModuleId } from '@/types'
 
 const statusTone: Record<Activity['estado'], 'gris' | 'lavanda' | 'aqua' | 'amber'> = {
   pendiente: 'amber',
@@ -36,6 +37,7 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
   }))
   const updateActivity = useUpdate<Activity>('activities')
   const createVideo = useCreate<AssignedVideo>('videos')
+  const createEvent = useCreate<CalendarEvent>('events')
 
   const [assignOpen, setAssignOpen] = useState(false)
   const [videoOpen, setVideoOpen] = useState(false)
@@ -55,6 +57,9 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
   const templates = useMemo(() => MODULE_MAP[modId].actividades, [modId])
 
   const assign = async () => {
+    const tituloAsignado = templateId
+      ? templates.find((t) => t.id === templateId)!.titulo
+      : custom.titulo.trim()
     if (templateId) {
       const tpl = templates.find((t) => t.id === templateId)!
       await createActivity.mutateAsync({
@@ -88,6 +93,21 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
         fechaLimite: custom.fechaLimite || undefined,
       })
     }
+    // Automatización: la fecha límite genera una tarea en la agenda del profesional.
+    if (custom.fechaLimite) {
+      await createEvent.mutateAsync({
+        titulo: `Vence «${tituloAsignado}» de ${nombreCompleto(consultant)}`,
+        tipo: 'tarea',
+        fecha: new Date(`${custom.fechaLimite}T09:00:00`).toISOString(),
+        consultantId: consultant.id,
+        completado: false,
+      })
+    }
+    toast.success(
+      custom.fechaLimite
+        ? 'Actividad asignada · se agendó el vencimiento como tarea'
+        : 'Actividad asignada',
+    )
     setAssignOpen(false)
     setTemplateId('')
     setCustom({ titulo: '', descripcion: '', preguntas: '', fechaLimite: '' })
@@ -318,6 +338,7 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
               disabled={!videoForm.titulo.trim() || !videoForm.url.trim()}
               onClick={async () => {
                 await createVideo.mutateAsync({ consultantId: consultant.id, ...videoForm, visto: false })
+                toast.success('Video asignado')
                 setVideoOpen(false)
                 setVideoForm({ moduleId: 'historia', titulo: '', url: '', descripcion: '' })
               }}

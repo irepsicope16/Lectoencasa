@@ -1,6 +1,10 @@
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Camera, X } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { imageToAvatarDataUrl } from '@/lib/files'
 import { Button } from '@/components/ui/button'
 import { FieldError, Input, Label, NativeSelect, Textarea } from '@/components/ui/input'
 import {
@@ -27,7 +31,7 @@ const schema = z.object({
   estado: z.enum(['entrevista_inicial', 'en_proceso', 'en_pausa', 'finalizado']),
 })
 
-export type ConsultantFormData = z.infer<typeof schema>
+export type ConsultantFormData = z.infer<typeof schema> & { fotoUrl?: string }
 
 export function ConsultantFormDialog({
   open,
@@ -40,6 +44,11 @@ export function ConsultantFormDialog({
   initial?: Consultant
   onSubmit: (data: ConsultantFormData) => Promise<void>
 }) {
+  const fotoInputRef = useRef<HTMLInputElement>(null)
+  const [fotoUrl, setFotoUrl] = useState<string | undefined>(initial?.fotoUrl)
+  useEffect(() => {
+    if (open) setFotoUrl(initial?.fotoUrl)
+  }, [open, initial?.fotoUrl])
   const {
     register,
     handleSubmit,
@@ -75,7 +84,7 @@ export function ConsultantFormDialog({
   })
 
   const submit = async (data: ConsultantFormData) => {
-    await onSubmit(data)
+    await onSubmit({ ...data, fotoUrl })
     reset()
     onOpenChange(false)
   }
@@ -92,6 +101,35 @@ export function ConsultantFormDialog({
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(submit)} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="flex items-center gap-4 sm:col-span-2">
+            <Avatar className="h-16 w-16">
+              {fotoUrl && <AvatarImage src={fotoUrl} alt="" />}
+              <AvatarFallback className="text-lg">
+                <Camera className="h-5 w-5 text-faint" />
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex items-center gap-2">
+              <Button type="button" variant="outline" size="sm" onClick={() => fotoInputRef.current?.click()}>
+                <Camera /> {fotoUrl ? 'Cambiar foto' : 'Subir foto'}
+              </Button>
+              {fotoUrl && (
+                <Button type="button" variant="ghost" size="sm" onClick={() => setFotoUrl(undefined)}>
+                  <X /> Quitar
+                </Button>
+              )}
+              <input
+                ref={fotoInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0]
+                  e.target.value = ''
+                  if (file) setFotoUrl(await imageToAvatarDataUrl(file))
+                }}
+              />
+            </div>
+          </div>
           <div>
             <Label>Nombre</Label>
             <Input {...register('nombre')} placeholder="Nombre" />

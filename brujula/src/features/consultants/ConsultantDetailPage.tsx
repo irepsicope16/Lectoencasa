@@ -14,7 +14,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { useConsultant, useModuleProgress, useRemove, useUpdate } from '@/hooks/queries'
+import { useQueryClient } from '@tanstack/react-query'
+import { useConsultant, useModuleProgress, useUpdate } from '@/hooks/queries'
+import { deleteConsultantCascade } from '@/services/storage/db'
+import { toast } from '@/components/ui/toast'
 import { edad, fechaCorta, iniciales, nombreCompleto } from '@/lib/utils'
 import { overallProgress } from '@/lib/progress'
 import { CONSULTANT_STATUS } from '@/lib/constants'
@@ -37,7 +40,7 @@ export default function ConsultantDetailPage() {
   const { data: consultant, isLoading } = useConsultant(id)
   const { data: progress = [] } = useModuleProgress()
   const updateConsultant = useUpdate<Consultant>('consultants')
-  const removeConsultant = useRemove('consultants')
+  const qc = useQueryClient()
   const [editOpen, setEditOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
 
@@ -148,6 +151,7 @@ export default function ConsultantDetailPage() {
         initial={consultant}
         onSubmit={async (data) => {
           await updateConsultant.mutateAsync({ id: consultant.id, patch: data })
+          toast.success('Ficha actualizada')
         }}
       />
 
@@ -156,7 +160,8 @@ export default function ConsultantDetailPage() {
           <DialogHeader>
             <DialogTitle>Eliminar consultante</DialogTitle>
             <DialogDescription>
-              Se eliminará la ficha de {nombreCompleto(consultant)}. Esta acción no puede deshacerse.
+              Se eliminará la ficha de {nombreCompleto(consultant)} junto con todas sus sesiones,
+              actividades, evaluaciones, archivos y su cuenta de acceso. Esta acción no puede deshacerse.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -166,7 +171,9 @@ export default function ConsultantDetailPage() {
             <Button
               variant="danger"
               onClick={async () => {
-                await removeConsultant.mutateAsync(consultant.id)
+                await deleteConsultantCascade(consultant.id)
+                await qc.invalidateQueries()
+                toast.info(`Se eliminó la ficha de ${nombreCompleto(consultant)}`)
                 navigate('/pro/consultantes')
               }}
             >

@@ -1,4 +1,6 @@
-import { CheckCircle2, Sparkles } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { CheckCircle2, FileText, Sparkles } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { FadeIn, PageHeader, ProgressRing } from '@/components/shared'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -39,7 +41,17 @@ export default function MyProgressPage() {
 
   return (
     <FadeIn>
-      <PageHeader title="Mis avances" subtitle="Todo lo que ya recorriste. Cada paso cuenta." />
+      <PageHeader
+        title="Mis avances"
+        subtitle="Todo lo que ya recorriste. Cada paso cuenta."
+        actions={
+          <Button variant="outline" size="sm" asChild>
+            <Link to={`/print/${consultantId}/consultante`}>
+              <FileText /> Mi resumen en PDF
+            </Link>
+          </Button>
+        }
+      />
 
       <div className="mb-5 grid gap-3 sm:grid-cols-4">
         <div className="flex items-center gap-4 rounded-xl border bg-surface p-4 sm:col-span-1">

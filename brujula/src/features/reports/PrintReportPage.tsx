@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { ArrowLeft, Printer } from 'lucide-react'
+import { useAuthStore } from '@/stores/authStore'
 import { Button } from '@/components/ui/button'
 import { Isotipo } from '@/branding/Logo'
 import {
@@ -27,6 +28,7 @@ const TITULOS: Record<string, string> = {
 
 export default function PrintReportPage() {
   const { consultantId, tipo = 'profesional' } = useParams<{ consultantId: string; tipo: string }>()
+  const user = useAuthStore((s) => s.user)
   const { data: consultant } = useConsultant(consultantId)
   const { data: activities = [] } = useActivities()
   const { data: evaluations = [] } = useEvaluations()
@@ -48,7 +50,15 @@ export default function PrintReportPage() {
     })
   }, [consultant, activities, evaluations, reflections, observations, sessions, progress])
 
+  // Autorización fina: el consultante solo ve SU resumen (y su carta); el resto es del profesional.
+  const esConsultante = user?.role === 'consultante'
+  if (esConsultante && (user?.consultantId !== consultantId || !['consultante', 'carta'].includes(tipo))) {
+    return <Navigate to="/mi" replace />
+  }
+
   if (!consultant || !snap) return null
+
+  const volverA = esConsultante ? '/mi/avances' : `/pro/consultantes/${consultant.id}`
 
   const pct = overallProgress(progress, consultant.id)
   const sesionesRealizadas = sessions.filter((s) => s.consultantId === consultant.id && s.estado === 'realizada')
@@ -70,8 +80,8 @@ export default function PrintReportPage() {
       {/* barra de acciones (no se imprime) */}
       <div className="no-print sticky top-0 z-10 flex items-center justify-between border-b bg-surface px-6 py-3">
         <Button variant="ghost" size="sm" asChild>
-          <Link to={`/pro/consultantes/${consultant.id}`}>
-            <ArrowLeft /> Volver a la ficha
+          <Link to={volverA}>
+            <ArrowLeft /> {esConsultante ? 'Volver a mis avances' : 'Volver a la ficha'}
           </Link>
         </Button>
         <p className="text-[12.5px] text-muted-foreground">

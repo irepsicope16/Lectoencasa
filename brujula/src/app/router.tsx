@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { createHashRouter } from 'react-router-dom'
-import { RedirectByRole, RequireRole } from '@/features/auth/guards'
+import { RedirectByRole, RequireAuth, RequireRole } from '@/features/auth/guards'
 import { AppShell } from '@/components/layout/AppShell'
 
 // Hash router: funciona en hosting estático (GitHub Pages) sin config de servidor.
@@ -59,9 +59,13 @@ export const router = createHashRouter([
           { path: 'ajustes', element: <Page><SettingsPage /></Page> },
         ],
       },
-      // Vista de impresión (sin shell) — solo profesional
-      { path: '/print/:consultantId/:tipo', element: <Page><PrintReportPage /></Page> },
     ],
+  },
+  {
+    // Vista de impresión (sin shell): profesional para todos los informes;
+    // el consultante solo accede a los suyos (la página valida propiedad).
+    element: <RequireAuth />,
+    children: [{ path: '/print/:consultantId/:tipo', element: <Page><PrintReportPage /></Page> }],
   },
   {
     element: <RequireRole role="consultante" />,

@@ -12,5 +12,15 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 1200,
+    rollupOptions: {
+      output: {
+        // vendor split: reduce el payload inicial y mejora el cacheo entre deploys
+        manualChunks: {
+          react: ['react', 'react-dom', 'react-router-dom'],
+          motion: ['framer-motion'],
+          data: ['@tanstack/react-query', 'zustand', 'zod', 'date-fns'],
+        },
+      },
+    },
   },
 })

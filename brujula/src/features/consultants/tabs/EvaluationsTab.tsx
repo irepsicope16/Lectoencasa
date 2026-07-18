@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { EmptyState } from '@/components/shared'
+import { toast } from '@/components/ui/toast'
 import { useCreate, useEvaluations } from '@/hooks/queries'
 import { fechaCorta } from '@/lib/utils'
 import { DIMENSION_LABELS } from '@/lib/constants'
@@ -65,6 +66,7 @@ export function EvaluationsTab({ consultant }: { consultant: Consultant }) {
       items: finalItems,
       conclusiones,
     })
+    toast.success('Evaluación guardada')
     setOpen(false)
     setTitulo('')
     setConclusiones('')

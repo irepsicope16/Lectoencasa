@@ -1,17 +1,20 @@
 import { useState } from 'react'
-import { Copy, Sparkles } from 'lucide-react'
+import { BookmarkPlus, Copy, Sparkles } from 'lucide-react'
+import { toast } from '@/components/ui/toast'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/input'
 import {
   useActivities,
+  useCreate,
   useEvaluations,
   useModuleProgress,
   useObservations,
   useReflections,
   useSessions,
 } from '@/hooks/queries'
+import type { Observation } from '@/types'
 import { AI_TASK_LABELS, getAIProvider, getAISettings, type AITask } from '@/services/ai'
 import { fechaHora } from '@/lib/utils'
 import type { AIDraft, Consultant } from '@/types'
@@ -30,6 +33,18 @@ export function AITab({ consultant }: { consultant: Consultant }) {
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
   const settings = getAISettings()
+  const createObs = useCreate<Observation>('observations')
+
+  const saveToRecord = async () => {
+    if (!draft) return
+    await createObs.mutateAsync({
+      consultantId: consultant.id,
+      fecha: new Date().toISOString(),
+      tipo: 'proceso',
+      texto: `[Borrador IA · ${draft.titulo}]\n\n${draft.contenido}`,
+    })
+    toast.success('Borrador guardado como observación en el Resumen')
+  }
 
   const run = async (task: AITask) => {
     setRunning(task)
@@ -107,6 +122,9 @@ export function AITab({ consultant }: { consultant: Consultant }) {
                 }}
               >
                 <Copy /> {copied ? 'Copiado' : 'Copiar'}
+              </Button>
+              <Button variant="soft" size="sm" onClick={saveToRecord}>
+                <BookmarkPlus /> Guardar en la ficha
               </Button>
             </div>
           )}
