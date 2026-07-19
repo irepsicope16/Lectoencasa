@@ -52,6 +52,20 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
       {
+        id: 'historia-dibujo',
+        titulo: 'Dibujate haciendo algo',
+        descripcion:
+          'Técnica proyectiva: dibujate haciendo algo (lo que quieras), escribí tu nombre y contá una breve historia sobre el dibujo. No importa cómo dibujes: importa lo que aparece.',
+        tipo: 'collage',
+        duracionMin: 25,
+        dimensiones: ['historia', 'identidad'],
+        preguntas: [
+          { id: 'q1', texto: '¿Qué estás haciendo en tu dibujo?', tipo: 'abierta' },
+          { id: 'q2', texto: 'Contá una breve historia sobre el dibujo: ¿qué pasa ahí?', tipo: 'abierta' },
+          { id: 'q3', texto: 'Sacale una foto al dibujo y subila en la sección Archivos (o traela a la sesión).', tipo: 'abierta', ayuda: 'La trabajamos juntos en el próximo encuentro.' },
+        ],
+      },
+      {
         id: 'historia-objetos',
         titulo: 'Tres objetos que me cuentan',
         descripcion: 'Elegí tres objetos de tu casa que digan algo de quién sos y traelos (o fotografialos) para la próxima sesión.',
@@ -113,6 +127,20 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
       {
+        id: 'identidad-que-ves',
+        titulo: '¿Qué ves cuando me ves?',
+        descripcion:
+          'Encuesta a personas de distintos ámbitos de tu vida (familia, amigos, escuela): pediles que respondan con honestidad qué ven en vos — cómo sos, en qué te destacás, en qué te imaginan.',
+        tipo: 'entrevista',
+        duracionMin: 40,
+        dimensiones: ['identidad', 'fortalezas'],
+        preguntas: [
+          { id: 'q1', texto: '¿A quiénes encuestaste y qué respondió cada uno?', tipo: 'abierta' },
+          { id: 'q2', texto: '¿Qué respuestas coincidieron entre sí? ¿Cuáles te sorprendieron?', tipo: 'abierta' },
+          { id: 'q3', texto: '¿Qué de lo que ven los demás te gustaría que sea parte de tu futuro?', tipo: 'abierta' },
+        ],
+      },
+      {
         id: 'identidad-espejos',
         titulo: 'Los espejos',
         descripcion: 'Preguntale a tres personas cercanas cómo te describirían en tres palabras. Compará con cómo te ves vos.',
@@ -136,6 +164,13 @@ export const MODULES: ModuleDefinition[] = [
     ],
     materiales: [
       { id: 'm1', titulo: 'Ficha: Mis espejos', descripcion: 'Plantilla para registrar las respuestas de tus personas cercanas.', tipo: 'plantilla' },
+      {
+        id: 'm2',
+        titulo: 'Test de temperamento de Fisher (online)',
+        descripcion:
+          'Herramienta de autoconocimiento: cómo tu temperamento influye en tus decisiones. Hacelo en psicoactiva.com/test/test-temperamento-fisher y anotá tu resultado para conversarlo en sesión.',
+        tipo: 'enlace',
+      },
     ],
     preguntasGuia: [
       '¿Qué distancia hay entre cómo se ve y cómo lo ven?',
@@ -179,6 +214,21 @@ export const MODULES: ModuleDefinition[] = [
           },
           { id: 'q2', texto: 'Ordenalos del más al menos importante y explicá el primero.', tipo: 'abierta' },
           { id: 'q3', texto: 'Contá una escena real donde uno de esos valores haya guiado una decisión tuya.', tipo: 'abierta' },
+        ],
+      },
+      {
+        id: 'valores-rueda',
+        titulo: 'La Rueda de la Vida',
+        descripcion:
+          'Imaginá que esta rueda representa cómo te gustaría vivir tu vida en unos años: estudio, trabajo, familia, amistades, salud, tiempo libre, dinero, crecimiento personal. Puntuá cada área del 1 al 10 según el nivel IDEAL que te gustaría alcanzar.',
+        tipo: 'ejercicio',
+        duracionMin: 35,
+        dimensiones: ['valores', 'deseos'],
+        preguntas: [
+          { id: 'q1', texto: 'Puntuá cada área (1-10): Estudio · Trabajo · Familia · Amistades · Salud · Tiempo libre · Dinero · Crecimiento personal', tipo: 'lista' },
+          { id: 'q2', texto: '¿Qué áreas puntuaste más alto? ¿Por qué creés que valorás tanto esas áreas?', tipo: 'abierta' },
+          { id: 'q3', texto: '¿Creés que tu futura ocupación puede ayudarte a mejorar alguna de estas áreas? ¿Cuál?', tipo: 'abierta' },
+          { id: 'q4', texto: '¿Qué carreras u oficios se relacionan con lo que más valorás?', tipo: 'abierta' },
         ],
       },
       {
@@ -229,6 +279,20 @@ export const MODULES: ModuleDefinition[] = [
     ],
     actividades: [
       {
+        id: 'deseos-no-si',
+        titulo: 'Lo que NO quiero, lo que SÍ quiero',
+        descripcion:
+          'A veces es más fácil empezar por el descarte. Hacé dos listas con total honestidad: todo lo que ya sabés que NO querés para tu vida y tu futuro, y todo lo que SÍ querés.',
+        tipo: 'ejercicio',
+        duracionMin: 30,
+        dimensiones: ['deseos', 'valores'],
+        preguntas: [
+          { id: 'q1', texto: 'Mi lista de lo que NO quiero (trabajos, estilos de vida, situaciones…)', tipo: 'lista' },
+          { id: 'q2', texto: 'Mi lista de lo que SÍ quiero', tipo: 'lista' },
+          { id: 'q3', texto: 'Mirando las dos listas: ¿qué descubrís? ¿Cuál te salió más fácil?', tipo: 'abierta' },
+        ],
+      },
+      {
         id: 'deseos-sin-limites',
         titulo: 'Si nada fuera imposible',
         descripcion: 'Imaginá que el dinero, la opinión ajena y el “no da” no existen. ¿Qué harías con tu vida?',
@@ -257,10 +321,11 @@ export const MODULES: ModuleDefinition[] = [
     videos: [
       {
         id: 'v1',
-        titulo: 'Deseo, deber y miedo',
-        descripcion: 'Tres voces que se confunden al elegir. Cómo reconocer cuál habla.',
-        url: 'https://www.youtube.com/watch?v=metodo-brujula-deseos',
-        duracion: '9 min',
+        titulo: 'Aprender a elegir: ¿Qué carrera estudiar? — Liliana Llamas (TEDx Bariloche)',
+        descripcion:
+          'La socióloga Liliana Llamas propone otro punto de vista para elegir: ¿cuál es el estilo de vida que querés? ¿Qué decisión te acerca a la persona que querés ser? Después de verlo, escribí lo que te resultó más importante.',
+        url: 'https://youtu.be/bfp3vN2B5zo',
+        duracion: '15 min',
       },
     ],
     materiales: [
@@ -318,10 +383,11 @@ export const MODULES: ModuleDefinition[] = [
     videos: [
       {
         id: 'v1',
-        titulo: 'Mandatos: elegir con las voces en la mesa',
-        descripcion: 'Qué es un mandato, cómo opera y cómo se desactiva.',
-        url: 'https://www.youtube.com/watch?v=metodo-brujula-mandatos',
-        duracion: '10 min',
+        titulo: 'Trabajar de lo que amás es una trampa',
+        descripcion:
+          'Detrás de una frase motivadora puede haber una presión inmensa: no alcanza con que el trabajo te guste, ¿tenés que amarlo? Una mirada menos exigente sobre el mandato de la vocación perfecta.',
+        url: 'https://youtu.be/8VhWZ_pXgJg',
+        duracion: '8 min',
       },
     ],
     materiales: [
@@ -465,6 +531,19 @@ export const MODULES: ModuleDefinition[] = [
     ],
     materiales: [
       { id: 'm1', titulo: 'Registro semanal de intereses', descripcion: 'Plantilla de bitácora de consumo cultural.', tipo: 'plantilla' },
+      {
+        id: 'm2',
+        titulo: 'Cuestionario de Intereses Profesionales (Delgado)',
+        descripcion: 'Evaluación escrita de intereses profesionales, se administra y devuelve en sesión.',
+        tipo: 'pdf',
+      },
+      {
+        id: 'm3',
+        titulo: 'Test Chatside (testgratis.net)',
+        descripcion:
+          'Test online de intereses y preferencias profesionales: un punto de partida para explorar áreas ocupacionales afines. El resultado se conversa en sesión, nunca decide por vos.',
+        tipo: 'enlace',
+      },
     ],
     preguntasGuia: [
       '¿Los intereses declarados coinciden con su vida cotidiana?',
@@ -508,6 +587,20 @@ export const MODULES: ModuleDefinition[] = [
               'Trabajar con números', 'Crear cosas nuevas', 'Convencer y negociar', 'Observar detalles',
             ],
           },
+        ],
+      },
+      {
+        id: 'aptitudes-gardner',
+        titulo: 'Mis inteligencias múltiples',
+        descripcion:
+          'Según Gardner no hay UNA inteligencia sino varias: lingüística, lógico-matemática, espacial, musical, corporal, interpersonal, intrapersonal, naturalista. Hacé el test que te indique tu profesional y registrá el resultado.',
+        tipo: 'investigacion',
+        duracionMin: 30,
+        dimensiones: ['aptitudes', 'fortalezas'],
+        preguntas: [
+          { id: 'q1', texto: '¿Qué inteligencias te dieron más altas?', tipo: 'lista' },
+          { id: 'q2', texto: '¿Te reconocés en el resultado? ¿En qué situaciones de tu vida se nota?', tipo: 'abierta' },
+          { id: 'q3', texto: '¿Qué actividades o carreras se te ocurren donde esas inteligencias brillen?', tipo: 'abierta' },
         ],
       },
       {
@@ -633,6 +726,20 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
       {
+        id: 'proyecto-triangulo',
+        titulo: 'El Triángulo de mi vida',
+        descripcion:
+          'Representación simbólica personal: dibujá un triángulo y poné en cada vértice uno de los tres pilares que querés que sostengan tu vida. En el centro, escribí qué (o quién) querés ser.',
+        tipo: 'collage',
+        duracionMin: 35,
+        dimensiones: ['deseos', 'valores', 'identidad'],
+        preguntas: [
+          { id: 'q1', texto: '¿Cuáles son los tres pilares que elegiste para tus vértices? ¿Por qué esos?', tipo: 'abierta' },
+          { id: 'q2', texto: '¿Qué escribiste en el centro?', tipo: 'abierta' },
+          { id: 'q3', texto: 'Si uno de los pilares faltara, ¿qué pasaría con el resto? ¿Cuál es innegociable?', tipo: 'abierta' },
+        ],
+      },
+      {
         id: 'proyecto-mapa',
         titulo: 'Mapa de mi proyecto',
         descripcion: 'Organizá tu proyecto en áreas: formación, trabajo, vínculos, lugar, estilo de vida.',
@@ -753,6 +860,20 @@ export const MODULES: ModuleDefinition[] = [
           { id: 'q1', texto: 'Listá los pasos concretos de acá a la inscripción (con fechas).', tipo: 'lista' },
           { id: 'q2', texto: '¿Qué obstáculos podrían aparecer y cómo los vas a manejar?', tipo: 'abierta' },
           { id: 'q3', texto: '¿Cuál es tu plan B si el A se demora o cambia?', tipo: 'abierta' },
+        ],
+      },
+      {
+        id: 'plan-cv',
+        titulo: 'Mi presentación personal',
+        descripcion:
+          'Diseñá tu primer CV o presentación personal en Canva (u otra herramienta): quién sos, qué sabés hacer, qué te interesa, tus logros. No es solo para conseguir trabajo: es ponerle forma a todo lo que descubriste de vos.',
+        tipo: 'investigacion',
+        duracionMin: 60,
+        dimensiones: ['fortalezas', 'identidad'],
+        preguntas: [
+          { id: 'q1', texto: '¿Qué fortalezas y logros decidiste incluir?', tipo: 'lista' },
+          { id: 'q2', texto: '¿Cómo te describiste en la presentación? Copiá tu texto acá.', tipo: 'abierta' },
+          { id: 'q3', texto: 'Compartí el enlace de tu diseño (o subilo en Archivos).', tipo: 'abierta' },
         ],
       },
       {
