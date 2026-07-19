@@ -391,9 +391,12 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
                     <div key={q.id}>
                       <p className="text-[13px] font-medium">{q.texto}</p>
                       {r ? (
-                        <p className="mt-1 whitespace-pre-wrap rounded-lg bg-surface-2 p-3 text-[13px] leading-relaxed">
-                          {r.texto}
-                        </p>
+                        <div className="mt-1 rounded-lg border border-accent/30 bg-accent-soft/50 p-3">
+                          <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-accent-strong">
+                            Respuesta del consultante
+                          </p>
+                          <p className="whitespace-pre-wrap text-[13px] leading-relaxed">{r.texto}</p>
+                        </div>
                       ) : (
                         <p className="mt-1 text-[12.5px] italic text-faint">Sin responder todavía.</p>
                       )}
@@ -401,7 +404,7 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
                   )
                 })}
                 <div>
-                  <Label>Devolución profesional</Label>
+                  <Label className="text-primary-strong">Devolución profesional</Label>
                   <Textarea
                     value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}

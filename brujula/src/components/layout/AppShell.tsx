@@ -19,6 +19,13 @@ export function AppShell({ role }: { role: UserRole }) {
     setMobileNavOpen(false)
   }, [location.pathname, setMobileNavOpen])
 
+  // código de color por rol: lavanda para el área del consultante.
+  // Se aplica en <html> para alcanzar también los portales (diálogos, menús).
+  useEffect(() => {
+    document.documentElement.classList.toggle('role-consultante', role === 'consultante')
+    return () => document.documentElement.classList.remove('role-consultante')
+  }, [role])
+
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background">
       {/* sidebar fija (desktop) */}

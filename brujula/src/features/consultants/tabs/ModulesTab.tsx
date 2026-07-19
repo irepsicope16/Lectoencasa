@@ -145,8 +145,18 @@ export function ModulesTab({ consultant }: { consultant: Consultant }) {
                   </ul>
                 </div>
 
+                {progressOf(selected.id)?.notasConsultante && (
+                  <div className="rounded-lg border border-accent/30 bg-accent-soft/50 p-3">
+                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-accent-strong">
+                      Notas del consultante en este módulo
+                    </p>
+                    <p className="whitespace-pre-wrap text-[13px] leading-relaxed">
+                      {progressOf(selected.id)!.notasConsultante}
+                    </p>
+                  </div>
+                )}
                 <div>
-                  <Label>Notas profesionales del módulo</Label>
+                  <Label className="text-primary-strong">Notas profesionales del módulo</Label>
                   <Textarea
                     value={notas}
                     onChange={(e) => setNotas(e.target.value)}

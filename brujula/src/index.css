@@ -68,6 +68,42 @@
   --warning-soft: #38301c;
 }
 
+/* ============================================================
+   Código de color por rol:
+   · Profesional  → primario VERDE AGUA (por defecto)
+   · Consultante  → primario LAVANDA (clase en <html> al entrar
+     a su área; los acentos se invierten, así "lo del profesional"
+     se ve verde agua también dentro del área del consultante).
+   ============================================================ */
+
+.role-consultante {
+  --primary: #8b87d4;
+  --primary-strong: #6f6ac1;
+  --primary-soft: #edecf9;
+  --primary-foreground: #ffffff;
+
+  --accent: #14a098;
+  --accent-strong: #0e7f79;
+  --accent-soft: #e3f4f2;
+  --accent-foreground: #ffffff;
+
+  --ring: #8b87d455;
+}
+
+.dark.role-consultante {
+  --primary: #a29ee6;
+  --primary-strong: #b7b4ef;
+  --primary-soft: #262343;
+  --primary-foreground: #12101f;
+
+  --accent: #2fb8af;
+  --accent-strong: #4fccc3;
+  --accent-soft: #12332f;
+  --accent-foreground: #0b1512;
+
+  --ring: #a29ee666;
+}
+
 @theme inline {
   --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
 
