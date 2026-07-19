@@ -78,10 +78,20 @@ npm run build && npx vite preview          # producción local
 | Cuenta consultante | Se crea al crear la ficha; si se edita el email después, no se sincroniza |
 | Formularios | Consultantes y Login usan RHF+Zod; Sesiones/Agenda/Evaluaciones usan useState |
 
+### Modo nube (Supabase) — Fase 3 ✅
+- `services/cloud/` (config, cliente lazy, migración) + `SupabaseRepository` con la misma
+  API que el repo local: la UI no distingue modos. SDK en chunk diferido (0 costo local).
+- Auth real (Supabase Auth + tabla `profiles` por trigger); cuentas de consultante creadas
+  con cliente aislado sin pisar la sesión profesional.
+- `supabase/schema.sql`: tablas-documento (id + data jsonb + consultantId generado) con
+  RLS — profesional acceso total, consultante solo sus filas, materiales generales lectura.
+- Ajustes → Nube: conexión, prueba, activación, alta de cuenta profesional y migración
+  local→nube (upsert re-ejecutable). Guía no técnica en `SUPABASE.md`.
+- Pendiente de activación por la usuaria (crear proyecto Supabase y pegar URL + anon key).
+
 ## 🔜 Backlog priorizado
 
-1. **Supabase** (`SupabaseDriver` + Auth real + Storage + RLS) — la interfaz ya lo espera;
-   habilita multi-dispositivo y respaldo real. Ver esquema en ARCHITECTURE.md §6.
+1. Probar el modo nube contra un proyecto Supabase real (el código está; falta el proyecto).
 2. Tests unitarios del motor (`compassEngine` es puro y testeable; agregar vitest).
 3. Unificar formularios restantes en RHF+Zod (elimina ~10 casts `as never`).
 4. Búsqueda global de contenido (sesiones, notas, reflexiones).
