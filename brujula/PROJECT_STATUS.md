@@ -107,5 +107,18 @@ npm run build && npx vite preview          # producción local
 Lectoencasa/
 ├── index.html, css/, js/…     → sitio de marca Psicope con Ire (no tocar)
 ├── app/                       → producto Lectoescritura (independiente, no tocar)
-└── brujula/                   → ESTA plataforma (Método Brújula)
+├── brujula/                   → código fuente de ESTA plataforma (Método Brújula)
+└── plataforma/                → build de producción publicado en GitHub Pages
+```
+
+## Deploy
+
+La app se publica como archivos estáticos en `/plataforma/` (GitHub Pages del repo):
+**https://irepsicope16.github.io/Lectoencasa/plataforma/**
+
+Tras cualquier cambio en `brujula/`, regenerar y commitear el build:
+
+```bash
+cd brujula && npm run deploy   # build + copia dist/ → ../plataforma/
+git add ../plataforma && git commit && git push
 ```
