@@ -71,7 +71,7 @@ export function OverviewTab({ consultant }: { consultant: Consultant }) {
           {own.map((o) => (
             <div key={o.id} className="rounded-lg border p-3">
               <div className="mb-1 flex items-center gap-2">
-                <Badge variant="lavanda">{OBS_TYPES[o.tipo]}</Badge>
+                <Badge variant="aqua">{OBS_TYPES[o.tipo]}</Badge>
                 {o.moduleId && (
                   <Badge variant="outline">{MODULES.find((m) => m.id === o.moduleId)?.nombre}</Badge>
                 )}
