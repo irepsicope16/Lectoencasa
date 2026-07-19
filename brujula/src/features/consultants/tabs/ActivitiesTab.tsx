@@ -15,6 +15,7 @@ import { EmptyState } from '@/components/shared'
 import { toast } from '@/components/ui/toast'
 import { useActivities, useCreate, useUpdate, useVideos } from '@/hooks/queries'
 import { fechaCorta, nombreCompleto } from '@/lib/utils'
+import { isTest, scoreActivity } from '@/lib/scoring'
 import { MODULES, MODULE_MAP } from '@/data/modules'
 import { ACTIVITY_STATUS } from '@/lib/constants'
 import type { Activity, AssignedVideo, CalendarEvent, Consultant, ModuleId } from '@/types'
@@ -359,8 +360,33 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
                 <DialogDescription>{viewing.descripcion}</DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
+                {isTest(viewing) && viewing.respuestas.length > 0 && (
+                  <div className="rounded-xl border border-primary/30 bg-primary-soft/40 p-4">
+                    <p className="text-[12px] font-semibold uppercase tracking-wider text-primary-strong">
+                      Resultados por categoría · uso profesional
+                    </p>
+                    <div className="mt-2.5 space-y-1.5">
+                      {scoreActivity(viewing).map((s) => (
+                        <div key={s.categoria} className="flex items-center gap-3">
+                          <span className="w-56 shrink-0 truncate text-[12.5px] font-medium">{s.categoria}</span>
+                          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface">
+                            <div
+                              className="h-full rounded-full bg-primary"
+                              style={{ width: `${(s.promedio / 5) * 100}%` }}
+                            />
+                          </div>
+                          <span className="w-8 text-right text-[12px] text-muted-foreground">{s.promedio}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="mt-2 text-[11px] text-faint">
+                      El consultante no ve estos valores: se devuelven cualitativamente en sesión.
+                    </p>
+                  </div>
+                )}
                 {viewing.preguntas.map((q) => {
                   const r = viewing.respuestas.find((x) => x.questionId === q.id)
+                  if (q.tipo === 'escala') return null
                   return (
                     <div key={q.id}>
                       <p className="text-[13px] font-medium">{q.texto}</p>

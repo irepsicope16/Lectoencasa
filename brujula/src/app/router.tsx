@@ -26,6 +26,7 @@ const MyMaterialsPage = lazy(() => import('@/features/files/MyMaterialsPage'))
 const MyProgressPage = lazy(() => import('@/features/method/MyProgressPage'))
 
 const PrintReportPage = lazy(() => import('@/features/reports/PrintReportPage'))
+const PrintableMaterialPage = lazy(() => import('@/features/reports/PrintableMaterialPage'))
 
 function Page({ children }: { children: React.ReactNode }) {
   return (
@@ -65,7 +66,10 @@ export const router = createHashRouter([
     // Vista de impresión (sin shell): profesional para todos los informes;
     // el consultante solo accede a los suyos (la página valida propiedad).
     element: <RequireAuth />,
-    children: [{ path: '/print/:consultantId/:tipo', element: <Page><PrintReportPage /></Page> }],
+    children: [
+      { path: '/print/material/:printableId', element: <Page><PrintableMaterialPage /></Page> },
+      { path: '/print/:consultantId/:tipo', element: <Page><PrintReportPage /></Page> },
+    ],
   },
   {
     element: <RequireRole role="consultante" />,

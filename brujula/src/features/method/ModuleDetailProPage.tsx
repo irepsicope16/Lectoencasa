@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, BookOpen, Clapperboard, FileText, HelpCircle, Target } from 'lucide-react'
+import { ArrowLeft, BookOpen, Clapperboard, ExternalLink, FileText, HelpCircle, Printer, Target } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { FadeIn } from '@/components/shared'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -142,6 +143,20 @@ export default function ModuleDetailProPage() {
                     <Badge variant="outline">{m.tipo}</Badge>
                   </div>
                   <p className="text-[12px] text-muted-foreground">{m.descripcion}</p>
+                  {m.printableId && (
+                    <Button variant="outline" size="sm" className="mt-2" asChild>
+                      <Link to={`/print/material/${m.printableId}`}>
+                        <Printer /> Imprimir lámina
+                      </Link>
+                    </Button>
+                  )}
+                  {m.url && (
+                    <Button variant="outline" size="sm" className="mt-2" asChild>
+                      <a href={m.url} target="_blank" rel="noreferrer">
+                        <ExternalLink /> Abrir
+                      </a>
+                    </Button>
+                  )}
                 </div>
               ))}
             </CardContent>
