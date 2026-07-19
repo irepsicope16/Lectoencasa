@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <style>
+    :root { --p:#14a098; --a:#8b87d4; --s:#ffffff; }
+    @media (prefers-color-scheme: dark) { :root { --p:#2fb8af; --a:#a29ee6; --s:#141519; } }
+  </style>
+  <circle cx="32" cy="32" r="29" stroke="var(--p)" stroke-width="4"/>
+  <path d="M32 13 L36 32 L32 36 L28 32 Z" fill="var(--a)"/>
+  <path d="M32 51 L28 32 L32 28 L36 32 Z" fill="var(--a)" opacity="0.55"/>
+  <path d="M13 32 L32 28 L36 32 L32 36 Z" fill="var(--a)" opacity="0.55"/>
+  <path d="M51 32 L32 36 L28 32 L32 28 Z" fill="var(--a)"/>
+  <path d="M46.5 17.5 L34.5 29.5 L32 32 L34.9 34.9 Z" fill="var(--p)"/>
+  <path d="M46.5 17.5 L34.9 34.9 L32 32 L29.5 29.5 Z" fill="var(--p)" opacity="0.45"/>
+  <circle cx="32" cy="32" r="4.2" fill="var(--s)" stroke="var(--p)" stroke-width="2.5"/>
+</svg>

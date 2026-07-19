@@ -1,0 +1,171 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================================
+   Método Brújula — Design tokens
+   Paleta: verde agua (primary) · lavanda (accent) · blancos y
+   grises muy claros. Estética Notion/Linear/Calm: hairline
+   borders, sombras mínimas, muchísimo aire.
+   ============================================================ */
+
+:root {
+  --background: #fbfbfa;
+  --surface: #ffffff;
+  --surface-2: #f6f6f4;
+  --foreground: #1d1f24;
+  --muted-foreground: #62687a;
+  --faint-foreground: #7c8292;
+
+  --primary: #14a098;
+  --primary-strong: #0e7f79;
+  --primary-soft: #e3f4f2;
+  --primary-foreground: #ffffff;
+
+  --accent: #8b87d4;
+  --accent-strong: #6f6ac1;
+  --accent-soft: #edecf9;
+  --accent-foreground: #ffffff;
+
+  --border: #e8e8e5;
+  --border-strong: #d9d9d5;
+  --ring: #14a09855;
+
+  --danger: #d4574e;
+  --danger-soft: #fbeae9;
+  --warning: #c08a2d;
+  --warning-soft: #faf1de;
+
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: #141519;
+  --surface: #1b1d23;
+  --surface-2: #22242c;
+  --foreground: #e8e9ec;
+  --muted-foreground: #a4aab6;
+  --faint-foreground: #838a98;
+
+  --primary: #2fb8af;
+  --primary-strong: #4fccc3;
+  --primary-soft: #12332f;
+  --primary-foreground: #0b1512;
+
+  --accent: #a29ee6;
+  --accent-strong: #b7b4ef;
+  --accent-soft: #262343;
+  --accent-foreground: #12101f;
+
+  --border: #2a2d35;
+  --border-strong: #383c46;
+  --ring: #2fb8af66;
+
+  --danger: #e2726a;
+  --danger-soft: #3a221f;
+  --warning: #d8a54f;
+  --warning-soft: #38301c;
+}
+
+@theme inline {
+  --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-faint: var(--faint-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-ring: var(--ring);
+
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.25rem);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
+  ::selection {
+    background: var(--primary-soft);
+  }
+  .dark ::selection {
+    background: var(--accent-soft);
+  }
+
+  /* Scrollbars discretos */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 8px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ============================================================
+   Impresión de informes (PDF vía print)
+   ============================================================ */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #1d1f24 !important;
+    font-size: 12px;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-page {
+    page-break-after: always;
+  }
+  @page {
+    margin: 18mm 16mm;
+  }
+}
