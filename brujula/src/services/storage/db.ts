@@ -1,5 +1,7 @@
 import { LocalStorageDriver } from './driver'
 import { Repository } from './repository'
+import { SupabaseRepository } from './supabaseRepository'
+import { isCloudEnabled } from '@/services/cloud/config'
 import type {
   Activity,
   ActivityLogEntry,
@@ -16,31 +18,59 @@ import type {
   User,
 } from '@/types'
 
-// Punto único de acceso a datos. Migración a Supabase = cambiar el driver
-// (y los repos por su variante remota) SOLO acá.
+// ------------------------------------------------------------
+// Punto único de acceso a datos.
+// Modo local  → LocalStorage (por defecto, sin configuración).
+// Modo nube   → Supabase (activado desde Ajustes → Nube).
+// Ambos repos implementan la MISMA API: la UI no distingue.
+// ------------------------------------------------------------
+
+interface BaseRow {
+  id: string
+  createdAt: string
+  updatedAt: string
+}
+
+/** Contrato común de repositorio (local y remoto). */
+export interface DataRepository<T extends BaseRow> {
+  readonly collection: string
+  list(): Promise<T[]>
+  get(id: string): Promise<T | undefined>
+  query(predicate: (row: T) => boolean): Promise<T[]>
+  create(data: Omit<T, 'id' | 'createdAt' | 'updatedAt'> & Partial<BaseRow>): Promise<T>
+  update(id: string, patch: Partial<T>): Promise<T>
+  remove(id: string): Promise<void>
+  bulkCreate(items: T[]): Promise<void>
+}
+
+const cloud = isCloudEnabled()
 const driver = new LocalStorageDriver()
 
+function repo<T extends BaseRow>(collection: string): DataRepository<T> {
+  return cloud ? new SupabaseRepository<T>(collection) : new Repository<T>(driver, collection)
+}
+
 export const db = {
-  users: new Repository<User>(driver, 'users'),
-  consultants: new Repository<Consultant>(driver, 'consultants'),
-  sessions: new Repository<Session>(driver, 'sessions'),
-  observations: new Repository<Observation>(driver, 'observations'),
-  moduleProgress: new Repository<ModuleProgress>(driver, 'module_progress'),
-  activities: new Repository<Activity>(driver, 'activities'),
-  videos: new Repository<AssignedVideo>(driver, 'assigned_videos'),
-  files: new Repository<StoredFile>(driver, 'files'),
-  reflections: new Repository<Reflection>(driver, 'reflections'),
-  evaluations: new Repository<Evaluation>(driver, 'evaluations'),
-  snapshots: new Repository<CompassSnapshot>(driver, 'compass_snapshots'),
-  events: new Repository<CalendarEvent>(driver, 'calendar_events'),
-  log: new Repository<ActivityLogEntry>(driver, 'activity_log'),
+  users: repo<User>('users'),
+  consultants: repo<Consultant>('consultants'),
+  sessions: repo<Session>('sessions'),
+  observations: repo<Observation>('observations'),
+  moduleProgress: repo<ModuleProgress>('module_progress'),
+  activities: repo<Activity>('activities'),
+  videos: repo<AssignedVideo>('assigned_videos'),
+  files: repo<StoredFile>('files'),
+  reflections: repo<Reflection>('reflections'),
+  evaluations: repo<Evaluation>('evaluations'),
+  snapshots: repo<CompassSnapshot>('compass_snapshots'),
+  events: repo<CalendarEvent>('calendar_events'),
+  log: repo<ActivityLogEntry>('activity_log'),
   clearAll: () => driver.clearAll(),
 }
 
 /**
  * Borrado en cascada: elimina al consultante y TODO su rastro
  * (sesiones, actividades, progreso, archivos, snapshots, cuenta de acceso…).
- * Equivalente local del ON DELETE CASCADE del esquema Supabase objetivo.
+ * Equivalente del ON DELETE CASCADE del esquema Supabase objetivo.
  */
 export async function deleteConsultantCascade(consultantId: string): Promise<void> {
   const collections = [

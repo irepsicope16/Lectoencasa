@@ -1,4 +1,5 @@
 import { db } from '@/services/storage/db'
+import { isCloudEnabled } from '@/services/cloud/config'
 import type { Consultant } from '@/types'
 
 /**
@@ -13,6 +14,32 @@ export async function ensureConsultantAccount(
 ): Promise<{ email: string; password: string } | null> {
   const email = consultant.email.trim().toLowerCase()
   if (!email) return null
+
+  // Modo nube: registro real en Supabase Auth con un cliente aislado
+  // (no pisa la sesión de la profesional). El trigger crea el perfil.
+  if (isCloudEnabled()) {
+    const { getIsolatedClient } = await import('@/services/cloud/client')
+    const sb = await getIsolatedClient()
+    const password = 'brujula'
+    const { error } = await sb.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          role: 'consultante',
+          nombre: consultant.nombre,
+          apellido: consultant.apellido,
+          consultantId: consultant.id,
+        },
+      },
+    })
+    if (error) {
+      // cuenta ya existente u otro error: no bloquea la creación de la ficha
+      return null
+    }
+    return { email, password }
+  }
+
   const users = await db.users.list()
   const existing = users.find((u) => u.email.toLowerCase() === email)
   if (existing) {
