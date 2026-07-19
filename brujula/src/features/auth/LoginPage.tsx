@@ -5,7 +5,6 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
 import { ArrowRight, Compass, Sparkles, UserRound } from 'lucide-react'
-import { LogoFull } from '@/branding/Logo'
 import { Button } from '@/components/ui/button'
 import { FieldError, Input, Label } from '@/components/ui/input'
 import { useAuthStore } from '@/stores/authStore'
@@ -54,28 +53,18 @@ export default function LoginPage() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="max-w-md"
+          className="mx-auto max-w-lg text-center"
         >
-          <h1 className="text-3xl font-semibold leading-tight tracking-tight">
-            Encontrá tu norte.
-            <br />
-            <span className="text-primary">Construí tu camino.</span>
-          </h1>
-          <p className="mt-4 text-[14px] leading-relaxed text-muted-foreground">
-            Método Brújula es la plataforma profesional de orientación vocacional: evaluación,
-            acompañamiento, seguimiento y proyecto de vida en un solo lugar. Porque orientar no es
-            aplicar un test: es acompañar a alguien a encontrar su rumbo.
+          <img
+            src="logo-completo.jpg"
+            alt="Método Brújula — Psicope con Ire. Encontrá tu norte. Construí tu camino."
+            className="mx-auto w-full max-w-[440px] rounded-3xl shadow-sm"
+          />
+          <p className="mx-auto mt-6 max-w-md text-[14px] leading-relaxed text-muted-foreground">
+            La plataforma profesional de orientación vocacional: evaluación, acompañamiento,
+            seguimiento y proyecto de vida en un solo lugar. Porque orientar no es aplicar un
+            test: es acompañar a alguien a encontrar su rumbo.
           </p>
-          <div className="mt-8 flex gap-6 text-[12.5px] text-muted-foreground">
-            {['Conocerte', 'Valorarte', 'Explorar', 'Decidir', 'Actuar'].map((s, i) => (
-              <span key={s} className="flex items-center gap-1.5">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary-soft text-[10px] font-semibold text-primary-strong">
-                  {i + 1}
-                </span>
-                {s}
-              </span>
-            ))}
-          </div>
         </motion.div>
         <p className="text-[11.5px] text-faint">
           © {new Date().getFullYear()} Psicope con Ire · Orientación vocacional y reorientación profesional
@@ -94,7 +83,11 @@ export default function LoginPage() {
           transition={{ duration: 0.35, ease: 'easeOut' }}
           className="w-full max-w-sm"
         >
-          <LogoFull className="mb-8 lg:hidden" />
+          <img
+            src="logo-completo.jpg"
+            alt="Método Brújula — Psicope con Ire"
+            className="mx-auto mb-8 w-full max-w-[260px] rounded-2xl lg:hidden"
+          />
           <h2 className="text-lg font-semibold tracking-tight">Ingresar a la plataforma</h2>
           <p className="mt-0.5 text-[13px] text-muted-foreground">
             Accedé con tu cuenta profesional o de consultante.
