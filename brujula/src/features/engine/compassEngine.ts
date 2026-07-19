@@ -105,6 +105,34 @@ function collectSignals(input: EngineInput): Signals {
     }
   }
 
+  // tests internos (ítems escala con categoría): las categorías destacadas
+  // (promedio >= 4) suman señal en la dimensión del módulo del test
+  for (const act of done) {
+    const porCategoria = new Map<string, number[]>()
+    for (const q of act.preguntas) {
+      if (q.tipo !== 'escala' || !q.categoria) continue
+      const r = act.respuestas.find((x) => x.questionId === q.id)
+      const v = r ? Number(r.texto) : NaN
+      if (!Number.isFinite(v)) continue
+      porCategoria.set(q.categoria, [...(porCategoria.get(q.categoria) ?? []), v])
+    }
+    for (const [categoria, valores] of porCategoria) {
+      const prom = valores.reduce((a, b) => a + b, 0) / valores.length
+      if (prom < 4) continue
+      const señal: Signal = {
+        texto: categoria,
+        evidencia: {
+          fuente: 'actividad',
+          detalle: `En el test «${act.titulo}» se destacó «${categoria}»`,
+        },
+      }
+      if (act.moduleId === 'intereses') s.intereses.push(señal)
+      else if (act.moduleId === 'aptitudes') s.aptitudes.push(señal)
+      else if (act.moduleId === 'fortalezas') s.fortalezas.push(señal)
+      else if (act.moduleId === 'valores') s.valores.push(señal)
+    }
+  }
+
   // evaluaciones: ítems con valor alto suman señal con su etiqueta
   for (const ev of input.evaluations) {
     for (const item of ev.items) {

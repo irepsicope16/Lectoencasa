@@ -146,7 +146,36 @@ export default function ActivityRunnerPage() {
                 {q.texto}
               </p>
               {q.ayuda && <p className="mt-1 text-[12px] italic text-faint">{q.ayuda}</p>}
-              {q.tipo === 'seleccion' && q.opciones ? (
+              {q.tipo === 'escala' ? (
+                <div className="mt-3">
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4, 5].map((n) => {
+                      const active = values[q.id] === String(n)
+                      return (
+                        <button
+                          key={n}
+                          type="button"
+                          disabled={readOnly}
+                          onClick={() => setValue(q.id, String(n))}
+                          className={cn(
+                            'h-10 w-10 cursor-pointer rounded-full border text-[14px] font-semibold transition-all',
+                            active
+                              ? 'border-primary bg-primary text-primary-foreground shadow-sm'
+                              : 'text-muted-foreground hover:bg-surface-2',
+                            readOnly && 'cursor-default opacity-70',
+                          )}
+                        >
+                          {n}
+                        </button>
+                      )
+                    })}
+                  </div>
+                  <div className="mt-1.5 flex w-[232px] justify-between text-[10.5px] text-faint">
+                    <span>Nada que ver conmigo</span>
+                    <span>Totalmente yo</span>
+                  </div>
+                </div>
+              ) : q.tipo === 'seleccion' && q.opciones ? (
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {q.opciones.map((opt) => {
                     const active = (values[q.id] ?? '').includes(opt)

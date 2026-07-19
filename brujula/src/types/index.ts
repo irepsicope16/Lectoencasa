@@ -99,6 +99,13 @@ export interface ModuleQuestion {
   tipo: 'abierta' | 'lista' | 'seleccion' | 'escala'
   opciones?: string[] // para 'seleccion'
   ayuda?: string
+  /**
+   * Para ítems de test tipo 'escala': categoría que agrupa el ítem
+   * (p. ej. una inteligencia, un área de interés). El puntaje por categoría
+   * es de uso profesional y alimenta el Motor Brújula; nunca se muestra
+   * como resultado numérico al consultante.
+   */
+  categoria?: string
 }
 
 export interface ModuleActivityTemplate {
@@ -125,6 +132,10 @@ export interface ModuleResource {
   titulo: string
   descripcion: string
   tipo: 'pdf' | 'lectura' | 'plantilla' | 'enlace'
+  /** si está presente, la plantilla se abre en /print/material/:printableId para imprimir */
+  printableId?: string
+  /** enlace externo (tests online, portales) */
+  url?: string
 }
 
 export interface ModuleDefinition {

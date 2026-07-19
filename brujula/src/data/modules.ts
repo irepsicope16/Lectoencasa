@@ -1,4 +1,5 @@
 import type { ModuleDefinition, ModuleId } from '@/types'
+import { TEST_APTITUDES, TEST_INTELIGENCIAS, TEST_INTERESES } from './tests'
 
 // ============================================================
 // Contenido del Método Brújula: 12 módulos · 5 etapas.
@@ -88,7 +89,7 @@ export const MODULES: ModuleDefinition[] = [
       },
     ],
     materiales: [
-      { id: 'm1', titulo: 'Plantilla: Línea de vida', descripcion: 'PDF imprimible para dibujar tu línea de vida.', tipo: 'plantilla' },
+      { id: 'm1', titulo: 'Plantilla: Línea de vida', descripcion: 'Lámina imprimible para marcar tus momentos importantes.', tipo: 'plantilla', printableId: 'linea-vida' },
       { id: 'm2', titulo: 'Guía para familias: cómo acompañar', descripcion: 'Qué decir (y qué no) durante el proceso.', tipo: 'pdf' },
     ],
     preguntasGuia: [
@@ -168,8 +169,9 @@ export const MODULES: ModuleDefinition[] = [
         id: 'm2',
         titulo: 'Test de temperamento de Fisher (online)',
         descripcion:
-          'Herramienta de autoconocimiento: cómo tu temperamento influye en tus decisiones. Hacelo en psicoactiva.com/test/test-temperamento-fisher y anotá tu resultado para conversarlo en sesión.',
+          'Herramienta de autoconocimiento: cómo tu temperamento influye en tus decisiones. Hacelo online y anotá tu resultado para conversarlo en sesión.',
         tipo: 'enlace',
+        url: 'https://www.psicoactiva.com/test/test-temperamento-fisher/',
       },
     ],
     preguntasGuia: [
@@ -255,6 +257,7 @@ export const MODULES: ModuleDefinition[] = [
     ],
     materiales: [
       { id: 'm1', titulo: 'Listado de 40 valores', descripcion: 'Material de apoyo para la actividad Mis valores.', tipo: 'pdf' },
+      { id: 'm2', titulo: 'Plantilla: La Rueda de la Vida', descripcion: 'Lámina imprimible con la rueda de 8 áreas para pintar en papel.', tipo: 'plantilla', printableId: 'rueda-vida' },
     ],
     preguntasGuia: [
       '¿Sus valores son propios o repetidos del discurso familiar?',
@@ -330,6 +333,7 @@ export const MODULES: ModuleDefinition[] = [
     ],
     materiales: [
       { id: 'm1', titulo: 'Bitácora del deseo', descripcion: 'Registro semanal de momentos de disfrute genuino.', tipo: 'plantilla' },
+      { id: 'm2', titulo: 'Plantilla: Lo que NO quiero / SÍ quiero', descripcion: 'Lámina imprimible con las dos listas para completar a mano.', tipo: 'plantilla', printableId: 'no-si-quiero' },
     ],
     preguntasGuia: [
       '¿Puede nombrar deseos o responde con deberes?',
@@ -391,7 +395,7 @@ export const MODULES: ModuleDefinition[] = [
       },
     ],
     materiales: [
-      { id: 'm1', titulo: 'Plantilla: Árbol de profesiones', descripcion: 'Esquema imprimible del genograma profesional.', tipo: 'plantilla' },
+      { id: 'm1', titulo: 'Plantilla: Árbol de profesiones', descripcion: 'Lámina imprimible del genograma profesional familiar.', tipo: 'plantilla', printableId: 'arbol-profesiones' },
     ],
     preguntasGuia: [
       '¿Elige por deseo, por obediencia o por rebeldía?',
@@ -497,6 +501,7 @@ export const MODULES: ModuleDefinition[] = [
           { id: 'q3', texto: '¿Qué actividad harías gratis, solo por el gusto de hacerla?', tipo: 'abierta' },
         ],
       },
+      TEST_INTERESES,
       {
         id: 'intereses-areas',
         titulo: 'Áreas que me llaman',
@@ -543,6 +548,7 @@ export const MODULES: ModuleDefinition[] = [
         descripcion:
           'Test online de intereses y preferencias profesionales: un punto de partida para explorar áreas ocupacionales afines. El resultado se conversa en sesión, nunca decide por vos.',
         tipo: 'enlace',
+        url: 'https://testgratis.net/',
       },
     ],
     preguntasGuia: [
@@ -589,20 +595,8 @@ export const MODULES: ModuleDefinition[] = [
           },
         ],
       },
-      {
-        id: 'aptitudes-gardner',
-        titulo: 'Mis inteligencias múltiples',
-        descripcion:
-          'Según Gardner no hay UNA inteligencia sino varias: lingüística, lógico-matemática, espacial, musical, corporal, interpersonal, intrapersonal, naturalista. Hacé el test que te indique tu profesional y registrá el resultado.',
-        tipo: 'investigacion',
-        duracionMin: 30,
-        dimensiones: ['aptitudes', 'fortalezas'],
-        preguntas: [
-          { id: 'q1', texto: '¿Qué inteligencias te dieron más altas?', tipo: 'lista' },
-          { id: 'q2', texto: '¿Te reconocés en el resultado? ¿En qué situaciones de tu vida se nota?', tipo: 'abierta' },
-          { id: 'q3', texto: '¿Qué actividades o carreras se te ocurren donde esas inteligencias brillen?', tipo: 'abierta' },
-        ],
-      },
+      TEST_INTELIGENCIAS,
+      TEST_APTITUDES,
       {
         id: 'aptitudes-desafio',
         titulo: 'Mi relación con la dificultad',
@@ -763,7 +757,8 @@ export const MODULES: ModuleDefinition[] = [
       },
     ],
     materiales: [
-      { id: 'm1', titulo: 'Plantilla: Mapa de proyecto de vida', descripcion: 'Esquema de áreas para completar.', tipo: 'plantilla' },
+      { id: 'm1', titulo: 'Plantilla: Mapa de proyecto de vida', descripcion: 'Lámina imprimible con las áreas del proyecto para completar.', tipo: 'plantilla', printableId: 'mapa-proyecto' },
+      { id: 'm2', titulo: 'Plantilla: El Triángulo de mi vida', descripcion: 'Lámina imprimible de la representación simbólica personal.', tipo: 'plantilla', printableId: 'triangulo-vida' },
     ],
     preguntasGuia: [
       '¿El proyecto es propio o calcado de un modelo externo?',

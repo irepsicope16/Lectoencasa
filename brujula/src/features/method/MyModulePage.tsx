@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, ExternalLink, FileText, MonitorPlay, Target } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ExternalLink, FileText, MonitorPlay, Printer, Target } from 'lucide-react'
 import { FadeIn } from '@/components/shared'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -212,10 +212,24 @@ export default function MyModulePage() {
                     <Badge variant="outline">{m.tipo}</Badge>
                   </div>
                   <p className="text-[12px] text-muted-foreground">{m.descripcion}</p>
+                  {m.printableId && (
+                    <Button variant="soft" size="sm" className="mt-2" asChild>
+                      <Link to={`/print/material/${m.printableId}`}>
+                        <Printer /> Imprimir lámina
+                      </Link>
+                    </Button>
+                  )}
+                  {m.url && (
+                    <Button variant="outline" size="sm" className="mt-2" asChild>
+                      <a href={m.url} target="_blank" rel="noreferrer">
+                        <ExternalLink /> Abrir
+                      </a>
+                    </Button>
+                  )}
                 </div>
               ))}
               <p className="text-[11.5px] text-faint">
-                Pedile a tu profesional los materiales en la sección{' '}
+                Los archivos que te comparta tu profesional aparecen en{' '}
                 <Link to="/mi/materiales" className="text-primary underline">
                   Materiales
                 </Link>
