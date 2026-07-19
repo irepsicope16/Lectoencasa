@@ -9,7 +9,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
-    "deploy": "npm run build && rm -rf ../plataforma && cp -r dist ../plataforma"
+    "deploy": "npm run build && rm -rf ../metodo-brujula && cp -r dist ../metodo-brujula"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.5",
