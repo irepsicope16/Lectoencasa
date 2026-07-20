@@ -123,9 +123,23 @@ export default function ModuleDetailProPage() {
                 <div key={v.id} className="rounded-lg border p-3">
                   <p className="text-[13px] font-medium">{v.titulo}</p>
                   <p className="text-[12px] text-muted-foreground">{v.descripcion}</p>
-                  <p className="mt-1 text-[11px] text-faint">{v.duracion}</p>
+                  <div className="mt-2 flex items-center gap-2">
+                    <Button variant="outline" size="sm" asChild>
+                      <a href={v.url} target="_blank" rel="noreferrer">
+                        <ExternalLink /> Ver video
+                      </a>
+                    </Button>
+                    <span className="text-[11px] text-faint">{v.duracion}</span>
+                  </div>
                 </div>
               ))}
+              {mod.videos.length === 0 && (
+                <p className="rounded-lg border border-dashed p-3 text-[12px] leading-relaxed text-muted-foreground">
+                  Este módulo no tiene un video fijo del método. Podés asignar el video que prefieras
+                  (YouTube u otro) a cada consultante desde su ficha → Actividades →{' '}
+                  <span className="font-medium text-foreground">Asignar video</span>.
+                </p>
+              )}
             </CardContent>
           </Card>
 

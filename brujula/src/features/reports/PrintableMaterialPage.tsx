@@ -3,6 +3,7 @@ import { ArrowLeft, Printer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Isotipo } from '@/branding/Logo'
 import { useAuthStore } from '@/stores/authStore'
+import { PRINTABLES_EXTRA } from './printablesExtra'
 
 // ============================================================
 // Plantillas imprimibles del método (láminas de trabajo en papel).
@@ -239,6 +240,7 @@ function NotasFinales({ pregunta, lineas }: { pregunta: string; lineas: number }
 }
 
 export const PRINTABLES: Record<string, { titulo: string; componente: () => React.ReactNode }> = {
+  ...PRINTABLES_EXTRA,
   'rueda-vida': { titulo: 'La Rueda de la Vida', componente: RuedaDeLaVida },
   'linea-vida': { titulo: 'Mi línea de vida', componente: LineaDeVida },
   'triangulo-vida': { titulo: 'El Triángulo de mi vida', componente: TrianguloVida },

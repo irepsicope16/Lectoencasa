@@ -79,18 +79,11 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
     ],
-    videos: [
-      {
-        id: 'v1',
-        titulo: '¿Qué es la orientación vocacional?',
-        descripcion: 'Por qué orientarse no es hacer un test: es un proceso de conocimiento personal.',
-        url: 'https://www.youtube.com/watch?v=metodo-brujula-intro',
-        duracion: '6 min',
-      },
-    ],
+    videos: [],
     materiales: [
       { id: 'm1', titulo: 'Plantilla: Línea de vida', descripcion: 'Lámina imprimible para marcar tus momentos importantes.', tipo: 'plantilla', printableId: 'linea-vida' },
-      { id: 'm2', titulo: 'Guía para familias: cómo acompañar', descripcion: 'Qué decir (y qué no) durante el proceso.', tipo: 'pdf' },
+      { id: 'm2', titulo: 'Guía para familias: cómo acompañar', descripcion: 'Qué ayuda y qué no durante el proceso. Para imprimir y entregar.', tipo: 'plantilla', printableId: 'guia-familias' },
+      { id: 'm3', titulo: 'Infografía: El proceso, en un vistazo', descripcion: 'Por qué la orientación no es un test y cómo son las 5 etapas del camino.', tipo: 'lectura', printableId: 'infografia-metodo' },
     ],
     preguntasGuia: [
       '¿Cómo llega al proceso? ¿Quién lo trae: deseo propio o presión externa?',
@@ -154,17 +147,9 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
     ],
-    videos: [
-      {
-        id: 'v1',
-        titulo: 'Identidad vocacional: quién sos cuando elegís',
-        descripcion: 'La elección vocacional como capítulo de tu identidad.',
-        url: 'https://www.youtube.com/watch?v=metodo-brujula-identidad',
-        duracion: '8 min',
-      },
-    ],
+    videos: [],
     materiales: [
-      { id: 'm1', titulo: 'Ficha: Mis espejos', descripcion: 'Plantilla para registrar las respuestas de tus personas cercanas.', tipo: 'plantilla' },
+      { id: 'm1', titulo: 'Ficha: Mis espejos', descripcion: 'Lámina imprimible para registrar las respuestas de tus tres espejos.', tipo: 'plantilla', printableId: 'mis-espejos' },
       {
         id: 'm2',
         titulo: 'Test de temperamento de Fisher (online)',
@@ -246,17 +231,9 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
     ],
-    videos: [
-      {
-        id: 'v1',
-        titulo: 'Valores: el criterio invisible',
-        descripcion: 'Cómo los valores ordenan (sin que lo notes) tus decisiones.',
-        url: 'https://www.youtube.com/watch?v=metodo-brujula-valores',
-        duracion: '7 min',
-      },
-    ],
+    videos: [],
     materiales: [
-      { id: 'm1', titulo: 'Listado de 40 valores', descripcion: 'Material de apoyo para la actividad Mis valores.', tipo: 'pdf' },
+      { id: 'm1', titulo: 'Listado de 40 valores', descripcion: 'Lámina imprimible con 40 valores para marcar, elegir y ordenar tus 5 fundamentales.', tipo: 'plantilla', printableId: '40-valores' },
       { id: 'm2', titulo: 'Plantilla: La Rueda de la Vida', descripcion: 'Lámina imprimible con la rueda de 8 áreas para pintar en papel.', tipo: 'plantilla', printableId: 'rueda-vida' },
     ],
     preguntasGuia: [
@@ -332,7 +309,7 @@ export const MODULES: ModuleDefinition[] = [
       },
     ],
     materiales: [
-      { id: 'm1', titulo: 'Bitácora del deseo', descripcion: 'Registro semanal de momentos de disfrute genuino.', tipo: 'plantilla' },
+      { id: 'm1', titulo: 'Bitácora del deseo', descripcion: 'Lámina imprimible: una semana registrando lo que disfrutaste y lo que quisiste hacer.', tipo: 'plantilla', printableId: 'bitacora-deseo' },
       { id: 'm2', titulo: 'Plantilla: Lo que NO quiero / SÍ quiero', descripcion: 'Lámina imprimible con las dos listas para completar a mano.', tipo: 'plantilla', printableId: 'no-si-quiero' },
     ],
     preguntasGuia: [
@@ -454,17 +431,9 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
     ],
-    videos: [
-      {
-        id: 'v1',
-        titulo: 'Fortalezas: lo fácil tuyo no es fácil para todos',
-        descripcion: 'Cómo detectar talentos que pasan desapercibidos por familiaridad.',
-        url: 'https://www.youtube.com/watch?v=metodo-brujula-fortalezas',
-        duracion: '7 min',
-      },
-    ],
+    videos: [],
     materiales: [
-      { id: 'm1', titulo: 'Inventario de fortalezas (imprimible)', descripcion: 'Listado ampliado con definiciones.', tipo: 'pdf' },
+      { id: 'm1', titulo: 'Inventario de fortalezas', descripcion: 'Lámina imprimible: 20 fortalezas con definiciones para marcar y elegir las 5 tuyas.', tipo: 'plantilla', printableId: 'inventario-fortalezas' },
     ],
     preguntasGuia: [
       '¿Reconoce logros propios o los minimiza?',
@@ -525,22 +494,14 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
     ],
-    videos: [
-      {
-        id: 'v1',
-        titulo: 'Interés real vs. interés declarado',
-        descripcion: 'Por qué lo que hacés dice más que lo que decís que te gusta.',
-        url: 'https://www.youtube.com/watch?v=metodo-brujula-intereses',
-        duracion: '8 min',
-      },
-    ],
+    videos: [],
     materiales: [
-      { id: 'm1', titulo: 'Registro semanal de intereses', descripcion: 'Plantilla de bitácora de consumo cultural.', tipo: 'plantilla' },
+      { id: 'm1', titulo: 'Registro semanal de intereses', descripcion: 'Lámina imprimible: una semana anotando lo que consumís por gusto y sus temas.', tipo: 'plantilla', printableId: 'registro-intereses' },
       {
         id: 'm2',
-        titulo: 'Cuestionario de Intereses Profesionales (Delgado)',
-        descripcion: 'Evaluación escrita de intereses profesionales, se administra y devuelve en sesión.',
-        tipo: 'pdf',
+        titulo: 'Test de Intereses Profesionales (en la plataforma)',
+        descripcion: 'El test se responde directamente acá: tu profesional te lo asigna desde Actividades y las respuestas le llegan solas.',
+        tipo: 'lectura',
       },
       {
         id: 'm3',
@@ -610,17 +571,9 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
     ],
-    videos: [
-      {
-        id: 'v1',
-        titulo: 'Aptitud e interés: cuando no coinciden',
-        descripcion: 'Qué hacer cuando te gusta algo que te cuesta (y viceversa).',
-        url: 'https://www.youtube.com/watch?v=metodo-brujula-aptitudes',
-        duracion: '9 min',
-      },
-    ],
+    videos: [],
     materiales: [
-      { id: 'm1', titulo: 'Guía de aptitudes con ejemplos', descripcion: 'Descripción de cada aptitud con ejemplos cotidianos.', tipo: 'pdf' },
+      { id: 'm1', titulo: 'Guía de aptitudes con ejemplos', descripcion: 'Lámina imprimible: las 10 aptitudes con ejemplos cotidianos para reconocerlas.', tipo: 'plantilla', printableId: 'guia-aptitudes' },
     ],
     preguntasGuia: [
       '¿Qué evidencia escolar/extraescolar respalda cada aptitud?',
@@ -672,18 +625,10 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
     ],
-    videos: [
-      {
-        id: 'v1',
-        titulo: 'Cómo entrevistar a un profesional',
-        descripcion: 'Guía práctica para conseguir y conducir la entrevista.',
-        url: 'https://www.youtube.com/watch?v=metodo-brujula-exploracion',
-        duracion: '6 min',
-      },
-    ],
+    videos: [],
     materiales: [
-      { id: 'm1', titulo: 'Guía de entrevista a profesionales', descripcion: '20 preguntas sugeridas + tips de contacto.', tipo: 'pdf' },
-      { id: 'm2', titulo: 'Checklist de visita a instituciones', descripcion: 'Qué mirar y qué preguntar en una visita.', tipo: 'plantilla' },
+      { id: 'm1', titulo: 'Guía de entrevista a profesionales', descripcion: 'Lámina imprimible: 14 preguntas potentes + cómo conseguir y conducir la charla.', tipo: 'plantilla', printableId: 'guia-entrevista' },
+      { id: 'm2', titulo: 'Checklist de visita a instituciones', descripcion: 'Lámina imprimible: qué averiguar antes, durante y después de cada visita.', tipo: 'plantilla', printableId: 'checklist-visita' },
     ],
     preguntasGuia: [
       '¿Qué fantasías se confirmaron y cuáles se desarmaron?',
@@ -747,15 +692,7 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
     ],
-    videos: [
-      {
-        id: 'v1',
-        titulo: 'Proyecto de vida: la carrera al servicio de la vida',
-        descripcion: 'Por qué empezar por la vida y no por el listado de carreras.',
-        url: 'https://www.youtube.com/watch?v=metodo-brujula-proyecto',
-        duracion: '11 min',
-      },
-    ],
+    videos: [],
     materiales: [
       { id: 'm1', titulo: 'Plantilla: Mapa de proyecto de vida', descripcion: 'Lámina imprimible con las áreas del proyecto para completar.', tipo: 'plantilla', printableId: 'mapa-proyecto' },
       { id: 'm2', titulo: 'Plantilla: El Triángulo de mi vida', descripcion: 'Lámina imprimible de la representación simbólica personal.', tipo: 'plantilla', printableId: 'triangulo-vida' },
@@ -809,18 +746,11 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
     ],
-    videos: [
-      {
-        id: 'v1',
-        titulo: 'Cómo leer un plan de estudios',
-        descripcion: 'Qué mirar más allá del nombre de la carrera.',
-        url: 'https://www.youtube.com/watch?v=metodo-brujula-carreras',
-        duracion: '8 min',
-      },
-    ],
+    videos: [],
     materiales: [
-      { id: 'm1', titulo: 'Ficha comparativa de carreras', descripcion: 'Plantilla para investigar cada finalista.', tipo: 'plantilla' },
-      { id: 'm2', titulo: 'Directorio de portales oficiales', descripcion: 'Dónde buscar información confiable de instituciones.', tipo: 'enlace' },
+      { id: 'm1', titulo: 'Ficha comparativa de carreras', descripcion: 'Lámina imprimible: una columna por finalista, del plan de estudios al «me imagino ahí».', tipo: 'plantilla', printableId: 'ficha-carreras' },
+      { id: 'm3', titulo: 'Infografía: Cómo leer un plan de estudios', descripcion: 'Siete pasos para leer un plan como profesional y detectar señales.', tipo: 'lectura', printableId: 'infografia-plan-estudios' },
+      { id: 'm2', titulo: 'Directorio de portales oficiales', descripcion: 'Fuentes oficiales para investigar carreras (imprimible + acceso directo a la Guía de Carreras del SIU).', tipo: 'enlace', printableId: 'directorio-portales', url: 'https://guiadecarreras.siu.edu.ar/' },
     ],
     preguntasGuia: [
       '¿Investiga con criterios propios o con rankings ajenos?',
@@ -883,18 +813,10 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
     ],
-    videos: [
-      {
-        id: 'v1',
-        titulo: 'Sostener la decisión',
-        descripcion: 'Cómo responder a los cuestionamientos sin perder el rumbo.',
-        url: 'https://www.youtube.com/watch?v=metodo-brujula-plan',
-        duracion: '7 min',
-      },
-    ],
+    videos: [],
     materiales: [
-      { id: 'm1', titulo: 'Plantilla: Plan de acción', descripcion: 'Cronograma de pasos con fechas y requisitos.', tipo: 'plantilla' },
-      { id: 'm2', titulo: 'Calendario de inscripciones', descripcion: 'Fechas clave de inscripción por institución.', tipo: 'pdf' },
+      { id: 'm1', titulo: 'Plantilla: Plan de acción', descripcion: 'Lámina imprimible: cronograma de pasos con fechas, requisitos y plan B.', tipo: 'plantilla', printableId: 'cronograma-pasos' },
+      { id: 'm2', titulo: 'Calendario de inscripciones', descripcion: 'Lámina imprimible: fechas clave de inscripción por institución, para completar con datos oficiales.', tipo: 'plantilla', printableId: 'calendario-inscripciones' },
     ],
     preguntasGuia: [
       '¿El plan es realista y con fechas verificables?',
