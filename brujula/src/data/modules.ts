@@ -84,6 +84,9 @@ export const MODULES: ModuleDefinition[] = [
       { id: 'm1', titulo: 'Plantilla: Línea de vida', descripcion: 'Lámina imprimible para marcar tus momentos importantes.', tipo: 'plantilla', printableId: 'linea-vida' },
       { id: 'm2', titulo: 'Guía para familias: cómo acompañar', descripcion: 'Qué ayuda y qué no durante el proceso. Para imprimir y entregar.', tipo: 'plantilla', printableId: 'guia-familias' },
       { id: 'm3', titulo: 'Infografía: El proceso, en un vistazo', descripcion: 'Por qué la orientación no es un test y cómo son las 5 etapas del camino.', tipo: 'lectura', printableId: 'infografia-metodo' },
+      { id: 'm4', titulo: 'Encuadre del proceso', descripcion: 'Para entregar al inicio: qué es el proceso, cómo trabajamos (sujetos integrales: emociones, deseos, contexto) y los compromisos de ambas partes.', tipo: 'plantilla', printableId: 'encuadre-proceso' },
+      { id: 'm5', titulo: 'Consentimiento informado (menores)', descripcion: 'Modelo para completar y firmar con el adulto responsable antes del primer encuentro.', tipo: 'plantilla', printableId: 'consentimiento-informado' },
+      { id: 'm6', titulo: 'Guía de entrevista inicial: ¡Contame de vos!', descripcion: 'Mapa de la primera entrevista, por secciones. El objetivo es el vínculo, no el cuestionario.', tipo: 'plantilla', printableId: 'entrevista-inicial' },
     ],
     preguntasGuia: [
       '¿Cómo llega al proceso? ¿Quién lo trae: deseo propio o presión externa?',
@@ -151,12 +154,19 @@ export const MODULES: ModuleDefinition[] = [
     materiales: [
       { id: 'm1', titulo: 'Ficha: Mis espejos', descripcion: 'Lámina imprimible para registrar las respuestas de tus tres espejos.', tipo: 'plantilla', printableId: 'mis-espejos' },
       {
+        id: 'm3',
+        titulo: 'Infografía: El Sujeto y la personalidad',
+        descripcion: 'Cómo se configura el psiquismo (ello, yo, superyó) y por qué la meta del proceso es la autonomía al decidir.',
+        tipo: 'lectura',
+        printableId: 'infografia-sujeto',
+      },
+      {
         id: 'm2',
         titulo: 'Test de temperamento de Fisher (online)',
         descripcion:
           'Herramienta de autoconocimiento: cómo tu temperamento influye en tus decisiones. Hacelo online y anotá tu resultado para conversarlo en sesión.',
         tipo: 'enlace',
-        url: 'https://www.psicoactiva.com/test/test-temperamento-fisher/',
+        url: 'https://www.psicoactiva.com/test/test-temperamento-fisher/?r=1a60a2a86a3a52a4a76',
       },
     ],
     preguntasGuia: [
@@ -240,6 +250,8 @@ export const MODULES: ModuleDefinition[] = [
       '¿Sus valores son propios o repetidos del discurso familiar?',
       '¿Qué conflicto de valores aparece (p. ej. libertad vs. seguridad)?',
       '¿Qué valores necesita que el futuro trabajo respete sí o sí?',
+      'Devolución de la Rueda de la Vida: comparar áreas más altas y más bajas. ¿Por qué creés que esa área está baja/alta? ¿Qué te gustaría que cambie?',
+      'Rueda: ¿tu futura ocupación puede ayudarte a mejorar alguna de estas áreas? ¿Qué carreras u oficios se relacionan con lo que más valorás?',
     ],
   },
   {
@@ -696,6 +708,7 @@ export const MODULES: ModuleDefinition[] = [
     materiales: [
       { id: 'm1', titulo: 'Plantilla: Mapa de proyecto de vida', descripcion: 'Lámina imprimible con las áreas del proyecto para completar.', tipo: 'plantilla', printableId: 'mapa-proyecto' },
       { id: 'm2', titulo: 'Plantilla: El Triángulo de mi vida', descripcion: 'Lámina imprimible de la representación simbólica personal.', tipo: 'plantilla', printableId: 'triangulo-vida' },
+      { id: 'm3', titulo: 'Infografía: OV por competencias · Proyecto de vida vs. vida con proyectos', descripcion: 'Qué significa orientar por competencias y la diferencia entre tener proyectos y tener un proyecto de vida.', tipo: 'lectura', printableId: 'infografia-competencias' },
     ],
     preguntasGuia: [
       '¿El proyecto es propio o calcado de un modelo externo?',
@@ -821,6 +834,9 @@ export const MODULES: ModuleDefinition[] = [
     preguntasGuia: [
       '¿El plan es realista y con fechas verificables?',
       '¿Qué apoyos familiares/económicos requiere y están conversados?',
+      'Espacio de integración: ¿qué descubriste de vos en todo el proceso?',
+      'Devolución final verbal y escrita (generar los informes desde la ficha).',
+      'Cierre simbólico del taller: elegir un gesto/objeto/palabra que condense el recorrido.',
       '¿Cómo se siente al cerrar? ¿Qué queda abierto para seguimiento?',
     ],
   },
