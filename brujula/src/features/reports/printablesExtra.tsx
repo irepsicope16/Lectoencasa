@@ -504,7 +504,228 @@ function CalendarioInscripciones() {
   )
 }
 
+// ---------- 16 · Encuadre del proceso ----------
+function EncuadreProceso() {
+  return (
+    <>
+      <Caja>
+        Bienvenido/a al proceso de Orientación Vocacional-Ocupacional. Esta hoja explica cómo vamos a
+        trabajar, para que empecemos con las reglas claras y la confianza puesta.
+      </Caja>
+      <Titulo>Qué es (y qué no es) este proceso</Titulo>
+      <p className="text-[12px] leading-relaxed text-neutral-700">
+        No es un test que “da un resultado”: es un recorrido de autoconocimiento y exploración, acompañado
+        profesionalmente, donde la decisión la construís vos. Dos ideas nos van a acompañar todo el camino:
+        <strong> el futuro no se puede predecir</strong> y <strong>nada en la vida es lineal</strong> — se
+        puede elegir, recalcular y volver a elegir.
+      </p>
+      <Titulo>Cómo trabajamos</Titulo>
+      <p className="text-[12px] leading-relaxed text-neutral-700">
+        Con <strong>SUJETOS</strong>, de forma <strong>INTEGRAL</strong>: teniendo en cuenta tus{' '}
+        <strong>EMOCIONES</strong>, tus <strong>DESEOS</strong> y tu <strong>CONTEXTO</strong>. No sos un
+        puntaje ni una lista de aptitudes: sos una persona completa eligiendo un camino.
+      </p>
+      <Titulo>Compromisos de ambas partes</Titulo>
+      <Check texto="Asistencia a los encuentros acordados (avisar con tiempo si hay que reprogramar)." />
+      <Check texto="Realizar las actividades entre encuentros: son parte del proceso, no «tarea extra»." />
+      <Check texto="Honestidad: acá no hay respuestas correctas, hay respuestas tuyas." />
+      <Check texto="Confidencialidad profesional: lo trabajado se comparte solo según lo acordado." />
+      <Check texto="Devolución final verbal y escrita al cierre del proceso." />
+      <Titulo>Datos del encuadre</Titulo>
+      <p className="mt-2 text-[12px] text-neutral-600">Día y horario: ______________________ · Duración de cada encuentro: ________</p>
+      <p className="mt-3 text-[12px] text-neutral-600">Cantidad estimada de encuentros: ________ · Modalidad: ☐ Presencial ☐ Virtual ☐ Mixta</p>
+      <p className="mt-3 text-[12px] text-neutral-600">Contacto profesional: ______________________________________</p>
+    </>
+  )
+}
+
+// ---------- 17 · Consentimiento informado ----------
+function ConsentimientoInformado() {
+  return (
+    <>
+      <Caja>
+        Modelo de consentimiento para consultantes menores de edad. Completar y firmar antes del primer
+        encuentro. (Documento de referencia: cada profesional lo adapta a su jurisdicción y criterio.)
+      </Caja>
+      <p className="mt-4 text-[12.5px] leading-[1.9] text-neutral-800">
+        Yo, ______________________________________, DNI ______________, en mi carácter de
+        madre / padre / tutor/a de ______________________________________, DNI ______________,
+        <strong> autorizo</strong> su participación en el proceso de Orientación Vocacional-Ocupacional
+        conducido por la profesional ______________________________________.
+      </p>
+      <p className="mt-4 text-[12.5px] leading-[1.9] text-neutral-800">
+        Declaro estar informado/a de que: (1) se trata de un proceso de autoconocimiento y exploración,
+        no de un test con resultado automático; (2) incluye entrevistas, actividades, cuestionarios y
+        tareas entre encuentros; (3) la información trabajada es confidencial y se comparte con la familia
+        únicamente en la instancia de devolución o cuando el profesional lo considere necesario; (4) al
+        finalizar se entrega una devolución verbal y escrita.
+      </p>
+      <div className="mt-8 grid grid-cols-2 gap-10">
+        <div>
+          <div className="border-b border-neutral-400 pb-8" />
+          <p className="mt-1 text-center text-[11px] text-neutral-500">Firma y aclaración del adulto responsable</p>
+        </div>
+        <div>
+          <div className="border-b border-neutral-400 pb-8" />
+          <p className="mt-1 text-center text-[11px] text-neutral-500">Firma de la profesional</p>
+        </div>
+      </div>
+      <p className="mt-6 text-[12px] text-neutral-600">Lugar y fecha: ______________________________________</p>
+    </>
+  )
+}
+
+// ---------- 18 · Entrevista inicial: ¡Contame de vos! ----------
+function EntrevistaInicial() {
+  const secciones: [string, string[]][] = [
+    ['Para romper el hielo', [
+      '¿Cómo te gusta que te digan? ¿Quién te acompaña hoy (aunque sea a la distancia)?',
+      '¿Cómo llegaste hasta acá? ¿De quién fue la idea de hacer este proceso?',
+      '¿Qué esperás que pase en estos encuentros? ¿Y qué esperás que NO pase?',
+    ]],
+    ['Tu familia y tu contexto', [
+      '¿Con quiénes vivís? ¿A qué se dedica cada uno?',
+      '¿Qué se dice en tu casa sobre estudiar y trabajar?',
+      '¿Hay alguien cuya opinión te pese especialmente al pensar tu futuro?',
+    ]],
+    ['Tu escuela', [
+      '¿Cómo te llevás con la escuela? ¿Qué materias disfrutás y cuáles padecés?',
+      '¿Cómo sos como estudiante? ¿Y cómo te gustaría ser?',
+      '¿Hubo algún docente o experiencia que te haya marcado?',
+    ]],
+    ['Tu tiempo, tus gustos', [
+      '¿Qué hacés cuando nadie te pide nada? (ahí suele esconderse el deseo)',
+      '¿En qué se te pasa el tiempo volando?',
+      '¿Qué cosas nuevas te gustaría probar y todavía no probaste?',
+    ]],
+    ['El futuro, hoy', [
+      '¿Qué ideas ya se te cruzaron sobre qué estudiar o hacer? ¿De dónde salieron?',
+      '¿Qué te ilusiona del futuro? ¿Qué te asusta?',
+      'Si el proceso saliera perfecto, ¿qué te llevarías al terminar?',
+    ]],
+  ]
+  return (
+    <>
+      <Caja>
+        Guía para la entrevista personal inicial del primer encuentro. El objetivo no es completar el
+        cuestionario: es <strong>lograr el vínculo</strong>. Usala como mapa, no como guion — y dejá que
+        la conversación mande.
+      </Caja>
+      {secciones.map(([titulo, preguntas]) => (
+        <div key={titulo}>
+          <Titulo>{titulo}</Titulo>
+          {preguntas.map((p, i) => (
+            <p key={i} className="border-b border-neutral-200 py-1.5 text-[12px]">{p}</p>
+          ))}
+        </div>
+      ))}
+      <Titulo color="#6f6ac1">Observaciones de la profesional</Titulo>
+      <Lineas n={4} />
+    </>
+  )
+}
+
+// ---------- 19 · Infografía: OV por competencias y proyecto de vida ----------
+function InfografiaCompetencias() {
+  return (
+    <>
+      <div className="rounded-xl border-2 border-[#14a098] bg-[#e3f4f2] p-4">
+        <p className="text-[14px] font-bold text-[#0e7f79]">¿Qué es la orientación vocacional por competencias?</p>
+        <p className="mt-1.5 text-[12px] leading-relaxed text-neutral-700">
+          No mira solamente «qué te gusta». Mira qué sabés hacer, qué podrías desarrollar y cómo lo ponés
+          en juego. Una <strong>competencia</strong> es la combinación de tres cosas en acción:
+        </p>
+        <div className="mt-3 flex gap-3 text-center">
+          {[['SABER', 'conocimientos'], ['SABER HACER', 'habilidades'], ['SABER SER', 'actitudes']].map(([t, d]) => (
+            <div key={t} className="flex-1 rounded-lg bg-white p-2.5">
+              <p className="text-[12px] font-bold text-[#0e7f79]">{t}</p>
+              <p className="text-[10.5px] text-neutral-500">{d}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-2.5 text-[11.5px] text-neutral-600">
+          Las competencias se entrenan: por eso el futuro no está «escrito» en lo que hoy te sale bien o mal.
+        </p>
+      </div>
+      <div className="mt-5 rounded-xl border-2 border-[#8b87d4] bg-[#edecf9] p-4">
+        <p className="text-[14px] font-bold text-[#6f6ac1]">Proyecto de vida ≠ una vida con proyectos</p>
+        <div className="mt-2.5 grid grid-cols-2 gap-3">
+          <div className="rounded-lg bg-white p-3">
+            <p className="text-[12px] font-bold">Una vida con proyectos</p>
+            <p className="mt-1 text-[11.5px] leading-relaxed text-neutral-600">
+              Proyectos sueltos que se van sumando sin dirección: empiezo esto, pruebo aquello… Puede ser
+              divertida, pero cada decisión arranca de cero.
+            </p>
+          </div>
+          <div className="rounded-lg bg-white p-3">
+            <p className="text-[12px] font-bold text-[#6f6ac1]">Un proyecto de vida</p>
+            <p className="mt-1 text-[11.5px] leading-relaxed text-neutral-600">
+              Un rumbo elegido que ordena las decisiones: sé hacia dónde quiero ir, y cada proyecto (la
+              carrera incluida) es un medio para acercarme.
+            </p>
+          </div>
+        </div>
+        <p className="mt-2.5 text-[11.5px] text-neutral-600">
+          En este proceso construimos lo segundo: primero la vida que querés, después los caminos de
+          formación que te acercan a ella.
+        </p>
+      </div>
+      <Caja>
+        Dos ideas para llevarse: <strong>el futuro no se predice, se construye</strong> — y{' '}
+        <strong>nada en la vida es lineal</strong>: se puede recalcular siempre.
+      </Caja>
+    </>
+  )
+}
+
+// ---------- 20 · Infografía: El Sujeto y la personalidad ----------
+function InfografiaSujeto() {
+  const instancias: [string, string, string, string][] = [
+    ['ELLO', '«Quiero, ya»', 'La fuente de los impulsos y deseos. No conoce la espera ni las normas: pura energía de querer.', '#8b87d4'],
+    ['SUPERYÓ', '«Debés»', 'Las normas, exigencias y mandatos que fuimos internalizando de la familia, la escuela y la cultura.', '#b3474f'],
+    ['YO', '«Elijo cómo»', 'El negociador: escucha al deseo, escucha al deber, mira la realidad… y decide. Es la instancia que este proceso fortalece.', '#0e7f79'],
+  ]
+  return (
+    <>
+      <Caja>
+        En este proceso trabajamos con <strong>SUJETOS</strong> de forma <strong>INTEGRAL</strong>: tus{' '}
+        <strong>emociones</strong>, tus <strong>deseos</strong> y tu <strong>contexto</strong> cuentan
+        tanto como tus notas. Para entender cómo decidimos, ayuda conocer cómo se configura nuestro
+        psiquismo (según el modelo clásico de Freud):
+      </Caja>
+      <div className="mt-4 space-y-3">
+        {instancias.map(([nombre, frase, desc, color]) => (
+          <div key={nombre} className="flex items-start gap-3 rounded-xl border-2 p-3" style={{ borderColor: color }}>
+            <div className="w-24 shrink-0 text-center">
+              <p className="text-[14px] font-black" style={{ color }}>{nombre}</p>
+              <p className="text-[10.5px] italic text-neutral-500">{frase}</p>
+            </div>
+            <p className="text-[12px] leading-relaxed text-neutral-700">{desc}</p>
+          </div>
+        ))}
+      </div>
+      <div className="mt-5 rounded-xl bg-[#e3f4f2] p-4">
+        <p className="text-[13px] font-bold text-[#0e7f79]">¿Y esto qué tiene que ver con elegir una carrera?</p>
+        <p className="mt-1.5 text-[12px] leading-relaxed text-neutral-700">
+          Todo. Cuando «no sabés qué elegir», muchas veces lo que pasa es que tu deseo (ello) y tus
+          mandatos (superyó) están tirando para lados distintos. La meta de este proceso es tu{' '}
+          <strong>AUTONOMÍA</strong>: que la decisión la tome tu <strong>yo</strong> — escuchando el
+          deseo, revisando los mandatos y mirando la realidad — y no el impulso solo ni el deber solo.
+        </p>
+      </div>
+      <Titulo>Para pensar</Titulo>
+      <p className="text-[12px] text-neutral-600">En tu elección, ¿qué está diciendo tu deseo? ¿Qué está exigiendo tu «deber»? ¿Qué decide tu yo?</p>
+      <Lineas n={3} />
+    </>
+  )
+}
+
 export const PRINTABLES_EXTRA: Record<string, { titulo: string; componente: () => React.ReactNode }> = {
+  'encuadre-proceso': { titulo: 'Encuadre del proceso', componente: EncuadreProceso },
+  'consentimiento-informado': { titulo: 'Consentimiento informado (menores)', componente: ConsentimientoInformado },
+  'entrevista-inicial': { titulo: 'Entrevista inicial: ¡Contame de vos!', componente: EntrevistaInicial },
+  'infografia-competencias': { titulo: 'OV por competencias · Proyecto de vida vs. vida con proyectos', componente: InfografiaCompetencias },
+  'infografia-sujeto': { titulo: 'El Sujeto y la personalidad: ello, yo y superyó', componente: InfografiaSujeto },
   'guia-familias': { titulo: 'Guía para familias: cómo acompañar', componente: GuiaFamilias },
   'infografia-metodo': { titulo: 'El proceso de orientación, en un vistazo', componente: InfografiaMetodo },
   'mis-espejos': { titulo: 'Ficha: Mis espejos', componente: MisEspejos },
