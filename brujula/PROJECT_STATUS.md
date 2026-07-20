@@ -1,6 +1,6 @@
 # Método Brújula — Estado del proyecto
 
-> Última actualización: 2026-07-19 · Rama: `claude/metodo-brujula-platform-a1ns2b`
+> Última actualización: 2026-07-20 · Rama: `claude/metodo-brujula-platform-a1ns2b`
 > Documento de continuidad: leer junto a [ARCHITECTURE.md](./ARCHITECTURE.md) antes de retomar el desarrollo.
 
 ## Resumen ejecutivo
