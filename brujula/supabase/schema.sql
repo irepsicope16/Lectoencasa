@@ -64,6 +64,30 @@ create or replace function public.mb_consultant_id()
 returns text language sql stable security definer set search_path = public
 as $$ select data->>'consultantId' from public.profiles where id = auth.uid() $$;
 
+-- ---------- Consultants (la ficha ES el consultante) ----------
+-- Se crea acá, antes de mb_owns_consultant(), porque esa función la
+-- referencia y Postgres valida las funciones "language sql" al crearlas.
+-- "profesionalId" (dueña de la ficha) es el límite de aislamiento entre
+-- profesionales: cada una solo ve y edita sus propios consultantes.
+create table if not exists public.consultants (
+  id text primary key,
+  data jsonb not null,
+  "consultantId" text generated always as (data->>'id') stored,
+  "profesionalId" text generated always as (data->>'profesionalId') stored
+);
+-- por si la tabla ya existía de una instalación previa sin esta columna
+alter table public.consultants
+  add column if not exists "profesionalId" text generated always as (data->>'profesionalId') stored;
+create index if not exists consultants_profesional_idx on public.consultants ("profesionalId");
+alter table public.consultants enable row level security;
+drop policy if exists consultants_pro on public.consultants;
+create policy consultants_pro on public.consultants
+  for all using (public.mb_role() = 'profesional' and "profesionalId" = auth.uid()::text)
+  with check (public.mb_role() = 'profesional' and "profesionalId" = auth.uid()::text);
+drop policy if exists consultants_own on public.consultants;
+create policy consultants_own on public.consultants
+  for select using ("consultantId" = public.mb_consultant_id());
+
 -- ¿La profesional logueada es dueña de este consultante? Security definer
 -- para poder consultar `consultants` desde las políticas de las otras
 -- tablas sin caer en recursión de RLS.
@@ -85,9 +109,8 @@ create policy profiles_own on public.profiles
   for select using (id = auth.uid());
 drop policy if exists profiles_pro on public.profiles;
 
--- ---------- Colecciones de datos ----------
+-- ---------- Resto de colecciones de datos ----------
 -- "consultantId" es columna generada desde data para RLS e índices.
--- En `consultants` se genera desde data->>'id' (la ficha ES el consultante).
 
 do $$
 declare
@@ -120,28 +143,6 @@ begin
         with check ("consultantId" = public.mb_consultant_id())$f$, t || '_own', t);
   end loop;
 end $$;
-
--- consultants: igual, pero el id de la fila ES el consultantId.
--- "profesionalId" (dueña de la ficha) es el límite de aislamiento entre
--- profesionales: cada una solo ve y edita sus propios consultantes.
-create table if not exists public.consultants (
-  id text primary key,
-  data jsonb not null,
-  "consultantId" text generated always as (data->>'id') stored,
-  "profesionalId" text generated always as (data->>'profesionalId') stored
-);
--- por si la tabla ya existía de una instalación previa sin esta columna
-alter table public.consultants
-  add column if not exists "profesionalId" text generated always as (data->>'profesionalId') stored;
-create index if not exists consultants_profesional_idx on public.consultants ("profesionalId");
-alter table public.consultants enable row level security;
-drop policy if exists consultants_pro on public.consultants;
-create policy consultants_pro on public.consultants
-  for all using (public.mb_role() = 'profesional' and "profesionalId" = auth.uid()::text)
-  with check (public.mb_role() = 'profesional' and "profesionalId" = auth.uid()::text);
-drop policy if exists consultants_own on public.consultants;
-create policy consultants_own on public.consultants
-  for select using ("consultantId" = public.mb_consultant_id());
 
 -- materiales generales (files sin consultante): lectura para cualquier cuenta
 drop policy if exists files_general on public.files;
