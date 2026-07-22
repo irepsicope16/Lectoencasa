@@ -180,6 +180,14 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'enlace',
         url: 'https://www.psicoactiva.com/test/test-temperamento-fisher/?r=1a60a2a86a3a52a4a76',
       },
+      {
+        id: 'm4',
+        titulo: '¿Cuál es tu tipo de personalidad? (con tests)',
+        descripcion:
+          'Video con tests de personalidad para seguir profundizando el autoconocimiento después de la encuesta "¿Qué ves cuando me ves?".',
+        tipo: 'enlace',
+        url: 'https://youtu.be/mtkryJtFhKs',
+      },
     ],
     preguntasGuia: [
       '¿Qué distancia hay entre cómo se ve y cómo lo ven?',

@@ -6,6 +6,7 @@ import { AppShell } from '@/components/layout/AppShell'
 // Hash router: funciona en hosting estático (GitHub Pages) sin config de servidor.
 // Lazy loading por página → cada área se descarga solo cuando se usa.
 
+const SplashPage = lazy(() => import('@/features/home/SplashPage'))
 const LoginPage = lazy(() => import('@/features/auth/LoginPage'))
 
 const ProDashboard = lazy(() => import('@/features/dashboard/ProDashboard'))
@@ -41,7 +42,7 @@ function Page({ children }: { children: React.ReactNode }) {
 }
 
 export const router = createHashRouter([
-  { path: '/', element: <RedirectByRole /> },
+  { path: '/', element: <Page><SplashPage /></Page> },
   { path: '/login', element: <Page><LoginPage /></Page> },
   {
     element: <RequireRole role="profesional" />,
