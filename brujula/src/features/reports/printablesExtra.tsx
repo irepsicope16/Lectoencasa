@@ -134,25 +134,20 @@ function InfografiaMetodo() {
   )
 }
 
-// ---------- 3 · Ficha: Mis espejos ----------
-function MisEspejos() {
+// ---------- 3 · Ficha: Entrevista a 10 personas ----------
+function EntrevistaDiez() {
   return (
     <>
       <Caja>
-        Elegí tres personas de ámbitos distintos (familia, amistades, escuela) y pedile a cada una: «Decime
-        tres palabras que me describan, y algo que creas que hago bien». Anotá sus respuestas acá.
+        Entrevistá a 10 personas de tu entorno (familia, amigos, docentes, vecinos) y pedile a cada una:
+        «Decime en pocas palabras cómo me ves, y algo que creas que hago bien». Anotá sus respuestas acá y
+        traé la ficha completa a la próxima sesión.
       </Caja>
-      {[1, 2, 3].map((n) => (
-        <div key={n} className="mt-4 rounded-xl border-2 border-neutral-200 p-3">
-          <p className="text-[12px] font-bold text-[#6f6ac1]">Espejo {n} — ¿Quién es? _______________ (vínculo: ____________)</p>
-          <p className="mt-3 text-[11.5px] text-neutral-500">Sus tres palabras:</p>
-          <Lineas n={1} gap="mt-4" />
-          <p className="mt-3 text-[11.5px] text-neutral-500">Algo que dice que hago bien:</p>
-          <Lineas n={1} gap="mt-4" />
-        </div>
-      ))}
+      <Tabla cols={['Persona (vínculo)', 'Cómo me ve, en pocas palabras', 'Algo que hago bien']} rows={10} anchoCol0="w-[26%]" />
       <Titulo>Para pensar después</Titulo>
-      <p className="text-[12px] text-neutral-600">¿Qué se repitió? ¿Qué te sorprendió? ¿Qué coincide (o no) con cómo te ves vos?</p>
+      <p className="text-[12px] text-neutral-600">
+        ¿Qué palabras o ideas se repitieron? ¿Qué te sorprendió? ¿Qué coincide (o no) con cómo te ves vos?
+      </p>
       <Lineas n={3} />
     </>
   )
@@ -728,7 +723,7 @@ export const PRINTABLES_EXTRA: Record<string, { titulo: string; componente: () =
   'infografia-sujeto': { titulo: 'El Sujeto y la personalidad: ello, yo y superyó', componente: InfografiaSujeto },
   'guia-familias': { titulo: 'Guía para familias: cómo acompañar', componente: GuiaFamilias },
   'infografia-metodo': { titulo: 'El proceso de orientación, en un vistazo', componente: InfografiaMetodo },
-  'mis-espejos': { titulo: 'Ficha: Mis espejos', componente: MisEspejos },
+  'entrevista-10-personas': { titulo: 'Ficha: Entrevista a 10 personas', componente: EntrevistaDiez },
   '40-valores': { titulo: 'Listado de 40 valores', componente: Valores40 },
   'bitacora-deseo': { titulo: 'Bitácora del deseo (una semana)', componente: BitacoraDeseo },
   'inventario-fortalezas': { titulo: 'Inventario de fortalezas', componente: InventarioFortalezas },
