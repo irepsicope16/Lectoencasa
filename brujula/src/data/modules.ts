@@ -148,21 +148,23 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
       {
-        id: 'identidad-espejos',
-        titulo: 'Los espejos',
-        descripcion: 'Preguntale a tres personas cercanas cómo te describirían en tres palabras. Compará con cómo te ves vos.',
+        id: 'identidad-entrevista-10',
+        titulo: 'Entrevista a 10 personas (para enviar)',
+        descripcion:
+          'Entrevistá a 10 personas de tu entorno (familia, amigos, docentes, vecinos) y pedile a cada una que te describa en pocas palabras: cómo te ve, en qué te destacás, algo que hacés bien. Es tarea para hacer en casa: completá la ficha y traela a la próxima sesión.',
         tipo: 'entrevista',
-        duracionMin: 30,
+        duracionMin: 45,
         dimensiones: ['identidad', 'fortalezas'],
         preguntas: [
-          { id: 'q1', texto: '¿Qué palabras eligió cada persona?', tipo: 'lista' },
-          { id: 'q2', texto: '¿Qué coincidió con tu propia mirada? ¿Qué te sorprendió?', tipo: 'abierta' },
+          { id: 'q1', texto: 'Anotá a cada persona (vínculo) y lo que respondió', tipo: 'lista' },
+          { id: 'q2', texto: '¿Qué palabras o ideas se repitieron entre varias personas?', tipo: 'abierta' },
+          { id: 'q3', texto: '¿Qué te sorprendió de lo que dijeron? ¿Qué coincide (o no) con cómo te ves vos?', tipo: 'abierta' },
         ],
       },
     ],
     videos: [],
     materiales: [
-      { id: 'm1', titulo: 'Ficha: Mis espejos', descripcion: 'Lámina imprimible para registrar las respuestas de tus tres espejos.', tipo: 'plantilla', printableId: 'mis-espejos' },
+      { id: 'm1', titulo: 'Para enviar · Ficha: Entrevista a 10 personas', descripcion: 'Lámina imprimible para registrar las respuestas de las 10 personas entrevistadas.', tipo: 'plantilla', printableId: 'entrevista-10-personas' },
       {
         id: 'm3',
         titulo: 'Infografía: El Sujeto y la personalidad',
