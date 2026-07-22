@@ -35,7 +35,7 @@ export default function SettingsPage() {
   const [cloud, setCloud] = useState(getCloudConfig())
   const cloudActive = isCloudEnabled()
   const [cloudBusy, setCloudBusy] = useState('')
-  const [proAccount, setProAccount] = useState({ email: '', password: '' })
+  const [proAccount, setProAccount] = useState({ nombre: '', apellido: '', titulo: '', email: '', password: '' })
 
   const testCloud = async () => {
     setCloudBusy('Probando conexión…')
@@ -67,7 +67,12 @@ export default function SettingsPage() {
         email: proAccount.email.trim(),
         password: proAccount.password,
         options: {
-          data: { role: 'profesional', nombre: 'Irene', apellido: 'M.', titulo: 'Lic. en Psicopedagogía · Esp. en Orientación Vocacional' },
+          data: {
+            role: 'profesional',
+            nombre: proAccount.nombre.trim(),
+            apellido: proAccount.apellido.trim(),
+            titulo: proAccount.titulo.trim() || undefined,
+          },
         },
       })
       if (error) toast.error(error.message)
@@ -240,6 +245,23 @@ export default function SettingsPage() {
               <div className="grid gap-4 rounded-lg border border-dashed p-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <p className="text-[12.5px] font-semibold">1 · Crear tu cuenta profesional</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Input
+                      placeholder="Nombre"
+                      value={proAccount.nombre}
+                      onChange={(e) => setProAccount({ ...proAccount, nombre: e.target.value })}
+                    />
+                    <Input
+                      placeholder="Apellido"
+                      value={proAccount.apellido}
+                      onChange={(e) => setProAccount({ ...proAccount, apellido: e.target.value })}
+                    />
+                  </div>
+                  <Input
+                    placeholder="Título profesional (opcional)"
+                    value={proAccount.titulo}
+                    onChange={(e) => setProAccount({ ...proAccount, titulo: e.target.value })}
+                  />
                   <Input
                     placeholder="tu@email.com"
                     value={proAccount.email}
@@ -254,7 +276,10 @@ export default function SettingsPage() {
                   <Button
                     size="sm"
                     onClick={createProAccount}
-                    disabled={!proAccount.email || proAccount.password.length < 6 || !!cloudBusy}
+                    disabled={
+                      !proAccount.nombre || !proAccount.apellido || !proAccount.email ||
+                      proAccount.password.length < 6 || !!cloudBusy
+                    }
                   >
                     Crear cuenta profesional
                   </Button>

@@ -1,6 +1,6 @@
 # Método Brújula — Estado del proyecto
 
-> Última actualización: 2026-07-20 · Rama: `claude/metodo-brujula-platform-a1ns2b`
+> Última actualización: 2026-07-22 · Rama: `claude/metodo-brujula-platform-a1ns2b`
 > Documento de continuidad: leer junto a [ARCHITECTURE.md](./ARCHITECTURE.md) antes de retomar el desarrollo.
 
 ## Resumen ejecutivo
@@ -78,26 +78,40 @@ npm run build && npx vite preview          # producción local
 | Cuenta consultante | Se crea al crear la ficha; si se edita el email después, no se sincroniza |
 | Formularios | Consultantes y Login usan RHF+Zod; Sesiones/Agenda/Evaluaciones usan useState |
 
-### Modo nube (Supabase) — Fase 3 ✅
+### Modo nube (Supabase) — Fase 3 ✅ · Multi-profesional (Fase 4) ✅
 - `services/cloud/` (config, cliente lazy, migración) + `SupabaseRepository` con la misma
   API que el repo local: la UI no distingue modos. SDK en chunk diferido (0 costo local).
 - Auth real (Supabase Auth + tabla `profiles` por trigger); cuentas de consultante creadas
   con cliente aislado sin pisar la sesión profesional.
 - `supabase/schema.sql`: tablas-documento (id + data jsonb + consultantId generado) con
-  RLS — profesional acceso total, consultante solo sus filas, materiales generales lectura.
-- Ajustes → Nube: conexión, prueba, activación, alta de cuenta profesional y migración
-  local→nube (upsert re-ejecutable). Guía no técnica en `SUPABASE.md`.
-- Pendiente de activación por la usuaria (crear proyecto Supabase y pegar URL + anon key).
+  RLS — **cada profesional accede solo a sus propios consultantes** (columna generada
+  `profesionalId` en `consultants` + función `mb_owns_consultant()` que scopea el resto de
+  las tablas por ese dueño), consultante solo sus filas, materiales generales lectura.
+- Registro público de nuevas profesionales en `/registro` (`RegisterProPage.tsx`): cada una
+  crea su propia cuenta con su nombre/apellido/título, aislada del resto — pensado para
+  comercializar la plataforma a varias profesionales sobre el mismo proyecto Supabase.
+- Config de nube con fallback a variables de entorno de build (`VITE_SUPABASE_URL` /
+  `VITE_SUPABASE_ANON_KEY`, ver `.env.example`): si el build de producción las trae, la nube
+  queda activa por defecto para cualquier visitante (necesario para que `/registro`
+  funcione sin que cada profesional tenga que tocar Ajustes primero).
+- Ajustes → Nube: conexión, prueba, activación, alta de cuenta profesional (con
+  nombre/apellido/título propios, ya no hardcodeado) y migración local→nube (upsert
+  re-ejecutable). Guía no técnica en `SUPABASE.md` (incluye el paso de producción).
+- Pendiente de activación por la usuaria (crear proyecto Supabase, correr `schema.sql` y
+  pegar URL + anon key — en Ajustes para uso propio, o en `.env.production.local` para que
+  quede prendido de fábrica en el sitio publicado).
 
 ## 🔜 Backlog priorizado
 
-1. Probar el modo nube contra un proyecto Supabase real (el código está; falta el proyecto).
+1. Probar el modo nube (y el registro multi-profesional) contra un proyecto Supabase real
+   (el código está; falta el proyecto).
 2. Tests unitarios del motor (`compassEngine` es puro y testeable; agregar vitest).
 3. Unificar formularios restantes en RHF+Zod (elimina ~10 casts `as never`).
 4. Búsqueda global de contenido (sesiones, notas, reflexiones).
 5. Dashboard con widgets configurables.
 6. Diccionario de sinónimos para el matching del motor (hoy substring normalizado).
-7. Streaming de respuestas IA; notificaciones por email; multi-profesional (`organization_id`).
+7. Streaming de respuestas IA; notificaciones por email; panel de facturación/planes si se
+   comercializa con suscripción paga.
 
 ## Decisiones técnicas clave (no revertir sin razón)
 

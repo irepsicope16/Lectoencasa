@@ -8,8 +8,9 @@
 -- elimina errores de mapeo. La normalización por columnas es un
 -- paso posterior de backend (ver ARCHITECTURE.md).
 --
--- Seguridad (RLS):
---   · profesional  → acceso total a todas las colecciones
+-- Seguridad (RLS) — multi-profesional:
+--   · profesional  → acceso total, pero SOLO a sus propios consultantes
+--     y a los datos de esos consultantes (por "profesionalId")
 --   · consultante  → solo SUS filas (por consultantId del perfil)
 --   · materiales generales (files sin consultante) → lectura para todos
 -- ============================================================
@@ -63,13 +64,26 @@ create or replace function public.mb_consultant_id()
 returns text language sql stable security definer set search_path = public
 as $$ select data->>'consultantId' from public.profiles where id = auth.uid() $$;
 
--- Políticas de profiles
+-- ¿La profesional logueada es dueña de este consultante? Security definer
+-- para poder consultar `consultants` desde las políticas de las otras
+-- tablas sin caer en recursión de RLS.
+create or replace function public.mb_owns_consultant(cid text)
+returns boolean language sql stable security definer set search_path = public
+as $$
+  select exists (
+    select 1 from public.consultants c
+    where c."consultantId" = cid and c."profesionalId" = auth.uid()::text
+  )
+$$;
+
+-- Políticas de profiles: cada cuenta solo lee su propio perfil.
+-- (Antes existía una política que dejaba a cualquier "profesional" leer
+-- TODOS los perfiles — filtraba nombres/emails entre profesionales
+-- distintos. La app nunca la necesitó: cada cuenta solo consulta la suya.)
 drop policy if exists profiles_own on public.profiles;
 create policy profiles_own on public.profiles
   for select using (id = auth.uid());
 drop policy if exists profiles_pro on public.profiles;
-create policy profiles_pro on public.profiles
-  for select using (public.mb_role() = 'profesional');
 
 -- ---------- Colecciones de datos ----------
 -- "consultantId" es columna generada desde data para RLS e índices.
@@ -92,12 +106,12 @@ begin
       )$f$, t);
     execute format('create index if not exists %I on public.%I ("consultantId")', t || '_cid_idx', t);
     execute format('alter table public.%I enable row level security', t);
-    -- profesional: acceso total
+    -- profesional: acceso total, pero solo a SUS consultantes
     execute format('drop policy if exists %I on public.%I', t || '_pro', t);
     execute format($f$
       create policy %I on public.%I for all
-        using (public.mb_role() = 'profesional')
-        with check (public.mb_role() = 'profesional')$f$, t || '_pro', t);
+        using (public.mb_role() = 'profesional' and public.mb_owns_consultant("consultantId"))
+        with check (public.mb_role() = 'profesional' and public.mb_owns_consultant("consultantId"))$f$, t || '_pro', t);
     -- consultante: solo sus filas
     execute format('drop policy if exists %I on public.%I', t || '_own', t);
     execute format($f$
@@ -107,17 +121,24 @@ begin
   end loop;
 end $$;
 
--- consultants: igual, pero el id de la fila ES el consultantId
+-- consultants: igual, pero el id de la fila ES el consultantId.
+-- "profesionalId" (dueña de la ficha) es el límite de aislamiento entre
+-- profesionales: cada una solo ve y edita sus propios consultantes.
 create table if not exists public.consultants (
   id text primary key,
   data jsonb not null,
-  "consultantId" text generated always as (data->>'id') stored
+  "consultantId" text generated always as (data->>'id') stored,
+  "profesionalId" text generated always as (data->>'profesionalId') stored
 );
+-- por si la tabla ya existía de una instalación previa sin esta columna
+alter table public.consultants
+  add column if not exists "profesionalId" text generated always as (data->>'profesionalId') stored;
+create index if not exists consultants_profesional_idx on public.consultants ("profesionalId");
 alter table public.consultants enable row level security;
 drop policy if exists consultants_pro on public.consultants;
 create policy consultants_pro on public.consultants
-  for all using (public.mb_role() = 'profesional')
-  with check (public.mb_role() = 'profesional');
+  for all using (public.mb_role() = 'profesional' and "profesionalId" = auth.uid()::text)
+  with check (public.mb_role() = 'profesional' and "profesionalId" = auth.uid()::text);
 drop policy if exists consultants_own on public.consultants;
 create policy consultants_own on public.consultants
   for select using ("consultantId" = public.mb_consultant_id());

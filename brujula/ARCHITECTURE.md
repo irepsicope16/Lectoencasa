@@ -185,8 +185,11 @@ siembran solo si el storage está vacío (versión de seed registrada).
 
 ## 12. Roadmap post-v1
 
-1. `SupabaseDriver` + Auth real (magic link) — sin cambios de UI.
+1. `SupabaseDriver` + Auth real — ✅ hecho (ver §11).
 2. PDFs server-side y envío por email.
-3. Multi-profesional (equipos/estudios) — `organization_id` ya previsto en el modelo.
-4. Portal de pago (suscripción del estudio) y facturación.
+3. Multi-profesional — ✅ hecho: cada profesional es su propio tenant (`profesionalId` en
+   `consultants`, scopeado por RLS; alta pública en `/registro`). Si más adelante se necesita
+   que varias profesionales de un mismo estudio compartan una cartera de consultantes, ahí sí
+   habría que sumar una capa de `organization_id` por encima de esto.
+4. Portal de pago (suscripción por profesional) y facturación.
 5. Notificaciones push/email de tareas y sesiones.
