@@ -15,10 +15,11 @@ export const MODULES: ModuleDefinition[] = [
     nombre: 'Historia',
     esencia: 'De dónde venís: tu recorrido hasta hoy.',
     introduccion:
-      'Todo proceso de orientación comienza por la biografía. Este módulo reconstruye la historia personal, familiar y escolar del consultante: los hitos, las mudanzas, los cambios de escuela, las personas significativas y los momentos en que algo despertó su curiosidad.',
+      'Todo proceso de orientación comienza por la biografía — y por una idea que atraviesa todo el método: no se trata de diseñar un Proyecto de Vida cerrado y definitivo, sino de acompañar una vida con proyectos, que se eligen, se prueban y se pueden recalcular. Este módulo reconstruye la historia personal, familiar y escolar del consultante: los hitos, las mudanzas, los cambios de escuela, las personas significativas y los momentos en que algo despertó su curiosidad.',
     paraElConsultante:
-      'Antes de mirar hacia adelante, vamos a mirar tu recorrido. Tu historia guarda pistas: momentos en los que disfrutaste aprender, personas que te marcaron, decisiones que ya tomaste sin darte cuenta.',
+      'No venimos a armarte un plan de vida cerrado para siempre: venimos a ayudarte a elegir tus próximos proyectos, sabiendo que más adelante vas a poder revisarlos y elegir otros. Antes de mirar hacia adelante, vamos a mirar tu recorrido. Tu historia guarda pistas: momentos en los que disfrutaste aprender, personas que te marcaron, decisiones que ya tomaste sin darte cuenta.',
     objetivos: [
+      'Presentar el proceso como una vida con proyectos que se eligen y se revisan — no un "proyecto de vida" cerrado para siempre',
       'Reconstruir la línea de vida con sus hitos significativos',
       'Identificar experiencias que despertaron interés o rechazo',
       'Reconocer personas y contextos que influyeron en el recorrido',
@@ -29,7 +30,7 @@ export const MODULES: ModuleDefinition[] = [
         id: 'historia-linea-vida',
         titulo: 'Mi línea de vida',
         descripcion:
-          'Dibujá o escribí una línea del tiempo con los momentos más importantes de tu vida: cambios, logros, personas, descubrimientos.',
+          'Dibujá tu línea de vida: una línea entre tu Nacimiento y Hoy, marcando los momentos más importantes (cambios, logros, personas, descubrimientos).',
         tipo: 'ejercicio',
         duracionMin: 40,
         dimensiones: ['historia'],
@@ -79,14 +80,23 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
     ],
-    videos: [],
+    videos: [
+      {
+        id: 'v1',
+        titulo: 'Aprender a elegir: ¿Qué carrera estudiar? — Liliana Llamas (TEDx Bariloche)',
+        descripcion:
+          'La socióloga Liliana Llamas propone otro punto de vista para elegir: no un proyecto de vida cerrado, sino ir eligiendo el estilo de vida que querés, proyecto a proyecto. Después de verlo, escribí lo que te resultó más importante.',
+        url: 'https://youtu.be/bfp3vN2B5zo',
+        duracion: '15 min',
+      },
+    ],
     materiales: [
-      { id: 'm1', titulo: 'Plantilla: Línea de vida', descripcion: 'Lámina imprimible para marcar tus momentos importantes.', tipo: 'plantilla', printableId: 'linea-vida' },
-      { id: 'm2', titulo: 'Guía para familias: cómo acompañar', descripcion: 'Qué ayuda y qué no durante el proceso. Para imprimir y entregar.', tipo: 'plantilla', printableId: 'guia-familias' },
-      { id: 'm3', titulo: 'Infografía: El proceso, en un vistazo', descripcion: 'Por qué la orientación no es un test y cómo son las 5 etapas del camino.', tipo: 'lectura', printableId: 'infografia-metodo' },
-      { id: 'm4', titulo: 'Encuadre del proceso', descripcion: 'Para entregar al inicio: qué es el proceso, cómo trabajamos (sujetos integrales: emociones, deseos, contexto) y los compromisos de ambas partes.', tipo: 'plantilla', printableId: 'encuadre-proceso' },
-      { id: 'm5', titulo: 'Consentimiento informado (menores)', descripcion: 'Modelo para completar y firmar con el adulto responsable antes del primer encuentro.', tipo: 'plantilla', printableId: 'consentimiento-informado' },
-      { id: 'm6', titulo: 'Guía de entrevista inicial: ¡Contame de vos!', descripcion: 'Mapa de la primera entrevista, por secciones. El objetivo es el vínculo, no el cuestionario.', tipo: 'plantilla', printableId: 'entrevista-inicial' },
+      { id: 'm1', titulo: 'Encuadre del proceso', descripcion: 'Para entregar al inicio: qué es el proceso, cómo trabajamos (sujetos integrales: emociones, deseos, contexto) y los compromisos de ambas partes.', tipo: 'plantilla', printableId: 'encuadre-proceso' },
+      { id: 'm2', titulo: 'Infografía: El proceso, en un vistazo', descripcion: 'Por qué la orientación no es un test y cómo son las 5 etapas del camino.', tipo: 'lectura', printableId: 'infografia-metodo' },
+      { id: 'm3', titulo: 'Guía de entrevista inicial: ¡Contame de vos!', descripcion: 'Mapa de la primera entrevista, por secciones. El objetivo es el vínculo, no el cuestionario.', tipo: 'plantilla', printableId: 'entrevista-inicial' },
+      { id: 'm4', titulo: 'Plantilla: Línea de vida', descripcion: 'Lámina imprimible para dibujar, entre "Nacimiento" y "Hoy", la línea con tus momentos importantes.', tipo: 'plantilla', printableId: 'linea-vida' },
+      { id: 'm5', titulo: 'Para enviar · Guía para familias: cómo acompañar', descripcion: 'Qué ayuda y qué no durante el proceso. Para imprimir y entregar a la familia.', tipo: 'plantilla', printableId: 'guia-familias' },
+      { id: 'm6', titulo: 'Para enviar · Consentimiento informado (menores)', descripcion: 'Modelo para completar y firmar con el adulto responsable antes del primer encuentro.', tipo: 'plantilla', printableId: 'consentimiento-informado' },
     ],
     preguntasGuia: [
       '¿Cómo llega al proceso? ¿Quién lo trae: deseo propio o presión externa?',
