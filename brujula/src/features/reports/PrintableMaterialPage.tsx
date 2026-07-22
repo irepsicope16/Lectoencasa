@@ -88,24 +88,38 @@ function RuedaDeLaVida() {
 }
 
 function LineaDeVida() {
+  const x0 = 50
+  const x1 = 630
+  const y = 150
+  const puntos = 9
   return (
     <>
-      <Instrucciones texto="Marcá sobre la línea los momentos más importantes de tu vida: cambios, logros, personas, descubrimientos, mudanzas. Poné arriba los momentos lindos y abajo los difíciles. Al lado de cada marca, escribí qué pasó y qué edad tenías." />
-      <div className="relative mx-auto my-16 h-[340px]">
-        <div className="absolute left-0 right-0 top-1/2 h-[2.5px] bg-[#14a098]" />
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 rounded-full border-2 border-[#14a098] bg-white px-3 py-1 text-[11px] font-semibold">
-          Nacimiento
-        </div>
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 rounded-full border-2 border-[#8b87d4] bg-white px-3 py-1 text-[11px] font-semibold">
-          Hoy
-        </div>
-        <p className="absolute left-1/2 top-2 -translate-x-1/2 text-[11px] font-medium text-[#0e7f79]">
-          ↑ momentos lindos
-        </p>
-        <p className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[11px] font-medium text-[#6f6ac1]">
-          ↓ momentos difíciles
-        </p>
-      </div>
+      <Instrucciones texto="Dibujá tu línea de vida: trazá una línea entre 'Nacimiento' y 'Hoy' (podés seguir la guía punteada o hacerla a tu manera). Sobre esa línea, marcá los momentos más importantes: cambios, logros, personas, descubrimientos, mudanzas. Los lindos hacia arriba, los difíciles hacia abajo. Al lado de cada marca, escribí qué pasó y qué edad tenías." />
+      <p className="mb-1.5 text-center text-[11px] font-medium text-[#0e7f79]">↑ momentos lindos</p>
+      <svg viewBox="0 0 680 300" className="mx-auto block w-full max-w-[640px]">
+        {/* línea de base a trazar: guía punteada, no una línea ya terminada */}
+        <line x1={x0} y1={y} x2={x1} y2={y} stroke="#8b87d4" strokeWidth={1.5} strokeDasharray="2 6" strokeLinecap="round" />
+        {Array.from({ length: puntos }, (_, i) => {
+          const x = x0 + ((x1 - x0) * i) / (puntos - 1)
+          return (
+            <g key={i}>
+              {/* marca sobre la línea */}
+              <line x1={x} y1={y - 6} x2={x} y2={y + 6} stroke="#14a098" strokeWidth={1.25} />
+              {/* guía punteada hacia arriba, para escribir un momento lindo */}
+              <line x1={x} y1={y - 10} x2={x} y2={70} stroke="#c7d8d6" strokeWidth={1} strokeDasharray="1 4" />
+              <circle cx={x} cy={62} r={9} fill="#fff" stroke="#14a098" strokeWidth={1} />
+              {/* guía punteada hacia abajo, para escribir un momento difícil */}
+              <line x1={x} y1={y + 10} x2={x} y2={238} stroke="#ded9f1" strokeWidth={1} strokeDasharray="1 4" />
+              <circle cx={x} cy={246} r={9} fill="#fff" stroke="#8b87d4" strokeWidth={1} />
+            </g>
+          )
+        })}
+        <rect x={x0 - 42} y={y - 13} width="84" height="26" rx="13" fill="#fff" stroke="#14a098" strokeWidth={2} />
+        <text x={x0} y={y + 4} textAnchor="middle" fontSize="11" fontWeight="600" fill="#0e7f79">Nacimiento</text>
+        <rect x={x1 - 32} y={y - 13} width="64" height="26" rx="13" fill="#fff" stroke="#8b87d4" strokeWidth={2} />
+        <text x={x1} y={y + 4} textAnchor="middle" fontSize="11" fontWeight="600" fill="#6f6ac1">Hoy</text>
+      </svg>
+      <p className="mt-1.5 text-center text-[11px] font-medium text-[#6f6ac1]">↓ momentos difíciles</p>
       <NotasFinales lineas={3} pregunta="¿Qué momento elegirías como el más importante? ¿Por qué?" />
     </>
   )
