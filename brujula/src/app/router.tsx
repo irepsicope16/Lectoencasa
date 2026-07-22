@@ -8,6 +8,7 @@ import { AppShell } from '@/components/layout/AppShell'
 
 const SplashPage = lazy(() => import('@/features/home/SplashPage'))
 const LoginPage = lazy(() => import('@/features/auth/LoginPage'))
+const RegisterProPage = lazy(() => import('@/features/auth/RegisterProPage'))
 
 const ProDashboard = lazy(() => import('@/features/dashboard/ProDashboard'))
 const ConsultantsPage = lazy(() => import('@/features/consultants/ConsultantsPage'))
@@ -44,6 +45,7 @@ function Page({ children }: { children: React.ReactNode }) {
 export const router = createHashRouter([
   { path: '/', element: <Page><SplashPage /></Page> },
   { path: '/login', element: <Page><LoginPage /></Page> },
+  { path: '/registro', element: <Page><RegisterProPage /></Page> },
   {
     element: <RequireRole role="profesional" />,
     children: [

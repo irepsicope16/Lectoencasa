@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -8,6 +8,7 @@ import { ArrowRight, Compass, Sparkles, UserRound } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { FieldError, Input, Label } from '@/components/ui/input'
 import { useAuthStore } from '@/stores/authStore'
+import { isCloudEnabled } from '@/services/cloud/config'
 
 const schema = z.object({
   email: z.string().email('Ingresá un email válido'),
@@ -112,6 +113,15 @@ export default function LoginPage() {
                 Ingresar <ArrowRight />
               </Button>
             </form>
+
+            {isCloudEnabled() && (
+              <p className="mt-4 text-center text-[13px] text-muted-foreground">
+                ¿Sos profesional y todavía no tenés cuenta?{' '}
+                <Link to="/registro" className="font-medium text-primary underline-offset-2 hover:underline">
+                  Registrate
+                </Link>
+              </p>
+            )}
 
             <div className="mt-8 rounded-xl border border-dashed p-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-faint">
