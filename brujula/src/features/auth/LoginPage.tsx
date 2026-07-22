@@ -43,104 +43,113 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen">
-      {/* panel de marca */}
-      <div className="relative hidden w-[46%] flex-col justify-between overflow-hidden border-r bg-surface p-10 lg:flex">
-        <div className="flex items-center gap-2 text-[12px] font-medium tracking-[0.16em] text-faint uppercase">
-          <Compass className="h-4 w-4 text-primary" /> Psicope con Ire
-        </div>
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="mx-auto max-w-lg text-center"
-        >
-          <img
-            src="logo-completo.jpg"
-            alt="Método Brújula — Psicope con Ire. Encontrá tu norte. Construí tu camino."
-            className="mx-auto w-full max-w-[440px] rounded-3xl shadow-sm"
-          />
-          <p className="mx-auto mt-6 max-w-md text-[14px] leading-relaxed text-muted-foreground">
-            La plataforma profesional de orientación vocacional: evaluación, acompañamiento,
-            seguimiento y proyecto de vida en un solo lugar. Porque orientar no es aplicar un
-            test: es acompañar a alguien a encontrar su rumbo.
-          </p>
-        </motion.div>
-        <p className="text-[11.5px] text-faint">
-          © {new Date().getFullYear()} Psicope con Ire · Orientación vocacional y reorientación profesional
-        </p>
-        {/* brújula decorativa */}
-        <div className="pointer-events-none absolute -right-24 -top-24 opacity-[0.05]">
-          <Compass className="h-[420px] w-[420px] text-primary" strokeWidth={0.6} />
-        </div>
-      </div>
-
-      {/* formulario */}
-      <div className="flex flex-1 items-center justify-center p-6">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: 'easeOut' }}
-          className="w-full max-w-sm"
-        >
-          <img
-            src="logo-completo.jpg"
-            alt="Método Brújula — Psicope con Ire"
-            className="mx-auto mb-8 w-full max-w-[260px] rounded-2xl lg:hidden"
-          />
-          <h2 className="text-lg font-semibold tracking-tight">Ingresar a la plataforma</h2>
-          <p className="mt-0.5 text-[13px] text-muted-foreground">
-            Accedé con tu cuenta profesional o de consultante.
-          </p>
-
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
-            <div>
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="tu@email.com" autoComplete="email" {...register('email')} />
-              <FieldError>{errors.email?.message}</FieldError>
-            </div>
-            <div>
-              <Label htmlFor="password">Contraseña</Label>
-              <Input id="password" type="password" placeholder="••••••••" autoComplete="current-password" {...register('password')} />
-              <FieldError>{errors.password?.message}</FieldError>
-            </div>
-            {serverError && (
-              <p className="rounded-lg bg-danger-soft px-3 py-2 text-[12.5px] text-danger">{serverError}</p>
-            )}
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              Ingresar <ArrowRight />
-            </Button>
-          </form>
-
-          <div className="mt-8 rounded-xl border border-dashed p-4">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-faint">
-              Cuentas de demostración
-            </p>
-            <div className="mt-2.5 space-y-1.5">
-              <button
-                onClick={() => fillDemo('ire@psicopeconire.com')}
-                className="flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] transition-colors hover:bg-surface-2"
-              >
-                <Sparkles className="h-4 w-4 text-primary" />
-                <span>
-                  <span className="font-medium">Profesional</span>
-                  <span className="block text-[11.5px] text-faint">ire@psicopeconire.com</span>
-                </span>
-              </button>
-              <button
-                onClick={() => fillDemo('valen@demo.com')}
-                className="flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] transition-colors hover:bg-surface-2"
-              >
-                <UserRound className="h-4 w-4 text-accent-strong" />
-                <span>
-                  <span className="font-medium">Consultante</span>
-                  <span className="block text-[11.5px] text-faint">valen@demo.com</span>
-                </span>
-              </button>
-            </div>
+    <div className="flex min-h-screen flex-col">
+      <div className="flex flex-1">
+        {/* panel de marca */}
+        <div className="relative hidden w-[46%] flex-col justify-between overflow-hidden border-r bg-surface p-10 lg:flex">
+          <div className="flex items-center gap-2 text-[12px] font-medium tracking-[0.16em] text-faint uppercase">
+            <Compass className="h-4 w-4 text-primary" /> Psicope con Ire
           </div>
-        </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="mx-auto max-w-lg text-center"
+          >
+            <img
+              src="logo-completo.jpg"
+              alt="Método Brújula — Psicope con Ire. Encontrá tu norte. Construí tu camino."
+              className="mx-auto w-full max-w-[440px] rounded-3xl shadow-sm"
+            />
+            <p className="mx-auto mt-6 max-w-md text-[14px] leading-relaxed text-muted-foreground">
+              La plataforma profesional de orientación vocacional: evaluación, acompañamiento,
+              seguimiento y proyecto de vida en un solo lugar. Porque orientar no es aplicar un
+              test: es acompañar a alguien a encontrar su rumbo.
+            </p>
+          </motion.div>
+          <p className="text-[11.5px] text-faint">
+            © {new Date().getFullYear()} Psicope con Ire · Orientación vocacional y reorientación profesional
+          </p>
+          {/* brújula decorativa */}
+          <div className="pointer-events-none absolute -right-24 -top-24 opacity-[0.05]">
+            <Compass className="h-[420px] w-[420px] text-primary" strokeWidth={0.6} />
+          </div>
+        </div>
+
+        {/* formulario */}
+        <div className="flex flex-1 items-center justify-center p-6">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: 'easeOut' }}
+            className="w-full max-w-sm"
+          >
+            <img
+              src="logo-completo.jpg"
+              alt="Método Brújula — Psicope con Ire"
+              className="mx-auto mb-8 w-full max-w-[260px] rounded-2xl lg:hidden"
+            />
+            <h2 className="text-lg font-semibold tracking-tight">Ingresar a la plataforma</h2>
+            <p className="mt-0.5 text-[13px] text-muted-foreground">
+              Accedé con tu cuenta profesional o de consultante.
+            </p>
+
+            <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" placeholder="tu@email.com" autoComplete="email" {...register('email')} />
+                <FieldError>{errors.email?.message}</FieldError>
+              </div>
+              <div>
+                <Label htmlFor="password">Contraseña</Label>
+                <Input id="password" type="password" placeholder="••••••••" autoComplete="current-password" {...register('password')} />
+                <FieldError>{errors.password?.message}</FieldError>
+              </div>
+              {serverError && (
+                <p className="rounded-lg bg-danger-soft px-3 py-2 text-[12.5px] text-danger">{serverError}</p>
+              )}
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                Ingresar <ArrowRight />
+              </Button>
+            </form>
+
+            <div className="mt-8 rounded-xl border border-dashed p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-faint">
+                Cuentas de demostración
+              </p>
+              <div className="mt-2.5 space-y-1.5">
+                <button
+                  onClick={() => fillDemo('ire@psicopeconire.com')}
+                  className="flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] transition-colors hover:bg-surface-2"
+                >
+                  <Sparkles className="h-4 w-4 text-primary" />
+                  <span>
+                    <span className="font-medium">Profesional</span>
+                    <span className="block text-[11.5px] text-faint">ire@psicopeconire.com</span>
+                  </span>
+                </button>
+                <button
+                  onClick={() => fillDemo('valen@demo.com')}
+                  className="flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] transition-colors hover:bg-surface-2"
+                >
+                  <UserRound className="h-4 w-4 text-accent-strong" />
+                  <span>
+                    <span className="font-medium">Consultante</span>
+                    <span className="block text-[11.5px] text-faint">valen@demo.com</span>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
+
+      <footer className="border-t px-6 py-3 text-center">
+        <p className="text-[10.5px] leading-relaxed text-faint">
+          Material elaborado por Lic. Irene Morbidelli — MP: 260505. Prohibida su reproducción,
+          distribución o venta sin autorización expresa de la autora.
+        </p>
+      </footer>
     </div>
   )
 }
