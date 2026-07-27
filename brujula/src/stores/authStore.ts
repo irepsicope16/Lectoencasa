@@ -41,6 +41,7 @@ async function cloudLogin(email: string, password: string): Promise<{ ok: boolea
       password: '',
       titulo: p.titulo,
       consultantId: p.consultantId,
+      membershipExpiresAt: p.membershipExpiresAt,
       createdAt: p.createdAt ?? now,
       updatedAt: now,
     },

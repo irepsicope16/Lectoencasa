@@ -41,6 +41,7 @@ begin
       'apellido', coalesce(new.raw_user_meta_data->>'apellido', ''),
       'titulo', new.raw_user_meta_data->>'titulo',
       'consultantId', new.raw_user_meta_data->>'consultantId',
+      'membershipExpiresAt', new.raw_user_meta_data->>'membershipExpiresAt',
       'email', new.email,
       'createdAt', to_jsonb(now())::text
     )
