@@ -1,12 +1,15 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuthStore } from '@/stores/authStore'
+import { isMembershipExpired } from '@/lib/membership'
 import type { UserRole } from '@/types'
+import MembershipExpiredPage from './MembershipExpiredPage'
 
 export function RequireRole({ role }: { role: UserRole }) {
   const user = useAuthStore((s) => s.user)
   const location = useLocation()
   if (!user) return <Navigate to="/login" state={{ from: location }} replace />
   if (user.role !== role) return <Navigate to={user.role === 'profesional' ? '/pro' : '/mi'} replace />
+  if (isMembershipExpired(user)) return <MembershipExpiredPage />
   return <Outlet />
 }
 

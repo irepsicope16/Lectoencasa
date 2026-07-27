@@ -16,6 +16,13 @@ export interface User {
   titulo?: string // p. ej. "Lic. en Psicopedagogía"
   avatarUrl?: string
   consultantId?: string // solo rol consultante
+  /**
+   * Solo rol profesional, solo modo nube. Fecha ISO hasta la que la
+   * membresía está paga. Sin valor = sin restricción (cuentas creadas
+   * antes de esta función, o modo local). Se renueva a mano desde
+   * Supabase → Table Editor → profiles → data.membershipExpiresAt.
+   */
+  membershipExpiresAt?: string
   createdAt: string
   updatedAt: string
 }

@@ -21,6 +21,7 @@ import { getAISettings, saveAISettings } from '@/services/ai'
 import { resetDemoData } from '@/data/seed'
 import { useQueryClient } from '@tanstack/react-query'
 import { cn } from '@/lib/utils'
+import { oneYearFromNow } from '@/lib/membership'
 
 export default function SettingsPage() {
   const theme = useUIStore((s) => s.theme)
@@ -72,6 +73,7 @@ export default function SettingsPage() {
             nombre: proAccount.nombre.trim(),
             apellido: proAccount.apellido.trim(),
             titulo: proAccount.titulo.trim() || undefined,
+            membershipExpiresAt: oneYearFromNow(),
           },
         },
       })

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { FieldError, Input, Label } from '@/components/ui/input'
 import { toast } from '@/components/ui/toast'
 import { isCloudEnabled } from '@/services/cloud/config'
+import { oneYearFromNow } from '@/lib/membership'
 
 const schema = z
   .object({
@@ -51,6 +52,7 @@ export default function RegisterProPage() {
           nombre: data.nombre.trim(),
           apellido: data.apellido.trim(),
           titulo: data.titulo?.trim() || undefined,
+          membershipExpiresAt: oneYearFromNow(),
         },
       },
     })
@@ -82,6 +84,9 @@ export default function RegisterProPage() {
         <p className="mt-0.5 text-[13px] text-muted-foreground">
           Tu espacio queda aislado del de cualquier otra profesional: cada una ve y trabaja solo con sus propios
           consultantes.
+        </p>
+        <p className="mt-2 text-[12px] text-faint">
+          La membresía es anual. Coordiná el pago con Psicope con Ire para activar o renovar tu cuenta.
         </p>
 
         {!cloudActive && (
