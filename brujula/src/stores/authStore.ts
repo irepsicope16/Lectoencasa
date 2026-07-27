@@ -19,7 +19,7 @@ async function cloudLogin(email: string, password: string): Promise<{ ok: boolea
   if (error) {
     const msg = /confirm/i.test(error.message)
       ? 'La cuenta aún no está confirmada. En Supabase, desactivá «Confirm email» (ver guía).'
-      : 'Email o contraseña incorrectos.'
+      : `Email o contraseña incorrectos. (${error.message})`
     return { ok: false, error: msg }
   }
   const uid = data.user.id
