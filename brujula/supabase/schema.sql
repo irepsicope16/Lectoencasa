@@ -144,10 +144,16 @@ begin
   end loop;
 end $$;
 
--- materiales generales (files sin consultante): lectura para cualquier cuenta
+-- materiales generales (files sin consultante): lectura para cualquier cuenta,
+-- y cualquier profesional los puede subir/editar (son un pool compartido,
+-- no pertenecen a un consultante — por eso no hay "profesionalId" acá).
 drop policy if exists files_general on public.files;
 create policy files_general on public.files
   for select using ("consultantId" is null and auth.uid() is not null);
+drop policy if exists files_general_write on public.files;
+create policy files_general_write on public.files
+  for all using ("consultantId" is null and public.mb_role() = 'profesional')
+  with check ("consultantId" is null and public.mb_role() = 'profesional');
 
 -- ============================================================
 -- Listo. Siguiente paso: en Authentication → Providers → Email,
