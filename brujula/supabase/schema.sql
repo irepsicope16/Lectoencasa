@@ -141,19 +141,23 @@ begin
       create policy %I on public.%I for all
         using ("consultantId" = public.mb_consultant_id())
         with check ("consultantId" = public.mb_consultant_id())$f$, t || '_own', t);
+    -- filas sin consultante (agenda personal, archivos generales, log
+    -- general…): cualquier profesional las puede gestionar. No todas las
+    -- tablas admiten consultantId null, pero la política no molesta a las
+    -- que no lo usan — simplemente nunca aplica ahí.
+    execute format('drop policy if exists %I on public.%I', t || '_gen', t);
+    execute format($f$
+      create policy %I on public.%I for all
+        using ("consultantId" is null and public.mb_role() = 'profesional')
+        with check ("consultantId" is null and public.mb_role() = 'profesional')$f$, t || '_gen', t);
   end loop;
 end $$;
 
--- materiales generales (files sin consultante): lectura para cualquier cuenta,
--- y cualquier profesional los puede subir/editar (son un pool compartido,
--- no pertenecen a un consultante — por eso no hay "profesionalId" acá).
+-- materiales generales (files sin consultante): además de lo anterior,
+-- lectura para cualquier cuenta (incluida consultante), no solo profesional.
 drop policy if exists files_general on public.files;
 create policy files_general on public.files
   for select using ("consultantId" is null and auth.uid() is not null);
-drop policy if exists files_general_write on public.files;
-create policy files_general_write on public.files
-  for all using ("consultantId" is null and public.mb_role() = 'profesional')
-  with check ("consultantId" is null and public.mb_role() = 'profesional');
 
 -- ============================================================
 -- Listo. Siguiente paso: en Authentication → Providers → Email,
