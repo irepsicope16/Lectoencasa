@@ -65,6 +65,19 @@ create or replace function public.mb_consultant_id()
 returns text language sql stable security definer set search_path = public
 as $$ select data->>'consultantId' from public.profiles where id = auth.uid() $$;
 
+-- ¿Es la cuenta dueña de la plataforma? Único rol con permiso para ver y
+-- renovar la membresía anual de las demás profesionales (panel
+-- /pro/profesionales). Identificada por email, no por id, para no
+-- depender de un UUID fijo.
+create or replace function public.mb_is_owner()
+returns boolean language sql stable security definer set search_path = public
+as $$
+  select exists (
+    select 1 from public.profiles
+    where id = auth.uid() and data->>'email' = 'irenemorbidelli@gmail.com'
+  )
+$$;
+
 -- ---------- Consultants (la ficha ES el consultante) ----------
 -- Se crea acá, antes de mb_owns_consultant(), porque esa función la
 -- referencia y Postgres valida las funciones "language sql" al crearlas.
@@ -101,14 +114,16 @@ as $$
   )
 $$;
 
--- Políticas de profiles: cada cuenta solo lee su propio perfil.
--- (Antes existía una política que dejaba a cualquier "profesional" leer
--- TODOS los perfiles — filtraba nombres/emails entre profesionales
--- distintos. La app nunca la necesitó: cada cuenta solo consulta la suya.)
+-- Políticas de profiles: cada cuenta lee su propio perfil; la dueña de la
+-- plataforma además puede ver y actualizar los de las demás profesionales
+-- (panel /pro/profesionales, para renovar membresías sin tocar Supabase).
 drop policy if exists profiles_own on public.profiles;
 create policy profiles_own on public.profiles
-  for select using (id = auth.uid());
+  for select using (id = auth.uid() or public.mb_is_owner());
 drop policy if exists profiles_pro on public.profiles;
+drop policy if exists profiles_admin_update on public.profiles;
+create policy profiles_admin_update on public.profiles
+  for update using (public.mb_is_owner()) with check (public.mb_is_owner());
 
 -- ---------- Resto de colecciones de datos ----------
 -- "consultantId" es columna generada desde data para RLS e índices.

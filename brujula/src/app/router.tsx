@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { createHashRouter } from 'react-router-dom'
-import { RedirectByRole, RequireAuth, RequireRole } from '@/features/auth/guards'
+import { RedirectByRole, RequireAuth, RequireOwner, RequireRole } from '@/features/auth/guards'
 import { AppShell } from '@/components/layout/AppShell'
 
 // Hash router: funciona en hosting estático (GitHub Pages) sin config de servidor.
@@ -18,6 +18,7 @@ const MethodOverviewPage = lazy(() => import('@/features/method/MethodOverviewPa
 const ModuleDetailProPage = lazy(() => import('@/features/method/ModuleDetailProPage'))
 const StatsPage = lazy(() => import('@/features/stats/StatsPage'))
 const SettingsPage = lazy(() => import('@/features/settings/SettingsPage'))
+const ProfessionalsAdminPage = lazy(() => import('@/features/settings/ProfessionalsAdminPage'))
 
 const MyDashboard = lazy(() => import('@/features/dashboard/MyDashboard'))
 const MyModulePage = lazy(() => import('@/features/method/MyModulePage'))
@@ -61,6 +62,10 @@ export const router = createHashRouter([
           { path: 'metodo/:moduleId', element: <Page><ModuleDetailProPage /></Page> },
           { path: 'estadisticas', element: <Page><StatsPage /></Page> },
           { path: 'ajustes', element: <Page><SettingsPage /></Page> },
+          {
+            element: <RequireOwner />,
+            children: [{ path: 'profesionales', element: <Page><ProfessionalsAdminPage /></Page> }],
+          },
         ],
       },
     ],
