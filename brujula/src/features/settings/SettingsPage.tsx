@@ -21,12 +21,15 @@ import { getAISettings, saveAISettings } from '@/services/ai'
 import { resetDemoData } from '@/data/seed'
 import { useQueryClient } from '@tanstack/react-query'
 import { cn } from '@/lib/utils'
-import { oneYearFromNow } from '@/lib/membership'
+import { isOwner, oneYearFromNow } from '@/lib/membership'
+import { useAuthStore } from '@/stores/authStore'
 
 export default function SettingsPage() {
   const theme = useUIStore((s) => s.theme)
   const setTheme = useUIStore((s) => s.setTheme)
   const qc = useQueryClient()
+  const user = useAuthStore((s) => s.user)
+  const showCloudPanel = isOwner(user)
 
   const [ai, setAi] = useState(getAISettings())
   const [saved, setSaved] = useState(false)
@@ -194,7 +197,8 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        {/* nube */}
+        {/* nube: solo la dueña de la plataforma administra la configuración de Supabase. */}
+        {showCloudPanel && (
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -300,6 +304,7 @@ export default function SettingsPage() {
             )}
           </CardContent>
         </Card>
+        )}
 
         {/* datos */}
         <Card className="lg:col-span-2">
