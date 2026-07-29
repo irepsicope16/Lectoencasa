@@ -11,6 +11,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Settings,
+  ShieldCheck,
   Sparkles,
   TrendingUp,
   Users,
@@ -18,6 +19,8 @@ import {
 import type { UserRole } from '@/types'
 import { Isotipo, LogoHorizontal } from '@/branding/Logo'
 import { useUIStore } from '@/stores/uiStore'
+import { useAuthStore } from '@/stores/authStore'
+import { isOwner } from '@/lib/membership'
 import { cn } from '@/lib/utils'
 import { STAGES } from '@/lib/constants'
 import { MODULES } from '@/data/modules'
@@ -32,6 +35,8 @@ const proNav = [
   { to: '/pro/ajustes', icon: Settings, label: 'Ajustes' },
 ]
 
+const ownerNavItem: (typeof proNav)[number] = { to: '/pro/profesionales', icon: ShieldCheck, label: 'Profesionales' }
+
 const misNav = [
   { to: '/mi', icon: Home, label: 'Mi camino', end: true },
   { to: '/mi/actividades', icon: ListChecks, label: 'Actividades' },
@@ -44,7 +49,9 @@ export function Sidebar({ role }: { role: UserRole }) {
   const collapsed = useUIStore((s) => s.sidebarCollapsed)
   const toggle = useUIStore((s) => s.toggleSidebar)
   const navigate = useNavigate()
-  const nav = role === 'profesional' ? proNav : misNav
+  const user = useAuthStore((s) => s.user)
+  const nav =
+    role === 'profesional' ? (isOwner(user) ? [...proNav, ownerNavItem] : proNav) : misNav
 
   return (
     <aside

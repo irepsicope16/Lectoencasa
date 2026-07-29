@@ -1,8 +1,15 @@
 import type { User } from '@/types'
 
 // Membresía anual manual (Fase "comercializar"): sin cobro automático — la
-// profesional paga por fuera de la app y la fecha se renueva a mano desde
-// Supabase (Table Editor → profiles → data.membershipExpiresAt).
+// profesional paga por fuera de la app y la fecha se renueva desde la
+// pantalla /pro/profesionales (solo visible para la dueña de la plataforma).
+
+/** Única cuenta con acceso administrativo (gestionar membresías de otras profesionales). */
+export const OWNER_EMAIL = 'irenemorbidelli@gmail.com'
+
+export function isOwner(user: User | null): boolean {
+  return !!user && user.email.trim().toLowerCase() === OWNER_EMAIL
+}
 
 export function oneYearFromNow(): string {
   const d = new Date()
