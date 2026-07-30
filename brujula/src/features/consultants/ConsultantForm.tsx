@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/dialog'
 import type { Consultant } from '@/types'
 import { CONSULTANT_STATUS } from '@/lib/constants'
+import { toast } from '@/components/ui/toast'
 
 const schema = z.object({
   nombre: z.string().min(2, 'Ingresá el nombre'),
@@ -84,9 +85,13 @@ export function ConsultantFormDialog({
   })
 
   const submit = async (data: ConsultantFormData) => {
-    await onSubmit({ ...data, fotoUrl })
-    reset()
-    onOpenChange(false)
+    try {
+      await onSubmit({ ...data, fotoUrl })
+      reset()
+      onOpenChange(false)
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'No se pudo guardar el consultante')
+    }
   }
 
   return (
