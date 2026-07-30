@@ -17,6 +17,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query'
 import { useConsultant, useModuleProgress, useUpdate } from '@/hooks/queries'
 import { deleteConsultantCascade } from '@/services/storage/db'
+import { ensureConsultantAccount } from '@/features/auth/accounts'
 import { toast } from '@/components/ui/toast'
 import { edad, fechaCorta, iniciales, nombreCompleto } from '@/lib/utils'
 import { overallProgress } from '@/lib/progress'
@@ -150,8 +151,13 @@ export default function ConsultantDetailPage() {
         onOpenChange={setEditOpen}
         initial={consultant}
         onSubmit={async (data) => {
-          await updateConsultant.mutateAsync({ id: consultant.id, patch: data })
-          toast.success('Ficha actualizada')
+          const updated = await updateConsultant.mutateAsync({ id: consultant.id, patch: data })
+          const cuenta = await ensureConsultantAccount(updated)
+          if (cuenta) {
+            toast.success(`Ficha actualizada · acceso: ${cuenta.email} / clave «${cuenta.password}»`)
+          } else {
+            toast.success('Ficha actualizada')
+          }
         }}
       />
 
