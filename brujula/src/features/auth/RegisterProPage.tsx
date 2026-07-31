@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { FieldError, Input, Label } from '@/components/ui/input'
 import { toast } from '@/components/ui/toast'
 import { isCloudEnabled } from '@/services/cloud/config'
-import { oneYearFromNow } from '@/lib/membership'
+import { pendingMembership } from '@/lib/membership'
 
 const schema = z
   .object({
@@ -52,7 +52,7 @@ export default function RegisterProPage() {
           nombre: data.nombre.trim(),
           apellido: data.apellido.trim(),
           titulo: data.titulo?.trim() || undefined,
-          membershipExpiresAt: oneYearFromNow(),
+          membershipExpiresAt: pendingMembership(),
         },
       },
     })
@@ -62,7 +62,7 @@ export default function RegisterProPage() {
         : error.message)
       return
     }
-    toast.success('Cuenta creada. Ya podés ingresar.')
+    toast.success('Cuenta creada. Vas a poder ingresar una vez que se active tu membresía.')
     navigate('/login', { replace: true })
   }
 
@@ -86,7 +86,8 @@ export default function RegisterProPage() {
           consultantes.
         </p>
         <p className="mt-2 text-[12px] text-faint">
-          La membresía es anual. Coordiná el pago con Psicope con Ire para activar o renovar tu cuenta.
+          Tu cuenta se crea al instante, pero el acceso se activa una vez que coordines el pago de la
+          membresía anual con Psicope con Ire.
         </p>
 
         {!cloudActive && (

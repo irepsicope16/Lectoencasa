@@ -17,6 +17,16 @@ export function oneYearFromNow(): string {
   return d.toISOString()
 }
 
+/**
+ * Autorregistro público (/registro): la cuenta se crea sin acceso activo —
+ * queda "pendiente" hasta que la dueña de la plataforma confirme el pago y
+ * la active desde /pro/profesionales. Evita que el link de registro, si
+ * circula de más, le dé acceso gratis a cualquiera.
+ */
+export function pendingMembership(): string {
+  return new Date().toISOString()
+}
+
 /** Sin fecha = sin restricción (cuentas viejas, dueña de la plataforma, modo local). */
 export function isMembershipExpired(user: User | null): boolean {
   if (!user || user.role !== 'profesional' || !user.membershipExpiresAt) return false

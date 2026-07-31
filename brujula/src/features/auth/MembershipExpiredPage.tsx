@@ -16,14 +16,14 @@ export default function MembershipExpiredPage() {
       <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent-soft">
         <CalendarClock className="h-7 w-7 text-accent-strong" />
       </div>
-      <h1 className="mt-5 text-xl font-semibold tracking-tight">Tu membresía venció</h1>
+      <h1 className="mt-5 text-xl font-semibold tracking-tight">Tu acceso está pausado</h1>
       <p className="mt-2 max-w-sm text-[14px] leading-relaxed text-muted-foreground">
         {user?.nombre ? `Hola ${user.nombre}, tu` : 'Tu'} acceso profesional a Método Brújula está pausado hasta
-        renovar la membresía anual. Tus consultantes y todos tus datos siguen guardados tal cual — no se pierde
-        nada.
+        que se confirme el pago de la membresía anual. Tus consultantes y todos tus datos (si ya cargaste
+        alguno) siguen guardados tal cual — no se pierde nada.
       </p>
       <p className="mt-4 max-w-sm text-[13.5px] text-muted-foreground">
-        Para renovar, escribí a{' '}
+        Para activarlo, escribí a{' '}
         <a href="mailto:irenemorbidelli@gmail.com" className="font-medium text-primary underline-offset-2 hover:underline">
           irenemorbidelli@gmail.com
         </a>
