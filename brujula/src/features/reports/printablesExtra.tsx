@@ -715,6 +715,92 @@ function InfografiaSujeto() {
   )
 }
 
+// ---------- 20 · Infografía: Qué hacer después del secundario ----------
+function InfografiaDespuesSecundario() {
+  const caminos: [string, string, string, string][] = [
+    [
+      'Universidad',
+      '#0e7f79',
+      '4 a 6 años o más',
+      'Formación amplia y teórico-práctica, con título de grado. Puede ser pública (gratuita, sin límite de vacantes en la mayoría de los casos) o privada (arancelada). Conviene cuando la profesión elegida exige ese recorrido largo — medicina, ingeniería, abogacía, psicología, entre otras.',
+    ],
+    [
+      'Terciario / Instituto Superior',
+      '#8b87d4',
+      '2 a 3 años',
+      'Formación más corta y aplicada, con título de técnico/a o profesorado. También público o privado. Suele tener una salida laboral más rápida y, en muchos casos, se puede seguir estudiando después (algunas materias se reconocen si más adelante se pasa a una carrera universitaria afín).',
+    ],
+    [
+      'Oficios',
+      '#c17a3a',
+      'Semanas a 1-2 años',
+      'Formación práctica y específica (electricidad, gastronomía, programación, estética, soldadura, diseño, entre muchos otros). Inserción laboral rápida, muchas veces se puede empezar a trabajar mientras se sigue formando. Existen escuelas de oficios públicas y privadas, y también espacios comunitarios o municipales.',
+    ],
+    [
+      'Cursos y capacitaciones cortas',
+      '#c1508f',
+      'Días a pocos meses',
+      'Para explorar un interés concreto sin comprometerse todavía a una formación larga (un curso de fotografía, de diseño gráfico, de idiomas, de programación). Es una buena forma de "probar" antes de decidir, o de sumar una habilidad puntual en paralelo a otra formación.',
+    ],
+  ]
+
+  return (
+    <>
+      <Caja>
+        Terminar el secundario no es un único camino con una sola respuesta correcta: hay varias formas de
+        seguir formándose, y se pueden combinar entre sí. Esta lámina resume las principales opciones, para
+        pensar juntos cuál (o cuáles) tienen más sentido ahora.
+      </Caja>
+
+      <div className="mt-4 space-y-3">
+        {caminos.map(([nombre, color, duracion, desc]) => (
+          <div key={nombre} className="rounded-xl border-2 p-3" style={{ borderColor: color }}>
+            <div className="flex items-baseline justify-between gap-2">
+              <p className="text-[13.5px] font-bold" style={{ color }}>{nombre}</p>
+              <p className="shrink-0 text-[11px] font-semibold text-neutral-500">{duracion}</p>
+            </div>
+            <p className="mt-1 text-[12px] leading-relaxed text-neutral-700">{desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <Titulo>Público o privado: ¿qué cambia?</Titulo>
+      <p className="text-[12px] leading-relaxed text-neutral-700">
+        En universidades y terciarios <strong>públicos</strong> la cursada suele ser gratuita (con costos
+        de materiales o traslado a considerar); en los <strong>privados</strong> se paga una cuota, pero a
+        veces ofrecen grupos más reducidos, horarios distintos o una duración más corta. Ninguno es "mejor"
+        en abstracto — conviene comparar plan de estudios, modalidad, ubicación y costo real en cada caso
+        concreto.
+      </p>
+
+      <Titulo color="#c17a3a">Pensando en la salida laboral</Titulo>
+      <p className="text-[12px] leading-relaxed text-neutral-700">
+        Más que buscar "la carrera con más salida laboral" (eso cambia todo el tiempo y varía según la
+        región), conviene investigar caso por caso: ¿en qué tipo de lugares trabaja alguien con esa
+        formación? ¿Se puede empezar a trabajar mientras se estudia? ¿Hay campo de trabajo en la zona donde
+        se piensa vivir, o hay que estar dispuesto/a a mudarse? Esas preguntas dan información más útil que
+        cualquier ranking.
+      </p>
+
+      <Titulo color="#6f6ac1">Antes de elegir, conviene mirar</Titulo>
+      <Check texto="¿Qué duración tiene y qué carga horaria semanal implica?" />
+      <Check texto="¿Es pública o privada? ¿Cuál es el costo real (cuota, materiales, traslado)?" />
+      <Check texto="¿La modalidad es presencial, virtual o mixta? ¿Coincide con cómo te gusta aprender?" />
+      <Check texto="¿Se puede trabajar mientras se estudia?" />
+      <Check texto="¿Qué tan cerca está de lo que hoy me entusiasma o me interesa probar?" />
+
+      <div className="mt-5 rounded-xl bg-[#e3f4f2] p-4">
+        <p className="text-[13px] font-bold text-[#0e7f79]">No es una decisión de una sola vez</p>
+        <p className="mt-1.5 text-[12px] leading-relaxed text-neutral-700">
+          Se puede empezar por un camino y después sumar o cambiar — un oficio y después una tecnicatura,
+          una carrera universitaria y en el medio un curso corto de algo que entusiasma. Elegir ahora es dar
+          el próximo paso, no cerrar todos los caminos futuros.
+        </p>
+      </div>
+    </>
+  )
+}
+
 export const PRINTABLES_EXTRA: Record<string, { titulo: string; componente: () => React.ReactNode }> = {
   'encuadre-proceso': { titulo: 'Encuadre del proceso', componente: EncuadreProceso },
   'consentimiento-informado': { titulo: 'Consentimiento informado (menores)', componente: ConsentimientoInformado },
@@ -736,4 +822,5 @@ export const PRINTABLES_EXTRA: Record<string, { titulo: string; componente: () =
   'directorio-portales': { titulo: 'Directorio de portales oficiales', componente: DirectorioPortales },
   'cronograma-pasos': { titulo: 'Cronograma de pasos con fechas y requisitos', componente: CronogramaPasos },
   'calendario-inscripciones': { titulo: 'Calendario de inscripciones', componente: CalendarioInscripciones },
+  'infografia-despues-secundario': { titulo: 'Qué hacer después del secundario', componente: InfografiaDespuesSecundario },
 }
