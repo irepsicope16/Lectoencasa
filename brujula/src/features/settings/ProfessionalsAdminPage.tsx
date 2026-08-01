@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { CalendarClock, RefreshCcw, ShieldCheck } from 'lucide-react'
+import { CalendarClock, RefreshCcw, ShieldCheck, ShieldOff } from 'lucide-react'
 import { FadeIn, PageHeader } from '@/components/shared'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -66,16 +66,11 @@ export default function ProfessionalsAdminPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const renovar = async (row: ProfesionalRow) => {
+  const actualizarFecha = async (row: ProfesionalRow, nuevaFecha: string, mensaje: string) => {
     setBusyId(row.id)
     try {
       const { getSupabase } = await import('@/services/cloud/client')
       const sb = await getSupabase()
-      const base =
-        row.membershipExpiresAt && new Date(row.membershipExpiresAt).getTime() > Date.now()
-          ? row.membershipExpiresAt
-          : new Date().toISOString()
-      const nuevaFecha = addOneYear(base)
       const { data: current, error: readErr } = await sb
         .from('profiles')
         .select('data')
@@ -88,12 +83,26 @@ export default function ProfessionalsAdminPage() {
         .eq('id', row.id)
       if (error) throw new Error(error.message)
       setRows((prev) => prev?.map((r) => (r.id === row.id ? { ...r, membershipExpiresAt: nuevaFecha } : r)) ?? prev)
-      toast.success(`Membresía renovada hasta ${formatDate(nuevaFecha)}`)
+      toast.success(mensaje)
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : 'No se pudo renovar la membresía')
+      toast.error(e instanceof Error ? e.message : 'No se pudo actualizar la membresía')
     } finally {
       setBusyId('')
     }
+  }
+
+  const renovar = (row: ProfesionalRow) => {
+    const base =
+      row.membershipExpiresAt && new Date(row.membershipExpiresAt).getTime() > Date.now()
+        ? row.membershipExpiresAt
+        : new Date().toISOString()
+    const nuevaFecha = addOneYear(base)
+    void actualizarFecha(row, nuevaFecha, `Membresía renovada hasta ${formatDate(nuevaFecha)}`)
+  }
+
+  const revocar = (row: ProfesionalRow) => {
+    const nuevaFecha = new Date().toISOString()
+    void actualizarFecha(row, nuevaFecha, `Acceso cortado para ${row.nombre} ${row.apellido}`)
   }
 
   return (
@@ -154,6 +163,20 @@ export default function ProfessionalsAdminPage() {
                         >
                           <RefreshCcw className="h-3.5 w-3.5" /> Renovar 1 año
                         </Button>
+                        {!expired && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              if (window.confirm(`¿Cortar el acceso de ${row.nombre} ${row.apellido} ahora mismo?`)) {
+                                revocar(row)
+                              }
+                            }}
+                            disabled={busyId === row.id}
+                          >
+                            <ShieldOff className="h-3.5 w-3.5" /> Cortar acceso
+                          </Button>
+                        )}
                       </div>
                     </div>
                   )
