@@ -7,6 +7,7 @@ import { AppShell } from '@/components/layout/AppShell'
 // Lazy loading por página → cada área se descarga solo cuando se usa.
 
 const SplashPage = lazy(() => import('@/features/home/SplashPage'))
+const LandingPage = lazy(() => import('@/features/home/LandingPage'))
 const LoginPage = lazy(() => import('@/features/auth/LoginPage'))
 const RegisterProPage = lazy(() => import('@/features/auth/RegisterProPage'))
 
@@ -45,6 +46,7 @@ function Page({ children }: { children: React.ReactNode }) {
 
 export const router = createHashRouter([
   { path: '/', element: <Page><SplashPage /></Page> },
+  { path: '/plataforma', element: <Page><LandingPage /></Page> },
   { path: '/login', element: <Page><LoginPage /></Page> },
   { path: '/registro', element: <Page><RegisterProPage /></Page> },
   {
