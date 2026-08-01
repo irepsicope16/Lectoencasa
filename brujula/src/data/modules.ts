@@ -666,7 +666,16 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
     ],
-    videos: [],
+    videos: [
+      {
+        id: 'v1',
+        titulo: 'Cómo decidir qué estudiar cuando no te entusiasma ninguna carrera',
+        descripcion:
+          'Consejos prácticos para cuando ninguna carrera universitaria parece la indicada: ideas para ordenar la búsqueda y encontrar un rumbo posible, del canal Estudiar con Manu.',
+        url: 'https://youtu.be/KQh72MsfBG4',
+        duracion: '16:43 min',
+      },
+    ],
     materiales: [
       { id: 'm1', titulo: 'Guía de entrevista a profesionales', descripcion: 'Lámina imprimible: 14 preguntas potentes + cómo conseguir y conducir la charla.', tipo: 'plantilla', printableId: 'guia-entrevista' },
       { id: 'm2', titulo: 'Checklist de visita a instituciones', descripcion: 'Lámina imprimible: qué averiguar antes, durante y después de cada visita.', tipo: 'plantilla', printableId: 'checklist-visita' },
