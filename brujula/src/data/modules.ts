@@ -162,7 +162,16 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
     ],
-    videos: [],
+    videos: [
+      {
+        id: 'v1',
+        titulo: 'Los 5 grandes rasgos de la personalidad',
+        descripcion:
+          'El modelo de los "Cinco Grandes": Apertura, Responsabilidad, Extraversión, Amabilidad y Neuroticismo — los rasgos que, combinados de forma única en cada persona, arman su personalidad. Un buen complemento para seguir profundizando el autoconocimiento.',
+        url: 'https://youtu.be/RfdFjj8J5LU',
+        duracion: '',
+      },
+    ],
     materiales: [
       { id: 'm1', titulo: 'Para enviar · Ficha: Entrevista a 10 personas', descripcion: 'Lámina imprimible para registrar las respuestas de las 10 personas entrevistadas.', tipo: 'plantilla', printableId: 'entrevista-10-personas' },
       {
