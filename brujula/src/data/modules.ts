@@ -844,6 +844,13 @@ export const MODULES: ModuleDefinition[] = [
     materiales: [
       { id: 'm1', titulo: 'Ficha comparativa de carreras', descripcion: 'Lámina imprimible: una columna por finalista, del plan de estudios al «me imagino ahí».', tipo: 'plantilla', printableId: 'ficha-carreras' },
       { id: 'm3', titulo: 'Infografía: Cómo leer un plan de estudios', descripcion: 'Siete pasos para leer un plan como profesional y detectar señales.', tipo: 'lectura', printableId: 'infografia-plan-estudios' },
+      {
+        id: 'm4',
+        titulo: 'Infografía: Qué hacer después del secundario',
+        descripcion: 'Universidad, terciario, oficios y cursos cortos — pública o privada, duración, y qué mirar antes de elegir.',
+        tipo: 'lectura',
+        printableId: 'infografia-despues-secundario',
+      },
       { id: 'm2', titulo: 'Directorio de portales oficiales', descripcion: 'Fuentes oficiales para investigar carreras (imprimible + acceso directo a la Guía de Carreras del SIU).', tipo: 'enlace', printableId: 'directorio-portales', url: 'https://guiadecarreras.siu.edu.ar/' },
     ],
     preguntasGuia: [
