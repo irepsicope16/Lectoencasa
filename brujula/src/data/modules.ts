@@ -770,6 +770,41 @@ export const MODULES: ModuleDefinition[] = [
     ],
     actividades: [
       {
+        id: 'carreras-ruta-investigacion',
+        titulo: 'Ruta de Investigación de Carreras',
+        descripcion:
+          'Un recorrido en 8 pasos para investigar a fondo tus carreras finalistas: desde mirar contenido orientador hasta escribir una reflexión final sobre cuál te entusiasma más.',
+        tipo: 'investigacion',
+        duracionMin: 120,
+        dimensiones: ['exploracion', 'intereses', 'valores'],
+        preguntas: [
+          {
+            id: 'q1',
+            texto: 'Marcá cada paso de la ruta a medida que lo vayas completando',
+            tipo: 'seleccion',
+            opciones: [
+              'Mirar el video de Educ.ar sobre cómo investigar carreras',
+              'Leer el plan de estudios de cada carrera',
+              'Investigar dos universidades donde se dicte',
+              'Ver un video "Un día en la vida de..."',
+              'Buscar tres salidas laborales reales',
+              'Entrevistar (o escuchar una entrevista) a un profesional',
+              'Completar una matriz comparativa',
+              'Escribir una reflexión final',
+            ],
+          },
+          { id: 'q2', texto: 'Plan de estudios: ¿qué materias te entusiasman y cuáles te asustan de cada carrera?', tipo: 'abierta' },
+          { id: 'q3', texto: '¿Qué dos universidades investigaste? ¿Qué diferencias encontraste entre ellas?', tipo: 'abierta' },
+          { id: 'q4', texto: 'Video "Un día en la vida de...": ¿qué te mostró que no imaginabas?', tipo: 'abierta' },
+          { id: 'q5', texto: 'Anotá las tres salidas laborales reales que encontraste', tipo: 'lista' },
+          { id: 'q6', texto: '¿Con quién hablaste (o qué entrevista escuchaste)? ¿Qué fue lo más importante que dijo?', tipo: 'abierta' },
+          { id: 'q7', texto: 'Matriz comparativa: ¿cómo quedaron posicionadas tus carreras finalistas?', tipo: 'abierta' },
+          { id: 'q8', texto: 'Reflexión final — ¿Cuál te entusiasma más?', tipo: 'abierta' },
+          { id: 'q9', texto: 'Reflexión final — ¿Cuál encaja mejor con tu proyecto de vida?', tipo: 'abierta' },
+          { id: 'q10', texto: 'Reflexión final — ¿Qué dudas todavía tenés?', tipo: 'abierta' },
+        ],
+      },
+      {
         id: 'carreras-finalistas',
         titulo: 'Mis carreras finalistas',
         descripcion: 'Elegí 2 a 4 opciones finalistas e investigá cada una a fondo con la ficha comparativa.',
