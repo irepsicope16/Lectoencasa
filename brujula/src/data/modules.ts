@@ -738,6 +738,14 @@ export const MODULES: ModuleDefinition[] = [
       { id: 'm1', titulo: 'Plantilla: Mapa de proyecto de vida', descripcion: 'Lámina imprimible con las áreas del proyecto para completar.', tipo: 'plantilla', printableId: 'mapa-proyecto' },
       { id: 'm2', titulo: 'Plantilla: El Triángulo de mi vida', descripcion: 'Lámina imprimible de la representación simbólica personal.', tipo: 'plantilla', printableId: 'triangulo-vida' },
       { id: 'm3', titulo: 'Infografía: OV por competencias · Proyecto de vida vs. vida con proyectos', descripcion: 'Qué significa orientar por competencias y la diferencia entre tener proyectos y tener un proyecto de vida.', tipo: 'lectura', printableId: 'infografia-competencias' },
+      {
+        id: 'm4',
+        titulo: 'Serie de videos: Cómo elegir tu formación (Educ.ar)',
+        descripcion:
+          'El orientador vocacional Emmanuel Pacheco explica, en una serie de videos breves, qué conviene tener en cuenta al elegir una formación, junto con información sobre la oferta educativa del nivel superior.',
+        tipo: 'enlace',
+        url: 'https://www.educ.ar/recursos/158690/orientacion-vocacional',
+      },
     ],
     preguntasGuia: [
       '¿El proyecto es propio o calcado de un modelo externo?',
