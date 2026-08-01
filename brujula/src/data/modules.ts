@@ -169,7 +169,7 @@ export const MODULES: ModuleDefinition[] = [
         descripcion:
           'El modelo de los "Cinco Grandes": Apertura, Responsabilidad, Extraversión, Amabilidad y Neuroticismo — los rasgos que, combinados de forma única en cada persona, arman su personalidad. Un buen complemento para seguir profundizando el autoconocimiento.',
         url: 'https://youtu.be/RfdFjj8J5LU',
-        duracion: '',
+        duracion: '5:30 min',
       },
     ],
     materiales: [
