@@ -46,8 +46,28 @@ export interface Consultant {
   estado: ConsultantStatus
   profesionalId: string
   notas?: string
+  comparacionCarreras?: CareerComparisonEntry[]
   createdAt: string
   updatedAt: string
+}
+
+/**
+ * Comparador de Carreras: valoraciones propias del consultante (no datos de
+ * mercado externos) para comparar carreras finalistas de forma visual.
+ * Se completa junto con la actividad "Ruta de Investigación de Carreras".
+ */
+export interface CareerComparisonEntry {
+  id: string
+  nombre: string
+  institucion?: string
+  tipoInstitucion?: 'publica' | 'privada'
+  duracion?: string
+  /** valoraciones 1-5, siempre subjetivas y propias del consultante */
+  entusiasmo: number
+  encajeValores: number
+  estiloDeVida: number
+  salidaLaboralPercibida: number
+  viabilidad: number
 }
 
 export interface Observation {
