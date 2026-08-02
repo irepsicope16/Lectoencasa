@@ -32,6 +32,7 @@ import { ActivitiesTab } from './tabs/ActivitiesTab'
 import { EvaluationsTab } from './tabs/EvaluationsTab'
 import { FilesTab } from './tabs/FilesTab'
 import { CompassTab } from './tabs/CompassTab'
+import { ComparadorTab } from './tabs/ComparadorTab'
 import { AITab } from './tabs/AITab'
 import { ReportsTab } from './tabs/ReportsTab'
 
@@ -126,6 +127,7 @@ export default function ConsultantDetailPage() {
             ['evaluaciones', 'Evaluaciones'],
             ['archivos', 'Archivos'],
             ['motor', 'Motor Brújula'],
+            ['comparador', 'Comparador de Carreras'],
             ['ia', 'Asistente IA'],
             ['informes', 'Informes'],
           ].map(([v, l]) => (
@@ -142,6 +144,7 @@ export default function ConsultantDetailPage() {
         <TabsContent value="evaluaciones"><EvaluationsTab consultant={consultant} /></TabsContent>
         <TabsContent value="archivos"><FilesTab consultant={consultant} /></TabsContent>
         <TabsContent value="motor"><CompassTab consultant={consultant} /></TabsContent>
+        <TabsContent value="comparador"><ComparadorTab consultant={consultant} /></TabsContent>
         <TabsContent value="ia"><AITab consultant={consultant} /></TabsContent>
         <TabsContent value="informes"><ReportsTab consultant={consultant} /></TabsContent>
       </Tabs>
