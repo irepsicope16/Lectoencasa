@@ -606,7 +606,16 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
     ],
-    videos: [],
+    videos: [
+      {
+        id: 'v1',
+        titulo: '¿Para qué soy bueno/a? Cómo descubrir tus intereses y aptitudes',
+        descripcion:
+          'Una orientadora vocacional comparte ideas prácticas para identificar intereses y aptitudes propias como paso previo a decidir qué estudiar — con la aclaración de que ningún test da la respuesta sola: cada uno es el experto en sí mismo.',
+        url: 'https://youtu.be/XONqK2MgZcs',
+        duracion: '47:48 min',
+      },
+    ],
     materiales: [
       { id: 'm1', titulo: 'Guía de aptitudes con ejemplos', descripcion: 'Lámina imprimible: las 10 aptitudes con ejemplos cotidianos para reconocerlas.', tipo: 'plantilla', printableId: 'guia-aptitudes' },
     ],
