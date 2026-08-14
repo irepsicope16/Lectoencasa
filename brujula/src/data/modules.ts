@@ -539,12 +539,6 @@ export const MODULES: ModuleDefinition[] = [
     materiales: [
       { id: 'm1', titulo: 'Registro semanal de intereses', descripcion: 'Lámina imprimible: una semana anotando lo que consumís por gusto y sus temas.', tipo: 'plantilla', printableId: 'registro-intereses' },
       {
-        id: 'm2',
-        titulo: 'Test de Intereses Profesionales (en la plataforma)',
-        descripcion: 'El test se responde directamente acá: tu profesional te lo asigna desde Actividades y las respuestas le llegan solas.',
-        tipo: 'lectura',
-      },
-      {
         id: 'm3',
         titulo: 'Test Chatside (testgratis.net)',
         descripcion:
