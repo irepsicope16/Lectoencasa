@@ -390,6 +390,36 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
                     </p>
                   </div>
                 )}
+                {viewing.preguntas.some((q) => q.tipo === 'escala') && (
+                  <div className="rounded-lg border p-3">
+                    <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-faint">
+                      Ítems de puntaje (1-5)
+                    </p>
+                    <div className="space-y-1.5">
+                      {viewing.preguntas
+                        .filter((q) => q.tipo === 'escala')
+                        .map((q) => {
+                          const r = viewing.respuestas.find((x) => x.questionId === q.id)
+                          const valor = r ? Number(r.texto) : 0
+                          return (
+                            <div key={q.id} className="flex items-center gap-2 text-[12.5px]">
+                              <span className="flex-1 truncate">{q.texto}</span>
+                              <span className="flex gap-1">
+                                {[1, 2, 3, 4, 5].map((n) => (
+                                  <span
+                                    key={n}
+                                    className={`h-4 w-4 rounded-full border-2 ${
+                                      n <= valor ? 'border-primary bg-primary' : 'border-neutral-300'
+                                    }`}
+                                  />
+                                ))}
+                              </span>
+                            </div>
+                          )
+                        })}
+                    </div>
+                  </div>
+                )}
                 {viewing.preguntas.map((q) => {
                   const r = viewing.respuestas.find((x) => x.questionId === q.id)
                   if (q.tipo === 'escala') return null
