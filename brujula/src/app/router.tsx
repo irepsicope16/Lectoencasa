@@ -59,6 +59,7 @@ export const router = createHashRouter([
           { index: true, element: <Page><ProDashboard /></Page> },
           { path: 'consultantes', element: <Page><ConsultantsPage /></Page> },
           { path: 'consultantes/:id', element: <Page><ConsultantDetailPage /></Page> },
+          { path: 'consultantes/:consultantId/actividades/:id', element: <Page><ActivityRunnerPage /></Page> },
           { path: 'agenda', element: <Page><AgendaPage /></Page> },
           { path: 'metodo', element: <Page><MethodOverviewPage /></Page> },
           { path: 'metodo/:moduleId', element: <Page><ModuleDetailProPage /></Page> },
