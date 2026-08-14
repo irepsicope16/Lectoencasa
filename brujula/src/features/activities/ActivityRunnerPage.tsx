@@ -16,9 +16,14 @@ import { cn } from '@/lib/utils'
 import type { Activity, ActivityAnswer } from '@/types'
 
 export default function ActivityRunnerPage() {
-  const { id } = useParams<{ id: string }>()
+  const { id, consultantId } = useParams<{ id: string; consultantId?: string }>()
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
+  // Cuando la abre la profesional (por ejemplo, para completarla en sesión
+  // presencial junto al consultante), la ruta trae consultantId en la URL.
+  const isProView = user?.role === 'profesional' && !!consultantId
+  const backTo = isProView ? `/pro/consultantes/${consultantId}` : '/mi/actividades'
+  const backLabel = isProView ? 'Volver a la ficha' : 'Mis actividades'
   const { data: activities = [] } = useActivities()
   const { data: progress = [] } = useModuleProgress()
   const createProgress = useCreate<ModuleProgress>('moduleProgress')
@@ -28,10 +33,12 @@ export default function ActivityRunnerPage() {
   const updateActivity = useUpdate<Activity>('activities', (a) =>
     a.estado === 'completada'
       ? {
-          actor: 'consultante' as const,
+          actor: isProView ? ('profesional' as const) : ('consultante' as const),
           consultantId: a.consultantId,
           tipo: 'actividad_completada' as const,
-          descripcion: `${user?.nombre ?? 'Consultante'} completó «${a.titulo}»`,
+          descripcion: isProView
+            ? `Se completó «${a.titulo}» en sesión con ${user?.nombre ?? 'la profesional'}`
+            : `${user?.nombre ?? 'Consultante'} completó «${a.titulo}»`,
         }
       : null,
   )
@@ -50,7 +57,7 @@ export default function ActivityRunnerPage() {
     return (
       <div className="py-20 text-center text-sm text-faint">
         Actividad no encontrada.{' '}
-        <Link to="/mi/actividades" className="text-primary underline">
+        <Link to={backTo} className="text-primary underline">
           Volver
         </Link>
       </div>
@@ -96,8 +103,8 @@ export default function ActivityRunnerPage() {
       },
     })
     if (complete) {
-      toast.success('¡Actividad entregada! Tu profesional la va a revisar.')
-      navigate('/mi/actividades')
+      toast.success(isProView ? '¡Actividad completada!' : '¡Actividad entregada! Tu profesional la va a revisar.')
+      navigate(backTo)
     } else {
       setSaved(true)
       setTimeout(() => setSaved(false), 1500)
@@ -115,11 +122,16 @@ export default function ActivityRunnerPage() {
   return (
     <FadeIn className="mx-auto max-w-2xl">
       <Link
-        to="/mi/actividades"
+        to={backTo}
         className="mb-4 inline-flex items-center gap-1.5 text-[13px] text-muted-foreground transition-colors hover:text-foreground"
       >
-        <ArrowLeft className="h-3.5 w-3.5" /> Mis actividades
+        <ArrowLeft className="h-3.5 w-3.5" /> {backLabel}
       </Link>
+      {isProView && (
+        <p className="mb-4 -mt-2 text-[12px] text-faint">
+          La estás completando vos, en sesión — marcá lo que te vaya diciendo el consultante.
+        </p>
+      )}
 
       <div className="mb-6">
         <Badge variant="outline">{MODULE_MAP[activity.moduleId].nombre}</Badge>

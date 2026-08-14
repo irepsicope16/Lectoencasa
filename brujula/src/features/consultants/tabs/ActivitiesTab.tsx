@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
-import { ClipboardPlus, Eye, ListChecks, MonitorPlay, Plus } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ClipboardPlus, Eye, ListChecks, MonitorPlay, PenLine, Plus } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input, Label, NativeSelect, Textarea } from '@/components/ui/input'
@@ -155,6 +156,11 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
                   }}
                 >
                   <Eye /> Ver respuestas ({a.respuestas.length})
+                </Button>
+                <Button size="sm" variant="outline" asChild>
+                  <Link to={`/pro/consultantes/${consultant.id}/actividades/${a.id}`}>
+                    <PenLine /> Completar en sesión
+                  </Link>
                 </Button>
                 {a.estado === 'completada' && (
                   <Button
