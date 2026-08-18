@@ -194,6 +194,13 @@ export const MODULES: ModuleDefinition[] = [
         printableId: 'infografia-sujeto',
       },
       {
+        id: 'm5',
+        titulo: 'Infografía: Temperamento vs. Personalidad',
+        descripcion: 'Cuadro comparativo: qué es innato y estable, qué se va construyendo con la historia y las experiencias, y por qué importa distinguirlos en el proceso.',
+        tipo: 'lectura',
+        printableId: 'infografia-temperamento-personalidad',
+      },
+      {
         id: 'm2',
         titulo: 'Test de temperamento de Fisher (online)',
         descripcion:
