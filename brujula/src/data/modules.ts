@@ -135,16 +135,28 @@ export const MODULES: ModuleDefinition[] = [
       },
       {
         id: 'identidad-que-ves',
-        titulo: '¿Qué ves cuando me ves?',
+        titulo: 'Yo y los demás: el cuadro de las 4 preguntas',
         descripcion:
-          'Encuesta a personas de distintos ámbitos de tu vida (familia, amigos, escuela): pediles que respondan con honestidad qué ven en vos — cómo sos, en qué te destacás, en qué te imaginan.',
+          'Completá primero vos mismo/a un cuadro con 4 preguntas sobre vos, y después hacele la misma consigna a 5 personas de tu entorno (familia, amigos, escuela). Al final, comparás tu propia mirada con la de ellos.',
         tipo: 'entrevista',
-        duracionMin: 40,
+        duracionMin: 45,
         dimensiones: ['identidad', 'fortalezas'],
         preguntas: [
-          { id: 'q1', texto: '¿A quiénes encuestaste y qué respondió cada uno?', tipo: 'abierta' },
-          { id: 'q2', texto: '¿Qué respuestas coincidieron entre sí? ¿Cuáles te sorprendieron?', tipo: 'abierta' },
-          { id: 'q3', texto: '¿Qué de lo que ven los demás te gustaría que sea parte de tu futuro?', tipo: 'abierta' },
+          { id: 'q1', texto: 'Empezá vos: ¿qué cosas te gustan de vos?', tipo: 'lista' },
+          { id: 'q2', texto: '¿Qué cosas no te gustan (o te cuesta aceptar) de vos?', tipo: 'lista' },
+          { id: 'q3', texto: '¿Qué cosas hacés bien?', tipo: 'lista' },
+          { id: 'q4', texto: '¿Qué cosas sentís que deberías cambiar o mejorar?', tipo: 'lista' },
+          {
+            id: 'q5',
+            texto: 'Ahora hacele las mismas 4 preguntas a 5 personas de tu entorno. Anotá quién respondió y qué dijo en cada una.',
+            tipo: 'abierta',
+            ayuda: 'Por cada persona: nombre/vínculo, qué le gusta de vos, qué no, qué hacés bien, qué cambiaría.',
+          },
+          {
+            id: 'q6',
+            texto: 'Comparando tu cuadro con el de esas 5 personas: ¿qué coincide? ¿qué te sorprendió? ¿qué ven ellos que vos no habías notado?',
+            tipo: 'abierta',
+          },
         ],
       },
       {
