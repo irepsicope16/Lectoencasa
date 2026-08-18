@@ -801,6 +801,78 @@ function InfografiaDespuesSecundario() {
   )
 }
 
+// ---------- 21 · Infografía: Temperamento vs. Personalidad ----------
+function InfografiaTemperamentoPersonalidad() {
+  const filas: [string, string, string][] = [
+    ['Qué es', 'La "materia prima" con la que nacemos: la forma más básica de reaccionar emocionalmente.', 'La forma particular y estable en que cada persona piensa, siente y se comporta.'],
+    ['Origen', 'Biológico e innato — viene con nosotros desde el nacimiento.', 'Se construye a partir del temperamento + la crianza, la cultura, los vínculos y las experiencias vividas.'],
+    ['¿Se puede elegir?', 'No se elige: es la base con la que se nace.', 'No se elige del todo, pero sí se va moldeando con lo que vivimos y decidimos.'],
+    ['¿Cambia con el tiempo?', 'Es bastante estable a lo largo de la vida.', 'Puede irse modificando: madura, se ajusta, se trabaja.'],
+    ['Ejemplo', 'Un bebé que llora fuerte ante cualquier estímulo nuevo, o uno que se mantiene tranquilo casi siempre.', 'Esa base temperamental, sumada a la historia de esa persona, da como resultado alguien tímido y prudente, o alguien sociable y espontáneo.'],
+  ]
+
+  return (
+    <>
+      <Caja>
+        En orientación vocacional es común escuchar «yo soy así» como si fuera algo fijo e inmodificable.
+        Distinguir temperamento de personalidad ayuda a entender qué parte de «como soy» viene dada de base,
+        y qué parte se fue construyendo — y se puede seguir construyendo.
+      </Caja>
+
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        <div className="rounded-xl border-2 p-3" style={{ borderColor: '#0e7f79' }}>
+          <p className="text-[13.5px] font-bold" style={{ color: '#0e7f79' }}>Temperamento</p>
+          <p className="mt-1 text-[12px] leading-relaxed text-neutral-700">
+            La base biológica con la que nacemos. Innata, poco modificable, presente desde los primeros
+            días de vida.
+          </p>
+        </div>
+        <div className="rounded-xl border-2 p-3" style={{ borderColor: '#8b87d4' }}>
+          <p className="text-[13.5px] font-bold" style={{ color: '#8b87d4' }}>Personalidad</p>
+          <p className="mt-1 text-[12px] leading-relaxed text-neutral-700">
+            El resultado de esa base + la historia de vida, los vínculos y las experiencias. Se va
+            construyendo y puede seguir cambiando.
+          </p>
+        </div>
+      </div>
+
+      <Titulo>Punto por punto</Titulo>
+      <table className="mt-1 w-full border-collapse text-[11.5px]">
+        <thead>
+          <tr>
+            <th className="w-[20%] border border-neutral-300 bg-[#f6f6f4] px-2 py-1.5 text-left font-bold text-neutral-500" />
+            <th className="border border-neutral-300 bg-[#e3f4f2] px-2 py-1.5 text-left font-bold text-[#0e7f79]">
+              Temperamento
+            </th>
+            <th className="border border-neutral-300 bg-[#eeedf9] px-2 py-1.5 text-left font-bold text-[#8b87d4]">
+              Personalidad
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {filas.map(([etiqueta, temp, pers]) => (
+            <tr key={etiqueta}>
+              <td className="border border-neutral-300 px-2 py-1.5 font-semibold text-neutral-500">{etiqueta}</td>
+              <td className="border border-neutral-300 px-2 py-1.5 leading-snug text-neutral-700">{temp}</td>
+              <td className="border border-neutral-300 px-2 py-1.5 leading-snug text-neutral-700">{pers}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="mt-5 rounded-xl bg-[#e3f4f2] p-4">
+        <p className="text-[13px] font-bold text-[#0e7f79]">Para pensar en el proceso de orientación</p>
+        <p className="mt-1.5 text-[12px] leading-relaxed text-neutral-700">
+          Cuando algo de mi forma de ser me cierra puertas (por ejemplo, la timidez frente a una carrera
+          que exige mucha exposición pública), no siempre hay que "cambiar quién soy": a veces alcanza con
+          conocerse mejor, entrenar una habilidad puntual, o elegir un camino donde esa característica
+          juegue a favor en lugar de en contra.
+        </p>
+      </div>
+    </>
+  )
+}
+
 export const PRINTABLES_EXTRA: Record<string, { titulo: string; componente: () => React.ReactNode }> = {
   'encuadre-proceso': { titulo: 'Encuadre del proceso', componente: EncuadreProceso },
   'consentimiento-informado': { titulo: 'Consentimiento informado (menores)', componente: ConsentimientoInformado },
@@ -823,4 +895,5 @@ export const PRINTABLES_EXTRA: Record<string, { titulo: string; componente: () =
   'cronograma-pasos': { titulo: 'Cronograma de pasos con fechas y requisitos', componente: CronogramaPasos },
   'calendario-inscripciones': { titulo: 'Calendario de inscripciones', componente: CalendarioInscripciones },
   'infografia-despues-secundario': { titulo: 'Qué hacer después del secundario', componente: InfografiaDespuesSecundario },
+  'infografia-temperamento-personalidad': { titulo: 'Temperamento vs. Personalidad', componente: InfografiaTemperamentoPersonalidad },
 }
