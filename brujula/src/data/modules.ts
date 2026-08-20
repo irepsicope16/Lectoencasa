@@ -361,11 +361,11 @@ export const MODULES: ModuleDefinition[] = [
     videos: [
       {
         id: 'v1',
-        titulo: 'Aprender a elegir: ¿Qué carrera estudiar? — Liliana Llamas (TEDx Bariloche)',
+        titulo: '¿Cómo elegir una carrera universitaria?',
         descripcion:
-          'La socióloga Liliana Llamas propone otro punto de vista para elegir: ¿cuál es el estilo de vida que querés? ¿Qué decisión te acerca a la persona que querés ser? Después de verlo, escribí lo que te resultó más importante.',
-        url: 'https://youtu.be/bfp3vN2B5zo',
-        duracion: '15 min',
+          'Un testimonio en primera persona: alguien que ya pasó por la decisión cuenta cómo hizo para elegir qué estudiar, y qué pasos recomienda seguir para decidir tu carrera o futura profesión. Después de verlo, escribí lo que te resultó más importante.',
+        url: 'https://youtu.be/_CO55yQJYWc',
+        duracion: '21:32 min',
       },
     ],
     materiales: [
