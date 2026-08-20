@@ -884,7 +884,16 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
     ],
-    videos: [],
+    videos: [
+      {
+        id: 'v1',
+        titulo: '¿Qué estudiar en la era de la inteligencia artificial?',
+        descripcion:
+          'Especialistas en tecnología y educación de la región conversan sobre cómo elegir una formación en un mundo laboral que va a seguir cambiando: más que apostar a la carrera "más segura", proponen pensar qué problemas te interesa aprender a resolver.',
+        url: 'https://www.youtube.com/watch?v=nzjyll068MI',
+        duracion: '11:50 min',
+      },
+    ],
     materiales: [
       { id: 'm1', titulo: 'Ficha comparativa de carreras', descripcion: 'Lámina imprimible: una columna por finalista, del plan de estudios al «me imagino ahí».', tipo: 'plantilla', printableId: 'ficha-carreras' },
       { id: 'm3', titulo: 'Infografía: Cómo leer un plan de estudios', descripcion: 'Siete pasos para leer un plan como profesional y detectar señales.', tipo: 'lectura', printableId: 'infografia-plan-estudios' },
