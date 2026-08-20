@@ -861,6 +861,28 @@ export const MODULES: ModuleDefinition[] = [
           { id: 'q2', texto: '¿Cómo queda cada carrera finalista mirada con esos criterios?', tipo: 'abierta' },
         ],
       },
+      {
+        id: 'carreras-transformacion',
+        titulo: 'Profesiones en transformación: ¿qué vas a estudiar para un mundo que todavía no existe?',
+        descripcion:
+          'Elegí una de tus carreras finalistas y pensá cómo podría ir cambiando con la tecnología en los próximos años: qué tareas se podrían automatizar, cuáles van a seguir necesitando de una persona, y si esa transformación te acerca o te aleja de esa carrera.',
+        tipo: 'reflexion',
+        duracionMin: 40,
+        dimensiones: ['exploracion', 'intereses'],
+        preguntas: [
+          { id: 'q1', texto: 'Elegí una carrera finalista para trabajar en esta actividad', tipo: 'abierta' },
+          { id: 'q2', texto: '¿Qué tareas hace hoy, típicamente, un profesional de esa carrera?', tipo: 'abierta' },
+          { id: 'q3', texto: '¿Cuáles de esas tareas te imaginás que una inteligencia artificial podría llegar a hacer o facilitar?', tipo: 'abierta' },
+          { id: 'q4', texto: '¿Qué tareas te parece que van a seguir necesitando especialmente de una persona (por el vínculo, el criterio profesional, la creatividad)?', tipo: 'abierta' },
+          { id: 'q5', texto: '¿Qué herramientas o conocimientos tecnológicos te parece que ese profesional va a tener que ir incorporando?', tipo: 'abierta' },
+          {
+            id: 'q6',
+            texto: 'Si esta profesión cambia bastante en los próximos años, ¿seguiría interesándote? ¿Por qué?',
+            tipo: 'abierta',
+            ayuda: 'No se trata de adivinar qué carrera "va a sobrevivir", sino de imaginarte aprendiendo y reinventándote dentro de ella.',
+          },
+        ],
+      },
     ],
     videos: [],
     materiales: [
