@@ -47,6 +47,7 @@ export interface Consultant {
   profesionalId: string
   notas?: string
   comparacionCarreras?: CareerComparisonEntry[]
+  mapaCarreras?: CareerMapEntry[]
   createdAt: string
   updatedAt: string
 }
@@ -68,6 +69,18 @@ export interface CareerComparisonEntry {
   estiloDeVida: number
   salidaLaboralPercibida: number
   viabilidad: number
+}
+
+/**
+ * Mapa de Carreras: reacción del consultante a cada gran campo profesional
+ * (previo a elegir finalistas). Sirve para descubrir campos que no había
+ * considerado, antes de pasar al Comparador de Carreras.
+ */
+export type CareerFieldReaction = 'interesa' | 'curiosidad' | 'no'
+
+export interface CareerMapEntry {
+  campoId: string
+  reaccion: CareerFieldReaction
 }
 
 export interface Observation {
