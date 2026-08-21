@@ -559,9 +559,9 @@ export const MODULES: ModuleDefinition[] = [
       { id: 'm1', titulo: 'Registro semanal de intereses', descripcion: 'Lámina imprimible: una semana anotando lo que consumís por gusto y sus temas.', tipo: 'plantilla', printableId: 'registro-intereses' },
       {
         id: 'm3',
-        titulo: 'Test Chatside (testgratis.net)',
+        titulo: 'Otro test de intereses (opcional, sitio externo)',
         descripcion:
-          'Test online de intereses y preferencias profesionales: un punto de partida para explorar áreas ocupacionales afines. El resultado se conversa en sesión, nunca decide por vos.',
+          'Un complemento por fuera de la plataforma para quien quiera una segunda mirada. El test oficial e integrado de Brújula es el "Test de Intereses Profesionales" de este módulo. El resultado de este otro test se conversa en sesión, nunca decide por vos.',
         tipo: 'enlace',
         url: 'https://testgratis.net/',
       },
