@@ -13,7 +13,7 @@ import {
 } from '@/hooks/queries'
 import { useAuthStore } from '@/stores/authStore'
 import { MODULES, MODULE_MAP } from '@/data/modules'
-import { STAGES } from '@/lib/constants'
+import { STAGE_HEX, STAGES } from '@/lib/constants'
 import { overallProgress, pendingActivities } from '@/lib/progress'
 import { fechaHora } from '@/lib/utils'
 import { cn } from '@/lib/utils'
@@ -84,6 +84,7 @@ export default function MyDashboard() {
                         <Link
                           key={m.id}
                           to={`/mi/modulos/${m.id}`}
+                          style={{ borderLeftColor: STAGE_HEX[m.etapa].solid, borderLeftWidth: 3 }}
                           className={cn(
                             'flex items-center gap-2.5 rounded-lg border p-2.5 transition-colors hover:bg-surface-2',
                             estado === 'completado' && 'border-primary/40 bg-primary-soft/40',

@@ -36,6 +36,8 @@
   --danger-soft: #fbeae9;
   --warning: #c08a2d;
   --warning-soft: #faf1de;
+  --rose: #b3407a;
+  --rose-soft: #f9e7f0;
 
   --radius: 0.75rem;
 }
@@ -66,6 +68,8 @@
   --danger-soft: #3a221f;
   --warning: #d8a54f;
   --warning-soft: #38301c;
+  --rose: #dd7cae;
+  --rose-soft: #3a2430;
 }
 
 /* ============================================================
@@ -132,6 +136,8 @@
   --color-danger-soft: var(--danger-soft);
   --color-warning: var(--warning);
   --color-warning-soft: var(--warning-soft);
+  --color-rose: var(--rose);
+  --color-rose-soft: var(--rose-soft);
 
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 0.25rem);

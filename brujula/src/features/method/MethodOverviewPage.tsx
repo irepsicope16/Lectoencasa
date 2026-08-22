@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { FadeIn, PageHeader } from '@/components/shared'
 import { MODULES } from '@/data/modules'
-import { STAGES } from '@/lib/constants'
+import { STAGE_HEX, STAGES } from '@/lib/constants'
 import { Isotipo } from '@/branding/Logo'
 
 export default function MethodOverviewPage() {
@@ -31,7 +31,10 @@ export default function MethodOverviewPage() {
         {(Object.keys(STAGES) as (keyof typeof STAGES)[]).map((stage) => (
           <section key={stage}>
             <div className="mb-3 flex items-baseline gap-3">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-soft text-[12px] font-bold text-primary-strong">
+              <span
+                style={{ background: STAGE_HEX[stage].soft, color: STAGE_HEX[stage].solid }}
+                className="flex h-6 w-6 items-center justify-center rounded-full text-[12px] font-bold"
+              >
                 {STAGES[stage].orden}
               </span>
               <h2 className="text-[16px] font-semibold tracking-tight">{STAGES[stage].nombre}</h2>
@@ -42,6 +45,7 @@ export default function MethodOverviewPage() {
                 <Link
                   key={mod.id}
                   to={`/pro/metodo/${mod.id}`}
+                  style={{ borderLeftColor: STAGE_HEX[mod.etapa].solid, borderLeftWidth: 3 }}
                   className="group rounded-xl border bg-surface p-4 transition-all hover:border-border-strong hover:shadow-sm"
                 >
                   <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-faint">

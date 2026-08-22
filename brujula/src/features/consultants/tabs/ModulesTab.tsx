@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog'
 import { useActivities, useCreate, useModuleProgress, useUpdate } from '@/hooks/queries'
 import { MODULES } from '@/data/modules'
-import { STAGES } from '@/lib/constants'
+import { STAGE_HEX, STAGES } from '@/lib/constants'
 import { moduleActivityStats } from '@/lib/progress'
 import type { Consultant, ModuleDefinition, ModuleProgress, ModuleProgressStatus } from '@/types'
 import { cn } from '@/lib/utils'
@@ -84,6 +84,7 @@ export function ModulesTab({ consultant }: { consultant: Consultant }) {
                     setSelected(mod)
                     setNotas(p?.notasProfesionales ?? '')
                   }}
+                  style={{ borderLeftColor: STAGE_HEX[mod.etapa].solid, borderLeftWidth: 3 }}
                   className="group flex cursor-pointer items-center gap-3 rounded-xl border bg-surface p-3.5 text-left transition-all hover:border-border-strong hover:shadow-sm"
                 >
                   <Icon className={cn('h-5 w-5 shrink-0', meta.cls)} />
@@ -117,7 +118,7 @@ export function ModulesTab({ consultant }: { consultant: Consultant }) {
               </DialogHeader>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <Badge variant="lavanda">{STAGES[selected.etapa].nombre}</Badge>
+                  <Badge variant={STAGES[selected.etapa].color}>{STAGES[selected.etapa].nombre}</Badge>
                   <div className="ml-auto flex items-center gap-2">
                     <Label className="mb-0">Estado</Label>
                     <NativeSelect
