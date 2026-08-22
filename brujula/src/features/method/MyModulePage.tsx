@@ -77,7 +77,7 @@ export default function MyModulePage() {
 
       <div className="mb-6">
         <div className="flex flex-wrap items-center gap-2">
-          <Badge variant="lavanda">{STAGES[mod.etapa].nombre}</Badge>
+          <Badge variant={STAGES[mod.etapa].color}>{STAGES[mod.etapa].nombre}</Badge>
           <Badge variant="outline">Módulo {mod.numero} de 12</Badge>
           {p?.estado === 'completado' && <Badge variant="aqua">Completado ✓</Badge>}
         </div>

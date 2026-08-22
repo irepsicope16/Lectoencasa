@@ -14,12 +14,24 @@ export const APP_NAME = 'Método Brújula'
 export const APP_TAGLINE = 'Encontrá tu norte. Construí tu camino.'
 export const BRAND = 'Psicope con Ire'
 
-export const STAGES: Record<StageId, { nombre: string; descripcion: string; orden: number }> = {
-  conocerte: { nombre: 'Conocerte', descripcion: 'Tu historia, tu identidad', orden: 1 },
-  valorarte: { nombre: 'Valorarte', descripcion: 'Valores, deseos y mandatos', orden: 2 },
-  explorar: { nombre: 'Explorar', descripcion: 'Fortalezas, intereses y mundo', orden: 3 },
-  decidir: { nombre: 'Decidir', descripcion: 'Proyecto de vida y carreras', orden: 4 },
-  actuar: { nombre: 'Actuar', descripcion: 'Plan de acción concreto', orden: 5 },
+/** Variant de <Badge> usado como color distintivo de cada etapa, para identificarlas de un vistazo. */
+export type StageColor = 'aqua' | 'lavanda' | 'amber' | 'rosa' | 'danger'
+
+export const STAGES: Record<StageId, { nombre: string; descripcion: string; orden: number; color: StageColor }> = {
+  conocerte: { nombre: 'Conocerte', descripcion: 'Tu historia, tu identidad', orden: 1, color: 'aqua' },
+  valorarte: { nombre: 'Valorarte', descripcion: 'Valores, deseos y mandatos', orden: 2, color: 'lavanda' },
+  explorar: { nombre: 'Explorar', descripcion: 'Fortalezas, intereses y mundo', orden: 3, color: 'amber' },
+  decidir: { nombre: 'Decidir', descripcion: 'Proyecto de vida y carreras', orden: 4, color: 'rosa' },
+  actuar: { nombre: 'Actuar', descripcion: 'Plan de acción concreto', orden: 5, color: 'danger' },
+}
+
+/** Color de etapa como valores CSS directos (var(--x)), para bordes/íconos fuera de <Badge>. */
+export const STAGE_HEX: Record<StageId, { solid: string; soft: string }> = {
+  conocerte: { solid: 'var(--primary)', soft: 'var(--primary-soft)' },
+  valorarte: { solid: 'var(--accent)', soft: 'var(--accent-soft)' },
+  explorar: { solid: 'var(--warning)', soft: 'var(--warning-soft)' },
+  decidir: { solid: 'var(--rose)', soft: 'var(--rose-soft)' },
+  actuar: { solid: 'var(--danger)', soft: 'var(--danger-soft)' },
 }
 
 export const CONSULTANT_STATUS: Record<ConsultantStatus, { label: string; tone: string }> = {

@@ -31,7 +31,7 @@ export default function ModuleDetailProPage() {
 
       <div className="mb-6">
         <div className="flex items-center gap-2.5">
-          <Badge variant="lavanda">Etapa: {STAGES[mod.etapa].nombre}</Badge>
+          <Badge variant={STAGES[mod.etapa].color}>Etapa: {STAGES[mod.etapa].nombre}</Badge>
           <Badge variant="outline">Módulo {mod.numero} de 12</Badge>
         </div>
         <h1 className="mt-2 text-2xl font-semibold tracking-tight">{mod.nombre}</h1>
