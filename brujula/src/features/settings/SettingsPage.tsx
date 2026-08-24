@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { Cloud, CloudUpload, Database, Download, Moon, Paintbrush, RefreshCcw, Sparkles, Sun, Upload } from 'lucide-react'
+import { Cloud, CloudUpload, Database, Download, IdCard, Moon, Paintbrush, RefreshCcw, Sparkles, Sun, Upload } from 'lucide-react'
 import { exportBackup, importBackup } from '@/services/storage/backup'
 import { getCloudConfig, isCloudEnabled, saveCloudConfig } from '@/services/cloud/config'
 import { toast } from '@/components/ui/toast'
@@ -29,12 +29,36 @@ export default function SettingsPage() {
   const setTheme = useUIStore((s) => s.setTheme)
   const qc = useQueryClient()
   const user = useAuthStore((s) => s.user)
+  const updateProfile = useAuthStore((s) => s.updateProfile)
   const showCloudPanel = isOwner(user)
 
   const [ai, setAi] = useState(getAISettings())
   const [saved, setSaved] = useState(false)
   const [resetOpen, setResetOpen] = useState(false)
   const importRef = useRef<HTMLInputElement>(null)
+
+  const [perfil, setPerfil] = useState({
+    nombre: user?.nombre ?? '',
+    apellido: user?.apellido ?? '',
+    titulo: user?.titulo ?? '',
+    matricula: user?.matricula ?? '',
+    telefono: user?.telefono ?? '',
+  })
+  const [perfilSaving, setPerfilSaving] = useState(false)
+  const [perfilSaved, setPerfilSaved] = useState(false)
+
+  const guardarPerfil = async () => {
+    setPerfilSaving(true)
+    try {
+      await updateProfile(perfil)
+      setPerfilSaved(true)
+      setTimeout(() => setPerfilSaved(false), 1500)
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'No se pudo guardar el perfil')
+    } finally {
+      setPerfilSaving(false)
+    }
+  }
 
   const [cloud, setCloud] = useState(getCloudConfig())
   const cloudActive = isCloudEnabled()
@@ -101,6 +125,61 @@ export default function SettingsPage() {
       <PageHeader title="Ajustes" subtitle="Apariencia, asistente IA y datos de la plataforma." />
 
       <div className="grid gap-5 lg:grid-cols-2">
+        {/* perfil profesional */}
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <IdCard className="h-4 w-4 text-primary" /> Mi perfil profesional
+            </CardTitle>
+            <CardDescription>
+              Estos datos aparecen en los materiales que generás para consultantes y prospectos (como el
+              Encuadre del Taller de OVO), y son propios de tu cuenta — no afectan a otros profesionales.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <Label>Nombre</Label>
+                <Input value={perfil.nombre} onChange={(e) => setPerfil({ ...perfil, nombre: e.target.value })} />
+              </div>
+              <div>
+                <Label>Apellido</Label>
+                <Input value={perfil.apellido} onChange={(e) => setPerfil({ ...perfil, apellido: e.target.value })} />
+              </div>
+              <div>
+                <Label>Título profesional</Label>
+                <Input
+                  value={perfil.titulo}
+                  onChange={(e) => setPerfil({ ...perfil, titulo: e.target.value })}
+                  placeholder="Lic. en Psicología"
+                />
+              </div>
+              <div>
+                <Label>Matrícula</Label>
+                <Input
+                  value={perfil.matricula}
+                  onChange={(e) => setPerfil({ ...perfil, matricula: e.target.value })}
+                  placeholder="MP 260505"
+                />
+              </div>
+              <div>
+                <Label>Teléfono / WhatsApp</Label>
+                <Input
+                  value={perfil.telefono}
+                  onChange={(e) => setPerfil({ ...perfil, telefono: e.target.value })}
+                  placeholder="11 2345-6789"
+                />
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button size="sm" onClick={guardarPerfil} disabled={perfilSaving}>
+                Guardar perfil
+              </Button>
+              {perfilSaved && <Badge variant="aqua">Guardado ✓</Badge>}
+            </div>
+          </CardContent>
+        </Card>
+
         {/* apariencia */}
         <Card>
           <CardHeader>
