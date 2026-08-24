@@ -8,6 +8,7 @@ import {
   Circle,
   Compass,
   FilePlus2,
+  FileText,
   ListChecks,
   Sparkles,
   UserPlus,
@@ -79,6 +80,23 @@ export default function ProDashboard() {
           </>
         }
       />
+
+      {/* encuadre del taller — acceso directo desde el inicio, antes de tener consultantes */}
+      <Link
+        to="/print/material/encuadre-taller-ovo"
+        className="mb-5 flex items-center gap-4 rounded-xl border border-primary/30 bg-primary-soft/40 p-4 transition-colors hover:border-primary/50"
+      >
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+          <FileText className="h-5 w-5" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-[13.5px] font-semibold">Encuadre del Taller de OVO</p>
+          <p className="text-[12px] text-muted-foreground">
+            Para enviar a quien te consulta, antes de empezar con un consultante nuevo.
+          </p>
+        </div>
+        <ArrowRight className="h-4 w-4 shrink-0 text-primary" />
+      </Link>
 
       {/* métricas */}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">

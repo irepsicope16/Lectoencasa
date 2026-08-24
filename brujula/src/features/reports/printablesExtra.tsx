@@ -873,6 +873,69 @@ function InfografiaTemperamentoPersonalidad() {
   )
 }
 
+// ---------- 22 · Encuadre del Taller de OVO (para prospectos) ----------
+function EncuadreTallerOVO() {
+  const areas: [string, string, string][] = [
+    ['#0e7f79', 'Conocerte', 'Tu historia y tu identidad: de dónde venís y quién sos hoy, más allá de las etiquetas.'],
+    ['#8b87d4', 'Valorarte', 'Tus valores, tus deseos y los mandatos familiares o sociales que traés puestos.'],
+    ['#c08a2d', 'Explorar', 'Tus fortalezas, tus intereses, tus aptitudes — y el mundo real del estudio y el trabajo.'],
+    ['#b3407a', 'Decidir', 'Primero tu proyecto de vida; después, las carreras y formaciones que te acercan a él.'],
+    ['#d4574e', 'Actuar', 'Un plan de acción concreto, con pasos y fechas, para dar el próximo paso real.'],
+  ]
+
+  return (
+    <>
+      <Caja>
+        No es un test que te dice qué estudiar: es un proceso acompañado para que vos mismo/a construyas esa
+        decisión, con criterios propios. Esta hoja resume cómo funciona el Taller de Orientación
+        Vocacional-Ocupacional.
+      </Caja>
+
+      <Titulo>Cómo funciona</Titulo>
+      <table className="mt-1 w-full border-collapse text-[11.5px]">
+        <tbody>
+          {[
+            ['Modalidad', 'Presencial y/o virtual'],
+            ['Formato', 'Individual o grupal'],
+            ['Duración de cada encuentro', '45 minutos a 1 hora'],
+            ['Cantidad de encuentros', 'De 6 a 8, según cada consultante'],
+            ['Frecuencia', 'A coordinar juntos/as'],
+          ].map(([k, v]) => (
+            <tr key={k}>
+              <td className="w-[45%] border border-neutral-300 bg-[#f6f6f4] px-2 py-1.5 font-semibold text-neutral-600">{k}</td>
+              <td className="border border-neutral-300 px-2 py-1.5 text-neutral-700">{v}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <Titulo>Las 5 grandes áreas del recorrido</Titulo>
+      <div className="mt-1 space-y-2">
+        {areas.map(([color, nombre, desc]) => (
+          <div key={nombre} className="rounded-lg border-2 p-2.5" style={{ borderColor: color }}>
+            <p className="text-[12.5px] font-bold" style={{ color }}>{nombre}</p>
+            <p className="mt-0.5 text-[11.5px] leading-snug text-neutral-700">{desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <Titulo>Qué te vas a llevar</Titulo>
+      <Check texto="Informe final escrito, con la síntesis de tu proceso por cada área." />
+      <Check texto="Devolución oral en un encuentro de cierre, para conversar el informe." />
+      <Check texto="Materiales de trabajo (guías, láminas, ejercicios) de cada etapa." />
+
+      <div className="mt-5 rounded-xl bg-[#e3f4f2] p-4 text-center">
+        <p className="text-[13px] font-bold text-[#0e7f79]">¿Cómo empezamos?</p>
+        <p className="mt-1.5 text-[12px] leading-relaxed text-neutral-700">
+          El primer paso es una entrevista inicial, sin compromiso, para conocernos y coordinar los detalles
+          a tu medida.
+        </p>
+        <p className="mt-3 text-[11.5px] text-neutral-600">Lic. Irene Morbidelli — MP 260505</p>
+      </div>
+    </>
+  )
+}
+
 export const PRINTABLES_EXTRA: Record<string, { titulo: string; componente: () => React.ReactNode }> = {
   'encuadre-proceso': { titulo: 'Encuadre del proceso', componente: EncuadreProceso },
   'consentimiento-informado': { titulo: 'Consentimiento informado (menores)', componente: ConsentimientoInformado },
@@ -896,4 +959,5 @@ export const PRINTABLES_EXTRA: Record<string, { titulo: string; componente: () =
   'calendario-inscripciones': { titulo: 'Calendario de inscripciones', componente: CalendarioInscripciones },
   'infografia-despues-secundario': { titulo: 'Qué hacer después del secundario', componente: InfografiaDespuesSecundario },
   'infografia-temperamento-personalidad': { titulo: 'Temperamento vs. Personalidad', componente: InfografiaTemperamentoPersonalidad },
+  'encuadre-taller-ovo': { titulo: 'Encuadre del Taller de OVO', componente: EncuadreTallerOVO },
 }
