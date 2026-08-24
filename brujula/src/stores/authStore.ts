@@ -4,10 +4,13 @@ import type { User } from '@/types'
 import { db } from '@/services/storage/db'
 import { isCloudEnabled } from '@/services/cloud/config'
 
+type ProfileEditable = Pick<User, 'nombre' | 'apellido' | 'titulo' | 'matricula' | 'telefono'>
+
 interface AuthState {
   user: User | null
   login: (email: string, password: string) => Promise<{ ok: boolean; error?: string }>
   logout: () => void
+  updateProfile: (patch: Partial<ProfileEditable>) => Promise<void>
 }
 
 // Modo nube: autenticación real con Supabase Auth; el perfil (rol, nombre,
@@ -50,7 +53,7 @@ async function cloudLogin(email: string, password: string): Promise<{ ok: boolea
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       login: async (email, password) => {
         if (isCloudEnabled()) {
@@ -75,6 +78,27 @@ export const useAuthStore = create<AuthState>()(
           )
         }
         set({ user: null })
+      },
+      updateProfile: async (patch) => {
+        const current = get().user
+        if (!current) return
+        if (isCloudEnabled()) {
+          const { getSupabase } = await import('@/services/cloud/client')
+          const sb = await getSupabase()
+          // Función segura del lado del servidor: solo puede tocar estos 5
+          // campos de la propia fila, nunca "role" ni "membershipExpiresAt".
+          const { error } = await sb.rpc('mb_update_own_profile', {
+            p_nombre: patch.nombre ?? null,
+            p_apellido: patch.apellido ?? null,
+            p_titulo: patch.titulo ?? null,
+            p_matricula: patch.matricula ?? null,
+            p_telefono: patch.telefono ?? null,
+          })
+          if (error) throw new Error(error.message)
+        } else {
+          await db.users.update(current.id, patch)
+        }
+        set({ user: { ...current, ...patch } })
       },
     }),
     { name: 'mb:auth' },

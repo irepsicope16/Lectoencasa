@@ -125,6 +125,34 @@ drop policy if exists profiles_admin_update on public.profiles;
 create policy profiles_admin_update on public.profiles
   for update using (public.mb_is_owner()) with check (public.mb_is_owner());
 
+-- Autoedición segura del propio perfil (nombre, título, matrícula, teléfono):
+-- sin política RLS de "update" para el dueño de la fila, a propósito —
+-- así ningún profesional puede tocar su "role" ni "membershipExpiresAt"
+-- editando el JSON directo. Solo esta función, con esta lista fija de
+-- campos, puede escribir sobre la propia fila.
+create or replace function public.mb_update_own_profile(
+  p_nombre text default null,
+  p_apellido text default null,
+  p_titulo text default null,
+  p_matricula text default null,
+  p_telefono text default null
+)
+returns void language plpgsql security definer set search_path = public
+as $$
+begin
+  update public.profiles
+  set data = data || jsonb_strip_nulls(jsonb_build_object(
+    'nombre', p_nombre,
+    'apellido', p_apellido,
+    'titulo', p_titulo,
+    'matricula', p_matricula,
+    'telefono', p_telefono
+  ))
+  where id = auth.uid();
+end;
+$$;
+grant execute on function public.mb_update_own_profile to authenticated;
+
 -- ---------- Resto de colecciones de datos ----------
 -- "consultantId" es columna generada desde data para RLS e índices.
 

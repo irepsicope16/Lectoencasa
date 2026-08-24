@@ -14,6 +14,8 @@ export interface User {
   email: string
   password: string // demo/local. En Supabase: auth.users
   titulo?: string // p. ej. "Lic. en Psicopedagogía"
+  matricula?: string // p. ej. "MP 260505" — solo rol profesional
+  telefono?: string // solo rol profesional, para materiales de contacto
   avatarUrl?: string
   consultantId?: string // solo rol consultante
   /**

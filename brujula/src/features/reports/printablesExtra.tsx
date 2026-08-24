@@ -3,6 +3,8 @@
 // PrintableMaterialPage (PRINTABLES). Todo abre y se imprime: nada
 // de materiales "fantasma".
 
+import { useAuthStore } from '@/stores/authStore'
+
 function Caja({ children }: { children: React.ReactNode }) {
   return <div className="rounded-xl bg-[#f6f6f4] p-4 text-[12.5px] leading-relaxed text-neutral-600">{children}</div>
 }
@@ -875,6 +877,12 @@ function InfografiaTemperamentoPersonalidad() {
 
 // ---------- 22 · Encuadre del Taller de OVO (para prospectos) ----------
 function EncuadreTallerOVO() {
+  const user = useAuthStore((s) => s.user)
+  const nombreCompleto = [user?.titulo, user?.nombre, user?.apellido].filter(Boolean).join(' ').trim()
+  const firma = [nombreCompleto || 'Cargá tu nombre y título en Ajustes', user?.matricula]
+    .filter(Boolean)
+    .join(' — ')
+
   const areas: [string, string, string][] = [
     ['#0e7f79', 'Conocerte', 'Tu historia y tu identidad: de dónde venís y quién sos hoy, más allá de las etiquetas.'],
     ['#8b87d4', 'Valorarte', 'Tus valores, tus deseos y los mandatos familiares o sociales que traés puestos.'],
@@ -930,7 +938,8 @@ function EncuadreTallerOVO() {
           El primer paso es una entrevista inicial, sin compromiso, para conocernos y coordinar los detalles
           a tu medida.
         </p>
-        <p className="mt-3 text-[11.5px] text-neutral-600">Lic. Irene Morbidelli — MP 260505</p>
+        <p className="mt-3 text-[11.5px] text-neutral-600">{firma}</p>
+        {user?.telefono && <p className="mt-0.5 text-[11.5px] text-neutral-600">{user.telefono}</p>}
       </div>
     </>
   )
