@@ -8,7 +8,6 @@ import { Textarea } from '@/components/ui/input'
 import {
   useActivities,
   useCreate,
-  useEvaluations,
   useModuleProgress,
   useObservations,
   useReflections,
@@ -22,7 +21,6 @@ import { Link } from 'react-router-dom'
 
 export function AITab({ consultant }: { consultant: Consultant }) {
   const { data: activities = [] } = useActivities()
-  const { data: evaluations = [] } = useEvaluations()
   const { data: reflections = [] } = useReflections()
   const { data: observations = [] } = useObservations()
   const { data: sessions = [] } = useSessions()
@@ -54,7 +52,6 @@ export function AITab({ consultant }: { consultant: Consultant }) {
       const result = await provider.run(task, {
         consultant,
         activities: activities.filter((a) => a.consultantId === consultant.id),
-        evaluations: evaluations.filter((e) => e.consultantId === consultant.id),
         reflections: reflections.filter((r) => r.consultantId === consultant.id),
         observations: observations.filter((o) => o.consultantId === consultant.id),
         sessions: sessions.filter((s) => s.consultantId === consultant.id),

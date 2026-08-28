@@ -7,7 +7,6 @@ import { Isotipo } from '@/branding/Logo'
 import {
   useActivities,
   useConsultant,
-  useEvaluations,
   useModuleProgress,
   useObservations,
   useReflections,
@@ -31,7 +30,6 @@ export default function PrintReportPage() {
   const user = useAuthStore((s) => s.user)
   const { data: consultant } = useConsultant(consultantId)
   const { data: activities = [] } = useActivities()
-  const { data: evaluations = [] } = useEvaluations()
   const { data: reflections = [] } = useReflections()
   const { data: observations = [] } = useObservations()
   const { data: sessions = [] } = useSessions()
@@ -42,13 +40,12 @@ export default function PrintReportPage() {
     return generateSnapshot({
       consultant,
       activities: activities.filter((a) => a.consultantId === consultant.id),
-      evaluations: evaluations.filter((e) => e.consultantId === consultant.id),
       reflections: reflections.filter((r) => r.consultantId === consultant.id),
       observations: observations.filter((o) => o.consultantId === consultant.id),
       sessions: sessions.filter((s) => s.consultantId === consultant.id),
       progress,
     })
-  }, [consultant, activities, evaluations, reflections, observations, sessions, progress])
+  }, [consultant, activities, reflections, observations, sessions, progress])
 
   // Autorización fina: el consultante solo ve SU resumen (y su carta); el resto es del profesional.
   const esConsultante = user?.role === 'consultante'

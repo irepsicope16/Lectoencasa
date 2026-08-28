@@ -14,7 +14,6 @@ import { EmptyState } from '@/components/shared'
 import {
   useActivities,
   useCreate,
-  useEvaluations,
   useObservations,
   useReflections,
   useSessions,
@@ -36,7 +35,6 @@ const intensidadBadge = { alta: 'aqua', media: 'lavanda', incipiente: 'gris' } a
 
 export function CompassTab({ consultant }: { consultant: Consultant }) {
   const { data: activities = [] } = useActivities()
-  const { data: evaluations = [] } = useEvaluations()
   const { data: reflections = [] } = useReflections()
   const { data: observations = [] } = useObservations()
   const { data: sessions = [] } = useSessions()
@@ -80,7 +78,6 @@ export function CompassTab({ consultant }: { consultant: Consultant }) {
     const payload = generateSnapshot({
       consultant,
       activities: activities.filter((a) => a.consultantId === consultant.id),
-      evaluations: evaluations.filter((e) => e.consultantId === consultant.id),
       reflections: reflections.filter((r) => r.consultantId === consultant.id),
       observations: observations.filter((o) => o.consultantId === consultant.id),
       sessions: sessions.filter((s) => s.consultantId === consultant.id),
