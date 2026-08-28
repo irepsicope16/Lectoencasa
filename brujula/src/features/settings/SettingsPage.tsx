@@ -89,9 +89,9 @@ export default function SettingsPage() {
   const createProAccount = async () => {
     setCloudBusy('Creando cuenta profesional…')
     try {
-      const { getIsolatedClient } = await import('@/services/cloud/client')
+      const { getIsolatedClient, getSupabase } = await import('@/services/cloud/client')
       const sb = await getIsolatedClient()
-      const { error } = await sb.auth.signUp({
+      const { data, error } = await sb.auth.signUp({
         email: proAccount.email.trim(),
         password: proAccount.password,
         options: {
@@ -100,12 +100,36 @@ export default function SettingsPage() {
             nombre: proAccount.nombre.trim(),
             apellido: proAccount.apellido.trim(),
             titulo: proAccount.titulo.trim() || undefined,
-            membershipExpiresAt: oneYearFromNow(),
           },
         },
       })
-      if (error) toast.error(error.message)
-      else toast.success('Cuenta profesional creada. Ya podés ingresar con ella.')
+      if (error) {
+        toast.error(error.message)
+        return
+      }
+      // La membresía nunca se acepta desde los metadatos del registro (ver
+      // handle_new_user en schema.sql) — se activa acá aparte, con la
+      // sesión real de la dueña, que es la única habilitada por RLS
+      // (profiles_admin_update) para escribir membershipExpiresAt.
+      if (data.user) {
+        const owner = await getSupabase()
+        const { data: row, error: readErr } = await owner
+          .from('profiles')
+          .select('data')
+          .eq('id', data.user.id)
+          .maybeSingle()
+        if (readErr || !row) {
+          toast.error('Cuenta creada, pero no se pudo activar la membresía: no se encontró el perfil.')
+          return
+        }
+        const merged = { ...(row.data as object), membershipExpiresAt: oneYearFromNow() }
+        const { error: memErr } = await owner.from('profiles').update({ data: merged }).eq('id', data.user.id)
+        if (memErr) {
+          toast.error(`Cuenta creada, pero no se pudo activar la membresía: ${memErr.message}`)
+          return
+        }
+      }
+      toast.success('Cuenta profesional creada. Ya podés ingresar con ella.')
     } finally {
       setCloudBusy('')
     }

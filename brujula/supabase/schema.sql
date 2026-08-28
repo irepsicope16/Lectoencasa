@@ -24,24 +24,52 @@ create table if not exists public.profiles (
 
 alter table public.profiles enable row level security;
 
--- El perfil se crea automáticamente al registrarse una cuenta,
--- tomando rol/nombre/consultantId de los metadatos del registro.
+-- El perfil se crea automáticamente al registrarse una cuenta, tomando
+-- rol/nombre/consultantId de los metadatos del registro.
+--
+-- IMPORTANTE — por qué esta función es tan defensiva:
+-- `raw_user_meta_data` lo arma el propio cliente al llamar auth.signUp(),
+-- así que CUALQUIERA con la anon key (pública, va en el bundle) puede
+-- invocar signUp directo por API con los metadatos que quiera — no hace
+-- falta pasar por la UI de la app. Por eso acá NUNCA se confía en:
+--   · membershipExpiresAt del cliente: si se copiara tal cual, cualquiera
+--     podría autoasignarse una membresía activa por años sin pagar ni
+--     ser activado por la dueña. Siempre se fuerza a "pendiente" (ahora
+--     mismo, ya vencida) acá adentro; la única forma real de activarla
+--     es profiles_admin_update, que ya exige mb_is_owner().
+--   · consultantId del cliente: si se copiara tal cual, alguien podría
+--     registrarse como "consultante" reclamando el id de la ficha de
+--     otra persona (si lo adivina o se filtra en algún lado) y leer su
+--     proceso completo. Solo se acepta si ese id corresponde a un
+--     consultante real y todavía nadie lo reclamó.
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
 security definer set search_path = public
 as $$
+declare
+  claimed_role text := coalesce(new.raw_user_meta_data->>'role', 'consultante');
+  claimed_cid text := new.raw_user_meta_data->>'consultantId';
+  safe_cid text := null;
 begin
+  if claimed_role = 'consultante' and claimed_cid is not null then
+    if exists (select 1 from public.consultants c where c."consultantId" = claimed_cid)
+       and not exists (select 1 from public.profiles p where p.data->>'consultantId' = claimed_cid)
+    then
+      safe_cid := claimed_cid;
+    end if;
+  end if;
+
   insert into public.profiles (id, data)
   values (
     new.id,
     jsonb_build_object(
-      'role', coalesce(new.raw_user_meta_data->>'role', 'consultante'),
+      'role', claimed_role,
       'nombre', coalesce(new.raw_user_meta_data->>'nombre', ''),
       'apellido', coalesce(new.raw_user_meta_data->>'apellido', ''),
       'titulo', new.raw_user_meta_data->>'titulo',
-      'consultantId', new.raw_user_meta_data->>'consultantId',
-      'membershipExpiresAt', new.raw_user_meta_data->>'membershipExpiresAt',
+      'consultantId', safe_cid,
+      'membershipExpiresAt', to_jsonb(now())::text,
       'email', new.email,
       'createdAt', to_jsonb(now())::text
     )

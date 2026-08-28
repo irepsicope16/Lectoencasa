@@ -123,33 +123,35 @@ export default function LoginPage() {
               </p>
             )}
 
-            <div className="mt-8 rounded-xl border border-dashed p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-faint">
-                Cuentas de demostración
-              </p>
-              <div className="mt-2.5 space-y-1.5">
-                <button
-                  onClick={() => fillDemo('ire@psicopeconire.com')}
-                  className="flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] transition-colors hover:bg-surface-2"
-                >
-                  <Sparkles className="h-4 w-4 text-primary" />
-                  <span>
-                    <span className="font-medium">Profesional</span>
-                    <span className="block text-[11.5px] text-faint">ire@psicopeconire.com</span>
-                  </span>
-                </button>
-                <button
-                  onClick={() => fillDemo('valen@demo.com')}
-                  className="flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] transition-colors hover:bg-surface-2"
-                >
-                  <UserRound className="h-4 w-4 text-accent-strong" />
-                  <span>
-                    <span className="font-medium">Consultante</span>
-                    <span className="block text-[11.5px] text-faint">valen@demo.com</span>
-                  </span>
-                </button>
+            {!isCloudEnabled() && (
+              <div className="mt-8 rounded-xl border border-dashed p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-faint">
+                  Cuentas de demostración
+                </p>
+                <div className="mt-2.5 space-y-1.5">
+                  <button
+                    onClick={() => fillDemo('ire@psicopeconire.com')}
+                    className="flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] transition-colors hover:bg-surface-2"
+                  >
+                    <Sparkles className="h-4 w-4 text-primary" />
+                    <span>
+                      <span className="font-medium">Profesional</span>
+                      <span className="block text-[11.5px] text-faint">ire@psicopeconire.com</span>
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => fillDemo('valen@demo.com')}
+                    className="flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] transition-colors hover:bg-surface-2"
+                  >
+                    <UserRound className="h-4 w-4 text-accent-strong" />
+                    <span>
+                      <span className="font-medium">Consultante</span>
+                      <span className="block text-[11.5px] text-faint">valen@demo.com</span>
+                    </span>
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </motion.div>
         </div>
       </div>

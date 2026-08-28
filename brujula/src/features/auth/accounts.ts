@@ -2,6 +2,14 @@ import { db } from '@/services/storage/db'
 import { isCloudEnabled } from '@/services/cloud/config'
 import type { Consultant } from '@/types'
 
+// Sin 0/O/1/l/I: se dicta por teléfono o WhatsApp y esos caracteres se confunden.
+const PASSWORD_CHARS = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789'
+
+function generatePassword(length = 10): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(length))
+  return Array.from(bytes, (b) => PASSWORD_CHARS[b % PASSWORD_CHARS.length]).join('')
+}
+
 /**
  * Garantiza que el consultante tenga su cuenta de acceso a la plataforma.
  * Se invoca al crear (o editar el email de) un consultante.
@@ -20,7 +28,7 @@ export async function ensureConsultantAccount(
   if (isCloudEnabled()) {
     const { getIsolatedClient } = await import('@/services/cloud/client')
     const sb = await getIsolatedClient()
-    const password = 'brujula'
+    const password = generatePassword()
     const { error } = await sb.auth.signUp({
       email,
       password,
@@ -49,7 +57,7 @@ export async function ensureConsultantAccount(
     }
     return null
   }
-  const password = 'brujula'
+  const password = generatePassword()
   await db.users.create({
     role: 'consultante',
     nombre: consultant.nombre,
