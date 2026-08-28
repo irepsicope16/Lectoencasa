@@ -4,7 +4,6 @@ import type {
   CompassSnapshot,
   Consultant,
   EngineDimension,
-  Evaluation,
   EvidenceRef,
   ModuleProgress,
   NavigationChart,
@@ -19,8 +18,8 @@ import { MODULE_MAP } from '@/data/modules'
 
 // ============================================================
 // Motor Brújula
-// Cruza TODA la evidencia del proceso (actividades, evaluaciones,
-// reflexiones, observaciones, sesiones, progreso) y produce:
+// Cruza TODA la evidencia del proceso (actividades, reflexiones,
+// observaciones, sesiones, progreso) y produce:
 //   · Perfil Brújula   (síntesis por dimensión, con evidencias)
 //   · Mapa Brújula     (radar cualitativo interno)
 //   · Carta de Navegación (áreas sugeridas en niveles, SIEMPRE
@@ -31,12 +30,12 @@ import { MODULE_MAP } from '@/data/modules'
 export interface EngineInput {
   consultant: Consultant
   activities: Activity[]
-  evaluations: Evaluation[]
   reflections: Reflection[]
   observations: Observation[]
   sessions: Session[]
   progress: ModuleProgress[]
 }
+
 
 const norm = (s: string) =>
   s
@@ -168,21 +167,6 @@ function collectSignals(input: EngineInput): Signals {
     }
   }
 
-  // evaluaciones: ítems con valor alto suman señal con su etiqueta
-  for (const ev of input.evaluations) {
-    for (const item of ev.items) {
-      if (item.valor < 4) continue
-      const evidencia: EvidenceRef = {
-        fuente: 'evaluacion',
-        detalle: `En la evaluación «${ev.titulo}» se registró alto «${item.etiqueta}»${item.notas ? ` (${item.notas})` : ''}`,
-      }
-      if (item.dimension === 'intereses') s.intereses.push({ texto: item.etiqueta, evidencia })
-      if (item.dimension === 'aptitudes') s.aptitudes.push({ texto: item.etiqueta, evidencia })
-      if (item.dimension === 'fortalezas') s.fortalezas.push({ texto: item.etiqueta, evidencia })
-      if (item.dimension === 'valores') s.valores.push({ texto: item.etiqueta, evidencia })
-    }
-  }
-
   return s
 }
 
@@ -270,16 +254,9 @@ function buildProfile(input: EngineInput, signals: Signals): ProfileDimension[] 
 
 // ---------- Mapa (radar interno 0..5) ----------
 
-function buildMap(input: EngineInput, profile: ProfileDimension[]) {
+function buildMap(_input: EngineInput, profile: ProfileDimension[]) {
   return profile.map((p) => {
-    // promedio de ítems de evaluación de la dimensión, si existen
-    const items = input.evaluations.flatMap((e) => e.items.filter((i) => i.dimension === p.dimension))
-    let nivel: number
-    if (items.length) {
-      nivel = items.reduce((acc, i) => acc + i.valor, 0) / items.length
-    } else {
-      nivel = p.intensidad === 'alta' ? 4.2 : p.intensidad === 'media' ? 2.8 : 1.2
-    }
+    const nivel = p.intensidad === 'alta' ? 4.2 : p.intensidad === 'media' ? 2.8 : 1.2
     return { dimension: p.dimension, titulo: DIMENSION_LABELS[p.dimension], nivel: Math.round(nivel * 10) / 10 }
   })
 }

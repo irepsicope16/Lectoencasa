@@ -29,7 +29,6 @@ import { OverviewTab } from './tabs/OverviewTab'
 import { ModulesTab } from './tabs/ModulesTab'
 import { SessionsTab } from './tabs/SessionsTab'
 import { ActivitiesTab } from './tabs/ActivitiesTab'
-import { EvaluationsTab } from './tabs/EvaluationsTab'
 import { FilesTab } from './tabs/FilesTab'
 import { CompassTab } from './tabs/CompassTab'
 import { CareerMapTab } from './tabs/CareerMapTab'
@@ -125,7 +124,6 @@ export default function ConsultantDetailPage() {
             ['modulos', 'Módulos'],
             ['sesiones', 'Sesiones'],
             ['actividades', 'Actividades'],
-            ['evaluaciones', 'Evaluaciones'],
             ['archivos', 'Archivos'],
             ['motor', 'Motor Brújula'],
             ['mapa', 'Mapa de Carreras'],
@@ -143,7 +141,6 @@ export default function ConsultantDetailPage() {
         <TabsContent value="modulos"><ModulesTab consultant={consultant} /></TabsContent>
         <TabsContent value="sesiones"><SessionsTab consultant={consultant} /></TabsContent>
         <TabsContent value="actividades"><ActivitiesTab consultant={consultant} /></TabsContent>
-        <TabsContent value="evaluaciones"><EvaluationsTab consultant={consultant} /></TabsContent>
         <TabsContent value="archivos"><FilesTab consultant={consultant} /></TabsContent>
         <TabsContent value="motor"><CompassTab consultant={consultant} /></TabsContent>
         <TabsContent value="mapa"><CareerMapTab consultant={consultant} /></TabsContent>

@@ -7,7 +7,6 @@ import type {
   CalendarEvent,
   CompassSnapshot,
   Consultant,
-  Evaluation,
   ModuleProgress,
   Observation,
   Reflection,
@@ -30,7 +29,6 @@ export const keys = {
   videos: ['videos'] as const,
   files: ['files'] as const,
   reflections: ['reflections'] as const,
-  evaluations: ['evaluations'] as const,
   snapshots: ['snapshots'] as const,
   events: ['events'] as const,
   log: ['log'] as const,
@@ -48,7 +46,6 @@ export const useActivities = () => useCollection<Activity>(keys.activities, () =
 export const useVideos = () => useCollection<AssignedVideo>(keys.videos, () => db.videos.list())
 export const useFiles = () => useCollection<StoredFile>(keys.files, () => db.files.list())
 export const useReflections = () => useCollection<Reflection>(keys.reflections, () => db.reflections.list())
-export const useEvaluations = () => useCollection<Evaluation>(keys.evaluations, () => db.evaluations.list())
 export const useSnapshots = () => useCollection<CompassSnapshot>(keys.snapshots, () => db.snapshots.list())
 export const useEvents = () => useCollection<CalendarEvent>(keys.events, () => db.events.list())
 export const useActivityLog = () => useCollection<ActivityLogEntry>(keys.log, () => db.log.list())
@@ -74,7 +71,6 @@ const repoByName = {
   videos: db.videos,
   files: db.files,
   reflections: db.reflections,
-  evaluations: db.evaluations,
   snapshots: db.snapshots,
   events: db.events,
   log: db.log,
