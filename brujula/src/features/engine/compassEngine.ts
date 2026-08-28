@@ -45,6 +45,20 @@ const norm = (s: string) =>
     .replace(/[\u0300-\u036f]/g, "")
     .trim()
 
+/** ¿"needle" aparece dentro de "haystack" como palabra/frase completa,
+ * no como substring suelto? Evita falsos positivos como el tag "ciencia"
+ * (de Ciencias Exactas y Naturales) matcheando dentro de la señal
+ * "ciencias sociales" solo porque una cadena contiene a la otra. */
+function containsPhrase(haystack: string, needle: string): boolean {
+  if (!needle) return false
+  const idx = haystack.indexOf(needle)
+  if (idx === -1) return false
+  const before = idx === 0 || !/[a-z0-9]/.test(haystack[idx - 1])
+  const afterIdx = idx + needle.length
+  const after = afterIdx >= haystack.length || !/[a-z0-9]/.test(haystack[afterIdx])
+  return before && after
+}
+
 interface Signal {
   texto: string // etiqueta legible ("Creatividad")
   evidencia: EvidenceRef
@@ -298,7 +312,7 @@ function buildSuggestions(signals: Signals): CareerSuggestion[] {
         if (sig.soloEvidencia) continue
         const n = norm(sig.texto)
         if (vistas.has(n)) continue
-        if (tags.some((t) => n.includes(norm(t)) || norm(t).includes(n))) {
+        if (tags.some((t) => containsPhrase(n, norm(t)) || containsPhrase(norm(t), n))) {
           vistas.add(n)
           peso += pesoUnitario
           motivos.push(plantilla(sig.texto))
@@ -322,7 +336,8 @@ function buildSuggestions(signals: Signals): CareerSuggestion[] {
       // "Ciencias" solo, por ejemplo, aparece como primera palabra en carreras
       // de áreas muy distintas (Educación, Ambiente, Deporte) y generaba
       // tensiones atribuidas al área equivocada.
-      const areaMencionada = area.carreras.some((c) => n.includes(norm(c))) || n.includes(norm(area.nombre))
+      const areaMencionada =
+        area.carreras.some((c) => containsPhrase(n, norm(c))) || containsPhrase(n, norm(area.nombre))
       if (areaMencionada) {
         tensiones.push(
           'Atención: esta área aparece mencionada en los mandatos familiares registrados. Conviene revisar si el interés (o el rechazo) es propio o heredado.',
