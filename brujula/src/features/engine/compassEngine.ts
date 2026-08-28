@@ -48,6 +48,9 @@ const norm = (s: string) =>
 interface Signal {
   texto: string // etiqueta legible ("Creatividad")
   evidencia: EvidenceRef
+  /** true = no aparece en los "destacados" (tags cortos): es una respuesta de texto
+   * libre, no una etiqueta corta. Igual cuenta como evidencia del módulo. */
+  soloEvidencia?: boolean
 }
 
 interface Signals {
@@ -96,11 +99,29 @@ function collectSignals(input: EngineInput): Signals {
             target.push({ texto: e, evidencia: evidencia(`eligió «${e}»`) })
           }
         }
-      } else {
-        // texto libre: guarda como evidencia de la dimensión del módulo
+      } else if (q.tipo === 'abierta' || q.tipo === 'lista') {
+        // texto libre: guarda como evidencia de la dimensión del módulo.
+        // Antes esto solo pasaba para 'deseos' y 'mandatos' — las respuestas
+        // abiertas de valores/fortalezas/intereses/aptitudes se perdían por
+        // completo, aunque el consultante hubiera completado la actividad.
         const snippet = r.texto.length > 160 ? r.texto.slice(0, 157) + '…' : r.texto
-        if (act.moduleId === 'deseos') s.deseos.push({ texto: snippet, evidencia: evidencia(`escribió: “${snippet}”`) })
-        if (act.moduleId === 'mandatos') s.mandatos.push({ texto: snippet, evidencia: evidencia(`registró: “${snippet}”`) })
+        const target =
+          act.moduleId === 'valores'
+            ? s.valores
+            : act.moduleId === 'fortalezas'
+              ? s.fortalezas
+              : act.moduleId === 'intereses'
+                ? s.intereses
+                : act.moduleId === 'aptitudes'
+                  ? s.aptitudes
+                  : act.moduleId === 'deseos'
+                    ? s.deseos
+                    : act.moduleId === 'mandatos'
+                      ? s.mandatos
+                      : null
+        if (target) {
+          target.push({ texto: snippet, evidencia: evidencia(`escribió: "${snippet}"`), soloEvidencia: true })
+        }
       }
     }
   }
@@ -188,7 +209,7 @@ const DIMS: EngineDimension[] = [
 function buildProfile(input: EngineInput, signals: Signals): ProfileDimension[] {
   return DIMS.map((dim) => {
     const sig = (signals as unknown as Record<string, Signal[]>)[dim] ?? []
-    const destacados = [...new Set(sig.map((x) => x.texto))].slice(0, 6)
+    const destacados = [...new Set(sig.filter((x) => !x.soloEvidencia).map((x) => x.texto))].slice(0, 6)
     const evidencias = [
       ...sig.map((x) => x.evidencia),
       ...dimensionEvidence(input, dim),
