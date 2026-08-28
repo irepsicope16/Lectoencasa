@@ -318,7 +318,11 @@ function buildSuggestions(signals: Signals): CareerSuggestion[] {
     const tensiones: string[] = []
     for (const m of signals.mandatos) {
       const n = norm(m.texto)
-      const areaMencionada = area.carreras.some((c) => n.includes(norm(c).split(' ')[0])) || n.includes(norm(area.nombre).split(' ')[0])
+      // Nombre completo de la carrera o del área, no solo la primera palabra:
+      // "Ciencias" solo, por ejemplo, aparece como primera palabra en carreras
+      // de áreas muy distintas (Educación, Ambiente, Deporte) y generaba
+      // tensiones atribuidas al área equivocada.
+      const areaMencionada = area.carreras.some((c) => n.includes(norm(c))) || n.includes(norm(area.nombre))
       if (areaMencionada) {
         tensiones.push(
           'Atención: esta área aparece mencionada en los mandatos familiares registrados. Conviene revisar si el interés (o el rechazo) es propio o heredado.',
@@ -410,9 +414,13 @@ function buildOwnChoices(consultant: Consultant): (CareerSuggestion & { peso: nu
 }
 
 function buildChart(input: EngineInput, signals: Signals, profile: ProfileDimension[]): NavigationChart {
-  const valores = [...new Set(signals.valores.map((s) => s.texto))].slice(0, 4)
-  const intereses = [...new Set(signals.intereses.map((s) => s.texto))].slice(0, 4)
-  const fortalezas = [...new Set(signals.fortalezas.map((s) => s.texto))].slice(0, 4)
+  // Igual que en destacados de buildProfile: se excluyen las señales de
+  // texto libre (soloEvidencia) de estas listas cortas — son oraciones,
+  // no etiquetas, y arruinaban la lectura de "brújula interior"/"vientos
+  // a favor" cuando se mostraban unidas por comas.
+  const valores = [...new Set(signals.valores.filter((s) => !s.soloEvidencia).map((s) => s.texto))].slice(0, 4)
+  const intereses = [...new Set(signals.intereses.filter((s) => !s.soloEvidencia).map((s) => s.texto))].slice(0, 4)
+  const fortalezas = [...new Set(signals.fortalezas.filter((s) => !s.soloEvidencia).map((s) => s.texto))].slice(0, 4)
 
   const propias = buildOwnChoices(input.consultant).map(({ peso: _peso, ...rest }) => rest)
   const sugerencias = [...propias, ...buildSuggestions(signals)]
