@@ -106,6 +106,24 @@ as $$
   )
 $$;
 
+-- ¿Tiene la profesional logueada la membresía anual activa (o es la dueña,
+-- siempre exenta)? Antes "membershipExpiresAt" solo se chequeaba en el
+-- guard de React (RequireRole) — una profesional con la membresía vencida
+-- o cuyo acceso la dueña "cortó" desde /pro/profesionales seguía teniendo
+-- una sesión de Supabase Auth válida, así que podía seguir leyendo/
+-- escribiendo sus consultantes con una llamada directa a la API,
+-- sin pasar por la app. Ahora el corte también aplica en RLS.
+create or replace function public.mb_membership_active()
+returns boolean language sql stable security definer set search_path = public
+as $$
+  select public.mb_is_owner() or coalesce(
+    (select (p.data->>'membershipExpiresAt') is null
+       or (p.data->>'membershipExpiresAt')::timestamptz > now()
+     from public.profiles p where p.id = auth.uid()),
+    false
+  )
+$$;
+
 -- ---------- Consultants (la ficha ES el consultante) ----------
 -- Se crea acá, antes de mb_owns_consultant(), porque esa función la
 -- referencia y Postgres valida las funciones "language sql" al crearlas.
@@ -124,8 +142,14 @@ create index if not exists consultants_profesional_idx on public.consultants ("p
 alter table public.consultants enable row level security;
 drop policy if exists consultants_pro on public.consultants;
 create policy consultants_pro on public.consultants
-  for all using (public.mb_role() = 'profesional' and "profesionalId" = auth.uid()::text)
-  with check (public.mb_role() = 'profesional' and "profesionalId" = auth.uid()::text);
+  for all using (
+    public.mb_role() = 'profesional' and "profesionalId" = auth.uid()::text
+    and public.mb_membership_active()
+  )
+  with check (
+    public.mb_role() = 'profesional' and "profesionalId" = auth.uid()::text
+    and public.mb_membership_active()
+  );
 drop policy if exists consultants_own on public.consultants;
 create policy consultants_own on public.consultants
   for select using ("consultantId" = public.mb_consultant_id());
@@ -222,8 +246,14 @@ begin
     execute format('drop policy if exists %I on public.%I', t || '_pro', t);
     execute format($f$
       create policy %I on public.%I for all
-        using (public.mb_role() = 'profesional' and public.mb_owns_consultant("consultantId"))
-        with check (public.mb_role() = 'profesional' and public.mb_owns_consultant("consultantId"))$f$, t || '_pro', t);
+        using (
+          public.mb_role() = 'profesional' and public.mb_owns_consultant("consultantId")
+          and public.mb_membership_active()
+        )
+        with check (
+          public.mb_role() = 'profesional' and public.mb_owns_consultant("consultantId")
+          and public.mb_membership_active()
+        )$f$, t || '_pro', t);
     -- limpia cualquier política vieja "_own" en bloque (versiones previas
     -- del esquema); las de abajo la reemplazan con el acceso calibrado.
     execute format('drop policy if exists %I on public.%I', t || '_own', t);
@@ -267,8 +297,14 @@ begin
     execute format('drop policy if exists %I on public.%I', t || '_gen', t);
     execute format($f$
       create policy %I on public.%I for all
-        using ("consultantId" is null and public.mb_role() = 'profesional')
-        with check ("consultantId" is null and public.mb_role() = 'profesional')$f$, t || '_gen', t);
+        using (
+          "consultantId" is null and public.mb_role() = 'profesional'
+          and public.mb_membership_active()
+        )
+        with check (
+          "consultantId" is null and public.mb_role() = 'profesional'
+          and public.mb_membership_active()
+        )$f$, t || '_gen', t);
   end loop;
 end $$;
 
