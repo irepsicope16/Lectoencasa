@@ -184,6 +184,23 @@ grant execute on function public.mb_update_own_profile to authenticated;
 -- ---------- Resto de colecciones de datos ----------
 -- "consultantId" es columna generada desde data para RLS e índices.
 
+-- El acceso de la CONSULTANTE a sus propias filas se calibra por tabla,
+-- no en bloque: antes cualquier consultante podía leer/escribir/borrar
+-- sus 11 colecciones enteras por RLS, sin importar qué hace realmente la
+-- UI. Eso incluía "evaluations" (puntajes 1-5 de uso interno profesional,
+-- que el código explícitamente nunca le muestra como número) y
+-- "observations" (notas clínicas de la profesional) — accesibles igual
+-- por cualquiera que llamara a la API de Supabase directo, sin pasar por
+-- la app. Ahora el acceso es el mínimo real que usa el frontend:
+--   · own_full   (leer + crear + editar, nunca borrar): lo que la
+--     consultante realmente completa — su progreso, sus actividades, si
+--     vio un video.
+--   · own_insert (leer + crear, sin editar ni borrar): su bitácora de
+--     reflexiones.
+--   · own_read   (solo leer): trabajo de la profesional que le compete
+--     ver — sesiones, archivos compartidos, su informe.
+--   · own_none   (nada, ni lectura): trabajo clínico interno de la
+--     profesional — evaluaciones, observaciones, agenda, log interno.
 do $$
 declare
   t text;
@@ -207,12 +224,42 @@ begin
       create policy %I on public.%I for all
         using (public.mb_role() = 'profesional' and public.mb_owns_consultant("consultantId"))
         with check (public.mb_role() = 'profesional' and public.mb_owns_consultant("consultantId"))$f$, t || '_pro', t);
-    -- consultante: solo sus filas
+    -- limpia cualquier política vieja "_own" en bloque (versiones previas
+    -- del esquema); las de abajo la reemplazan con el acceso calibrado.
     execute format('drop policy if exists %I on public.%I', t || '_own', t);
-    execute format($f$
-      create policy %I on public.%I for all
-        using ("consultantId" = public.mb_consultant_id())
-        with check ("consultantId" = public.mb_consultant_id())$f$, t || '_own', t);
+    execute format('drop policy if exists %I on public.%I', t || '_own_sel', t);
+    execute format('drop policy if exists %I on public.%I', t || '_own_ins', t);
+    execute format('drop policy if exists %I on public.%I', t || '_own_upd', t);
+
+    if t = any(array['module_progress','activities','assigned_videos']) then
+      -- own_full: leer + crear + editar sus propias filas, nunca borrar
+      execute format($f$
+        create policy %I on public.%I for select
+          using ("consultantId" = public.mb_consultant_id())$f$, t || '_own_sel', t);
+      execute format($f$
+        create policy %I on public.%I for insert
+          with check ("consultantId" = public.mb_consultant_id())$f$, t || '_own_ins', t);
+      execute format($f$
+        create policy %I on public.%I for update
+          using ("consultantId" = public.mb_consultant_id())
+          with check ("consultantId" = public.mb_consultant_id())$f$, t || '_own_upd', t);
+    elsif t = 'reflections' then
+      -- own_insert: su bitácora — leer y crear, no editar ni borrar
+      execute format($f$
+        create policy %I on public.%I for select
+          using ("consultantId" = public.mb_consultant_id())$f$, t || '_own_sel', t);
+      execute format($f$
+        create policy %I on public.%I for insert
+          with check ("consultantId" = public.mb_consultant_id())$f$, t || '_own_ins', t);
+    elsif t = any(array['sessions','files','compass_snapshots']) then
+      -- own_read: trabajo de la profesional que le compete ver, solo lectura
+      execute format($f$
+        create policy %I on public.%I for select
+          using ("consultantId" = public.mb_consultant_id())$f$, t || '_own_sel', t);
+    end if;
+    -- own_none (observations, evaluations, calendar_events, activity_log):
+    -- ninguna política "_own" — sin ellas, RLS deniega por defecto.
+
     -- filas sin consultante (agenda personal, archivos generales, log
     -- general…): cualquier profesional las puede gestionar. No todas las
     -- tablas admiten consultantId null, pero la política no molesta a las
