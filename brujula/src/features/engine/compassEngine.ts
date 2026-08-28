@@ -357,12 +357,57 @@ function buildSuggestions(signals: Signals): CareerSuggestion[] {
   return ranked.map(({ peso: _peso, ...rest }) => rest)
 }
 
+// Carreras finalistas que el propio consultante cargó y valoró en el
+// Comparador de Carreras. Es la señal más directa que existe (elegida a
+// mano, con criterio propio) — antes no se leía nunca acá, así que el
+// informe podía omitir por completo carreras que el consultante ya había
+// elegido como finalistas.
+function buildOwnChoices(consultant: Consultant): (CareerSuggestion & { peso: number })[] {
+  const entradas = consultant.comparacionCarreras ?? []
+  return entradas
+    .filter((c) => c.nombre.trim())
+    .map((c) => {
+      const criterios: [string, number][] = [
+        ['entusiasmo', c.entusiasmo],
+        ['encaje con sus valores', c.encajeValores],
+        ['estilo de vida imaginado', c.estiloDeVida],
+        ['salida laboral investigada', c.salidaLaboralPercibida],
+        ['viabilidad práctica', c.viabilidad],
+      ]
+      const peso = criterios.reduce((acc, [, v]) => acc + v, 0) / criterios.length
+      const destacado = [...criterios].sort((a, b) => b[1] - a[1])[0]
+      return {
+        peso,
+        areaId: `propia-${c.id}`,
+        area: c.nombre,
+        carreras: [c.nombre],
+        nivel: peso >= 4 ? 'brujula_firme' : peso >= 2.5 ? 'rumbo_posible' : 'para_explorar',
+        motivos: [
+          `La cargó como carrera finalista en el Comparador de Carreras${c.institucion ? ` (${c.institucion}${c.tipoInstitucion ? `, ${c.tipoInstitucion}` : ''})` : ''}.`,
+          `Lo que más valoró de esta opción: ${destacado[0]} (${destacado[1]}/5).`,
+        ],
+        evidencias: [
+          {
+            fuente: 'actividad',
+            detalle: `Comparador de Carreras: «${c.nombre}»${c.duracion ? ` (${c.duracion})` : ''} — valoración propia del consultante.`,
+          },
+        ],
+        pasosExploracion: [
+          `Confirmar el plan de estudios actualizado de ${c.nombre}.`,
+          'Contrastar esta valoración propia en la próxima sesión.',
+        ],
+      } satisfies CareerSuggestion & { peso: number }
+    })
+    .sort((a, b) => b.peso - a.peso)
+}
+
 function buildChart(input: EngineInput, signals: Signals, profile: ProfileDimension[]): NavigationChart {
   const valores = [...new Set(signals.valores.map((s) => s.texto))].slice(0, 4)
   const intereses = [...new Set(signals.intereses.map((s) => s.texto))].slice(0, 4)
   const fortalezas = [...new Set(signals.fortalezas.map((s) => s.texto))].slice(0, 4)
 
-  const sugerencias = buildSuggestions(signals)
+  const propias = buildOwnChoices(input.consultant).map(({ peso: _peso, ...rest }) => rest)
+  const sugerencias = [...propias, ...buildSuggestions(signals)]
   const firmes = sugerencias.filter((s) => s.nivel === 'brujula_firme')
 
   const rumbo = firmes.length
