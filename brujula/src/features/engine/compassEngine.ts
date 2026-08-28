@@ -288,6 +288,14 @@ function buildSuggestions(signals: Signals): CareerSuggestion[] {
     ) => {
       const vistas = new Set<string>()
       for (const sig of señales) {
+        // Las señales de texto libre (soloEvidencia) son oraciones largas,
+        // no etiquetas cortas y deliberadas: compararlas por substring
+        // contra tags genéricos ("personas", "familia") producía falsos
+        // positivos — un consultante sin ningún interés en salud podía
+        // terminar con "Salud" sugerida solo porque escribió la palabra
+        // "personas" en una reflexión sobre otra cosa. Solo sirven como
+        // evidencia del perfil, no para matchear áreas de carrera.
+        if (sig.soloEvidencia) continue
         const n = norm(sig.texto)
         if (vistas.has(n)) continue
         if (tags.some((t) => n.includes(norm(t)) || norm(t).includes(n))) {
