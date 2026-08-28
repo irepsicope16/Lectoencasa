@@ -27,8 +27,14 @@ export function pendingMembership(): string {
   return new Date().toISOString()
 }
 
-/** Sin fecha = sin restricción (cuentas viejas, dueña de la plataforma, modo local). */
+/** Sin fecha = sin restricción (cuentas viejas, dueña de la plataforma, modo local).
+ * La dueña nunca queda bloqueada por membresía: es quien activa a las demás
+ * desde /pro/profesionales, así que si su propia cuenta se recreara alguna
+ * vez, el trigger de alta la dejaría en "pendiente" igual que a cualquiera
+ * — sin esta excepción quedaría afuera de la única pantalla que le
+ * permitiría reactivarse a sí misma. */
 export function isMembershipExpired(user: User | null): boolean {
   if (!user || user.role !== 'profesional' || !user.membershipExpiresAt) return false
+  if (isOwner(user)) return false
   return new Date(user.membershipExpiresAt).getTime() < Date.now()
 }
