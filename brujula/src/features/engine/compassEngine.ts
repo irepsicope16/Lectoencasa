@@ -172,8 +172,37 @@ function collectSignals(input: EngineInput): Signals {
 
 // ---------- Perfil ----------
 
+/** dimensiones cuyas respuestas de actividad ya se procesan en collectSignals()
+ * (selección o texto libre): agregarlas también acá las duplicaría. */
+const DIMS_CON_SEÑAL: EngineDimension[] = ['valores', 'fortalezas', 'intereses', 'aptitudes', 'deseos', 'mandatos']
+
 function dimensionEvidence(input: EngineInput, dim: EngineDimension): EvidenceRef[] {
   const out: EvidenceRef[] = []
+  // respuestas de actividades del módulo de esta dimensión (p. ej. la técnica
+  // proyectiva «Dibujate haciendo algo» en Historia) — para historia/identidad/
+  // exploracion no hay bucket de señal en collectSignals(), así que sin esto
+  // esas respuestas nunca llegaban al informe.
+  for (const act of input.activities) {
+    if (act.moduleId !== dim) continue
+    // la devolución profesional (p. ej. lo observado sobre un dibujo) nunca se
+    // usaba en ningún lado — se agrega siempre, primero (es la lectura ya
+    // elaborada por la profesional, más valiosa que la respuesta cruda).
+    if (act.feedbackProfesional?.trim()) {
+      const fb = act.feedbackProfesional.trim()
+      out.push({
+        fuente: 'actividad',
+        detalle: `Devolución profesional sobre «${act.titulo}»: ${fb.length > 160 ? fb.slice(0, 157) + '…' : fb}`,
+      })
+    }
+    if (!DIMS_CON_SEÑAL.includes(dim)) {
+      for (const r of act.respuestas) {
+        const q = act.preguntas.find((p) => p.id === r.questionId)
+        if (!q || q.tipo === 'escala' || !r.texto.trim()) continue
+        const snippet = r.texto.length > 160 ? r.texto.slice(0, 157) + '…' : r.texto
+        out.push({ fuente: 'actividad', detalle: `En la actividad «${act.titulo}»: ${snippet}` })
+      }
+    }
+  }
   for (const o of input.observations) {
     if (o.moduleId === dim || (!o.moduleId && dim === 'historia')) {
       out.push({ fuente: 'observacion', detalle: o.texto })
