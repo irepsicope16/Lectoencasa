@@ -157,7 +157,7 @@ export default function PrintReportPage() {
                   <p className="text-neutral-700">{p.sintesis}</p>
                   {p.evidencias.length > 0 ? (
                     <ul className="mt-1 list-disc pl-5 text-[12px] text-neutral-500">
-                      {p.evidencias.slice(0, 3).map((e, i) => (
+                      {p.evidencias.slice(0, 5).map((e, i) => (
                         <li key={i}>
                           [{e.fuente}] {e.detalle}
                         </li>
