@@ -325,6 +325,17 @@ export default function PrintReportPage() {
           </>
         )}
 
+        {/* firma profesional: solo en los documentos que redacta la profesional
+            (nunca en 'consultante', que habla en segunda persona) */}
+        {(tipo === 'profesional' || tipo === 'familia') && user && (
+          <div className="mt-8 border-t border-neutral-200 pt-4">
+            <p className="font-semibold">{nombreCompleto(user)}</p>
+            {user?.titulo && <p className="text-neutral-600">{user.titulo}</p>}
+            {user?.matricula && <p className="text-neutral-600">{user.matricula}</p>}
+            {user?.telefono && <p className="text-neutral-600">{user.telefono}</p>}
+          </div>
+        )}
+
         {/* recorrido por etapas (todas las versiones) */}
         <H>{tipo === 'consultante' ? 'Tu recorrido por el método' : 'Recorrido por el método'}</H>
         <div className="flex flex-wrap gap-1.5">
