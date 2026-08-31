@@ -143,15 +143,19 @@ export default function PrintReportPage() {
             <p>{consultant.motivoConsulta}</p>
 
             <H>3. Síntesis por dimensión</H>
-            {snap.perfil
-              .filter((p) => p.intensidad !== 'incipiente' || p.evidencias.length > 0)
-              .map((p) => (
+            <p className="mb-3 text-[11.5px] text-neutral-500">
+              Qué se exploró en cada dimensión del proceso, con su lectura cualitativa y a qué áreas de la Carta de
+              Navegación se conecta. Nunca un puntaje: siempre una explicación con evidencia.
+            </p>
+            {snap.perfil.map((p) => {
+              const relacionadas = snap.carta.sugerencias.filter((s) => s.dimensiones?.includes(p.dimension))
+              return (
                 <div key={p.dimension} className="mb-3">
                   <p className="font-semibold">
                     {p.titulo} <span className="font-normal text-neutral-500">· intensidad {p.intensidad}</span>
                   </p>
                   <p className="text-neutral-700">{p.sintesis}</p>
-                  {p.evidencias.length > 0 && (
+                  {p.evidencias.length > 0 ? (
                     <ul className="mt-1 list-disc pl-5 text-[12px] text-neutral-500">
                       {p.evidencias.slice(0, 3).map((e, i) => (
                         <li key={i}>
@@ -159,9 +163,23 @@ export default function PrintReportPage() {
                         </li>
                       ))}
                     </ul>
+                  ) : (
+                    <p className="mt-1 text-[12px] italic text-neutral-400">
+                      Todavía no hay evidencia registrada en esta dimensión.
+                    </p>
+                  )}
+                  {relacionadas.length > 0 && (
+                    <p className="mt-1 text-[12px] text-neutral-500">
+                      Se conecta con la Carta de Navegación en:{' '}
+                      <strong className="font-medium text-neutral-700">
+                        {relacionadas.map((r) => r.area).join(', ')}
+                      </strong>
+                      .
+                    </p>
                   )}
                 </div>
-              ))}
+              )
+            })}
 
             <H>4. Rumbo y áreas sugeridas</H>
             <p className="mb-3">{snap.carta.rumbo}</p>

@@ -350,6 +350,9 @@ export interface CareerSuggestion {
   evidencias: EvidenceRef[]
   tensiones?: string[] // p. ej. deseo vs. mandato detectado
   pasosExploracion: string[]
+  /** dimensiones del Perfil que aportaron señal a esta área (para conectar
+   * cada síntesis del informe con las carreras a las que se relaciona) */
+  dimensiones?: EngineDimension[]
 }
 
 export interface NavigationChart {

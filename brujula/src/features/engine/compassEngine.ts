@@ -269,9 +269,14 @@ function buildSuggestions(signals: Signals): CareerSuggestion[] {
   for (const area of CAREER_AREAS) {
     const motivos: string[] = []
     const evidencias: EvidenceRef[] = []
+    // Qué dimensiones del Perfil aportaron señal a esta área — permite que
+    // el informe conecte cada síntesis por dimensión con las áreas de
+    // carrera a las que se relaciona, sin mostrar ningún puntaje.
+    const dimensiones = new Set<EngineDimension>()
     let peso = 0
 
     const check = (
+      dim: EngineDimension,
       señales: Signal[],
       tags: string[],
       plantilla: (etiqueta: string) => string,
@@ -294,16 +299,17 @@ function buildSuggestions(signals: Signals): CareerSuggestion[] {
           peso += pesoUnitario
           motivos.push(plantilla(sig.texto))
           evidencias.push(sig.evidencia)
+          dimensiones.add(dim)
         }
       }
     }
 
     // El interés sostenido pesa más que cualquier otra señal; las fortalezas
     // acompañan pero no definen (suelen ser transversales a muchas áreas).
-    check(signals.intereses, area.tags.intereses, (e) => `Tu interés por «${e}» conecta directamente con esta área.`, 2.5)
-    check(signals.valores, area.tags.valores, (e) => `El valor «${e}», que elegiste como fundamental, suele realizarse en estas profesiones.`, 1.5)
-    check(signals.fortalezas, area.tags.fortalezas, (e) => `Tu fortaleza «${e}» es una de las más valoradas en este campo.`, 0.75)
-    check(signals.aptitudes, area.tags.aptitudes, (e) => `Tu facilidad para «${e}» acompaña bien las exigencias de estas carreras.`, 1)
+    check('intereses', signals.intereses, area.tags.intereses, (e) => `Tu interés por «${e}» conecta directamente con esta área.`, 2.5)
+    check('valores', signals.valores, area.tags.valores, (e) => `El valor «${e}», que elegiste como fundamental, suele realizarse en estas profesiones.`, 1.5)
+    check('fortalezas', signals.fortalezas, area.tags.fortalezas, (e) => `Tu fortaleza «${e}» es una de las más valoradas en este campo.`, 0.75)
+    check('aptitudes', signals.aptitudes, area.tags.aptitudes, (e) => `Tu facilidad para «${e}» acompaña bien las exigencias de estas carreras.`, 1)
 
     // tensiones: mandatos que empujan hacia (o en contra de) esta área
     const tensiones: string[] = []
@@ -334,6 +340,7 @@ function buildSuggestions(signals: Signals): CareerSuggestion[] {
       motivos: [...new Set(motivos)].slice(0, 4),
       evidencias: evidencias.slice(0, 4),
       tensiones: tensiones.length ? tensiones : undefined,
+      dimensiones: [...dimensiones],
       pasosExploracion: [
         `Entrevistar a un profesional de ${area.nombre.toLowerCase()}.`,
         'Revisar el plan de estudios de una carrera del área y marcar materias que entusiasman y que asustan.',
