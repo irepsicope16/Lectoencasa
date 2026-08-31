@@ -25,6 +25,13 @@ const TITULOS: Record<string, string> = {
   consultante: 'Tu resumen del proceso',
 }
 
+const OBS_TIPO_LABEL: Record<string, string> = {
+  clinica: 'Clínica',
+  familiar: 'Familiar',
+  escolar: 'Escolar',
+  proceso: 'Proceso',
+}
+
 export default function PrintReportPage() {
   const { consultantId, tipo = 'profesional' } = useParams<{ consultantId: string; tipo: string }>()
   const user = useAuthStore((s) => s.user)
@@ -65,6 +72,10 @@ export default function PrintReportPage() {
   const completados = MODULES.filter(
     (m) => progress.find((p) => p.consultantId === consultant.id && p.moduleId === m.id)?.estado === 'completado',
   )
+  const actividadesConsultante = activities.filter((a) => a.consultantId === consultant.id)
+  const observacionesConsultante = observations.filter((o) => o.consultantId === consultant.id)
+  const reflexionesConsultante = reflections.filter((r) => r.consultantId === consultant.id)
+  const progresoConsultante = progress.filter((p) => p.consultantId === consultant.id)
 
   const H = ({ children }: { children: React.ReactNode }) => (
     <h2 className="mb-2 mt-8 border-b border-neutral-200 pb-1 text-[15px] font-semibold tracking-tight">
@@ -141,8 +152,92 @@ export default function PrintReportPage() {
 
             <H>2. Motivo de consulta</H>
             <p>{consultant.motivoConsulta}</p>
+            {consultant.notas?.trim() && (
+              <p className="mt-2 whitespace-pre-wrap text-neutral-700">
+                <span className="font-medium text-neutral-500">Notas generales de la ficha: </span>
+                {consultant.notas}
+              </p>
+            )}
 
-            <H>3. Síntesis por dimensión</H>
+            <H>3. Registro completo de actividades y observaciones</H>
+            <p className="mb-3 text-[11.5px] text-neutral-500">
+              Todo lo trabajado en cada módulo tal como se registró — en sesión o enviado de forma remota por{' '}
+              {consultant.nombre} durante la semana — como base para la integración final.
+            </p>
+            {MODULES.map((m) => {
+              const acts = actividadesConsultante.filter(
+                (a) => a.moduleId === m.id && (a.respuestas.some((r) => r.texto.trim()) || a.feedbackProfesional?.trim()),
+              )
+              const obsMod = observacionesConsultante.filter(
+                (o) => o.moduleId === m.id || (!o.moduleId && m.id === 'historia'),
+              )
+              const reflMod = reflexionesConsultante.filter((r) => r.moduleId === m.id)
+              const notaModulo = progresoConsultante.find((p) => p.moduleId === m.id)?.notasProfesionales?.trim()
+              if (!acts.length && !obsMod.length && !reflMod.length && !notaModulo) return null
+              return (
+                <div key={m.id} className="mb-4">
+                  <p className="font-semibold">{m.nombre}</p>
+                  {notaModulo && (
+                    <p className="mt-1 whitespace-pre-wrap text-neutral-700">
+                      <span className="font-medium text-neutral-500">Notas del módulo: </span>
+                      {notaModulo}
+                    </p>
+                  )}
+                  {acts.map((a) => (
+                    <div key={a.id} className="mt-2 rounded-lg border border-neutral-200 p-3">
+                      <p className="font-medium">
+                        {a.titulo}{' '}
+                        <span className="font-normal text-[11px] text-neutral-400">
+                          {a.fechaCompletada
+                            ? `· completada ${fechaLarga(a.fechaCompletada)}`
+                            : a.fechaAsignada
+                              ? `· asignada ${fechaLarga(a.fechaAsignada)}`
+                              : ''}
+                        </span>
+                      </p>
+                      {a.respuestas.some((r) => r.texto.trim()) ? (
+                        <dl className="mt-1.5 space-y-1.5">
+                          {a.preguntas.map((q) => {
+                            const r = a.respuestas.find((x) => x.questionId === q.id)
+                            if (!r || !r.texto.trim() || q.tipo === 'escala') return null
+                            return (
+                              <div key={q.id}>
+                                <dt className="text-[11.5px] font-medium text-neutral-500">{q.texto}</dt>
+                                <dd className="whitespace-pre-wrap text-neutral-700">{r.texto}</dd>
+                              </div>
+                            )
+                          })}
+                        </dl>
+                      ) : (
+                        <p className="mt-1 text-[12px] italic text-neutral-400">Todavía sin respuestas.</p>
+                      )}
+                      {a.feedbackProfesional?.trim() && (
+                        <p className="mt-1.5 text-[12.5px]">
+                          <span className="font-medium text-neutral-500">Devolución profesional: </span>
+                          {a.feedbackProfesional}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                  {obsMod.map((o) => (
+                    <p key={o.id} className="mt-1.5 whitespace-pre-wrap text-neutral-700">
+                      <span className="font-medium text-neutral-500">
+                        Observación {OBS_TIPO_LABEL[o.tipo] ?? o.tipo} ({fechaLarga(o.fecha)}):{' '}
+                      </span>
+                      {o.texto}
+                    </p>
+                  ))}
+                  {reflMod.map((r) => (
+                    <p key={r.id} className="mt-1.5 whitespace-pre-wrap text-neutral-700">
+                      <span className="font-medium text-neutral-500">Reflexión «{r.titulo}»: </span>
+                      {r.contenido}
+                    </p>
+                  ))}
+                </div>
+              )
+            })}
+
+            <H>4. Síntesis por dimensión</H>
             <p className="mb-3 text-[11.5px] text-neutral-500">
               Qué se exploró en cada dimensión del proceso, con su lectura cualitativa y a qué áreas de la Carta de
               Navegación se conecta. Nunca un puntaje: siempre una explicación con evidencia.
@@ -181,7 +276,7 @@ export default function PrintReportPage() {
               )
             })}
 
-            <H>4. Rumbo y áreas sugeridas</H>
+            <H>5. Rumbo y áreas sugeridas</H>
             <p className="mb-3">{snap.carta.rumbo}</p>
             {snap.carta.sugerencias.map((s) => (
               <div key={s.areaId} className="mb-3">
@@ -197,7 +292,7 @@ export default function PrintReportPage() {
               </div>
             ))}
 
-            <H>5. Recomendaciones y próximos pasos</H>
+            <H>6. Recomendaciones y próximos pasos</H>
             <ul className="list-disc pl-5">
               {snap.carta.escalas.map((e, i) => (
                 <li key={i}>{e}</li>
