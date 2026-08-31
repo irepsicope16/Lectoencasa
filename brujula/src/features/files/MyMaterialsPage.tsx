@@ -49,7 +49,7 @@ export default function MyMaterialsPage() {
                   <Download /> Descargar
                 </Button>
               ) : (
-                <Badge variant="gris">disponible en sesión</Badge>
+                <Badge variant="gris">sin archivo digital — consultá con tu profesional</Badge>
               )}
             </div>
           ))}

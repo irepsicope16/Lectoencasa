@@ -9,14 +9,21 @@ import { downloadStoredFile } from '@/lib/files'
 import { toast } from '@/components/ui/toast'
 import { fechaCorta, formatBytes } from '@/lib/utils'
 import { MODULES, MODULE_MAP } from '@/data/modules'
+import { isCloudEnabled } from '@/services/cloud/config'
 import type { Consultant, ModuleId, StoredFile } from '@/types'
 
-// Límite prudente para LocalStorage. Con Supabase Storage este límite desaparece
-// (la interfaz ya separa metadatos de contenido).
-const MAX_BYTES = 700 * 1024
+// Límite prudente para LocalStorage, que comparte una cuota total minúscula
+// (~5-10 MB) entre TODOS los datos de la app, no solo archivos. En modo
+// nube el archivo va a una columna jsonb de Supabase vía la API REST, así
+// que el límite puede ser mucho mayor — se mantiene igual acotado (no
+// ilimitado) porque cada consulta a la lista de archivos trae el contenido
+// completo en base64 de todos los archivos del estudio, no solo el nombre.
+const MAX_BYTES_LOCAL = 700 * 1024
+const MAX_BYTES_CLOUD = 6 * 1024 * 1024
 
 export function FilesTab({ consultant }: { consultant: Consultant }) {
   const { data: files = [] } = useFiles()
+  const maxBytes = isCloudEnabled() ? MAX_BYTES_CLOUD : MAX_BYTES_LOCAL
   const createFile = useCreate<StoredFile>('files', (f) => ({
     actor: 'profesional',
     consultantId: f.consultantId,
@@ -37,9 +44,9 @@ export function FilesTab({ consultant }: { consultant: Consultant }) {
     e.target.value = ''
     if (!file) return
     setError('')
-    if (file.size > MAX_BYTES) {
+    if (file.size > maxBytes) {
       setError(
-        `El archivo pesa ${formatBytes(file.size)}. En esta versión local el máximo es ${formatBytes(MAX_BYTES)}; con la migración a la nube este límite desaparece. Se guardará solo la referencia.`,
+        `El archivo pesa ${formatBytes(file.size)} y el máximo es ${formatBytes(maxBytes)}${isCloudEnabled() ? '' : ' (modo local, sin conexión a la nube)'}. Se guardará solo el nombre como referencia, sin el contenido — no vas a poder abrirlo desde acá.`,
       )
       await createFile.mutateAsync({
         consultantId: consultant.id,
@@ -114,7 +121,9 @@ export function FilesTab({ consultant }: { consultant: Consultant }) {
                   <Download />
                 </Button>
               ) : (
-                <Badge variant="gris">solo referencia</Badge>
+                <Badge variant="gris" title="Pesaba más del máximo permitido: se guardó el nombre, pero no el contenido. Borralo y volvé a subirlo.">
+                  sin contenido — muy pesado
+                </Badge>
               )}
               <Button
                 variant="ghost"
