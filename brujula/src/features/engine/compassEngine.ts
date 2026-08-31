@@ -203,6 +203,14 @@ function dimensionEvidence(input: EngineInput, dim: EngineDimension): EvidenceRe
       }
     }
   }
+  // notas profesionales cargadas a nivel módulo (pestaña Módulos de la ficha,
+  // no ligadas a una actividad puntual) — tampoco se usaban en ningún lado.
+  const notaModulo = input.progress.find((p) => p.consultantId === input.consultant.id && p.moduleId === dim)
+    ?.notasProfesionales
+  if (notaModulo?.trim()) {
+    const n = notaModulo.trim()
+    out.push({ fuente: 'observacion', detalle: `Notas del módulo: ${n.length > 160 ? n.slice(0, 157) + '…' : n}` })
+  }
   for (const o of input.observations) {
     if (o.moduleId === dim || (!o.moduleId && dim === 'historia')) {
       out.push({ fuente: 'observacion', detalle: o.texto })
