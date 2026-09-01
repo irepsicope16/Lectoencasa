@@ -857,6 +857,14 @@ em { font-style: italic; }
 }
 .recurso-card--soon { opacity: .82; }
 
+/* Método Brújula: única tarjeta de orientación vocacional — se distingue
+   del resto (lectoescritura) combinando verde agua + lila, la paleta
+   que usamos en el resto de las publicaciones de OV. */
+.recurso-card--brujula:hover { border-color: var(--lila-200); }
+.recurso-card--brujula .recurso-card__tag { color: var(--lila-900); background: var(--lila-050); }
+.recurso-card--brujula .recurso-card__icon { background: var(--lila-050); border-color: var(--lila-200); color: var(--aqua-700); }
+.recurso-card--brujula .recurso-card__link { color: var(--lila-900); }
+
 .recurso-card__tag {
   position: absolute;
   top: 1.2rem; right: 1.2rem;
