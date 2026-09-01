@@ -13,6 +13,7 @@ import {
   useSessions,
 } from '@/hooks/queries'
 import { generateSnapshot } from '@/features/engine/compassEngine'
+import { buildInformeNarrativo } from '@/features/engine/reportNarrative'
 import { AFFINITY_TIER, DIMENSION_LABELS, STAGES } from '@/lib/constants'
 import { MODULES } from '@/data/modules'
 import { edad, fechaLarga, nombreCompleto } from '@/lib/utils'
@@ -24,13 +25,6 @@ const TITULOS: Record<string, string> = {
   carta: 'Carta de Navegación',
   familia: 'Resumen del proceso — para la familia',
   consultante: 'Tu resumen del proceso',
-}
-
-const OBS_TIPO_LABEL: Record<string, string> = {
-  clinica: 'Clínica',
-  familiar: 'Familiar',
-  escolar: 'Escolar',
-  proceso: 'Proceso',
 }
 
 /** Lectura cualitativa del promedio 1-5 de una categoría de un test interno
@@ -82,13 +76,18 @@ export default function PrintReportPage() {
     })
   }, [consultant, activities, reflections, observations, sessions, progress])
 
+  const narrativa = useMemo(() => {
+    if (!consultant || !snap) return null
+    return buildInformeNarrativo(consultant, snap.perfil, snap.carta)
+  }, [consultant, snap])
+
   // Autorización fina: el consultante solo ve SU resumen (y su carta); el resto es del profesional.
   const esConsultante = user?.role === 'consultante'
   if (esConsultante && (user?.consultantId !== consultantId || !['consultante', 'carta'].includes(tipo))) {
     return <Navigate to="/mi" replace />
   }
 
-  if (!consultant || !snap) return null
+  if (!consultant || !snap || !narrativa) return null
 
   const volverA = esConsultante ? '/mi/avances' : `/pro/consultantes/${consultant.id}`
 
@@ -101,9 +100,7 @@ export default function PrintReportPage() {
     (m) => progress.find((p) => p.consultantId === consultant.id && p.moduleId === m.id)?.estado === 'completado',
   )
   const actividadesConsultante = activities.filter((a) => a.consultantId === consultant.id)
-  const observacionesConsultante = observations.filter((o) => o.consultantId === consultant.id)
   const reflexionesConsultante = reflections.filter((r) => r.consultantId === consultant.id)
-  const progresoConsultante = progress.filter((p) => p.consultantId === consultant.id)
 
   const H = ({ children }: { children: React.ReactNode }) => (
     <h2 className="mb-2 mt-8 border-b border-neutral-200 pb-1 text-[15px] font-semibold tracking-tight">
@@ -222,166 +219,21 @@ export default function PrintReportPage() {
               </p>
             )}
 
-            <H>3. Registro completo de actividades y observaciones</H>
-            <p className="mb-3 text-[11.5px] text-neutral-500">
-              Todo lo trabajado en cada módulo tal como se registró — en sesión o enviado de forma remota por{' '}
-              {consultant.nombre} durante la semana — como base para la integración final.
-            </p>
-            {MODULES.map((m) => {
-              const acts = actividadesConsultante.filter(
-                (a) => a.moduleId === m.id && (a.respuestas.some((r) => r.texto.trim()) || a.feedbackProfesional?.trim()),
-              )
-              const obsMod = observacionesConsultante.filter(
-                (o) => o.moduleId === m.id || (!o.moduleId && m.id === 'historia'),
-              )
-              const reflMod = reflexionesConsultante.filter((r) => r.moduleId === m.id)
-              const notaModulo = progresoConsultante.find((p) => p.moduleId === m.id)?.notasProfesionales?.trim()
-              if (!acts.length && !obsMod.length && !reflMod.length && !notaModulo) return null
-              return (
-                <div key={m.id} className="mb-4">
-                  <p className="font-semibold">{m.nombre}</p>
-                  {notaModulo && (
-                    <p className="mt-1 whitespace-pre-wrap text-neutral-700">
-                      <span className="font-medium text-neutral-500">Notas del módulo: </span>
-                      {notaModulo}
-                    </p>
-                  )}
-                  {acts.map((a) => (
-                    <div key={a.id} className="mt-2 rounded-lg border border-neutral-200 p-3">
-                      <p className="font-medium">
-                        {a.titulo}{' '}
-                        <span className="font-normal text-[11px] text-neutral-400">
-                          {a.fechaCompletada
-                            ? `· completada ${fechaLarga(a.fechaCompletada)}`
-                            : a.fechaAsignada
-                              ? `· asignada ${fechaLarga(a.fechaAsignada)}`
-                              : ''}
-                        </span>
-                      </p>
-                      {(() => {
-                        const preguntasAbiertas = a.preguntas.filter((q) => q.tipo !== 'escala')
-                        const hayAbiertas = preguntasAbiertas.some((q) =>
-                          a.respuestas.find((r) => r.questionId === q.id)?.texto.trim(),
-                        )
-                        const categorias = testCategoryAverages(a)
-                        if (!hayAbiertas && categorias.length === 0) {
-                          return <p className="mt-1 text-[12px] italic text-neutral-400">Todavía sin respuestas.</p>
-                        }
-                        return (
-                          <>
-                            {hayAbiertas && (
-                              <dl className="mt-1.5 space-y-1.5">
-                                {preguntasAbiertas.map((q) => {
-                                  const r = a.respuestas.find((x) => x.questionId === q.id)
-                                  if (!r || !r.texto.trim()) return null
-                                  return (
-                                    <div key={q.id}>
-                                      <dt className="text-[11.5px] font-medium text-neutral-500">{q.texto}</dt>
-                                      <dd className="whitespace-pre-wrap text-neutral-700">{r.texto}</dd>
-                                    </div>
-                                  )
-                                })}
-                              </dl>
-                            )}
-                            {categorias.length > 0 && (
-                              <div className="mt-1.5">
-                                <p className="text-[11.5px] font-medium text-neutral-500">
-                                  Lectura por categoría (cualitativa, nunca un puntaje):
-                                </p>
-                                <ul className="mt-1 list-disc pl-5 text-neutral-700">
-                                  {categorias.map((c) => (
-                                    <li key={c.categoria}>
-                                      <strong>{c.categoria}:</strong> {tierLabel(c.avg)}
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-                          </>
-                        )
-                      })()}
-                      {a.feedbackProfesional?.trim() && (
-                        <p className="mt-1.5 text-[12.5px]">
-                          <span className="font-medium text-neutral-500">Devolución profesional: </span>
-                          {a.feedbackProfesional}
-                        </p>
-                      )}
-                    </div>
-                  ))}
-                  {obsMod.map((o) => (
-                    <p key={o.id} className="mt-1.5 whitespace-pre-wrap text-neutral-700">
-                      <span className="font-medium text-neutral-500">
-                        Observación {OBS_TIPO_LABEL[o.tipo] ?? o.tipo} ({fechaLarga(o.fecha)}):{' '}
-                      </span>
-                      {o.texto}
-                    </p>
-                  ))}
-                  {reflMod.map((r) => (
-                    <p key={r.id} className="mt-1.5 whitespace-pre-wrap text-neutral-700">
-                      <span className="font-medium text-neutral-500">Reflexión «{r.titulo}»: </span>
-                      {r.contenido}
-                    </p>
-                  ))}
-                </div>
-              )
-            })}
-
-            <H>4. Síntesis por dimensión</H>
-            <p className="mb-3 text-[11.5px] text-neutral-500">
-              Qué se exploró en cada dimensión del proceso, con su lectura cualitativa y a qué áreas de la Carta de
-              Navegación se conecta. Nunca un puntaje: siempre una explicación con evidencia.
-            </p>
-            {snap.perfil.map((p) => {
-              const relacionadas = snap.carta.sugerencias.filter((s) => s.dimensiones?.includes(p.dimension))
-              return (
-                <div key={p.dimension} className="mb-3">
-                  <p className="font-semibold">
-                    {p.titulo} <span className="font-normal text-neutral-500">· intensidad {p.intensidad}</span>
-                  </p>
-                  <p className="text-neutral-700">{p.sintesis}</p>
-                  {p.evidencias.length > 0 ? (
-                    <ul className="mt-1 list-disc pl-5 text-[12px] text-neutral-500">
-                      {p.evidencias.slice(0, 5).map((e, i) => (
-                        <li key={i}>
-                          [{e.fuente}] {e.detalle}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="mt-1 text-[12px] italic text-neutral-400">
-                      Todavía no hay evidencia registrada en esta dimensión.
-                    </p>
-                  )}
-                  {relacionadas.length > 0 && (
-                    <p className="mt-1 text-[12px] text-neutral-500">
-                      Se conecta con la Carta de Navegación en:{' '}
-                      <strong className="font-medium text-neutral-700">
-                        {relacionadas.map((r) => r.area).join(', ')}
-                      </strong>
-                      .
-                    </p>
-                  )}
-                </div>
-              )
-            })}
-
-            <H>5. Rumbo y áreas sugeridas</H>
-            <p className="mb-3">{snap.carta.rumbo}</p>
-            {snap.carta.sugerencias.map((s) => (
-              <div key={s.areaId} className="mb-3">
-                <p className="font-semibold">
-                  {s.area} <span className="font-normal text-neutral-500">· {AFFINITY_TIER[s.nivel].label}</span>
-                </p>
-                <ul className="list-disc pl-5 text-neutral-700">
-                  {s.motivos.map((m, i) => (
-                    <li key={i}>{m}</li>
-                  ))}
-                </ul>
-                {s.tensiones && <p className="mt-1 text-[12px] italic text-neutral-500">{s.tensiones[0]}</p>}
-              </div>
+            <H>3. Perfil vocacional</H>
+            {narrativa.perfilVocacional.map((parrafo, i) => (
+              <p key={i} className="mb-3 text-neutral-700">
+                {parrafo}
+              </p>
             ))}
 
-            <H>6. Recomendaciones y próximos pasos</H>
+            <H>4. Orientación vocacional</H>
+            {narrativa.orientacionVocacional.map((parrafo, i) => (
+              <p key={i} className="mb-3 text-neutral-700">
+                {parrafo}
+              </p>
+            ))}
+
+            <H>5. Recomendaciones y próximos pasos</H>
             <ul className="list-disc pl-5">
               {snap.carta.escalas.map((e, i) => (
                 <li key={i}>{e}</li>
@@ -499,6 +351,91 @@ export default function PrintReportPage() {
               {consultant.nombre}: este documento es tuyo. Junta lo más importante que fuiste descubriendo en el
               proceso. Leelo cuando dudes: acá está tu propia voz.
             </p>
+
+            <H>Tu recorrido, paso a paso</H>
+            <p className="mb-3 text-[11.5px] text-neutral-500">
+              Todo lo que fuiste haciendo y descubriendo, módulo a módulo — en sesión o enviado durante la semana.
+            </p>
+            {MODULES.map((m) => {
+              const acts = actividadesConsultante.filter(
+                (a) => a.moduleId === m.id && (a.respuestas.some((r) => r.texto.trim()) || a.feedbackProfesional?.trim()),
+              )
+              const reflMod = reflexionesConsultante.filter((r) => r.moduleId === m.id)
+              if (!acts.length && !reflMod.length) return null
+              return (
+                <div key={m.id} className="mb-4">
+                  <p className="font-semibold">{m.nombre}</p>
+                  {acts.map((a) => (
+                    <div key={a.id} className="mt-2 rounded-lg border border-neutral-200 p-3">
+                      <p className="font-medium">
+                        {a.titulo}{' '}
+                        <span className="font-normal text-[11px] text-neutral-400">
+                          {a.fechaCompletada
+                            ? `· completada ${fechaLarga(a.fechaCompletada)}`
+                            : a.fechaAsignada
+                              ? `· asignada ${fechaLarga(a.fechaAsignada)}`
+                              : ''}
+                        </span>
+                      </p>
+                      {(() => {
+                        const preguntasAbiertas = a.preguntas.filter((q) => q.tipo !== 'escala')
+                        const hayAbiertas = preguntasAbiertas.some((q) =>
+                          a.respuestas.find((r) => r.questionId === q.id)?.texto.trim(),
+                        )
+                        const categorias = testCategoryAverages(a)
+                        if (!hayAbiertas && categorias.length === 0) {
+                          return <p className="mt-1 text-[12px] italic text-neutral-400">Todavía sin respuestas.</p>
+                        }
+                        return (
+                          <>
+                            {hayAbiertas && (
+                              <dl className="mt-1.5 space-y-1.5">
+                                {preguntasAbiertas.map((q) => {
+                                  const r = a.respuestas.find((x) => x.questionId === q.id)
+                                  if (!r || !r.texto.trim()) return null
+                                  return (
+                                    <div key={q.id}>
+                                      <dt className="text-[11.5px] font-medium text-neutral-500">{q.texto}</dt>
+                                      <dd className="whitespace-pre-wrap text-neutral-700">{r.texto}</dd>
+                                    </div>
+                                  )
+                                })}
+                              </dl>
+                            )}
+                            {categorias.length > 0 && (
+                              <div className="mt-1.5">
+                                <p className="text-[11.5px] font-medium text-neutral-500">
+                                  Lectura por categoría (cualitativa, nunca un puntaje):
+                                </p>
+                                <ul className="mt-1 list-disc pl-5 text-neutral-700">
+                                  {categorias.map((c) => (
+                                    <li key={c.categoria}>
+                                      <strong>{c.categoria}:</strong> {tierLabel(c.avg)}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                          </>
+                        )
+                      })()}
+                      {a.feedbackProfesional?.trim() && (
+                        <p className="mt-1.5 text-[12.5px]">
+                          <span className="font-medium text-neutral-500">Devolución de tu profesional: </span>
+                          {a.feedbackProfesional}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                  {reflMod.map((r) => (
+                    <p key={r.id} className="mt-1.5 whitespace-pre-wrap text-neutral-700">
+                      <span className="font-medium text-neutral-500">Tu reflexión «{r.titulo}»: </span>
+                      {r.contenido}
+                    </p>
+                  ))}
+                </div>
+              )
+            })}
 
             <H>Lo que descubriste de vos</H>
             {snap.perfil
