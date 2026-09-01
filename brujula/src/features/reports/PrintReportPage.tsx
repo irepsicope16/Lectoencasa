@@ -17,6 +17,7 @@ import { AFFINITY_TIER, DIMENSION_LABELS, STAGES } from '@/lib/constants'
 import { MODULES } from '@/data/modules'
 import { edad, fechaLarga, nombreCompleto } from '@/lib/utils'
 import { overallProgress } from '@/lib/progress'
+import type { Activity } from '@/types'
 
 const TITULOS: Record<string, string> = {
   profesional: 'Informe profesional de orientación vocacional',
@@ -30,6 +31,33 @@ const OBS_TIPO_LABEL: Record<string, string> = {
   familiar: 'Familiar',
   escolar: 'Escolar',
   proceso: 'Proceso',
+}
+
+/** Lectura cualitativa del promedio 1-5 de una categoría de un test interno
+ * (Test de Intereses, Cuestionario de Aptitudes, Test de Inteligencias
+ * Múltiples). Nunca se muestra el número, solo esta etiqueta. */
+function tierLabel(avg: number): string {
+  if (avg >= 4.5) return 'muy marcado'
+  if (avg >= 3.5) return 'marcado'
+  if (avg >= 2.5) return 'moderado'
+  if (avg >= 1.5) return 'bajo'
+  return 'muy bajo'
+}
+
+/** Promedio por categoría de los ítems tipo 'escala' de una actividad (los
+ * cuestionarios/tests internos), ordenado de mayor a menor. */
+function testCategoryAverages(a: Activity): { categoria: string; avg: number }[] {
+  const porCategoria = new Map<string, number[]>()
+  for (const q of a.preguntas) {
+    if (q.tipo !== 'escala' || !q.categoria) continue
+    const r = a.respuestas.find((x) => x.questionId === q.id)
+    const v = r ? Number(r.texto) : NaN
+    if (!Number.isFinite(v)) continue
+    porCategoria.set(q.categoria, [...(porCategoria.get(q.categoria) ?? []), v])
+  }
+  return [...porCategoria.entries()]
+    .map(([categoria, valores]) => ({ categoria, avg: valores.reduce((a, b) => a + b, 0) / valores.length }))
+    .sort((x, y) => y.avg - x.avg)
 }
 
 export default function PrintReportPage() {
@@ -195,22 +223,48 @@ export default function PrintReportPage() {
                               : ''}
                         </span>
                       </p>
-                      {a.respuestas.some((r) => r.texto.trim()) ? (
-                        <dl className="mt-1.5 space-y-1.5">
-                          {a.preguntas.map((q) => {
-                            const r = a.respuestas.find((x) => x.questionId === q.id)
-                            if (!r || !r.texto.trim() || q.tipo === 'escala') return null
-                            return (
-                              <div key={q.id}>
-                                <dt className="text-[11.5px] font-medium text-neutral-500">{q.texto}</dt>
-                                <dd className="whitespace-pre-wrap text-neutral-700">{r.texto}</dd>
+                      {(() => {
+                        const preguntasAbiertas = a.preguntas.filter((q) => q.tipo !== 'escala')
+                        const hayAbiertas = preguntasAbiertas.some((q) =>
+                          a.respuestas.find((r) => r.questionId === q.id)?.texto.trim(),
+                        )
+                        const categorias = testCategoryAverages(a)
+                        if (!hayAbiertas && categorias.length === 0) {
+                          return <p className="mt-1 text-[12px] italic text-neutral-400">Todavía sin respuestas.</p>
+                        }
+                        return (
+                          <>
+                            {hayAbiertas && (
+                              <dl className="mt-1.5 space-y-1.5">
+                                {preguntasAbiertas.map((q) => {
+                                  const r = a.respuestas.find((x) => x.questionId === q.id)
+                                  if (!r || !r.texto.trim()) return null
+                                  return (
+                                    <div key={q.id}>
+                                      <dt className="text-[11.5px] font-medium text-neutral-500">{q.texto}</dt>
+                                      <dd className="whitespace-pre-wrap text-neutral-700">{r.texto}</dd>
+                                    </div>
+                                  )
+                                })}
+                              </dl>
+                            )}
+                            {categorias.length > 0 && (
+                              <div className="mt-1.5">
+                                <p className="text-[11.5px] font-medium text-neutral-500">
+                                  Lectura por categoría (cualitativa, nunca un puntaje):
+                                </p>
+                                <ul className="mt-1 list-disc pl-5 text-neutral-700">
+                                  {categorias.map((c) => (
+                                    <li key={c.categoria}>
+                                      <strong>{c.categoria}:</strong> {tierLabel(c.avg)}
+                                    </li>
+                                  ))}
+                                </ul>
                               </div>
-                            )
-                          })}
-                        </dl>
-                      ) : (
-                        <p className="mt-1 text-[12px] italic text-neutral-400">Todavía sin respuestas.</p>
-                      )}
+                            )}
+                          </>
+                        )
+                      })()}
                       {a.feedbackProfesional?.trim() && (
                         <p className="mt-1.5 text-[12.5px]">
                           <span className="font-medium text-neutral-500">Devolución profesional: </span>
