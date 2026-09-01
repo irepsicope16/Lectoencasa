@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ClipboardPlus, Eye, ListChecks, MonitorPlay, PenLine, Plus } from 'lucide-react'
+import { ClipboardPlus, Eye, ListChecks, MonitorPlay, PenLine, Plus, Sparkles } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input, Label, NativeSelect, Textarea } from '@/components/ui/input'
@@ -17,6 +17,7 @@ import { toast } from '@/components/ui/toast'
 import { useActivities, useCreate, useUpdate, useVideos } from '@/hooks/queries'
 import { fechaCorta, nombreCompleto } from '@/lib/utils'
 import { isTest, scoreActivity } from '@/lib/scoring'
+import { EVALUACION_PROCESO_ID, resumenEvaluacionProceso } from '@/data/evaluacionProceso'
 import { MODULES, MODULE_MAP } from '@/data/modules'
 import { ACTIVITY_STATUS } from '@/lib/constants'
 import type { Activity, AssignedVideo, CalendarEvent, Consultant, ModuleId } from '@/types'
@@ -440,7 +441,19 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
                   )
                 })}
                 <div>
-                  <Label className="text-primary-strong">Devolución profesional</Label>
+                  <div className="flex items-center justify-between">
+                    <Label className="text-primary-strong">Devolución profesional</Label>
+                    {viewing.templateId === EVALUACION_PROCESO_ID && viewing.respuestas.length > 0 && (
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => setFeedback(resumenEvaluacionProceso(viewing) ?? feedback)}
+                      >
+                        <Sparkles /> Generar automáticamente
+                      </Button>
+                    )}
+                  </div>
                   <Textarea
                     value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}
