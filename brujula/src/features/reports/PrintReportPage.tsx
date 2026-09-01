@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
-import { ArrowLeft, Printer } from 'lucide-react'
+import { ArrowLeft, Building2, CalendarDays, Printer, UserRound } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
 import { Button } from '@/components/ui/button'
 import { Isotipo } from '@/branding/Logo'
@@ -130,31 +130,68 @@ export default function PrintReportPage() {
 
       <div className="mx-auto max-w-[760px] px-8 py-10 text-[13px] leading-relaxed">
         {/* membrete */}
-        <header className="mb-8 flex items-center justify-between border-b border-neutral-200 pb-5">
-          <div className="flex items-center gap-3">
-            <Isotipo size={44} />
-            <div>
-              <p className="text-[15px] font-semibold tracking-tight">Método Brújula</p>
-              <p className="text-[11px] uppercase tracking-[0.16em] text-neutral-500">Psicope con Ire</p>
+        <header className="mb-8 overflow-hidden rounded-2xl border border-neutral-300">
+          <div className="flex items-center gap-5 border-b border-neutral-200 px-7 py-6">
+            <Isotipo size={72} className="shrink-0" />
+            <div className="h-16 w-px shrink-0 bg-neutral-200" />
+            <div className="flex-1 text-center">
+              <h1 className="font-display text-[26px] font-medium tracking-tight text-primary-strong sm:text-[30px]">
+                Método Brújula
+              </h1>
+              <p className="font-display mt-0.5 flex items-center justify-center gap-2.5 text-[12.5px] italic text-warning">
+                <span className="h-px w-6 bg-warning/40" /> Encontrá tu norte. Construí tu camino.{' '}
+                <span className="h-px w-6 bg-warning/40" />
+              </p>
+              <p className="font-display mt-1.5 text-[13.5px] font-semibold uppercase tracking-wide text-primary-strong">
+                {TITULOS[tipo] ?? TITULOS.profesional}
+              </p>
             </div>
           </div>
-          <div className="text-right text-[11.5px] text-neutral-500">
-            <p>Orientación vocacional y reorientación profesional</p>
-            <p>{fechaLarga(new Date().toISOString())}</p>
+
+          {(tipo === 'profesional' || tipo === 'familia') && user && (
+            <div className="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 border-b border-neutral-200 px-6 py-2 text-[11.5px]">
+              <span className="font-semibold text-warning">{nombreCompleto(user)}</span>
+              {user.titulo && (
+                <>
+                  <span className="text-neutral-300">|</span>
+                  <span className="text-neutral-600">{user.titulo}</span>
+                </>
+              )}
+              {user.matricula && (
+                <>
+                  <span className="text-neutral-300">|</span>
+                  <span className="text-neutral-600">{user.matricula}</span>
+                </>
+              )}
+            </div>
+          )}
+
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 px-6 py-3 text-[11.5px] text-neutral-700">
+            <span className="flex items-center gap-1.5">
+              <UserRound className="h-3.5 w-3.5 text-primary" strokeWidth={1.75} /> Consultante:{' '}
+              <strong className="font-medium">{nombreCompleto(consultant)}</strong>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <CalendarDays className="h-3.5 w-3.5 text-primary" strokeWidth={1.75} /> Edad:{' '}
+              <strong className="font-medium">{edad(consultant.fechaNacimiento)} años</strong>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <CalendarDays className="h-3.5 w-3.5 text-primary" strokeWidth={1.75} /> Fecha:{' '}
+              <strong className="font-medium">{fechaLarga(new Date().toISOString())}</strong>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Building2 className="h-3.5 w-3.5 text-primary" strokeWidth={1.75} /> Institución:{' '}
+              <strong className="font-medium">
+                {consultant.escuela}
+                {consultant.curso ? ` — ${consultant.curso}` : ''}
+              </strong>
+            </span>
           </div>
         </header>
 
-        <h1 className="text-xl font-semibold tracking-tight">{TITULOS[tipo] ?? TITULOS.profesional}</h1>
-        <p className="mt-1 text-neutral-600">
-          {tipo === 'consultante' ? (
-            <>Para {consultant.nombre}, con todo lo que descubriste hasta acá.</>
-          ) : (
-            <>
-              {nombreCompleto(consultant)} · {edad(consultant.fechaNacimiento)} años · {consultant.escuela} ·{' '}
-              {consultant.curso}
-            </>
-          )}
-        </p>
+        {tipo === 'consultante' && (
+          <p className="mb-6 text-neutral-600">Para {consultant.nombre}, con todo lo que descubriste hasta acá.</p>
+        )}
 
         {/* ================= INFORME PROFESIONAL ================= */}
         {tipo === 'profesional' && (
@@ -163,8 +200,6 @@ export default function PrintReportPage() {
             <table className="w-full text-[12.5px]">
               <tbody>
                 {[
-                  ['Consultante', `${nombreCompleto(consultant)} (${edad(consultant.fechaNacimiento)} años)`],
-                  ['Institución', `${consultant.escuela} — ${consultant.curso}`],
                   ['Inicio del proceso', fechaLarga(consultant.fechaInicio)],
                   ['Sesiones realizadas', String(sesionesRealizadas.length)],
                   ['Actividades completadas', String(actividadesHechas.length)],
