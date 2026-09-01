@@ -1,4 +1,4 @@
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, Compass } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -6,11 +6,15 @@ import { useAuthStore } from '@/stores/authStore'
 
 // Portada de la plataforma: primera pantalla que ve cualquier visitante
 // sin sesión iniciada. Si ya hay sesión, no se muestra — va directo a su área.
+// Excepción: con ?preview=1 en la URL se ve igual estando logueada/o (para
+// que la profesional pueda revisarla sin cerrar sesión).
 export default function SplashPage() {
   const user = useAuthStore((s) => s.user)
   const navigate = useNavigate()
+  const [params] = useSearchParams()
+  const preview = params.get('preview') === '1'
 
-  if (user) {
+  if (user && !preview) {
     return <Navigate to={user.role === 'profesional' ? '/pro' : '/mi'} replace />
   }
 
@@ -41,9 +45,15 @@ export default function SplashPage() {
           Un espacio creado y guiado por Lic. Irene Morbidelli — MP: 260505
         </p>
 
-        <Button size="lg" className="mt-8" onClick={() => navigate('/login')}>
-          Comenzar <ArrowRight />
-        </Button>
+        {user ? (
+          <Button size="lg" className="mt-8" onClick={() => navigate(user.role === 'profesional' ? '/pro' : '/mi')}>
+            Volver a mi panel <ArrowRight />
+          </Button>
+        ) : (
+          <Button size="lg" className="mt-8" onClick={() => navigate('/login')}>
+            Comenzar <ArrowRight />
+          </Button>
+        )}
       </motion.div>
 
       <footer className="mt-16">

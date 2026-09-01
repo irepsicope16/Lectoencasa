@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { Cloud, CloudUpload, Database, Download, IdCard, Moon, Paintbrush, RefreshCcw, Sparkles, Sun, Upload } from 'lucide-react'
+import { Cloud, CloudUpload, Database, Download, Eye, IdCard, Moon, Paintbrush, RefreshCcw, Sparkles, Sun, Upload } from 'lucide-react'
 import { exportBackup, importBackup } from '@/services/storage/backup'
 import { getCloudConfig, isCloudEnabled, saveCloudConfig } from '@/services/cloud/config'
 import { toast } from '@/components/ui/toast'
@@ -234,6 +234,26 @@ export default function SettingsPage() {
                 </button>
               ))}
             </div>
+          </CardContent>
+        </Card>
+
+        {/* portada */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Eye className="h-4 w-4 text-primary" /> Portada de bienvenida
+            </CardTitle>
+            <CardDescription>
+              La primera pantalla que ve cualquier persona sin sesión iniciada (imagen y leyenda antes de
+              iniciar sesión o registrarse). Estando logueada no se muestra sola — usá este enlace para verla.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button size="sm" variant="outline" asChild>
+              <a href="#/?preview=1" target="_blank" rel="noopener noreferrer">
+                Ver la portada <Eye />
+              </a>
+            </Button>
           </CardContent>
         </Card>
 
