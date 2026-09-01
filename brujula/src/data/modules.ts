@@ -1,5 +1,6 @@
 import type { ModuleDefinition, ModuleId } from '@/types'
 import { TEST_APTITUDES, TEST_INTELIGENCIAS, TEST_INTERESES } from './tests'
+import { EVALUACION_PROCESO } from './evaluacionProceso'
 
 // ============================================================
 // Contenido del Método Brújula: 12 módulos · 5 etapas.
@@ -966,6 +967,7 @@ export const MODULES: ModuleDefinition[] = [
           { id: 'q1', texto: 'Escribí la carta: ¿qué descubriste de vos? ¿Qué querés recordarte?', tipo: 'abierta' },
         ],
       },
+      EVALUACION_PROCESO,
     ],
     videos: [],
     materiales: [
