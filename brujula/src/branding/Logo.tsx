@@ -1,3 +1,4 @@
+import { Brain, Heart, Milestone, Rocket, Search } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 // ============================================================
@@ -57,6 +58,62 @@ export function LogoHorizontal({ className, size = 30 }: LogoProps) {
           Psicope con Ire
         </span>
       </div>
+    </div>
+  )
+}
+
+const STAGE_ITEMS = [
+  { id: 'conocerte', label: 'Conocerte', Icon: Brain, color: 'var(--primary)', soft: 'var(--primary-soft)' },
+  { id: 'valorarte', label: 'Valorarte', Icon: Heart, color: 'var(--accent)', soft: 'var(--accent-soft)' },
+  { id: 'explorar', label: 'Explorar', Icon: Search, color: 'var(--warning)', soft: 'var(--warning-soft)' },
+  { id: 'decidir', label: 'Decidir', Icon: Milestone, color: 'var(--rose)', soft: 'var(--rose-soft)' },
+  { id: 'actuar', label: 'Actuar', Icon: Rocket, color: 'var(--danger)', soft: 'var(--danger-soft)' },
+] as const
+
+/**
+ * Marca completa para las pantallas de entrada (portada, login): brújula,
+ * nombre del método, leyenda, los 5 pasos del recorrido, la especialidad
+ * y — opcionalmente — la firma profesional, a modo de marca registrada.
+ */
+export function BrandMark({
+  className,
+  showCredential = false,
+}: {
+  className?: string
+  showCredential?: boolean
+}) {
+  return (
+    <div className={cn('flex flex-col items-center text-center', className)}>
+      <Isotipo size={96} />
+      <h1 className="font-display mt-5 text-[32px] font-medium tracking-tight text-primary-strong sm:text-[38px]">
+        Método Brújula
+      </h1>
+      <p className="font-display mt-1.5 text-[15px] italic text-warning">
+        Encontrá tu norte. Construí tu camino.
+      </p>
+      <div className="mt-5 h-px w-full max-w-[360px] bg-border" />
+      <div className="mt-4 flex items-start gap-4 sm:gap-5">
+        {STAGE_ITEMS.map(({ id, label, Icon, color, soft }) => (
+          <div key={id} className="flex flex-col items-center gap-1.5">
+            <div
+              className="flex h-9 w-9 items-center justify-center rounded-full"
+              style={{ background: soft, color }}
+            >
+              <Icon className="h-4 w-4" strokeWidth={1.75} />
+            </div>
+            <span className="text-[9px] font-medium uppercase tracking-wide text-faint">{label}</span>
+          </div>
+        ))}
+      </div>
+      <p className="mt-5 text-[10.5px] font-medium uppercase tracking-[0.14em] text-faint">
+        Orientación Vocacional y Ocupacional
+      </p>
+      {showCredential && (
+        <div className="mt-6 text-[11.5px] leading-relaxed">
+          <p className="font-medium text-muted-foreground">Lic. Irene Morbidelli</p>
+          <p className="text-faint">Licenciada en Psicopedagogía — M.P. 260505</p>
+        </div>
+      )}
     </div>
   )
 }

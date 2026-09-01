@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/inter';
+@import '@fontsource-variable/fraunces';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -110,6 +111,7 @@
 
 @theme inline {
   --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Fraunces Variable', Georgia, serif;
 
   --color-background: var(--background);
   --color-surface: var(--surface);

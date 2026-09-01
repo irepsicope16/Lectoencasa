@@ -2,6 +2,7 @@ import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, Compass } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { BrandMark } from '@/branding/Logo'
 import { useAuthStore } from '@/stores/authStore'
 
 // Portada de la plataforma: primera pantalla que ve cualquier visitante
@@ -30,19 +31,11 @@ export default function SplashPage() {
         transition={{ duration: 0.5, ease: 'easeOut' }}
         className="mt-8 flex flex-col items-center"
       >
-        <img
-          src="logo-completo.jpg"
-          alt="Método Brújula — Psicope con Ire. Encontrá tu norte. Construí tu camino."
-          className="w-full max-w-[420px] rounded-3xl shadow-sm sm:max-w-[480px]"
-        />
+        <BrandMark showCredential className="max-w-[440px]" />
 
         <p className="mx-auto mt-6 max-w-md text-[14px] leading-relaxed text-muted-foreground">
           La plataforma profesional de orientación vocacional: evaluación, acompañamiento,
           seguimiento y proyecto de vida en un solo lugar.
-        </p>
-
-        <p className="mt-4 text-[13px] font-medium text-foreground">
-          Un espacio creado y guiado por Lic. Irene Morbidelli — MP: 260505
         </p>
 
         {user ? (

@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight, Compass, Sparkles, UserRound } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { FieldError, Input, Label } from '@/components/ui/input'
+import { BrandMark } from '@/branding/Logo'
 import { useAuthStore } from '@/stores/authStore'
 import { isCloudEnabled } from '@/services/cloud/config'
 
@@ -57,11 +58,7 @@ export default function LoginPage() {
             transition={{ duration: 0.5, ease: 'easeOut' }}
             className="mx-auto max-w-lg text-center"
           >
-            <img
-              src="logo-completo.jpg"
-              alt="Método Brújula — Psicope con Ire. Encontrá tu norte. Construí tu camino."
-              className="mx-auto w-full max-w-[440px] rounded-3xl shadow-sm"
-            />
+            <BrandMark showCredential className="mx-auto max-w-[420px]" />
             <p className="mx-auto mt-6 max-w-md text-[14px] leading-relaxed text-muted-foreground">
               La plataforma profesional de orientación vocacional: evaluación, acompañamiento,
               seguimiento y proyecto de vida en un solo lugar. Porque orientar no es aplicar un
@@ -85,11 +82,7 @@ export default function LoginPage() {
             transition={{ duration: 0.35, ease: 'easeOut' }}
             className="w-full max-w-sm"
           >
-            <img
-              src="logo-completo.jpg"
-              alt="Método Brújula — Psicope con Ire"
-              className="mx-auto mb-8 w-full max-w-[260px] rounded-2xl lg:hidden"
-            />
+            <BrandMark className="mx-auto mb-8 max-w-[280px] lg:hidden" />
             <h2 className="text-lg font-semibold tracking-tight">Ingresar a la plataforma</h2>
             <p className="mt-0.5 text-[13px] text-muted-foreground">
               Accedé con tu cuenta profesional o de consultante.
