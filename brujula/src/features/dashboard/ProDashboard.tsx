@@ -31,7 +31,7 @@ import {
 } from '@/hooks/queries'
 import { useAuthStore } from '@/stores/authStore'
 import { fechaHora, haceCuanto, iniciales, nombreCompleto } from '@/lib/utils'
-import { overallProgress } from '@/lib/progress'
+import { effectiveEstado, overallProgress } from '@/lib/progress'
 import { CONSULTANT_STATUS } from '@/lib/constants'
 import type { CalendarEvent } from '@/types'
 
@@ -128,7 +128,7 @@ export default function ProDashboard() {
             <CardContent className="space-y-1">
               {consultants.slice(0, 5).map((c) => {
                 const pct = overallProgress(progress, c.id)
-                const st = CONSULTANT_STATUS[c.estado]
+                const st = CONSULTANT_STATUS[effectiveEstado(c, progress)]
                 return (
                   <Link
                     key={c.id}

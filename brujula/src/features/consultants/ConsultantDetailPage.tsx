@@ -20,7 +20,7 @@ import { deleteConsultantCascade } from '@/services/storage/db'
 import { ensureConsultantAccount } from '@/features/auth/accounts'
 import { toast } from '@/components/ui/toast'
 import { edad, fechaCorta, iniciales, nombreCompleto } from '@/lib/utils'
-import { overallProgress } from '@/lib/progress'
+import { effectiveEstado, overallProgress } from '@/lib/progress'
 import { CONSULTANT_STATUS } from '@/lib/constants'
 import type { Consultant } from '@/types'
 import { useNavigate } from 'react-router-dom'
@@ -59,7 +59,7 @@ export default function ConsultantDetailPage() {
   }
 
   const pct = overallProgress(progress, consultant.id)
-  const st = CONSULTANT_STATUS[consultant.estado]
+  const st = CONSULTANT_STATUS[effectiveEstado(consultant, progress)]
 
   return (
     <FadeIn>
