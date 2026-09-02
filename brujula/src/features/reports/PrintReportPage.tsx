@@ -13,11 +13,10 @@ import {
   useSessions,
 } from '@/hooks/queries'
 import { generateSnapshot } from '@/features/engine/compassEngine'
-import { buildInformeNarrativo } from '@/features/engine/reportNarrative'
+import { buildInformeCompleto } from '@/features/engine/reportNarrative'
 import { AFFINITY_TIER, DIMENSION_LABELS, STAGES } from '@/lib/constants'
 import { MODULES } from '@/data/modules'
 import { edad, fechaLarga, nombreCompleto } from '@/lib/utils'
-import { overallProgress } from '@/lib/progress'
 import type { Activity } from '@/types'
 
 const TITULOS: Record<string, string> = {
@@ -78,8 +77,17 @@ export default function PrintReportPage() {
 
   const narrativa = useMemo(() => {
     if (!consultant || !snap) return null
-    return buildInformeNarrativo(consultant, snap.perfil, snap.carta)
-  }, [consultant, snap])
+    const propias = activities.filter((a) => a.consultantId === consultant.id)
+    const sesionesRealizadas = sessions.filter((s) => s.consultantId === consultant.id && s.estado === 'realizada')
+    const completados = MODULES.filter(
+      (m) => progress.find((p) => p.consultantId === consultant.id && p.moduleId === m.id)?.estado === 'completado',
+    )
+    return buildInformeCompleto(consultant, propias, snap.perfil, snap.carta, {
+      sesiones: sesionesRealizadas.length,
+      modulosCompletados: completados.length,
+      modulosTotales: MODULES.length,
+    })
+  }, [consultant, snap, activities, sessions, progress])
 
   // Autorización fina: el consultante solo ve SU resumen (y su carta); el resto es del profesional.
   const esConsultante = user?.role === 'consultante'
@@ -91,7 +99,6 @@ export default function PrintReportPage() {
 
   const volverA = esConsultante ? '/mi/avances' : `/pro/consultantes/${consultant.id}`
 
-  const pct = overallProgress(progress, consultant.id)
   const sesionesRealizadas = sessions.filter((s) => s.consultantId === consultant.id && s.estado === 'realizada')
   const actividadesHechas = activities.filter(
     (a) => a.consultantId === consultant.id && (a.estado === 'completada' || a.estado === 'revisada'),
@@ -193,52 +200,22 @@ export default function PrintReportPage() {
         {/* ================= INFORME PROFESIONAL ================= */}
         {tipo === 'profesional' && (
           <>
-            <H>1. Datos del proceso</H>
-            <table className="w-full text-[12.5px]">
-              <tbody>
-                {[
-                  ['Inicio del proceso', fechaLarga(consultant.fechaInicio)],
-                  ['Sesiones realizadas', String(sesionesRealizadas.length)],
-                  ['Actividades completadas', String(actividadesHechas.length)],
-                  ['Módulos completados', `${completados.length} de 12 (${pct}% del recorrido)`],
-                ].map(([k, v]) => (
-                  <tr key={k} className="border-b border-neutral-100">
-                    <td className="w-48 py-1.5 pr-4 font-medium text-neutral-500">{k}</td>
-                    <td className="py-1.5">{v}</td>
-                  </tr>
+            {narrativa.secciones.map((seccion, idx) => (
+              <div key={seccion.titulo}>
+                <H>
+                  {idx + 1}. {seccion.titulo}
+                </H>
+                {seccion.parrafos.map((parrafo, i) => (
+                  <p key={i} className="mb-3 whitespace-pre-wrap text-neutral-700">
+                    {parrafo}
+                  </p>
                 ))}
-              </tbody>
-            </table>
-
-            <H>2. Motivo de consulta</H>
-            <p>{consultant.motivoConsulta}</p>
-            {consultant.notas?.trim() && (
-              <p className="mt-2 whitespace-pre-wrap text-neutral-700">
-                <span className="font-medium text-neutral-500">Notas generales de la ficha: </span>
-                {consultant.notas}
-              </p>
-            )}
-
-            <H>3. Perfil vocacional</H>
-            {narrativa.perfilVocacional.map((parrafo, i) => (
-              <p key={i} className="mb-3 text-neutral-700">
-                {parrafo}
-              </p>
+              </div>
             ))}
 
-            <H>4. Orientación vocacional</H>
-            {narrativa.orientacionVocacional.map((parrafo, i) => (
-              <p key={i} className="mb-3 text-neutral-700">
-                {parrafo}
-              </p>
-            ))}
-
-            <H>5. Recomendaciones y próximos pasos</H>
-            <ul className="list-disc pl-5">
-              {snap.carta.escalas.map((e, i) => (
-                <li key={i}>{e}</li>
-              ))}
-            </ul>
+            <p className="mt-8 border-t border-neutral-200 pt-4 text-[13px] italic text-neutral-600">
+              «{narrativa.cartaCierre}»
+            </p>
           </>
         )}
 
