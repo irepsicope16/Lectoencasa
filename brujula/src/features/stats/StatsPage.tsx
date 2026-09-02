@@ -24,7 +24,7 @@ import {
 } from '@/hooks/queries'
 import { MODULES } from '@/data/modules'
 import { CONSULTANT_STATUS } from '@/lib/constants'
-import { overallProgress } from '@/lib/progress'
+import { effectiveEstado, overallProgress } from '@/lib/progress'
 import { nombreCompleto } from '@/lib/utils'
 import type { ConsultantStatus } from '@/types'
 
@@ -38,11 +38,14 @@ export default function StatsPage() {
 
   const porEstado = useMemo(() => {
     const counts: Record<string, number> = {}
-    for (const c of consultants) counts[c.estado] = (counts[c.estado] ?? 0) + 1
+    for (const c of consultants) {
+      const estado = effectiveEstado(c, progress)
+      counts[estado] = (counts[estado] ?? 0) + 1
+    }
     return (Object.keys(CONSULTANT_STATUS) as ConsultantStatus[])
       .filter((k) => counts[k])
       .map((k) => ({ name: CONSULTANT_STATUS[k].label, value: counts[k] }))
-  }, [consultants])
+  }, [consultants, progress])
 
   const sesionesPorMes = useMemo(() => {
     const months: { key: string; label: string; realizadas: number; programadas: number }[] = []

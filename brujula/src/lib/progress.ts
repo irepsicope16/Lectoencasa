@@ -1,4 +1,4 @@
-import type { Activity, ModuleProgress } from '@/types'
+import type { Activity, Consultant, ConsultantStatus, ModuleProgress } from '@/types'
 import { MODULES } from '@/data/modules'
 
 /**
@@ -17,6 +17,19 @@ export function overallProgress(progress: ModuleProgress[], consultantId: string
     else if (p.estado === 'en_progreso') sum += 0.5
   }
   return Math.round((sum / MODULES.length) * 100)
+}
+
+/**
+ * Estado a mostrar para un consultante: "En pausa" y "Finalizado" son
+ * siempre una decisión de la profesional y se respetan tal cual están
+ * cargados en la ficha. "Entrevista inicial" y "En proceso" en cambio se
+ * calculan solos a partir del avance real (% de módulos), para que no
+ * queden fichas mostrando "Entrevista inicial" para siempre solo porque
+ * nadie volvió a tocar ese campo.
+ */
+export function effectiveEstado(consultant: Consultant, progress: ModuleProgress[]): ConsultantStatus {
+  if (consultant.estado === 'en_pausa' || consultant.estado === 'finalizado') return consultant.estado
+  return overallProgress(progress, consultant.id) > 0 ? 'en_proceso' : 'entrevista_inicial'
 }
 
 export function moduleActivityStats(activities: Activity[], consultantId: string, moduleId: string) {

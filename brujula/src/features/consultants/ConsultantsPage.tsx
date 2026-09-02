@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
 import { useConsultants, useCreate, useModuleProgress } from '@/hooks/queries'
 import { edad, fechaCorta, iniciales, nombreCompleto } from '@/lib/utils'
-import { overallProgress } from '@/lib/progress'
+import { effectiveEstado, overallProgress } from '@/lib/progress'
 import { CONSULTANT_STATUS } from '@/lib/constants'
 import { useAuthStore } from '@/stores/authStore'
 import type { Consultant } from '@/types'
@@ -36,14 +36,14 @@ export default function ConsultantsPage() {
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase()
     return consultants
-      .filter((c) => (estado === 'todos' ? true : c.estado === estado))
+      .filter((c) => (estado === 'todos' ? true : effectiveEstado(c, progress) === estado))
       .filter((c) =>
         term
           ? `${c.nombre} ${c.apellido} ${c.escuela} ${c.curso}`.toLowerCase().includes(term)
           : true,
       )
       .sort((a, b) => a.apellido.localeCompare(b.apellido))
-  }, [consultants, q, estado])
+  }, [consultants, q, estado, progress])
 
   const setOpen = (o: boolean) => {
     if (o) params.set('nuevo', '1')
@@ -55,7 +55,7 @@ export default function ConsultantsPage() {
     <FadeIn>
       <PageHeader
         title="Consultantes"
-        subtitle={`${consultants.length} consultantes · ${consultants.filter((c) => c.estado === 'en_proceso').length} en proceso activo`}
+        subtitle={`${consultants.length} consultantes · ${consultants.filter((c) => effectiveEstado(c, progress) === 'en_proceso').length} en proceso activo`}
         actions={
           <Button size="sm" onClick={() => setOpen(true)}>
             <UserPlus /> Nuevo consultante
@@ -98,7 +98,7 @@ export default function ConsultantsPage() {
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {filtered.map((c) => {
             const pct = overallProgress(progress, c.id)
-            const st = CONSULTANT_STATUS[c.estado]
+            const st = CONSULTANT_STATUS[effectiveEstado(c, progress)]
             return (
               <Link
                 key={c.id}

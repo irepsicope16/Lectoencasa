@@ -188,6 +188,10 @@ export function ConsultantFormDialog({
                 </option>
               ))}
             </NativeSelect>
+            <p className="mt-1 text-[11px] text-faint">
+              "Entrevista inicial" y "En proceso" se calculan solos según el avance del método — elegí acá solo si
+              querés marcar "En pausa" o "Finalizado".
+            </p>
           </div>
           <DialogFooter className="sm:col-span-2">
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
