@@ -1,37 +1,66 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
-import { ArrowLeft, MailCheck } from 'lucide-react'
+import { ArrowLeft, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { FieldError, Input, Label } from '@/components/ui/input'
 import { useAuthStore } from '@/stores/authStore'
 
-const schema = z.object({
+const emailSchema = z.object({
   email: z.string().email('Ingresá un email válido'),
 })
-type FormData = z.infer<typeof schema>
+type EmailForm = z.infer<typeof emailSchema>
 
+const resetSchema = z
+  .object({
+    token: z.string().min(6, 'El código tiene 6 dígitos'),
+    password: z.string().min(6, 'Mínimo 6 caracteres'),
+    confirm: z.string(),
+  })
+  .refine((d) => d.password === d.confirm, { message: 'Las contraseñas no coinciden', path: ['confirm'] })
+type ResetForm = z.infer<typeof resetSchema>
+
+/**
+ * Recuperación en dos pasos, todo en una sola página, con un CÓDIGO de 6
+ * dígitos por mail — no un link. Los links de recuperación de un solo uso
+ * fallan seguido porque algunos clientes de mail "abren" el link solos
+ * para escanearlo antes de que la persona lo toque, gastándolo. Un código
+ * que la persona tipea a mano no tiene ese problema.
+ */
 export default function ForgotPasswordPage() {
   const requestPasswordReset = useAuthStore((s) => s.requestPasswordReset)
+  const confirmPasswordReset = useAuthStore((s) => s.confirmPasswordReset)
+  const navigate = useNavigate()
+  const [email, setEmail] = useState<string>()
   const [serverError, setServerError] = useState<string>()
-  const [sent, setSent] = useState<string>()
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<FormData>({ resolver: zodResolver(schema) })
+  const [done, setDone] = useState(false)
 
-  const onSubmit = async (data: FormData) => {
+  const emailForm = useForm<EmailForm>({ resolver: zodResolver(emailSchema) })
+  const resetForm = useForm<ResetForm>({ resolver: zodResolver(resetSchema) })
+
+  const onSubmitEmail = async (data: EmailForm) => {
     setServerError(undefined)
     const res = await requestPasswordReset(data.email)
     if (!res.ok) {
       setServerError(res.error)
       return
     }
-    setSent(data.email)
+    setEmail(data.email)
+  }
+
+  const onSubmitReset = async (data: ResetForm) => {
+    if (!email) return
+    setServerError(undefined)
+    const res = await confirmPasswordReset(email, data.token, data.password)
+    if (!res.ok) {
+      setServerError(res.error)
+      return
+    }
+    setDone(true)
+    setTimeout(() => navigate('/login', { replace: true }), 2000)
   }
 
   return (
@@ -49,36 +78,97 @@ export default function ForgotPasswordPage() {
           <ArrowLeft className="h-3.5 w-3.5" /> Volver a ingresar
         </Link>
 
-        {sent ? (
+        {done ? (
           <div className="text-center">
             <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-primary-soft text-primary">
-              <MailCheck className="h-5 w-5" />
+              <CheckCircle2 className="h-5 w-5" />
             </div>
-            <h2 className="mt-4 text-lg font-semibold tracking-tight">Revisá tu email</h2>
-            <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
-              Si <strong>{sent}</strong> tiene una cuenta, te enviamos un link para elegir una contraseña nueva.
-              Puede tardar unos minutos — revisá también la carpeta de spam.
-            </p>
+            <h2 className="mt-4 text-lg font-semibold tracking-tight">Contraseña actualizada</h2>
+            <p className="mt-1.5 text-[13px] text-muted-foreground">Te llevamos a la pantalla de ingreso…</p>
           </div>
-        ) : (
+        ) : !email ? (
           <>
             <h2 className="text-lg font-semibold tracking-tight">Recuperar contraseña</h2>
             <p className="mt-0.5 text-[13px] text-muted-foreground">
-              Ingresá el email de tu cuenta y te mandamos un link para elegir una nueva contraseña.
+              Ingresá el email de tu cuenta y te mandamos un código para elegir una contraseña nueva.
             </p>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
+            <form onSubmit={emailForm.handleSubmit(onSubmitEmail)} className="mt-6 space-y-4">
               <div>
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="tu@email.com" autoComplete="email" {...register('email')} />
-                <FieldError>{errors.email?.message}</FieldError>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="tu@email.com"
+                  autoComplete="email"
+                  {...emailForm.register('email')}
+                />
+                <FieldError>{emailForm.formState.errors.email?.message}</FieldError>
               </div>
               {serverError && (
                 <p className="rounded-lg bg-danger-soft px-3 py-2 text-[12.5px] text-danger">{serverError}</p>
               )}
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
-                Enviar link de recuperación
+              <Button type="submit" className="w-full" disabled={emailForm.formState.isSubmitting}>
+                Enviar código
               </Button>
+            </form>
+          </>
+        ) : (
+          <>
+            <h2 className="text-lg font-semibold tracking-tight">Ingresá el código</h2>
+            <p className="mt-0.5 text-[13px] leading-relaxed text-muted-foreground">
+              Te mandamos un código de 6 dígitos a <strong>{email}</strong> (revisá también spam) y elegí tu
+              contraseña nueva.
+            </p>
+
+            <form onSubmit={resetForm.handleSubmit(onSubmitReset)} className="mt-6 space-y-4">
+              <div>
+                <Label htmlFor="token">Código de 6 dígitos</Label>
+                <Input
+                  id="token"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="123456"
+                  autoComplete="one-time-code"
+                  {...resetForm.register('token')}
+                />
+                <FieldError>{resetForm.formState.errors.token?.message}</FieldError>
+              </div>
+              <div>
+                <Label htmlFor="password">Contraseña nueva</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  autoComplete="new-password"
+                  {...resetForm.register('password')}
+                />
+                <FieldError>{resetForm.formState.errors.password?.message}</FieldError>
+              </div>
+              <div>
+                <Label htmlFor="confirm">Repetí la contraseña</Label>
+                <Input
+                  id="confirm"
+                  type="password"
+                  placeholder="••••••••"
+                  autoComplete="new-password"
+                  {...resetForm.register('confirm')}
+                />
+                <FieldError>{resetForm.formState.errors.confirm?.message}</FieldError>
+              </div>
+              {serverError && (
+                <p className="rounded-lg bg-danger-soft px-3 py-2 text-[12.5px] text-danger">{serverError}</p>
+              )}
+              <Button type="submit" className="w-full" disabled={resetForm.formState.isSubmitting}>
+                Guardar contraseña
+              </Button>
+              <button
+                type="button"
+                onClick={() => setEmail(undefined)}
+                className="w-full text-center text-[12.5px] text-muted-foreground underline-offset-2 hover:underline"
+              >
+                Usar otro email
+              </button>
             </form>
           </>
         )}
