@@ -17,15 +17,20 @@ interface AuthState {
 
 /**
  * La persona puede pegar el link completo del mail de recuperación (copiado
- * con el botón derecho, SIN hacer clic — clickear lo gasta) o, si el plan de
- * Supabase tiene plantillas personalizadas, directamente el código de 6
- * dígitos. El link trae el token como parámetro "token" o "token_hash" en
- * la URL de verificación que arma Supabase por defecto.
+ * con el botón derecho, SIN hacer clic — clickear lo gasta), la URL a la
+ * que terminó llegando si lo clickeó por error (con "?code=..." — ese
+ * todavía no está gastado, solo se gasta cuando esta app lo usa), o el
+ * código de 6 dígitos si el plan de Supabase tiene plantillas
+ * personalizadas.
  */
-function extractRecoveryToken(input: string): { token_hash: string } | { token: string } {
+function extractRecoveryToken(
+  input: string,
+): { code: string } | { token_hash: string } | { token: string } {
   const trimmed = input.trim()
   try {
     const url = new URL(trimmed)
+    const code = url.searchParams.get('code')
+    if (code) return { code }
     const hash = url.searchParams.get('token_hash') ?? url.searchParams.get('token')
     if (hash) return { token_hash: hash }
   } catch {
@@ -122,9 +127,11 @@ export const useAuthStore = create<AuthState>()(
         const sb = await getSupabase()
         const extracted = extractRecoveryToken(codeOrLink)
         const { error: otpError } =
-          'token_hash' in extracted
-            ? await sb.auth.verifyOtp({ token_hash: extracted.token_hash, type: 'recovery' })
-            : await sb.auth.verifyOtp({ email: email.trim(), token: extracted.token, type: 'recovery' })
+          'code' in extracted
+            ? await sb.auth.exchangeCodeForSession(extracted.code)
+            : 'token_hash' in extracted
+              ? await sb.auth.verifyOtp({ token_hash: extracted.token_hash, type: 'recovery' })
+              : await sb.auth.verifyOtp({ email: email.trim(), token: extracted.token, type: 'recovery' })
         if (otpError) return { ok: false, error: 'El código o link no es válido, o venció. Pedí uno nuevo.' }
         const { error } = await sb.auth.updateUser({ password: newPassword })
         if (error) return { ok: false, error: error.message }
