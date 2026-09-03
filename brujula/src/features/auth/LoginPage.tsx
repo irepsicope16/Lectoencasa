@@ -95,7 +95,17 @@ export default function LoginPage() {
                 <FieldError>{errors.email?.message}</FieldError>
               </div>
               <div>
-                <Label htmlFor="password">Contraseña</Label>
+                <div className="flex items-baseline justify-between">
+                  <Label htmlFor="password">Contraseña</Label>
+                  {isCloudEnabled() && (
+                    <Link
+                      to="/olvide-contrasena"
+                      className="text-[12px] text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+                    >
+                      ¿Olvidaste tu contraseña?
+                    </Link>
+                  )}
+                </div>
                 <Input id="password" type="password" placeholder="••••••••" autoComplete="current-password" {...register('password')} />
                 <FieldError>{errors.password?.message}</FieldError>
               </div>

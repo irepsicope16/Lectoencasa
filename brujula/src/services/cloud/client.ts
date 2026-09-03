@@ -11,7 +11,10 @@ export async function getSupabase(): Promise<SupabaseClient> {
   const { createClient } = await import('@supabase/supabase-js')
   const cfg = getCloudConfig()
   client = createClient(cfg.url, cfg.anonKey, {
-    auth: { persistSession: true, storageKey: 'mb:cloud-auth' },
+    // flowType 'pkce': el link de recuperación de contraseña vuelve con
+    // "?code=..." en la query string, no en el hash — así no choca con
+    // el HashRouter (que usa el "#" para sus propias rutas).
+    auth: { persistSession: true, storageKey: 'mb:cloud-auth', flowType: 'pkce' },
   })
   return client
 }
