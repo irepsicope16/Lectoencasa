@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Compass, UserPlus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { FieldError, Input, Label } from '@/components/ui/input'
+import { FieldError, Input, Label, PasswordInput } from '@/components/ui/input'
 import { toast } from '@/components/ui/toast'
 import { isCloudEnabled } from '@/services/cloud/config'
 import { pendingMembership } from '@/lib/membership'
@@ -125,9 +125,8 @@ export default function RegisterProPage() {
           </div>
           <div>
             <Label htmlFor="password">Contraseña</Label>
-            <Input
+            <PasswordInput
               id="password"
-              type="password"
               placeholder="••••••••"
               autoComplete="new-password"
               {...register('password')}
@@ -137,9 +136,8 @@ export default function RegisterProPage() {
           </div>
           <div>
             <Label htmlFor="confirmar">Confirmar contraseña</Label>
-            <Input
+            <PasswordInput
               id="confirmar"
-              type="password"
               placeholder="••••••••"
               autoComplete="new-password"
               {...register('confirmar')}
