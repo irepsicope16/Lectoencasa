@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
 import { ArrowLeft, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { FieldError, Input, Label } from '@/components/ui/input'
+import { FieldError, Input, Label, PasswordInput } from '@/components/ui/input'
 import { useAuthStore } from '@/stores/authStore'
 
 const emailSchema = z.object({
@@ -136,9 +136,8 @@ export default function ForgotPasswordPage() {
               </div>
               <div>
                 <Label htmlFor="password">Contraseña nueva</Label>
-                <Input
+                <PasswordInput
                   id="password"
-                  type="password"
                   placeholder="••••••••"
                   autoComplete="new-password"
                   {...resetForm.register('password')}
@@ -147,9 +146,8 @@ export default function ForgotPasswordPage() {
               </div>
               <div>
                 <Label htmlFor="confirm">Repetí la contraseña</Label>
-                <Input
+                <PasswordInput
                   id="confirm"
-                  type="password"
                   placeholder="••••••••"
                   autoComplete="new-password"
                   {...resetForm.register('confirm')}

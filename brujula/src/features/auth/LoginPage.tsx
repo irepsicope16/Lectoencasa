@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
 import { ArrowRight, Compass, Sparkles, UserRound } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { FieldError, Input, Label } from '@/components/ui/input'
+import { FieldError, Input, Label, PasswordInput } from '@/components/ui/input'
 import { BrandMark } from '@/branding/Logo'
 import { useAuthStore } from '@/stores/authStore'
 import { isCloudEnabled } from '@/services/cloud/config'
@@ -106,7 +106,7 @@ export default function LoginPage() {
                     </Link>
                   )}
                 </div>
-                <Input id="password" type="password" placeholder="••••••••" autoComplete="current-password" {...register('password')} />
+                <PasswordInput id="password" placeholder="••••••••" autoComplete="current-password" {...register('password')} />
                 <FieldError>{errors.password?.message}</FieldError>
               </div>
               {serverError && (

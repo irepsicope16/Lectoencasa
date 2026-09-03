@@ -6,7 +6,7 @@ import { toast } from '@/components/ui/toast'
 import { FadeIn, PageHeader } from '@/components/shared'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Input, Label, NativeSelect } from '@/components/ui/input'
+import { Input, Label, NativeSelect, PasswordInput } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import {
   Dialog,
@@ -283,8 +283,7 @@ export default function SettingsPage() {
               <>
                 <div>
                   <Label>API Key</Label>
-                  <Input
-                    type="password"
+                  <PasswordInput
                     value={ai.apiKey ?? ''}
                     onChange={(e) => setAi({ ...ai, apiKey: e.target.value })}
                     placeholder="sk-…"
@@ -346,8 +345,7 @@ export default function SettingsPage() {
               </div>
               <div>
                 <Label>Clave anónima (anon key)</Label>
-                <Input
-                  type="password"
+                <PasswordInput
                   value={cloud.anonKey}
                   onChange={(e) => setCloud({ ...cloud, anonKey: e.target.value })}
                   placeholder="eyJ…"
@@ -396,8 +394,7 @@ export default function SettingsPage() {
                     value={proAccount.email}
                     onChange={(e) => setProAccount({ ...proAccount, email: e.target.value })}
                   />
-                  <Input
-                    type="password"
+                  <PasswordInput
                     placeholder="Contraseña (mín. 6 caracteres)"
                     value={proAccount.password}
                     onChange={(e) => setProAccount({ ...proAccount, password: e.target.value })}
