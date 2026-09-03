@@ -12,7 +12,26 @@ interface AuthState {
   logout: () => void
   updateProfile: (patch: Partial<ProfileEditable>) => Promise<void>
   requestPasswordReset: (email: string) => Promise<{ ok: boolean; error?: string }>
-  confirmPasswordReset: (email: string, token: string, newPassword: string) => Promise<{ ok: boolean; error?: string }>
+  confirmPasswordReset: (email: string, codeOrLink: string, newPassword: string) => Promise<{ ok: boolean; error?: string }>
+}
+
+/**
+ * La persona puede pegar el link completo del mail de recuperación (copiado
+ * con el botón derecho, SIN hacer clic — clickear lo gasta) o, si el plan de
+ * Supabase tiene plantillas personalizadas, directamente el código de 6
+ * dígitos. El link trae el token como parámetro "token" o "token_hash" en
+ * la URL de verificación que arma Supabase por defecto.
+ */
+function extractRecoveryToken(input: string): { token_hash: string } | { token: string } {
+  const trimmed = input.trim()
+  try {
+    const url = new URL(trimmed)
+    const hash = url.searchParams.get('token_hash') ?? url.searchParams.get('token')
+    if (hash) return { token_hash: hash }
+  } catch {
+    /* no es una URL: se toma como código escrito a mano */
+  }
+  return { token: trimmed }
 }
 
 // Modo nube: autenticación real con Supabase Auth; el perfil (rol, nombre,
@@ -87,22 +106,26 @@ export const useAuthStore = create<AuthState>()(
         }
         const { getSupabase } = await import('@/services/cloud/client')
         const sb = await getSupabase()
-        // Sin redirectTo a propósito: el mail lleva el código de 6 dígitos
-        // ({{ .Token }} en la plantilla de Supabase), no un link. Así se
-        // evita que el escaneo de seguridad de algunos clientes de mail
-        // "abra" el link solo y lo gaste antes de que la persona lo use.
+        // Sin redirectTo a propósito: no navegamos nunca a ese link — la
+        // persona lo copia (no lo clickea) y lo pega en confirmPasswordReset,
+        // que extrae el token de la URL. Así da lo mismo a dónde "diría" que
+        // redirige.
         const { error } = await sb.auth.resetPasswordForEmail(email.trim())
         if (error) return { ok: false, error: error.message }
         return { ok: true }
       },
-      confirmPasswordReset: async (email, token, newPassword) => {
+      confirmPasswordReset: async (email, codeOrLink, newPassword) => {
         if (!isCloudEnabled()) {
           return { ok: false, error: 'La recuperación de contraseña solo está disponible con la nube activa.' }
         }
         const { getSupabase } = await import('@/services/cloud/client')
         const sb = await getSupabase()
-        const { error: otpError } = await sb.auth.verifyOtp({ email: email.trim(), token: token.trim(), type: 'recovery' })
-        if (otpError) return { ok: false, error: 'El código es incorrecto o venció. Pedí uno nuevo.' }
+        const extracted = extractRecoveryToken(codeOrLink)
+        const { error: otpError } =
+          'token_hash' in extracted
+            ? await sb.auth.verifyOtp({ token_hash: extracted.token_hash, type: 'recovery' })
+            : await sb.auth.verifyOtp({ email: email.trim(), token: extracted.token, type: 'recovery' })
+        if (otpError) return { ok: false, error: 'El código o link no es válido, o venció. Pedí uno nuevo.' }
         const { error } = await sb.auth.updateUser({ password: newPassword })
         if (error) return { ok: false, error: error.message }
         return { ok: true }

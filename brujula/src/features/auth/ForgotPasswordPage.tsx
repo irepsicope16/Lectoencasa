@@ -16,7 +16,7 @@ type EmailForm = z.infer<typeof emailSchema>
 
 const resetSchema = z
   .object({
-    token: z.string().min(6, 'El código tiene 6 dígitos'),
+    token: z.string().min(6, 'Pegá el link o el código que te llegó por mail'),
     password: z.string().min(6, 'Mínimo 6 caracteres'),
     confirm: z.string(),
   })
@@ -24,11 +24,12 @@ const resetSchema = z
 type ResetForm = z.infer<typeof resetSchema>
 
 /**
- * Recuperación en dos pasos, todo en una sola página, con un CÓDIGO de 6
- * dígitos por mail — no un link. Los links de recuperación de un solo uso
- * fallan seguido porque algunos clientes de mail "abren" el link solos
- * para escanearlo antes de que la persona lo toque, gastándolo. Un código
- * que la persona tipea a mano no tiene ese problema.
+ * Recuperación en dos pasos, todo en una sola página. En vez de hacer clic
+ * en el link del mail (los links de un solo uso fallan seguido: algunos
+ * clientes de mail "abren" el link solos para escanearlo antes de que la
+ * persona lo toque, gastándolo), se pega el link COPIADO — copiar no lo
+ * gasta, solo clickearlo — o el código, si la cuenta de Supabase tiene
+ * plantillas de mail personalizadas.
  */
 export default function ForgotPasswordPage() {
   const requestPasswordReset = useAuthStore((s) => s.requestPasswordReset)
@@ -90,7 +91,7 @@ export default function ForgotPasswordPage() {
           <>
             <h2 className="text-lg font-semibold tracking-tight">Recuperar contraseña</h2>
             <p className="mt-0.5 text-[13px] text-muted-foreground">
-              Ingresá el email de tu cuenta y te mandamos un código para elegir una contraseña nueva.
+              Ingresá el email de tu cuenta y te mandamos un mail para elegir una contraseña nueva.
             </p>
 
             <form onSubmit={emailForm.handleSubmit(onSubmitEmail)} className="mt-6 space-y-4">
@@ -109,27 +110,26 @@ export default function ForgotPasswordPage() {
                 <p className="rounded-lg bg-danger-soft px-3 py-2 text-[12.5px] text-danger">{serverError}</p>
               )}
               <Button type="submit" className="w-full" disabled={emailForm.formState.isSubmitting}>
-                Enviar código
+                Enviar mail de recuperación
               </Button>
             </form>
           </>
         ) : (
           <>
-            <h2 className="text-lg font-semibold tracking-tight">Ingresá el código</h2>
+            <h2 className="text-lg font-semibold tracking-tight">Pegá el link del mail</h2>
             <p className="mt-0.5 text-[13px] leading-relaxed text-muted-foreground">
-              Te mandamos un código de 6 dígitos a <strong>{email}</strong> (revisá también spam) y elegí tu
-              contraseña nueva.
+              Te mandamos un mail a <strong>{email}</strong> (revisá también spam) con un link para recuperar la
+              cuenta. <strong>No hagas clic</strong> — mantené el dedo (o el clic derecho) apretado sobre el link
+              hasta que aparezca la opción «Copiar dirección del enlace», y pegala acá abajo.
             </p>
 
             <form onSubmit={resetForm.handleSubmit(onSubmitReset)} className="mt-6 space-y-4">
               <div>
-                <Label htmlFor="token">Código de 6 dígitos</Label>
+                <Label htmlFor="token">Link copiado (o código)</Label>
                 <Input
                   id="token"
                   type="text"
-                  inputMode="numeric"
-                  placeholder="123456"
-                  autoComplete="one-time-code"
+                  placeholder="Pegá acá el link o el código"
                   {...resetForm.register('token')}
                 />
                 <FieldError>{resetForm.formState.errors.token?.message}</FieldError>
