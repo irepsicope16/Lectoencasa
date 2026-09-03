@@ -11,6 +11,8 @@ interface AuthState {
   login: (email: string, password: string) => Promise<{ ok: boolean; error?: string }>
   logout: () => void
   updateProfile: (patch: Partial<ProfileEditable>) => Promise<void>
+  requestPasswordReset: (email: string) => Promise<{ ok: boolean; error?: string }>
+  confirmPasswordReset: (newPassword: string) => Promise<{ ok: boolean; error?: string }>
 }
 
 // Modo nube: autenticación real con Supabase Auth; el perfil (rol, nombre,
@@ -78,6 +80,27 @@ export const useAuthStore = create<AuthState>()(
           )
         }
         set({ user: null })
+      },
+      requestPasswordReset: async (email) => {
+        if (!isCloudEnabled()) {
+          return { ok: false, error: 'La recuperación de contraseña solo está disponible con la nube activa.' }
+        }
+        const { getSupabase } = await import('@/services/cloud/client')
+        const sb = await getSupabase()
+        const redirectTo = `${window.location.origin}${window.location.pathname}#/restablecer-contrasena`
+        const { error } = await sb.auth.resetPasswordForEmail(email.trim(), { redirectTo })
+        if (error) return { ok: false, error: error.message }
+        return { ok: true }
+      },
+      confirmPasswordReset: async (newPassword) => {
+        if (!isCloudEnabled()) {
+          return { ok: false, error: 'La recuperación de contraseña solo está disponible con la nube activa.' }
+        }
+        const { getSupabase } = await import('@/services/cloud/client')
+        const sb = await getSupabase()
+        const { error } = await sb.auth.updateUser({ password: newPassword })
+        if (error) return { ok: false, error: error.message }
+        return { ok: true }
       },
       updateProfile: async (patch) => {
         const current = get().user
