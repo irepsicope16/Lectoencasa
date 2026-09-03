@@ -11,10 +11,13 @@ export async function getSupabase(): Promise<SupabaseClient> {
   const { createClient } = await import('@supabase/supabase-js')
   const cfg = getCloudConfig()
   client = createClient(cfg.url, cfg.anonKey, {
-    // flowType 'pkce': el link de recuperación de contraseña vuelve con
-    // "?code=..." en la query string, no en el hash — así no choca con
-    // el HashRouter (que usa el "#" para sus propias rutas).
-    auth: { persistSession: true, storageKey: 'mb:cloud-auth', flowType: 'pkce' },
+    // flowType 'implicit': el link de recuperación de contraseña trae un
+    // "?token=..." plano, verificable del lado del cliente con verifyOtp()
+    // sin necesidad de visitar el link (alguien lo copia y lo pega en la
+    // app). Con 'pkce' (el default del SDK) el token viene prefijado
+    // "pkce_..." y solo es válido si el link se abre en el navegador —
+    // eso rompe el flujo de "copiar el link, no hacer clic".
+    auth: { persistSession: true, storageKey: 'mb:cloud-auth', flowType: 'implicit' },
   })
   return client
 }
