@@ -113,6 +113,10 @@ export interface Session {
   notas: string
   moduleIds: ModuleId[]
   proximosPasos: string
+  /** Honorario de la sesión. Sin valor = no se registró monto. */
+  monto?: number
+  /** Sin valor = no se registró monto, así que tampoco aplica estado de cobro. */
+  cobrado?: boolean
   createdAt: string
   updatedAt: string
 }
