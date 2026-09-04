@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { FileText, HeartHandshake, Map, UserRound } from 'lucide-react'
+import { FileText, HeartHandshake, Map, PenLine, UserRound } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
 import type { Consultant } from '@/types'
 
 export const REPORT_TYPES = [
@@ -53,6 +54,27 @@ export function ReportsTab({ consultant }: { consultant: Consultant }) {
             </p>
           </Link>
         ))}
+
+        <Link
+          to={`/print/consentimiento/${consultant.id}`}
+          className="group rounded-xl border bg-surface p-5 transition-all hover:border-border-strong hover:shadow-sm"
+        >
+          <div className="mb-3 flex items-center justify-between">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent-soft">
+              <PenLine className="h-4.5 w-4.5 text-accent-strong" />
+            </div>
+            <Badge variant={consultant.consentimiento?.firmado ? 'aqua' : 'amber'}>
+              {consultant.consentimiento?.firmado ? 'Firmado' : 'Sin firmar'}
+            </Badge>
+          </div>
+          <p className="text-[14px] font-semibold">Consentimiento informado</p>
+          <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">
+            Para firmar en persona, con el consultante (o tutor/a) presente.
+          </p>
+          <p className="mt-3 text-[12px] font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
+            {consultant.consentimiento?.firmado ? 'Ver documento firmado →' : 'Firmar ahora →'}
+          </p>
+        </Link>
       </div>
     </div>
   )

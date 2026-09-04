@@ -33,6 +33,8 @@ const MyProgressPage = lazy(() => import('@/features/method/MyProgressPage'))
 
 const PrintReportPage = lazy(() => import('@/features/reports/PrintReportPage'))
 const PrintableMaterialPage = lazy(() => import('@/features/reports/PrintableMaterialPage'))
+const PrintConsentPage = lazy(() => import('@/features/reports/PrintConsentPage'))
+const PrintReciboPage = lazy(() => import('@/features/reports/PrintReciboPage'))
 
 function Page({ children }: { children: React.ReactNode }) {
   return (
@@ -83,6 +85,8 @@ export const router = createHashRouter([
     element: <RequireAuth />,
     children: [
       { path: '/print/material/:printableId', element: <Page><PrintableMaterialPage /></Page> },
+      { path: '/print/consentimiento/:consultantId', element: <Page><PrintConsentPage /></Page> },
+      { path: '/print/recibo/:sessionId', element: <Page><PrintReciboPage /></Page> },
       { path: '/print/:consultantId/:tipo', element: <Page><PrintReportPage /></Page> },
     ],
   },
