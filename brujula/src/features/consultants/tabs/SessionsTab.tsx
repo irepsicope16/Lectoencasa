@@ -3,6 +3,7 @@ import { CalendarPlus, Clock, MapPin, Video } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input, Label, NativeSelect, Textarea } from '@/components/ui/input'
+import { Switch } from '@/components/ui/misc'
 import {
   Dialog,
   DialogContent,
@@ -14,7 +15,7 @@ import {
 import { EmptyState } from '@/components/shared'
 import { toast } from '@/components/ui/toast'
 import { useCreate, useSessions, useUpdate } from '@/hooks/queries'
-import { fechaHora, nombreCompleto } from '@/lib/utils'
+import { fechaHora, formatMonto, nombreCompleto } from '@/lib/utils'
 import { MODULES } from '@/data/modules'
 import { SESSION_STATUS } from '@/lib/constants'
 import type { Consultant, ModuleId, Session } from '@/types'
@@ -31,6 +32,8 @@ const emptyForm = {
   notas: '',
   proximosPasos: '',
   moduleIds: [] as ModuleId[],
+  monto: '',
+  cobrado: false,
 }
 
 export function SessionsTab({ consultant }: { consultant: Consultant }) {
@@ -70,12 +73,15 @@ export function SessionsTab({ consultant }: { consultant: Consultant }) {
       notas: s.notas,
       proximosPasos: s.proximosPasos,
       moduleIds: s.moduleIds,
+      monto: s.monto != null ? String(s.monto) : '',
+      cobrado: s.cobrado ?? false,
     })
     setOpen(true)
   }
 
   const save = async () => {
     const fechaISO = new Date(`${form.fecha}T${form.hora}:00`).toISOString()
+    const monto = form.monto.trim() ? Number(form.monto) : undefined
     const payload = {
       consultantId: consultant.id,
       titulo: form.titulo.trim() || 'Sesión',
@@ -87,6 +93,8 @@ export function SessionsTab({ consultant }: { consultant: Consultant }) {
       notas: form.notas,
       proximosPasos: form.proximosPasos,
       moduleIds: form.moduleIds,
+      monto,
+      cobrado: monto != null ? form.cobrado : undefined,
     }
     if (editing) await updateSession.mutateAsync({ id: editing.id, patch: payload })
     else await createSession.mutateAsync(payload)
@@ -126,6 +134,11 @@ export function SessionsTab({ consultant }: { consultant: Consultant }) {
                 <Badge variant={s.estado === 'realizada' ? 'aqua' : s.estado === 'programada' ? 'lavanda' : 'gris'}>
                   {SESSION_STATUS[s.estado]}
                 </Badge>
+                {s.monto != null && (
+                  <Badge variant={s.cobrado ? 'aqua' : 'amber'}>
+                    {formatMonto(s.monto)} · {s.cobrado ? 'Cobrado' : 'Pendiente'}
+                  </Badge>
+                )}
                 <span className="ml-auto flex items-center gap-3 text-[12px] text-faint">
                   <span className="inline-flex items-center gap-1">
                     <Clock className="h-3 w-3" /> {fechaHora(s.fecha)} · {s.duracionMin} min
@@ -206,6 +219,24 @@ export function SessionsTab({ consultant }: { consultant: Consultant }) {
             <div>
               <Label>Temas (separados por coma)</Label>
               <Input value={form.temas} onChange={(e) => setForm({ ...form, temas: e.target.value })} placeholder="Encuadre, Historia familiar" />
+            </div>
+            <div>
+              <Label>Honorario</Label>
+              <Input
+                type="number"
+                min={0}
+                value={form.monto}
+                onChange={(e) => setForm({ ...form, monto: e.target.value })}
+                placeholder="Sin registrar"
+              />
+            </div>
+            <div className="flex items-end justify-between rounded-lg border px-3 py-2">
+              <Label className="mb-0">Cobrado</Label>
+              <Switch
+                checked={form.cobrado}
+                onCheckedChange={(v) => setForm({ ...form, cobrado: v })}
+                disabled={!form.monto.trim()}
+              />
             </div>
             <div className="col-span-2">
               <Label>Módulos trabajados</Label>

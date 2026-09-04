@@ -15,6 +15,7 @@ import {
   Sparkles,
   TrendingUp,
   Users,
+  Wallet,
 } from 'lucide-react'
 import type { UserRole } from '@/types'
 import { Isotipo, LogoHorizontal } from '@/branding/Logo'
@@ -30,6 +31,7 @@ const proNav = [
   { to: '/pro', icon: Home, label: 'Inicio', end: true },
   { to: '/pro/consultantes', icon: Users, label: 'Consultantes' },
   { to: '/pro/agenda', icon: Calendar, label: 'Agenda' },
+  { to: '/pro/honorarios', icon: Wallet, label: 'Honorarios' },
   { to: '/pro/metodo', icon: Compass, label: 'Método Brújula' },
   { to: '/pro/estadisticas', icon: BarChart3, label: 'Estadísticas' },
   { to: '/pro/ajustes', icon: Settings, label: 'Ajustes' },

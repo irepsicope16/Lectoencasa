@@ -55,6 +55,10 @@ export function nombreCompleto(p: { nombre: string; apellido: string }): string 
   return `${p.nombre} ${p.apellido}`
 }
 
+export function formatMonto(n: number): string {
+  return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(n)
+}
+
 export function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
