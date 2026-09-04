@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { CheckCircle2, CircleDollarSign, Clock3, Wallet } from 'lucide-react'
@@ -90,6 +91,9 @@ export default function HonorariosPage() {
                     </div>
                     <span className="text-[14px] font-semibold">{formatMonto(s.monto ?? 0)}</span>
                     <Badge variant={s.cobrado ? 'aqua' : 'amber'}>{s.cobrado ? 'Cobrado' : 'Pendiente'}</Badge>
+                    <Button size="sm" variant="ghost" asChild>
+                      <Link to={`/print/recibo/${s.id}`}>Recibo</Link>
+                    </Button>
                     <Button
                       size="sm"
                       variant={s.cobrado ? 'ghost' : 'outline'}

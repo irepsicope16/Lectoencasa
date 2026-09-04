@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { CalendarPlus, Clock, MapPin, Video } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -124,11 +125,11 @@ export function SessionsTab({ consultant }: { consultant: Consultant }) {
       ) : (
         <div className="space-y-3">
           {own.map((s) => (
-            <button
-              key={s.id}
-              onClick={() => openEdit(s)}
-              className="block w-full cursor-pointer rounded-xl border bg-surface p-4 text-left transition-all hover:border-border-strong hover:shadow-sm"
-            >
+            <div key={s.id}>
+              <button
+                onClick={() => openEdit(s)}
+                className="block w-full cursor-pointer rounded-xl border bg-surface p-4 text-left transition-all hover:border-border-strong hover:shadow-sm"
+              >
               <div className="flex flex-wrap items-center gap-2">
                 <p className="text-[14px] font-semibold">{s.titulo}</p>
                 <Badge variant={s.estado === 'realizada' ? 'aqua' : s.estado === 'programada' ? 'lavanda' : 'gris'}>
@@ -165,7 +166,16 @@ export function SessionsTab({ consultant }: { consultant: Consultant }) {
                   <span className="text-muted-foreground">{s.proximosPasos}</span>
                 </p>
               )}
-            </button>
+              </button>
+              {s.monto != null && (
+                <Link
+                  to={`/print/recibo/${s.id}`}
+                  className="mt-1.5 block text-right text-[12px] font-medium text-primary hover:underline"
+                >
+                  Recibo →
+                </Link>
+              )}
+            </div>
           ))}
         </div>
       )}

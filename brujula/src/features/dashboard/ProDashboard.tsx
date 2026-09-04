@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import {
   Activity as ActivityIcon,
   ArrowRight,
+  BellRing,
   CalendarClock,
   CalendarPlus,
   CheckCircle2,
@@ -47,11 +48,16 @@ export default function ProDashboard() {
   const updateEvent = useUpdate<CalendarEvent>('events')
 
   const now = new Date().toISOString()
+  const hoy = now.slice(0, 10)
   const activos = consultants.filter((c) => c.estado === 'en_proceso' || c.estado === 'entrevista_inicial')
   const proximasSesiones = sessions
     .filter((s) => s.estado === 'programada' && s.fecha >= now)
     .sort((a, b) => a.fecha.localeCompare(b.fecha))
     .slice(0, 4)
+  const sesionesHoy = sessions
+    .filter((s) => s.estado === 'programada' && s.fecha.slice(0, 10) === hoy)
+    .sort((a, b) => a.fecha.localeCompare(b.fecha))
+  const tareasVencidas = events.filter((e) => !e.completado && e.fecha < now)
   const paraRevisar = activities.filter((a) => a.estado === 'completada')
   const tareas = events
     .filter((e) => e.tipo !== 'sesion' && !e.completado)
@@ -80,6 +86,29 @@ export default function ProDashboard() {
           </>
         }
       />
+
+      {/* recordatorio del día */}
+      {(sesionesHoy.length > 0 || tareasVencidas.length > 0) && (
+        <div className="mb-5 flex flex-wrap items-center gap-3 rounded-xl border border-warning/30 bg-warning-soft px-4 py-3">
+          <BellRing className="h-4 w-4 shrink-0 text-warning" />
+          <div className="flex flex-1 flex-wrap items-center gap-x-4 gap-y-1 text-[13px]">
+            {sesionesHoy.length > 0 && (
+              <Link to="/pro/agenda" className="font-medium text-foreground hover:underline">
+                {sesionesHoy.length === 1
+                  ? `Hoy: sesión con ${consultantName(sesionesHoy[0].consultantId)}`
+                  : `Hoy tenés ${sesionesHoy.length} sesiones`}
+              </Link>
+            )}
+            {tareasVencidas.length > 0 && (
+              <span className="font-medium text-foreground">
+                {tareasVencidas.length === 1
+                  ? '1 tarea vencida sin marcar'
+                  : `${tareasVencidas.length} tareas vencidas sin marcar`}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* encuadre del taller — acceso directo desde el inicio, antes de tener consultantes */}
       <Link

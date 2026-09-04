@@ -33,6 +33,7 @@ export default function MyDashboard() {
   const proximaSesion = sessions
     .filter((s) => s.consultantId === consultantId && s.estado === 'programada')
     .sort((a, b) => a.fecha.localeCompare(b.fecha))[0]
+  const sesionEsHoy = proximaSesion?.fecha.slice(0, 10) === new Date().toISOString().slice(0, 10)
 
   const progressOf = (moduleId: string) =>
     progress.find((p) => p.consultantId === consultantId && p.moduleId === moduleId)
@@ -126,10 +127,11 @@ export default function MyDashboard() {
         <div className="space-y-5">
           {/* próxima sesión */}
           {proximaSesion && (
-            <Card>
+            <Card className={cn(sesionEsHoy && 'border-accent/50 bg-accent-soft/40')}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <CalendarClock className="h-4 w-4 text-primary" /> Tu próxima sesión
+                  {sesionEsHoy && <Badge variant="lavanda">Hoy</Badge>}
                 </CardTitle>
               </CardHeader>
               <CardContent>

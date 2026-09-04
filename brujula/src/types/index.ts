@@ -50,6 +50,13 @@ export interface Consultant {
   notas?: string
   comparacionCarreras?: CareerComparisonEntry[]
   mapaCarreras?: CareerMapEntry[]
+  /** Consentimiento informado firmado digitalmente. Sin valor = todavía no se firmó. */
+  consentimiento?: {
+    firmado: boolean
+    fecha?: string // ISO, cuándo se firmó
+    firmaDataUrl?: string // PNG en base64, trazo de la firma
+    firmante?: string // nombre y apellido de quien firma (consultante o tutor)
+  }
   createdAt: string
   updatedAt: string
 }
