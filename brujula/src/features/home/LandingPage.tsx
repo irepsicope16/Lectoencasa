@@ -66,9 +66,11 @@ export default function LandingPage() {
         <Link to="/" className="flex items-center gap-2 text-[13px] font-semibold tracking-tight">
           <Compass className="h-4.5 w-4.5 text-primary" /> Método Brújula
         </Link>
-        <Link to="/login" className="text-[13px] font-medium text-muted-foreground hover:text-foreground">
-          Ya tengo cuenta →
-        </Link>
+        <Button variant="outline" size="sm" asChild>
+          <Link to="/login">
+            Ya tengo cuenta <ArrowRight />
+          </Link>
+        </Button>
       </header>
 
       {/* hero */}

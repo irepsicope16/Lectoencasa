@@ -103,7 +103,7 @@ export default function ConsultantsPage() {
               <Link
                 key={c.id}
                 to={`/pro/consultantes/${c.id}`}
-                className="group rounded-xl border bg-surface p-4 transition-all hover:border-border-strong hover:shadow-sm"
+                className="group rounded-xl border bg-surface p-4 shadow-[0_1px_2px_rgba(16,24,32,0.04),0_4px_14px_-6px_rgba(16,24,32,0.07)] transition-all hover:border-border-strong hover:shadow-md"
               >
                 <div className="flex items-start gap-3">
                   <Avatar className="h-10 w-10">
