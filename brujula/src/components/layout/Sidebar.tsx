@@ -75,7 +75,7 @@ export function Sidebar({ role }: { role: UserRole }) {
 
       {/* navegación */}
       <nav className="flex-1 overflow-y-auto px-2 py-3">
-        <ul className="space-y-0.5">
+        <ul className="space-y-1.5">
           {nav.map((item) => (
             <li key={item.to}>
               <Tooltip>
@@ -85,8 +85,9 @@ export function Sidebar({ role }: { role: UserRole }) {
                     end={item.end}
                     className={({ isActive }) =>
                       cn(
-                        'flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground',
-                        isActive && 'bg-primary-soft text-primary-strong hover:bg-primary-soft hover:text-primary-strong',
+                        'flex items-center gap-2.5 rounded-lg border border-border/70 bg-surface-2 px-2.5 py-1.5 text-[13px] font-medium text-muted-foreground shadow-[0_1px_2px_rgba(16,24,32,0.03)] transition-colors hover:border-border-strong hover:bg-border/40 hover:text-foreground',
+                        isActive &&
+                          'border-primary/25 bg-primary-soft text-primary-strong hover:border-primary/25 hover:bg-primary-soft hover:text-primary-strong',
                         collapsed && 'justify-center px-0 py-2',
                       )
                     }
