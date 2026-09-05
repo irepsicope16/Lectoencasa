@@ -17,7 +17,6 @@ import { nombreCompleto } from '@/lib/utils'
 export type AITask =
   | 'resumen_sesion'
   | 'proponer_preguntas'
-  | 'borrador_informe'
   | 'integrar_resultados'
   | 'analizar_respuestas'
   | 'proponer_hipotesis'
@@ -25,7 +24,6 @@ export type AITask =
 export const AI_TASK_LABELS: Record<AITask, { titulo: string; descripcion: string }> = {
   resumen_sesion: { titulo: 'Resumir sesiones', descripcion: 'Síntesis de las últimas sesiones registradas.' },
   proponer_preguntas: { titulo: 'Proponer preguntas', descripcion: 'Preguntas sugeridas para la próxima sesión.' },
-  borrador_informe: { titulo: 'Borrador de informe', descripcion: 'Primer borrador del informe profesional.' },
   integrar_resultados: { titulo: 'Integrar resultados', descripcion: 'Integración narrativa de toda la evidencia.' },
   analizar_respuestas: { titulo: 'Analizar respuestas', descripcion: 'Lectura de las actividades respondidas.' },
   proponer_hipotesis: { titulo: 'Proponer hipótesis', descripcion: 'Hipótesis clínicas para validar en sesión.' },
@@ -119,26 +117,6 @@ class LocalAssistantProvider implements AIProvider {
         ].join('\n')
         break
       }
-      case 'borrador_informe': {
-        contenido = [
-          `# Borrador de informe — ${nombreCompleto(c)}`,
-          '',
-          `**Motivo de consulta.** ${c.motivoConsulta}`,
-          '',
-          `**Síntesis del proceso.** ${snap.carta.rumbo}`,
-          '',
-          '**Dimensiones trabajadas.**',
-          ...snap.perfil
-            .filter((p) => p.intensidad !== 'incipiente')
-            .map((p) => `- **${p.titulo}** (${p.intensidad}): ${p.sintesis}`),
-          '',
-          '**Sugerencias de la Carta de Navegación.**',
-          ...snap.carta.sugerencias.map((s) => `- ${s.area}: ${s.motivos[0] ?? ''}`),
-          '',
-          '_Borrador generado automáticamente para edición profesional. Revisar, corregir y completar antes de compartir._',
-        ].join('\n')
-        break
-      }
       case 'integrar_resultados': {
         contenido = contextoTextual(input)
         break
@@ -205,7 +183,6 @@ class OpenAIProvider implements AIProvider {
     const prompts: Record<AITask, string> = {
       resumen_sesion: 'Resumí las sesiones registradas en un texto clínico breve y claro.',
       proponer_preguntas: 'Proponé 6 preguntas potentes para la próxima sesión de orientación vocacional.',
-      borrador_informe: 'Redactá un borrador de informe profesional de orientación vocacional (markdown).',
       integrar_resultados: 'Integrá toda la evidencia en una síntesis narrativa del proceso.',
       analizar_respuestas: 'Analizá las respuestas del consultante: temas recurrentes, contradicciones, emergentes.',
       proponer_hipotesis: 'Proponé 3 hipótesis clínicas prudentes a validar en sesión.',
