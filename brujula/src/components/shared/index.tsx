@@ -67,7 +67,7 @@ export function StatCard({
   tone?: 'aqua' | 'lavanda' | 'neutro'
 }) {
   return (
-    <div className="rounded-xl border bg-surface p-4">
+    <div className="rounded-xl border bg-surface p-4 shadow-[0_1px_2px_rgba(16,24,32,0.04),0_4px_14px_-6px_rgba(16,24,32,0.07)]">
       <div className="flex items-center gap-2 text-muted-foreground">
         <div
           className={cn(
