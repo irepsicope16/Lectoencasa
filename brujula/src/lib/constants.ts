@@ -12,7 +12,7 @@ import type {
 
 export const APP_NAME = 'Método Brújula'
 export const APP_TAGLINE = 'Encontrá tu norte. Construí tu camino.'
-export const BRAND = 'Psicope con Ire'
+export const BRAND = 'Lic. Irene Morbidelli'
 
 /** Variant de <Badge> usado como color distintivo de cada etapa, para identificarlas de un vistazo. */
 export type StageColor = 'aqua' | 'lavanda' | 'amber' | 'rosa' | 'danger'

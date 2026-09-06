@@ -2,7 +2,7 @@
 
 **Encontrá tu norte. Construí tu camino.**
 
-Plataforma profesional de Orientación Vocacional de **Psicope con Ire**.
+Plataforma profesional de Orientación Vocacional de la **Lic. Irene Morbidelli**.
 No es un test vocacional: es el software con el que se conduce un proceso completo de
 orientación — evaluación, acompañamiento, seguimiento, proyecto de vida, informes e IA —
 alrededor de un método propio de 12 módulos.
@@ -20,7 +20,7 @@ npm run typecheck  # verificación de tipos
 
 | Rol | Email | Clave |
 |---|---|---|
-| Profesional | `ire@psicopeconire.com` | `brujula` |
+| Profesional | `ire@metodobrujula.com` | `brujula` |
 | Consultante | `valen@demo.com` | `brujula` |
 
 Los datos demo se siembran automáticamente la primera vez (LocalStorage).

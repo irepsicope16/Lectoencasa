@@ -10,7 +10,7 @@ Tailwind v4). **Fase 1** (plataforma completa) y **Fase 2** (completar experienc
 historial del motor, automatizaciones) están terminadas, verificadas con smoke test E2E
 y pusheadas. ~9.900 líneas de código fuente en 68 archivos. Typecheck y build en verde.
 
-**Cuentas demo**: `ire@psicopeconire.com` / `brujula` (profesional) · `valen@demo.com` / `brujula` (consultante).
+**Cuentas demo**: `ire@metodobrujula.com` / `brujula` (profesional) · `valen@demo.com` / `brujula` (consultante).
 
 ```bash
 cd brujula && npm install && npm run dev   # desarrollo
@@ -129,7 +129,7 @@ npm run build && npx vite preview          # producción local
 
 ```
 Lectoencasa/
-├── index.html, css/, js/…     → sitio de marca Psicope con Ire (no tocar)
+├── index.html, css/, js/…     → sitio de marca Lic. Irene Morbidelli (no tocar)
 ├── app/                       → producto Lectoescritura (independiente, no tocar)
 ├── brujula/                   → código fuente de ESTA plataforma (Método Brújula)
 └── metodo-brujula/                → build de producción publicado en GitHub Pages

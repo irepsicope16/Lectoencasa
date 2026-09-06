@@ -129,7 +129,7 @@ export function LogoFull({ className }: { className?: string }) {
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">Encontrá tu norte. Construí tu camino.</p>
         <p className="mt-2 text-[11px] font-medium tracking-[0.18em] text-faint uppercase">
-          Psicope con Ire
+          Lic. Irene Morbidelli
         </p>
       </div>
     </div>

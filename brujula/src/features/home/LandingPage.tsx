@@ -77,7 +77,7 @@ export default function LandingPage() {
       <Section className="text-center">
         <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <p className="text-[12px] font-medium tracking-[0.16em] text-faint uppercase">
-            Psicope con Ire · Plataforma profesional
+            Lic. Irene Morbidelli · Plataforma profesional
           </p>
           <h1 className="mx-auto mt-4 max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
             Orientación Vocacional, ordenada de punta a punta

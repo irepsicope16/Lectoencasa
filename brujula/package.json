@@ -2,7 +2,7 @@
   "name": "metodo-brujula",
   "private": true,
   "version": "1.0.0",
-  "description": "Método Brújula — Plataforma profesional de Orientación Vocacional. Psicope con Ire.",
+  "description": "Método Brújula — Plataforma profesional de Orientación Vocacional. Lic. Irene Morbidelli.",
   "type": "module",
   "scripts": {
     "dev": "vite",

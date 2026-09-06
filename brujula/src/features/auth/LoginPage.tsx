@@ -51,7 +51,7 @@ export default function LoginPage() {
         {/* panel de marca */}
         <div className="relative hidden w-[46%] flex-col justify-between overflow-hidden border-r bg-surface p-10 lg:flex">
           <div className="flex items-center gap-2 text-[12px] font-medium tracking-[0.16em] text-faint uppercase">
-            <Compass className="h-4 w-4 text-primary" /> Psicope con Ire
+            <Compass className="h-4 w-4 text-primary" /> Lic. Irene Morbidelli
           </div>
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -67,7 +67,7 @@ export default function LoginPage() {
             </p>
           </motion.div>
           <p className="text-[11.5px] text-faint">
-            © {new Date().getFullYear()} Psicope con Ire · Orientación vocacional y reorientación profesional
+            © {new Date().getFullYear()} Lic. Irene Morbidelli · Orientación vocacional y reorientación profesional
           </p>
           {/* brújula decorativa */}
           <img
@@ -137,13 +137,13 @@ export default function LoginPage() {
                 </p>
                 <div className="mt-2.5 space-y-1.5">
                   <button
-                    onClick={() => fillDemo('ire@psicopeconire.com')}
+                    onClick={() => fillDemo('ire@metodobrujula.com')}
                     className="flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] transition-colors hover:bg-surface-2"
                   >
                     <Sparkles className="h-4 w-4 text-primary" />
                     <span>
                       <span className="font-medium">Profesional</span>
-                      <span className="block text-[11.5px] text-faint">ire@psicopeconire.com</span>
+                      <span className="block text-[11.5px] text-faint">ire@metodobrujula.com</span>
                     </span>
                   </button>
                   <button

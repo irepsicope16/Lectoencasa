@@ -303,7 +303,7 @@ export default function PrintableMaterialPage() {
             <Isotipo size={36} />
             <div>
               <p className="text-[13px] font-semibold leading-tight">Método Brújula</p>
-              <p className="text-[9.5px] uppercase tracking-[0.14em] text-neutral-500">Psicope con Ire</p>
+              <p className="text-[9.5px] uppercase tracking-[0.14em] text-neutral-500">Lic. Irene Morbidelli</p>
             </div>
           </div>
           <div className="text-right text-[11px] text-neutral-500">
@@ -316,7 +316,7 @@ export default function PrintableMaterialPage() {
         <Cuerpo />
 
         <footer className="mt-8 border-t border-neutral-200 pt-3 text-center text-[9.5px] text-neutral-400">
-          Método Brújula · Encontrá tu norte. Construí tu camino. · Psicope con Ire
+          Método Brújula · Encontrá tu norte. Construí tu camino. · Lic. Irene Morbidelli
         </footer>
       </div>
     </div>

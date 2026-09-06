@@ -75,7 +75,7 @@ export default function RegisterProPage() {
         className="w-full max-w-sm"
       >
         <div className="mb-6 flex items-center gap-2 text-[12px] font-medium tracking-[0.16em] text-faint uppercase">
-          <Compass className="h-4 w-4 text-primary" /> Psicope con Ire
+          <Compass className="h-4 w-4 text-primary" /> Lic. Irene Morbidelli
         </div>
 
         <h2 className="flex items-center gap-2 text-lg font-semibold tracking-tight">
@@ -87,7 +87,7 @@ export default function RegisterProPage() {
         </p>
         <p className="mt-2 text-[12px] text-faint">
           Tu cuenta se crea al instante, pero el acceso se activa una vez que coordines el pago de la
-          membresía anual con Psicope con Ire.
+          membresía anual con Lic. Irene Morbidelli.
         </p>
 
         {!cloudActive && (
