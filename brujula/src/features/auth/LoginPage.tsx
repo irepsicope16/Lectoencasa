@@ -10,6 +10,7 @@ import { FieldError, Input, Label, PasswordInput } from '@/components/ui/input'
 import { BrandMark } from '@/branding/Logo'
 import { useAuthStore } from '@/stores/authStore'
 import { isCloudEnabled } from '@/services/cloud/config'
+import brandCompass from '@/assets/branding/brand-compass.png'
 
 const schema = z.object({
   email: z.string().email('Ingresá un email válido'),
@@ -69,9 +70,12 @@ export default function LoginPage() {
             © {new Date().getFullYear()} Psicope con Ire · Orientación vocacional y reorientación profesional
           </p>
           {/* brújula decorativa */}
-          <div className="pointer-events-none absolute -right-24 -top-24 opacity-[0.05]">
-            <Compass className="h-[420px] w-[420px] text-primary" strokeWidth={0.6} />
-          </div>
+          <img
+            src={brandCompass}
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute -right-28 -top-28 h-[420px] w-[420px] rounded-full opacity-[0.07] grayscale"
+          />
         </div>
 
         {/* formulario */}

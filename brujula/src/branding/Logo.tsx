@@ -1,5 +1,6 @@
 import { Brain, Heart, Milestone, Rocket, Search } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import brandCompass from '@/assets/branding/brand-compass.png'
 
 // ============================================================
 // Identidad visual Método Brújula.
@@ -84,7 +85,7 @@ export function BrandMark({
 }) {
   return (
     <div className={cn('flex flex-col items-center text-center', className)}>
-      <Isotipo size={96} />
+      <img src={brandCompass} alt="Método Brújula" className="h-28 w-28 rounded-full sm:h-32 sm:w-32" />
       <h1 className="font-display mt-5 text-[32px] font-medium tracking-tight text-primary-strong sm:text-[38px]">
         Método Brújula
       </h1>
