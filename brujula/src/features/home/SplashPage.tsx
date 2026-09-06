@@ -39,7 +39,7 @@ export default function SplashPage() {
         transition={{ duration: 0.5, ease: 'easeOut' }}
         className="mt-8 flex flex-col items-center"
       >
-        <BrandMark showCredential showOrientationLabel={false} className="max-w-[440px]" />
+        <BrandMark showOrientationLabel={false} className="max-w-[440px]" />
 
         <p className="mx-auto mt-6 max-w-md text-[14px] leading-relaxed text-muted-foreground">
           La plataforma profesional de orientación vocacional: evaluación, acompañamiento,
@@ -61,6 +61,11 @@ export default function SplashPage() {
         <p className="mx-auto max-w-md text-[10.5px] leading-relaxed text-faint">
           Material elaborado por Lic. Irene Morbidelli — MP: 260505. Prohibida su reproducción,
           distribución o venta sin autorización expresa de la autora.
+        </p>
+        <p className="mt-1.5 text-[10.5px] text-faint">
+          <a href="mailto:irenemorbidelli@gmail.com" className="hover:text-foreground hover:underline">
+            irenemorbidelli@gmail.com
+          </a>
         </p>
       </footer>
     </div>
