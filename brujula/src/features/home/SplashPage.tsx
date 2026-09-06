@@ -4,6 +4,7 @@ import { ArrowRight, Compass } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { BrandMark } from '@/branding/Logo'
 import { useAuthStore } from '@/stores/authStore'
+import brandCompass from '@/assets/branding/brand-compass.png'
 
 // Portada de la plataforma: primera pantalla que ve cualquier visitante
 // sin sesión iniciada. Si ya hay sesión, no se muestra — va directo a su área.
@@ -20,7 +21,13 @@ export default function SplashPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-surface px-6 py-12 text-center">
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-surface px-6 py-12 text-center">
+      <img
+        src={brandCompass}
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute -right-32 -top-32 h-[480px] w-[480px] rounded-full opacity-[0.06] grayscale sm:-right-40 sm:-top-40 sm:h-[560px] sm:w-[560px]"
+      />
       <div className="flex items-center gap-2 text-[12px] font-medium tracking-[0.16em] text-faint uppercase">
         <Compass className="h-4 w-4 text-primary" /> Psicope con Ire
       </div>
