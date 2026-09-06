@@ -28,8 +28,9 @@ export default function SplashPage() {
         aria-hidden
         className="pointer-events-none absolute -right-32 -top-32 h-[480px] w-[480px] rounded-full opacity-[0.06] grayscale sm:-right-40 sm:-top-40 sm:h-[560px] sm:w-[560px]"
       />
-      <div className="flex items-center gap-2 text-[12px] font-medium tracking-[0.16em] text-faint uppercase">
-        <Compass className="h-4 w-4 text-primary" /> Lic. Irene Morbidelli
+      <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-1.5 shadow-[0_1px_2px_rgba(16,24,32,0.04)]">
+        <Compass className="h-4 w-4 text-primary" />
+        <span className="font-display text-[15px] italic text-primary-strong">Orientación Vocacional</span>
       </div>
 
       <motion.div
@@ -38,7 +39,7 @@ export default function SplashPage() {
         transition={{ duration: 0.5, ease: 'easeOut' }}
         className="mt-8 flex flex-col items-center"
       >
-        <BrandMark showCredential className="max-w-[440px]" />
+        <BrandMark showCredential showOrientationLabel={false} className="max-w-[440px]" />
 
         <p className="mx-auto mt-6 max-w-md text-[14px] leading-relaxed text-muted-foreground">
           La plataforma profesional de orientación vocacional: evaluación, acompañamiento,
