@@ -26,7 +26,7 @@ export default function SplashPage() {
         src={brandCompass}
         alt=""
         aria-hidden
-        className="pointer-events-none absolute -right-32 -top-32 h-[480px] w-[480px] rounded-full opacity-[0.06] grayscale sm:-right-40 sm:-top-40 sm:h-[560px] sm:w-[560px]"
+        className="pointer-events-none absolute -right-40 -top-40 hidden h-[560px] w-[560px] rounded-full opacity-[0.06] grayscale sm:block"
       />
       <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-1.5 shadow-[0_1px_2px_rgba(16,24,32,0.04)]">
         <Compass className="h-4 w-4 text-primary" />
