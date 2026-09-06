@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { Search, UserPlus, Users } from 'lucide-react'
+import { Archive, Search, UserPlus, Users } from 'lucide-react'
 import { EmptyState, FadeIn, PageHeader } from '@/components/shared'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -8,7 +8,7 @@ import { Input, NativeSelect } from '@/components/ui/input'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
 import { useConsultants, useCreate, useModuleProgress } from '@/hooks/queries'
-import { edad, fechaCorta, iniciales, nombreCompleto } from '@/lib/utils'
+import { cn, edad, fechaCorta, iniciales, nombreCompleto } from '@/lib/utils'
 import { effectiveEstado, overallProgress } from '@/lib/progress'
 import { CONSULTANT_STATUS } from '@/lib/constants'
 import { useAuthStore } from '@/stores/authStore'
@@ -21,6 +21,7 @@ export default function ConsultantsPage() {
   const [params, setParams] = useSearchParams()
   const [q, setQ] = useState('')
   const [estado, setEstado] = useState<string>('todos')
+  const [showArchived, setShowArchived] = useState(false)
   const open = params.get('nuevo') === '1'
   const user = useAuthStore((s) => s.user)
 
@@ -33,9 +34,12 @@ export default function ConsultantsPage() {
     descripcion: `Se creó la ficha de ${nombreCompleto(c)}`,
   }))
 
+  const archivedCount = useMemo(() => consultants.filter((c) => c.archivedAt).length, [consultants])
+
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase()
     return consultants
+      .filter((c) => (showArchived ? true : !c.archivedAt))
       .filter((c) => (estado === 'todos' ? true : effectiveEstado(c, progress) === estado))
       .filter((c) =>
         term
@@ -43,7 +47,7 @@ export default function ConsultantsPage() {
           : true,
       )
       .sort((a, b) => a.apellido.localeCompare(b.apellido))
-  }, [consultants, q, estado, progress])
+  }, [consultants, q, estado, showArchived, progress])
 
   const setOpen = (o: boolean) => {
     if (o) params.set('nuevo', '1')
@@ -55,7 +59,7 @@ export default function ConsultantsPage() {
     <FadeIn>
       <PageHeader
         title="Consultantes"
-        subtitle={`${consultants.length} consultantes · ${consultants.filter((c) => effectiveEstado(c, progress) === 'en_proceso').length} en proceso activo`}
+        subtitle={`${consultants.length - archivedCount} consultantes activos${archivedCount ? ` · ${archivedCount} archivados` : ''} · ${consultants.filter((c) => effectiveEstado(c, progress) === 'en_proceso').length} en proceso activo`}
         actions={
           <Button size="sm" onClick={() => setOpen(true)}>
             <UserPlus /> Nuevo consultante
@@ -81,6 +85,15 @@ export default function ConsultantsPage() {
             </option>
           ))}
         </NativeSelect>
+        {archivedCount > 0 && (
+          <Button
+            variant={showArchived ? 'soft' : 'outline'}
+            size="sm"
+            onClick={() => setShowArchived((v) => !v)}
+          >
+            <Archive /> {showArchived ? 'Ocultar archivados' : `Ver archivados (${archivedCount})`}
+          </Button>
+        )}
       </div>
 
       {filtered.length === 0 ? (
@@ -103,7 +116,10 @@ export default function ConsultantsPage() {
               <Link
                 key={c.id}
                 to={`/pro/consultantes/${c.id}`}
-                className="group rounded-xl border bg-surface p-4 shadow-[0_1px_2px_rgba(16,24,32,0.04),0_4px_14px_-6px_rgba(16,24,32,0.07)] transition-all hover:border-border-strong hover:shadow-md"
+                className={cn(
+                  'group rounded-xl border bg-surface p-4 shadow-[0_1px_2px_rgba(16,24,32,0.04),0_4px_14px_-6px_rgba(16,24,32,0.07)] transition-all hover:border-border-strong hover:shadow-md',
+                  c.archivedAt && 'opacity-60',
+                )}
               >
                 <div className="flex items-start gap-3">
                   <Avatar className="h-10 w-10">
@@ -115,7 +131,10 @@ export default function ConsultantsPage() {
                       {edad(c.fechaNacimiento)} años · {c.curso}
                     </p>
                   </div>
-                  <Badge variant={st.tone as 'aqua'}>{st.label}</Badge>
+                  <div className="flex flex-col items-end gap-1">
+                    <Badge variant={st.tone as 'aqua'}>{st.label}</Badge>
+                    {c.archivedAt && <Badge variant="outline">Archivado</Badge>}
+                  </div>
                 </div>
                 <p className="mt-3 line-clamp-2 min-h-[2.4em] text-[12.5px] text-muted-foreground">
                   {c.motivoConsulta}
