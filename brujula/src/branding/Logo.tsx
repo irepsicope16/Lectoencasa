@@ -56,7 +56,7 @@ export function LogoHorizontal({ className, size = 30 }: LogoProps) {
           Método <span className="text-primary">Brújula</span>
         </span>
         <span className="mt-0.5 text-[10px] font-medium tracking-[0.14em] text-faint uppercase">
-          Psicope con Ire
+          Lic. Irene Morbidelli
         </span>
       </div>
     </div>

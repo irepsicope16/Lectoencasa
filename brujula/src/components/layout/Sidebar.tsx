@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import {
   BarChart3,
   BookOpen,
@@ -51,9 +51,16 @@ export function Sidebar({ role }: { role: UserRole }) {
   const collapsed = useUIStore((s) => s.sidebarCollapsed)
   const toggle = useUIStore((s) => s.toggleSidebar)
   const navigate = useNavigate()
+  const location = useLocation()
   const user = useAuthStore((s) => s.user)
   const nav =
     role === 'profesional' ? (isOwner(user) ? [...proNav, ownerNavItem] : proNav) : misNav
+
+  // Se calcula acá (en vez de con la función className de NavLink) porque
+  // TooltipTrigger asChild (Radix Slot) no compone bien un className que sea
+  // función — termina serializando el código fuente en vez de invocarlo.
+  const isNavActive = (item: (typeof nav)[number]) =>
+    item.end ? location.pathname === item.to : location.pathname.startsWith(item.to)
 
   return (
     <aside
@@ -76,21 +83,24 @@ export function Sidebar({ role }: { role: UserRole }) {
       {/* navegación */}
       <nav className="flex-1 overflow-y-auto px-2 py-3">
         <ul className="space-y-1.5">
-          {nav.map((item) => (
+          {nav.map((item) => {
+            const active = isNavActive(item)
+            return (
             <li key={item.to}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <NavLink
                     to={item.to}
                     end={item.end}
-                    className={({ isActive }) =>
-                      cn(
-                        'flex items-center gap-2.5 rounded-lg border border-border/70 bg-surface-2 px-2.5 py-1.5 text-[13px] font-medium text-muted-foreground shadow-[0_1px_2px_rgba(16,24,32,0.03)] transition-colors hover:border-border-strong hover:bg-border/40 hover:text-foreground',
-                        isActive &&
-                          'border-primary/25 bg-primary-soft text-primary-strong hover:border-primary/25 hover:bg-primary-soft hover:text-primary-strong',
-                        collapsed && 'justify-center px-0 py-2',
-                      )
-                    }
+                    className={cn(
+                      'flex items-center gap-2.5 rounded-lg border px-2.5 py-1.5 text-[13px] font-medium shadow-[0_1px_2px_rgba(16,24,32,0.03)] transition-colors',
+                      active
+                        ? 'border-primary/25 bg-primary-soft text-primary-strong hover:border-primary/25 hover:bg-primary-soft hover:text-primary-strong'
+                        : role === 'profesional'
+                          ? 'border-[#8b87d4]/25 bg-[#8b87d4]/10 text-[#6f6ac1] hover:border-[#8b87d4]/40 hover:bg-[#8b87d4]/15'
+                          : 'border-border/70 bg-surface-2 text-muted-foreground hover:border-border-strong hover:bg-border/40 hover:text-foreground',
+                      collapsed && 'justify-center px-0 py-2',
+                    )}
                   >
                     <item.icon className="h-4 w-4 shrink-0" />
                     {!collapsed && <span className="truncate">{item.label}</span>}
@@ -99,7 +109,8 @@ export function Sidebar({ role }: { role: UserRole }) {
                 {collapsed && <TooltipContent side="right">{item.label}</TooltipContent>}
               </Tooltip>
             </li>
-          ))}
+            )
+          })}
         </ul>
 
         {/* módulos por etapa (solo consultante, sidebar expandida) */}
