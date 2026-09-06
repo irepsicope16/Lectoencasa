@@ -29,7 +29,7 @@ export default function SplashPage() {
         className="pointer-events-none absolute -right-32 -top-32 h-[480px] w-[480px] rounded-full opacity-[0.06] grayscale sm:-right-40 sm:-top-40 sm:h-[560px] sm:w-[560px]"
       />
       <div className="flex items-center gap-2 text-[12px] font-medium tracking-[0.16em] text-faint uppercase">
-        <Compass className="h-4 w-4 text-primary" /> Psicope con Ire
+        <Compass className="h-4 w-4 text-primary" /> Lic. Irene Morbidelli
       </div>
 
       <motion.div

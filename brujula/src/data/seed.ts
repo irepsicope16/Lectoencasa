@@ -49,7 +49,7 @@ const users: User[] = [
     role: 'profesional',
     nombre: 'Irene',
     apellido: 'M.',
-    email: 'ire@psicopeconire.com',
+    email: 'ire@metodobrujula.com',
     password: 'brujula',
     titulo: 'Lic. en Psicopedagogía · Esp. en Orientación Vocacional',
     ...t(120),

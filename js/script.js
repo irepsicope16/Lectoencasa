@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════
-   PSICOPE CON IRE — Interacciones
+   LIC. IRENE MORBIDELLI — Interacciones
    Vanilla JS · sin dependencias
    ─────────────────────────────────────────────────────────────
    1. Menú móvil accesible

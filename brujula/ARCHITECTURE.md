@@ -1,7 +1,7 @@
 # Método Brújula — Arquitectura
 
 > **Encontrá tu norte. Construí tu camino.**
-> Plataforma profesional de Orientación Vocacional de **Psicope con Ire**.
+> Plataforma profesional de Orientación Vocacional de la **Lic. Irene Morbidelli**.
 
 Este documento describe la arquitectura completa de la plataforma. Cada decisión está
 justificada técnicamente y pensada para un producto SaaS comercial listo para escalar,

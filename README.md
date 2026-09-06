@@ -1,4 +1,4 @@
-# Psicope con Ire — Sitio web oficial
+# Lic. Irene Morbidelli — Sitio web oficial
 
 Sitio de marca personal de **Irene**, Licenciada en Psicopedagogía y docente durante más de 20 años.
 
