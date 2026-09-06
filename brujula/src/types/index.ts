@@ -48,6 +48,8 @@ export interface Consultant {
   estado: ConsultantStatus
   profesionalId: string
   notas?: string
+  /** Fecha ISO en que se archivó. Sin valor = activo (aparece en la lista principal). */
+  archivedAt?: string
   comparacionCarreras?: CareerComparisonEntry[]
   mapaCarreras?: CareerMapEntry[]
   /** Consentimiento informado firmado digitalmente. Sin valor = todavía no se firmó. */

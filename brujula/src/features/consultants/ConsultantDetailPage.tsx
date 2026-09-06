@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, CalendarDays, GraduationCap, Mail, Pencil, Phone, Trash2 } from 'lucide-react'
+import { Archive, ArchiveRestore, ArrowLeft, CalendarDays, GraduationCap, Mail, Pencil, Phone, Trash2 } from 'lucide-react'
 import { FadeIn, ProgressRing } from '@/components/shared'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -80,6 +80,7 @@ export default function ConsultantDetailPage() {
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-xl font-semibold tracking-tight">{nombreCompleto(consultant)}</h1>
             <Badge variant={st.tone as 'aqua'}>{st.label}</Badge>
+            {consultant.archivedAt && <Badge variant="outline">Archivado</Badge>}
           </div>
           <div className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-[12.5px] text-muted-foreground">
             <span className="inline-flex items-center gap-1.5">
@@ -109,6 +110,32 @@ export default function ConsultantDetailPage() {
           <div className="flex gap-1.5">
             <Button variant="outline" size="sm" onClick={() => setEditOpen(true)}>
               <Pencil /> Editar
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={async () => {
+                const archivando = !consultant.archivedAt
+                await updateConsultant.mutateAsync({
+                  id: consultant.id,
+                  patch: { archivedAt: archivando ? new Date().toISOString() : undefined },
+                })
+                toast.info(
+                  archivando
+                    ? `${nombreCompleto(consultant)} se archivó · ya no aparece en la lista principal`
+                    : `${nombreCompleto(consultant)} se desarchivó`,
+                )
+              }}
+            >
+              {consultant.archivedAt ? (
+                <>
+                  <ArchiveRestore /> Desarchivar
+                </>
+              ) : (
+                <>
+                  <Archive /> Archivar
+                </>
+              )}
             </Button>
             <Button variant="ghost" size="iconSm" onClick={() => setDeleteOpen(true)} aria-label="Eliminar">
               <Trash2 className="text-danger" />
