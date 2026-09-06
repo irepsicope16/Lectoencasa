@@ -30,7 +30,9 @@ export default function SplashPage() {
       />
       <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-1.5 shadow-[0_1px_2px_rgba(16,24,32,0.04)]">
         <Compass className="h-4 w-4 text-primary" />
-        <span className="font-display text-[15px] italic text-primary-strong">Orientación Vocacional</span>
+        <span className="font-display text-[15px] uppercase italic tracking-wide text-primary-strong">
+          Orientación Vocacional y Ocupacional
+        </span>
       </div>
 
       <motion.div
