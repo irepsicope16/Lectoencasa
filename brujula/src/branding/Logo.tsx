@@ -79,9 +79,11 @@ const STAGE_ITEMS = [
 export function BrandMark({
   className,
   showCredential = false,
+  showOrientationLabel = true,
 }: {
   className?: string
   showCredential?: boolean
+  showOrientationLabel?: boolean
 }) {
   return (
     <div className={cn('flex flex-col items-center text-center', className)}>
@@ -106,9 +108,11 @@ export function BrandMark({
           </div>
         ))}
       </div>
-      <p className="mt-5 text-[10.5px] font-medium uppercase tracking-[0.14em] text-faint">
-        Orientación Vocacional y Ocupacional
-      </p>
+      {showOrientationLabel && (
+        <p className="mt-5 text-[10.5px] font-medium uppercase tracking-[0.14em] text-faint">
+          Orientación Vocacional y Ocupacional
+        </p>
+      )}
       {showCredential && (
         <div className="mt-6 text-[11.5px] leading-relaxed">
           <p className="font-medium text-muted-foreground">Lic. Irene Morbidelli</p>
