@@ -19,6 +19,9 @@ const schema = z
     email: z.string().email('Ingresá un email válido'),
     password: z.string().min(6, 'Mínimo 6 caracteres'),
     confirmar: z.string(),
+    aceptaTerminos: z.boolean().refine((v) => v === true, {
+      message: 'Tenés que aceptar esta condición para crear la cuenta',
+    }),
   })
   .refine((d) => d.password === d.confirmar, {
     message: 'Las contraseñas no coinciden',
@@ -144,6 +147,20 @@ export default function RegisterProPage() {
               disabled={!cloudActive}
             />
             <FieldError>{errors.confirmar?.message}</FieldError>
+          </div>
+          <div>
+            <label className="flex items-start gap-2 text-[12px] leading-relaxed text-muted-foreground">
+              <input
+                type="checkbox"
+                className="mt-0.5 h-3.5 w-3.5 shrink-0 accent-primary"
+                {...register('aceptaTerminos')}
+                disabled={!cloudActive}
+              />
+              Declaro que esta cuenta es de uso personal e intransferible, para mi práctica profesional
+              individual. Entiendo que compartir el acceso con otra persona puede implicar el corte del
+              servicio, sin reembolso.
+            </label>
+            <FieldError>{errors.aceptaTerminos?.message}</FieldError>
           </div>
           {serverError && (
             <p className="rounded-lg bg-danger-soft px-3 py-2 text-[12.5px] text-danger">{serverError}</p>
