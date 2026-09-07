@@ -51,6 +51,10 @@ async function cloudLogin(email: string, password: string): Promise<{ ok: boolea
       : `Email o contraseña incorrectos. (${error.message})`
     return { ok: false, error: msg }
   }
+  // Sesión única: este login cierra cualquier otra sesión abierta con esta
+  // misma cuenta en otros dispositivos/navegadores (evita que dos personas
+  // usen la misma cuenta profesional al mismo tiempo).
+  await sb.auth.signOut({ scope: 'others' })
   const uid = data.user.id
   const { data: profile, error: pErr } = await sb.from('profiles').select('data').eq('id', uid).maybeSingle()
   if (pErr || !profile) {
