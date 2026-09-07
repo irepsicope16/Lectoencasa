@@ -13,12 +13,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { EmptyState } from '@/components/shared'
+import { EmptyState, StageStepper } from '@/components/shared'
 import { toast } from '@/components/ui/toast'
-import { useCreate, useSessions, useUpdate } from '@/hooks/queries'
+import { useCreate, useModuleProgress, useSessions, useUpdate } from '@/hooks/queries'
 import { fechaHora, formatMonto, nombreCompleto } from '@/lib/utils'
 import { MODULES } from '@/data/modules'
 import { SESSION_STATUS } from '@/lib/constants'
+import { stageProgress } from '@/lib/progress'
 import type { Consultant, ModuleId, Session } from '@/types'
 import { CalendarDays } from 'lucide-react'
 
@@ -39,6 +40,7 @@ const emptyForm = {
 
 export function SessionsTab({ consultant }: { consultant: Consultant }) {
   const { data: sessions = [] } = useSessions()
+  const { data: progress = [] } = useModuleProgress()
   const createSession = useCreate<Session>('sessions', (s) => ({
     actor: 'profesional',
     consultantId: s.consultantId,
@@ -105,6 +107,13 @@ export function SessionsTab({ consultant }: { consultant: Consultant }) {
 
   return (
     <div>
+      <div className="mb-6 rounded-xl border bg-surface p-4">
+        <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.1em] text-faint">
+          Recorrido del método
+        </p>
+        <StageStepper statuses={stageProgress(progress, consultant.id)} />
+      </div>
+
       <div className="mb-4 flex justify-end">
         <Button size="sm" onClick={openNew}>
           <CalendarPlus /> Registrar sesión
