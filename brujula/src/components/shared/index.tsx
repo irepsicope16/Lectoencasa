@@ -1,7 +1,10 @@
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import type { LucideIcon } from 'lucide-react'
+import { Check, type LucideIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { STAGES, STAGE_HEX } from '@/lib/constants'
+import type { StageId } from '@/types'
+import type { StageProgressStatus } from '@/lib/progress'
 
 // ---------- PageHeader ----------
 export function PageHeader({
@@ -124,6 +127,66 @@ export function ProgressRing({
       <span className="absolute text-[10.5px] font-semibold text-foreground">
         {label ?? `${Math.round(value)}%`}
       </span>
+    </div>
+  )
+}
+
+// ---------- StageStepper ----------
+/**
+ * Indicador visual horizontal de las 5 etapas del método (Conocerte →
+ * Actuar): un círculo numerado por etapa, conectados por una línea, con
+ * la etapa completada en su color sólido, la etapa activa resaltada con
+ * un aro de color, y las pendientes en gris. Pensado para mostrar de un
+ * vistazo en qué punto del recorrido está un consultante.
+ */
+export function StageStepper({
+  statuses,
+  className,
+}: {
+  statuses: Record<StageId, StageProgressStatus>
+  className?: string
+}) {
+  const stageIds = (Object.keys(STAGES) as StageId[]).sort((a, b) => STAGES[a].orden - STAGES[b].orden)
+  return (
+    <div className={cn('flex items-start', className)}>
+      {stageIds.map((id, i) => {
+        const status = statuses[id]
+        const stage = STAGES[id]
+        const color = STAGE_HEX[id]
+        return (
+          <React.Fragment key={id}>
+            <div className="flex flex-col items-center gap-1.5">
+              <div
+                className={cn(
+                  'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 text-[12px] font-semibold',
+                  status === 'pendiente' && 'border-border bg-surface text-faint',
+                )}
+                style={
+                  status === 'completado'
+                    ? { background: color.solid, borderColor: color.solid, color: 'var(--surface, #fff)' }
+                    : status === 'en_progreso'
+                      ? { borderColor: color.solid, background: color.soft, color: color.solid }
+                      : undefined
+                }
+              >
+                {status === 'completado' ? <Check className="h-4 w-4" /> : stage.orden}
+              </div>
+              <span
+                className={cn('max-w-[76px] text-center text-[10.5px] font-medium leading-tight', status === 'pendiente' && 'text-faint')}
+                style={status === 'pendiente' ? undefined : { color: color.solid }}
+              >
+                {stage.nombre}
+              </span>
+            </div>
+            {i < stageIds.length - 1 && (
+              <div
+                className="mt-4 h-[2px] flex-1 rounded-full"
+                style={{ background: status === 'completado' ? color.solid : 'var(--border)' }}
+              />
+            )}
+          </React.Fragment>
+        )
+      })}
     </div>
   )
 }

@@ -1,5 +1,6 @@
-import type { Activity, Consultant, ConsultantStatus, ModuleProgress } from '@/types'
+import type { Activity, Consultant, ConsultantStatus, ModuleProgress, StageId } from '@/types'
 import { MODULES } from '@/data/modules'
+import { STAGES } from '@/lib/constants'
 
 /**
  * Progreso global del proceso (0..100) para un consultante:
@@ -30,6 +31,31 @@ export function overallProgress(progress: ModuleProgress[], consultantId: string
 export function effectiveEstado(consultant: Consultant, progress: ModuleProgress[]): ConsultantStatus {
   if (consultant.estado === 'en_pausa' || consultant.estado === 'finalizado') return consultant.estado
   return overallProgress(progress, consultant.id) > 0 ? 'en_proceso' : 'entrevista_inicial'
+}
+
+export type StageProgressStatus = 'completado' | 'en_progreso' | 'pendiente'
+
+/**
+ * Estado de cada una de las 5 etapas del método para un consultante:
+ * "completado" si terminó todos los módulos de esa etapa, "en_progreso"
+ * si arrancó alguno sin terminarlos todos, "pendiente" si no tocó ninguno.
+ * Es la base del indicador visual de recorrido (StageStepper).
+ */
+export function stageProgress(
+  progress: ModuleProgress[],
+  consultantId: string,
+): Record<StageId, StageProgressStatus> {
+  const own = progress.filter((p) => p.consultantId === consultantId)
+  const result = {} as Record<StageId, StageProgressStatus>
+  for (const stageId of Object.keys(STAGES) as StageId[]) {
+    const estados = MODULES.filter((m) => m.etapa === stageId).map(
+      (m) => own.find((p) => p.moduleId === m.id)?.estado ?? 'no_iniciado',
+    )
+    if (estados.length > 0 && estados.every((e) => e === 'completado')) result[stageId] = 'completado'
+    else if (estados.some((e) => e === 'completado' || e === 'en_progreso')) result[stageId] = 'en_progreso'
+    else result[stageId] = 'pendiente'
+  }
+  return result
 }
 
 export function moduleActivityStats(activities: Activity[], consultantId: string, moduleId: string) {
