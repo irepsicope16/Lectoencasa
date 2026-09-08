@@ -167,8 +167,9 @@ export function Sidebar({ role }: { role: UserRole }) {
             href="https://wa.me/5492216185376?text=Hola%20Irene%2C%20tengo%20una%20consulta%20sobre%20M%C3%A9todo%20Br%C3%BAjula."
             target="_blank"
             rel="noopener noreferrer"
+            style={{ color: '#1faa59' }}
             className={cn(
-              'mb-1 flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] text-faint transition-colors hover:bg-surface-2 hover:text-foreground',
+              'mb-1 flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] font-medium transition-colors hover:bg-[#1faa59]/10',
               collapsed && 'w-auto justify-center px-2',
             )}
             aria-label="Soporte por WhatsApp"
