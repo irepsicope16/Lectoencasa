@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, BookOpen, Download, FileText } from 'lucide-react'
 import { FadeIn, PageHeader } from '@/components/shared'
 import { MODULES } from '@/data/modules'
 import { STAGE_HEX, STAGES } from '@/lib/constants'
 import { Isotipo } from '@/branding/Logo'
+import { BIBLIOGRAFIA } from '@/data/bibliografia'
 
 export default function MethodOverviewPage() {
   return (
@@ -68,6 +69,53 @@ export default function MethodOverviewPage() {
           </section>
         ))}
       </div>
+
+      {/* bibliografía */}
+      <section className="mt-10 border-t pt-8">
+        <div className="mb-3 flex items-baseline gap-3">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-surface-2 text-muted-foreground">
+            <BookOpen className="h-3.5 w-3.5" />
+          </span>
+          <h2 className="text-[16px] font-semibold tracking-tight">Bibliografía para profesionales</h2>
+          <span className="text-[12.5px] text-faint">Material de consulta y referencias teóricas</span>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {BIBLIOGRAFIA.map((item) => {
+            const Contenido = (
+              <>
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-[13.5px] font-semibold">{item.titulo}</p>
+                  {item.href && <Download className="h-3.5 w-3.5 shrink-0 text-primary" />}
+                </div>
+                <p className="mt-1 text-[11.5px] font-medium text-faint">{item.autor}</p>
+                <p className="mt-1.5 line-clamp-3 text-[12.5px] leading-relaxed text-muted-foreground">
+                  {item.descripcion}
+                </p>
+              </>
+            )
+            return item.href ? (
+              <a
+                key={item.titulo}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-xl border bg-surface p-4 transition-all hover:border-border-strong hover:shadow-sm"
+              >
+                {Contenido}
+              </a>
+            ) : (
+              <div key={item.titulo} className="rounded-xl border border-dashed bg-surface-2/40 p-4">
+                {Contenido}
+              </div>
+            )
+          })}
+        </div>
+        <p className="mt-3 flex items-center gap-1.5 text-[11.5px] text-faint">
+          <FileText className="h-3 w-3" /> Los libros y artículos se citan como referencia para buscarlos en tu
+          biblioteca o librería de confianza — solo el material propio de Método Brújula está disponible para
+          descargar acá.
+        </p>
+      </section>
     </FadeIn>
   )
 }
