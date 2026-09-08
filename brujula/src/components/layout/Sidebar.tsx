@@ -7,6 +7,7 @@ import {
   FolderOpen,
   Home,
   ListChecks,
+  MessageCircle,
   NotebookPen,
   PanelLeftClose,
   PanelLeftOpen,
@@ -160,7 +161,22 @@ export function Sidebar({ role }: { role: UserRole }) {
       </nav>
 
       {/* pie */}
-      <div className={cn('border-t p-2', collapsed && 'flex justify-center')}>
+      <div className={cn('border-t p-2', collapsed && 'flex flex-col items-center')}>
+        {role === 'profesional' && (
+          <a
+            href="https://wa.me/5492216185376?text=Hola%20Irene%2C%20tengo%20una%20consulta%20sobre%20M%C3%A9todo%20Br%C3%BAjula."
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              'mb-1 flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] text-faint transition-colors hover:bg-surface-2 hover:text-foreground',
+              collapsed && 'w-auto justify-center px-2',
+            )}
+            aria-label="Soporte por WhatsApp"
+          >
+            <MessageCircle className="h-4 w-4 shrink-0" />
+            {!collapsed && <span>Soporte por WhatsApp</span>}
+          </a>
+        )}
         <button
           onClick={toggle}
           className="flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] text-faint transition-colors hover:bg-surface-2 hover:text-foreground"
