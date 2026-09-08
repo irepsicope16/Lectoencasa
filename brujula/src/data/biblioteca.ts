@@ -175,6 +175,15 @@ export const BIBLIOTECA_PROFESIONAL: FichaProfesional[] = [
     numero: 10,
     bloque: 'Cierre',
     titulo: 'De la elección al proyecto: construir un camino posible',
-    recursos: [],
+    recursos: [
+      {
+        titulo: 'De la elección al proyecto: transformar una decisión en acciones con sentido',
+        autor: 'Savickas, M. L. (2012). Journal of Counseling & Development, 90(1), 13–19.',
+        descripcion:
+          'La elección vocacional adquiere sentido cuando se traduce en un proyecto: dirección, objetivos, acciones, apoyos y alternativas. Propone un plan de acción en cinco movimientos para el cierre del proceso, articulando lo trabajado en autoconocimiento, exploración y decisión.',
+        href: `${import.meta.env.BASE_URL}biblioteca/ficha-10-eleccion-proyecto.pdf`,
+        tipo: 'pdf',
+      },
+    ],
   },
 ]
