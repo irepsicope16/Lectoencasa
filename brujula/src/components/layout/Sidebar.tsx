@@ -29,6 +29,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/misc'
 
 const proNav = [
   { to: '/pro', icon: Home, label: 'Inicio', end: true },
+  { to: '/pro/biblioteca', icon: BookOpen, label: 'Biblioteca' },
   { to: '/pro/consultantes', icon: Users, label: 'Consultantes' },
   { to: '/pro/agenda', icon: Calendar, label: 'Agenda' },
   { to: '/pro/honorarios', icon: Wallet, label: 'Honorarios' },
