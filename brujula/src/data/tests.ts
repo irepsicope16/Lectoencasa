@@ -130,3 +130,46 @@ export const TEST_INTELIGENCIAS: ModuleActivityTemplate = {
     item('Naturalista', 'Me siento mejor al aire libre que en espacios cerrados.'),
   ],
 }
+
+// ---------- Test de Estilo Personal ----------
+// Inspirado en el modelo de los "Cinco Grandes" rasgos de personalidad
+// (Apertura, Responsabilidad, Extraversión, Amabilidad y Estabilidad
+// emocional — esta última es el polo positivo de lo que la literatura
+// llama "Neuroticismo", reformulado en sentido afirmativo para que el
+// puntaje alto siempre se lea como "más de este rasgo"). Complementa el
+// video "Los 5 grandes rasgos de la personalidad" del módulo Identidad.
+// No es un test clínico ni diagnóstico: explora el estilo personal para
+// pensar en qué ambientes de estudio o trabajo el consultante se
+// sentiría más cómodo/a.
+n = 300
+export const TEST_ESTILO_PERSONAL: ModuleActivityTemplate = {
+  id: 'test-estilo-personal',
+  titulo: 'Test de Estilo Personal',
+  descripcion:
+    'Puntuá cada frase del 1 (nada que ver conmigo) al 5 (totalmente yo). No mide si sos "bueno" o "malo" en algo: explora tu estilo personal, para pensar en qué ambientes y formas de trabajo te vas a sentir más cómodo/a.',
+  tipo: 'ejercicio',
+  duracionMin: 15,
+  dimensiones: ['identidad'],
+  preguntas: [
+    item('Apertura a la experiencia', 'Me gusta probar cosas nuevas, aunque no sepa cómo van a salir.'),
+    item('Apertura a la experiencia', 'Disfruto imaginar ideas, historias o posibilidades poco comunes.'),
+    item('Apertura a la experiencia', 'Me atrae aprender sobre temas que no tienen nada que ver con lo que ya sé.'),
+    item('Apertura a la experiencia', 'Prefiero los cambios y las sorpresas antes que la rutina.'),
+    item('Responsabilidad', 'Cuando me comprometo con algo, lo termino aunque me cueste.'),
+    item('Responsabilidad', 'Me gusta planificar las cosas antes de hacerlas.'),
+    item('Responsabilidad', 'Soy cuidadoso/a con los detalles y los plazos.'),
+    item('Responsabilidad', 'Me esfuerzo por hacer las cosas bien, aunque nadie las vaya a revisar.'),
+    item('Extraversión', 'Me energizo estando rodeado/a de gente.'),
+    item('Extraversión', 'Me resulta fácil iniciar una conversación con alguien que no conozco.'),
+    item('Extraversión', 'Prefiero hacer planes con otros antes que quedarme solo/a.'),
+    item('Extraversión', 'Me gusta ser el centro de atención en un grupo.'),
+    item('Amabilidad', 'Trato de ponerme en el lugar del otro antes de opinar.'),
+    item('Amabilidad', 'Prefiero ceder antes que generar un conflicto innecesario.'),
+    item('Amabilidad', 'Confío en las intenciones de las personas, aunque no las conozca bien.'),
+    item('Amabilidad', 'Me importa que las decisiones grupales sean justas para todos.'),
+    item('Estabilidad emocional', 'Me mantengo tranquilo/a incluso cuando las cosas se complican.'),
+    item('Estabilidad emocional', 'No me cuesta demasiado recuperarme después de un mal momento.'),
+    item('Estabilidad emocional', 'Puedo tomar decisiones importantes sin sentirme abrumado/a por los nervios.'),
+    item('Estabilidad emocional', 'En general, me siento seguro/a de mí mismo/a.'),
+  ],
+}

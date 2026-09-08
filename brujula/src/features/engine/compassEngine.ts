@@ -73,6 +73,7 @@ interface Signals {
   aptitudes: Signal[]
   deseos: Signal[]
   mandatos: Signal[]
+  identidad: Signal[]
 }
 
 /** extrae las opciones elegidas de una respuesta tipo selección ("A, B, C") */
@@ -84,7 +85,7 @@ function splitSelection(text: string): string[] {
 }
 
 function collectSignals(input: EngineInput): Signals {
-  const s: Signals = { valores: [], fortalezas: [], intereses: [], aptitudes: [], deseos: [], mandatos: [] }
+  const s: Signals = { valores: [], fortalezas: [], intereses: [], aptitudes: [], deseos: [], mandatos: [], identidad: [] }
   const done = input.activities.filter((a) => a.respuestas.length > 0)
 
   for (const act of done) {
@@ -131,7 +132,9 @@ function collectSignals(input: EngineInput): Signals {
                     ? s.deseos
                     : act.moduleId === 'mandatos'
                       ? s.mandatos
-                      : null
+                      : act.moduleId === 'identidad'
+                        ? s.identidad
+                        : null
         if (target) {
           target.push({ texto: snippet, evidencia: evidencia(`escribió: "${snippet}"`), soloEvidencia: true })
         }
@@ -164,6 +167,7 @@ function collectSignals(input: EngineInput): Signals {
       else if (act.moduleId === 'aptitudes') s.aptitudes.push(señal)
       else if (act.moduleId === 'fortalezas') s.fortalezas.push(señal)
       else if (act.moduleId === 'valores') s.valores.push(señal)
+      else if (act.moduleId === 'identidad') s.identidad.push(señal)
     }
   }
 
@@ -174,7 +178,7 @@ function collectSignals(input: EngineInput): Signals {
 
 /** dimensiones cuyas respuestas de actividad ya se procesan en collectSignals()
  * (selección o texto libre): agregarlas también acá las duplicaría. */
-const DIMS_CON_SEÑAL: EngineDimension[] = ['valores', 'fortalezas', 'intereses', 'aptitudes', 'deseos', 'mandatos']
+const DIMS_CON_SEÑAL: EngineDimension[] = ['valores', 'fortalezas', 'intereses', 'aptitudes', 'deseos', 'mandatos', 'identidad']
 
 function dimensionEvidence(input: EngineInput, dim: EngineDimension): EvidenceRef[] {
   const out: EvidenceRef[] = []
@@ -256,7 +260,9 @@ function buildProfile(input: EngineInput, signals: Signals): ProfileDimension[] 
 
     const sintesisPorDim: Record<EngineDimension, string> = {
       historia: 'Recorrido biográfico trabajado: la historia personal aporta escenas que anticipan intereses y modos de vincularse con el aprender.',
-      identidad: 'Construcción de una imagen de sí en proceso: se trabaja la diferencia entre cómo se ve y cómo lo ven.',
+      identidad: destacados.length
+        ? `Rasgos de estilo personal que se destacan: ${destacados.slice(0, 3).join(', ')}. Ayudan a pensar en qué ambientes y formas de trabajo se sentiría más cómodo/a.`
+        : 'Construcción de una imagen de sí en proceso: se trabaja la diferencia entre cómo se ve y cómo lo ven.',
       valores: destacados.length
         ? `Valores rectores identificados: ${destacados.slice(0, 3).join(', ')}. Funcionan como criterio de decisión.`
         : 'Los valores aún no fueron explicitados en actividades; profundizar en el módulo 3.',
