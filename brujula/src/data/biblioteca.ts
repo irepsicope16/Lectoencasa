@@ -99,20 +99,29 @@ export const BIBLIOTECA_PROFESIONAL: FichaProfesional[] = [
     numero: 5,
     bloque: 'Exploración',
     titulo: '"No podemos elegir lo que no conocemos": ampliar horizontes',
-    recursos: [],
+    recursos: [
+      {
+        titulo: 'No podemos elegir lo que no conocemos: ampliar horizontes',
+        autor: 'Rascovan, S. (2013) y Gavilán, M. (2006).',
+        descripcion:
+          'Toda elección se realiza dentro de un universo de opciones conocidas. Ampliar horizontes no es acumular información, sino crear condiciones para descubrir campos, recorridos y ocupaciones que antes no formaban parte de lo imaginable. Incluye claves para el profesional y preguntas para la sesión.',
+        href: `${import.meta.env.BASE_URL}biblioteca/ficha-05-ampliar-horizontes.pdf`,
+        tipo: 'pdf',
+      },
+    ],
   },
   {
     numero: 6,
     bloque: 'Exploración',
-    titulo: 'Jóvenes y mundo laboral actual — aportes de la OIT',
+    titulo: 'Juventudes y mundo laboral actual',
     recursos: [
       {
-        titulo: 'Juventudes y mundo laboral actual',
+        titulo: 'Juventudes y mundo laboral actual: nuevas formas de trabajo y trayectorias laborales',
         autor:
-          'Organización Internacional del Trabajo. (2026). Hagamos doble click en el trabajo: Guía para informar y capacitar sobre el ingreso al mundo laboral de las juventudes. OIT.',
+          'Organización Internacional del Trabajo. (2026). Hagamos doble click en el trabajo: Guía para informar y capacitar sobre el ingreso al mundo laboral de las juventudes (1.ª ed.). OIT.',
         descripcion:
-          'Explorar el futuro ocupacional requiere acercar a los jóvenes información real sobre el mundo del trabajo: derechos, trabajo decente, protección social, nuevas formas de trabajo y construcción de trayectorias.',
-        href: `${import.meta.env.BASE_URL}biblioteca/ficha-06-jovenes-mundo-laboral-oit.pdf`,
+          'El mundo laboral contemporáneo está atravesado por transformaciones tecnológicas y sociales: teletrabajo, plataformas digitales y nuevas ocupaciones. Orientar implica ayudar a comprender la inserción laboral como un proceso dinámico, no solo asociar una carrera con un empleo futuro.',
+        href: `${import.meta.env.BASE_URL}biblioteca/ficha-06-juventudes-mundo-laboral.pdf`,
         tipo: 'pdf',
       },
     ],
