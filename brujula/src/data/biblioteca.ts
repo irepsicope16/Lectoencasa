@@ -69,7 +69,16 @@ export const BIBLIOTECA_PROFESIONAL: FichaProfesional[] = [
     numero: 3,
     bloque: 'Autoconocimiento',
     titulo: 'Identidad vocacional y narrativa personal',
-    recursos: [],
+    recursos: [
+      {
+        titulo: 'Identidad vocacional y narrativa personal',
+        autor: 'Savickas, M. L. (2005). En Career development and counseling. John Wiley & Sons.',
+        descripcion:
+          'La identidad vocacional no es algo fijo por descubrir: se construye y reconstruye a lo largo de la vida. Incluye conceptos clave (identidad narrativa, temas de vida, adaptabilidad de carrera) y preguntas para la sesión.',
+        href: `${import.meta.env.BASE_URL}biblioteca/ficha-03-identidad-vocacional-narrativa.pdf`,
+        tipo: 'pdf',
+      },
+    ],
   },
   {
     numero: 4,
