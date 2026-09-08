@@ -1,5 +1,5 @@
 import type { ModuleDefinition, ModuleId } from '@/types'
-import { TEST_APTITUDES, TEST_INTELIGENCIAS, TEST_INTERESES } from './tests'
+import { TEST_APTITUDES, TEST_ESTILO_PERSONAL, TEST_INTELIGENCIAS, TEST_INTERESES } from './tests'
 import { EVALUACION_PROCESO } from './evaluacionProceso'
 
 // ============================================================
@@ -174,6 +174,7 @@ export const MODULES: ModuleDefinition[] = [
           { id: 'q3', texto: '¿Qué te sorprendió de lo que dijeron? ¿Qué coincide (o no) con cómo te ves vos?', tipo: 'abierta' },
         ],
       },
+      TEST_ESTILO_PERSONAL,
     ],
     videos: [
       {
