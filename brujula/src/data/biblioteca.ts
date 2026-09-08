@@ -136,7 +136,16 @@ export const BIBLIOTECA_PROFESIONAL: FichaProfesional[] = [
     numero: 8,
     bloque: 'Decisión',
     titulo: 'Gati: dificultades en la toma de decisiones vocacionales',
-    recursos: [],
+    recursos: [
+      {
+        titulo: 'Dificultades en la toma de decisiones vocacionales: modelo de Gati, Krausz y Osipow',
+        autor: 'Gati, I., Krausz, M., & Osipow, S. H. (1996). Journal of Counseling Psychology, 43(4), 510–526.',
+        descripcion:
+          'Una taxonomía que organiza las dificultades para decidir en tres grupos: falta de preparación, falta de información e información inconsistente. Permite pasar de un "no sé qué elegir" general a una hipótesis de trabajo más precisa. Incluye claves para el profesional y preguntas para la sesión.',
+        href: `${import.meta.env.BASE_URL}biblioteca/ficha-08-gati-toma-decisiones.pdf`,
+        tipo: 'pdf',
+      },
+    ],
   },
   {
     numero: 9,
