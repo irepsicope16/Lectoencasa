@@ -54,7 +54,16 @@ export const BIBLIOTECA_PROFESIONAL: FichaProfesional[] = [
     numero: 2,
     bloque: 'Autoconocimiento',
     titulo: 'Savickas: construcción de carrera y Life Design',
-    recursos: [],
+    recursos: [
+      {
+        titulo: 'Savickas: construcción de carrera y Life Design',
+        autor: 'Savickas, M. L., et al. (2009). Journal of Vocational Behavior, 75(3), 239–250.',
+        descripcion:
+          'La orientación no consiste solo en encontrar una carrera que "encaje": la persona organiza experiencias, intereses y significados en una historia que le permite proyectarse hacia el futuro. Incluye claves para el profesional y preguntas para la sesión.',
+        href: `${import.meta.env.BASE_URL}biblioteca/ficha-02-savickas-life-design.pdf`,
+        tipo: 'pdf',
+      },
+    ],
   },
   {
     numero: 3,
@@ -65,8 +74,17 @@ export const BIBLIOTECA_PROFESIONAL: FichaProfesional[] = [
   {
     numero: 4,
     bloque: 'Autoconocimiento → Exploración',
-    titulo: 'Adaptabilidad de carrera: preocupación, control, curiosidad y confianza',
-    recursos: [],
+    titulo: 'Adaptabilidad de carrera: recursos para transitar cambios',
+    recursos: [
+      {
+        titulo: 'Adaptabilidad de carrera: recursos para transitar cambios',
+        autor: 'Savickas, M. L. (1997). The Career Development Quarterly, 45(3), 247–259.',
+        descripcion:
+          'Las 4 C de la adaptabilidad de carrera (preocupación, control, curiosidad y confianza) como recursos para afrontar transiciones vocacionales en trayectorias que ya no son lineales.',
+        href: `${import.meta.env.BASE_URL}biblioteca/ficha-04-adaptabilidad-carrera.pdf`,
+        tipo: 'pdf',
+      },
+    ],
   },
   {
     numero: 5,
@@ -78,7 +96,17 @@ export const BIBLIOTECA_PROFESIONAL: FichaProfesional[] = [
     numero: 6,
     bloque: 'Exploración',
     titulo: 'Jóvenes y mundo laboral actual — aportes de la OIT',
-    recursos: [],
+    recursos: [
+      {
+        titulo: 'Juventudes y mundo laboral actual',
+        autor:
+          'Organización Internacional del Trabajo. (2026). Hagamos doble click en el trabajo: Guía para informar y capacitar sobre el ingreso al mundo laboral de las juventudes. OIT.',
+        descripcion:
+          'Explorar el futuro ocupacional requiere acercar a los jóvenes información real sobre el mundo del trabajo: derechos, trabajo decente, protección social, nuevas formas de trabajo y construcción de trayectorias.',
+        href: `${import.meta.env.BASE_URL}biblioteca/ficha-06-jovenes-mundo-laboral-oit.pdf`,
+        tipo: 'pdf',
+      },
+    ],
   },
   {
     numero: 7,
