@@ -51,7 +51,10 @@ export default function BibliotecaPage() {
                               {recurso.href ? (
                                 <Download className="h-3.5 w-3.5 shrink-0 text-primary" />
                               ) : (
-                                <span className="shrink-0 rounded-full bg-surface-2 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-faint">
+                                <span
+                                  className="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+                                  style={{ color: '#1faa59', backgroundColor: 'rgba(31, 170, 89, 0.12)' }}
+                                >
                                   Recomendación
                                 </span>
                               )}
