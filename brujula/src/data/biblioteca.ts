@@ -160,7 +160,16 @@ export const BIBLIOTECA_PROFESIONAL: FichaProfesional[] = [
     numero: 9,
     bloque: 'Decisión',
     titulo: 'Incertidumbre, indecisión y elección',
-    recursos: [],
+    recursos: [
+      {
+        titulo: 'Incertidumbre, indecisión y elección: aprender a decidir sin exigir certezas absolutas',
+        autor: 'Gelatt, H. B. (1989). Journal of Counseling Psychology, 36(2), 252–256.',
+        descripcion:
+          'Elegir una carrera no significa alcanzar una certeza total. Gelatt propone una actitud de "incertidumbre positiva": combinar racionalidad e intuición y mantener apertura para revisar el camino, en lugar de eliminar la duda. Diferencia incertidumbre, indecisión, elección y ambivalencia, con una secuencia de intervención para el módulo de Decisión.',
+        href: `${import.meta.env.BASE_URL}biblioteca/ficha-09-incertidumbre-indecision.pdf`,
+        tipo: 'pdf',
+      },
+    ],
   },
   {
     numero: 10,
