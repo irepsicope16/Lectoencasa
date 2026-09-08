@@ -48,7 +48,13 @@ export default function BibliotecaPage() {
                           <>
                             <div className="flex items-start justify-between gap-2">
                               <p className="text-[13px] font-semibold">{recurso.titulo}</p>
-                              {recurso.href && <Download className="h-3.5 w-3.5 shrink-0 text-primary" />}
+                              {recurso.href ? (
+                                <Download className="h-3.5 w-3.5 shrink-0 text-primary" />
+                              ) : (
+                                <span className="shrink-0 rounded-full bg-surface-2 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-faint">
+                                  Recomendación
+                                </span>
+                              )}
                             </div>
                             <p className="mt-1 text-[11.5px] font-medium text-faint">{recurso.autor}</p>
                             <p className="mt-1.5 line-clamp-3 text-[12px] leading-relaxed text-muted-foreground">
