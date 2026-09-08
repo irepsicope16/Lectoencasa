@@ -16,6 +16,7 @@ const ProDashboard = lazy(() => import('@/features/dashboard/ProDashboard'))
 const ConsultantsPage = lazy(() => import('@/features/consultants/ConsultantsPage'))
 const ConsultantDetailPage = lazy(() => import('@/features/consultants/ConsultantDetailPage'))
 const AgendaPage = lazy(() => import('@/features/sessions/AgendaPage'))
+const BibliotecaPage = lazy(() => import('@/features/biblioteca/BibliotecaPage'))
 const HonorariosPage = lazy(() => import('@/features/sessions/HonorariosPage'))
 const MethodOverviewPage = lazy(() => import('@/features/method/MethodOverviewPage'))
 const ModuleDetailProPage = lazy(() => import('@/features/method/ModuleDetailProPage'))
@@ -62,6 +63,7 @@ export const router = createHashRouter([
         element: <AppShell role="profesional" />,
         children: [
           { index: true, element: <Page><ProDashboard /></Page> },
+          { path: 'biblioteca', element: <Page><BibliotecaPage /></Page> },
           { path: 'consultantes', element: <Page><ConsultantsPage /></Page> },
           { path: 'consultantes/:id', element: <Page><ConsultantDetailPage /></Page> },
           { path: 'consultantes/:consultantId/actividades/:id', element: <Page><ActivityRunnerPage /></Page> },
