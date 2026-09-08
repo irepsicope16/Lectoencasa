@@ -72,13 +72,13 @@ export default function BibliotecaPage() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className={cn(
-                              'rounded-xl border border-primary/20 bg-primary-soft/50 p-3.5 transition-all hover:border-primary/40 hover:shadow-sm',
+                              'rounded-xl border-2 border-primary/35 bg-primary-soft/50 p-3.5 transition-all hover:border-primary/55 hover:shadow-sm',
                             )}
                           >
                             {contenido}
                           </a>
                         ) : (
-                          <div key={recurso.titulo} className="rounded-xl border border-dashed border-primary/25 bg-primary-soft/25 p-3.5">
+                          <div key={recurso.titulo} className="rounded-xl border-2 border-dashed border-primary/40 bg-primary-soft/25 p-3.5">
                             {contenido}
                           </div>
                         )
