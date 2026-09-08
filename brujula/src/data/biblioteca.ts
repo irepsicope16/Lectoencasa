@@ -130,7 +130,16 @@ export const BIBLIOTECA_PROFESIONAL: FichaProfesional[] = [
     numero: 7,
     bloque: 'Exploración',
     titulo: 'Nuevas formas de trabajo y trayectorias laborales',
-    recursos: [],
+    recursos: [
+      {
+        titulo: 'Nuevas formas de trabajo y trayectorias laborales: transformaciones del empleo y recorridos flexibles',
+        autor: 'Organización Internacional del Trabajo (OIT).',
+        descripcion:
+          'La relación tradicional entre estudiar una carrera e ingresar a una organización ya no representa todos los recorridos posibles. Trabajo remoto, plataformas digitales, freelance y emprendimientos amplían oportunidades pero también trasladan riesgos. Incluye escenarios laborales, aplicación en Método Brújula y preguntas para la sesión.',
+        href: `${import.meta.env.BASE_URL}biblioteca/ficha-07-nuevas-formas-trabajo.pdf`,
+        tipo: 'pdf',
+      },
+    ],
   },
   {
     numero: 8,
