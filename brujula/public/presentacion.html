@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Método Brújula</title>
+<meta name="description" content="Plataforma de orientación vocacional y ocupacional de la Lic. Irene Morbidelli: 5 etapas, 12 módulos, tests propios y un motor de análisis para acompañar cada proceso.">
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#F7F8F6;
+    --surface:#FFFFFF;
+    --surface-2:#F1F2EE;
+    --ink:#1D1F24;
+    --ink-soft:#62687A;
+    --teal:#14A098;
+    --teal-strong:#0E7F79;
+    --teal-soft:#E3F4F2;
+    --lilac:#8B87D4;
+    --lilac-strong:#6F6AC1;
+    --lilac-soft:#EDECF9;
+    --warning:#C08A2D;
+    --warning-soft:#FAF1DE;
+    --rose:#B3407A;
+    --rose-soft:#F9E7F0;
+    --danger:#D4574E;
+    --danger-soft:#FBEAE9;
+    --line:#E3E4E0;
+    --shadow: 0 1px 2px rgba(20,20,30,.04), 0 8px 24px -12px rgba(20,20,30,.16);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#15171B; --surface:#1B1D23; --surface-2:#22242B;
+      --ink:#E8E9EC; --ink-soft:#A4AAB6;
+      --teal:#2FB8AF; --teal-strong:#4FCCC3; --teal-soft:#12332F;
+      --lilac:#A29EE6; --lilac-strong:#B7B4EF; --lilac-soft:#262343;
+      --warning:#D8A54F; --warning-soft:#38301C;
+      --rose:#DD7CAE; --rose-soft:#3A2430;
+      --danger:#E2726A; --danger-soft:#3A221F;
+      --line:#2A2D35;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#15171B; --surface:#1B1D23; --surface-2:#22242B;
+    --ink:#E8E9EC; --ink-soft:#A4AAB6;
+    --teal:#2FB8AF; --teal-strong:#4FCCC3; --teal-soft:#12332F;
+    --lilac:#A29EE6; --lilac-strong:#B7B4EF; --lilac-soft:#262343;
+    --warning:#D8A54F; --warning-soft:#38301C;
+    --rose:#DD7CAE; --rose-soft:#3A2430;
+    --danger:#E2726A; --danger-soft:#3A221F;
+    --line:#2A2D35;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Public Sans', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-inline: max(20px, calc((100vw - 1180px)/2));
+    overflow-x:hidden;
+  }
+  h1,h2,h3{ font-family:'Fraunces', Georgia, serif; font-weight:600; line-height:1.08; text-wrap:balance; margin:0; color:var(--ink); }
+  p{ margin:0; }
+  a{ color:inherit; }
+  .eyebrow{ font-family:'IBM Plex Mono', monospace; font-size:13.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--teal-strong); }
+  .eyebrow.lilac{ color:var(--lilac-strong); }
+
+  section{ position:relative; padding-block: 84px; border-bottom:1px solid var(--line); }
+  section:last-of-type{ border-bottom:none; }
+  .wrap{ max-width:1180px; margin-inline:auto; }
+  .lede{ max-width:62ch; color:var(--ink-soft); font-size:16.5px; line-height:1.65; }
+
+  /* -------- nav -------- */
+  .nav{ display:flex; align-items:center; justify-content:space-between; padding-block:22px; gap:16px; flex-wrap:wrap; }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand svg{ width:30px; height:30px; flex-shrink:0; }
+  .brand-word{ font-family:'Fraunces', serif; font-weight:600; font-size:19px; }
+  .brand-word em{ font-style:normal; color:var(--teal-strong); }
+  .nav-cta{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; font-weight:700; letter-spacing:.04em;
+    text-decoration:none; background:var(--teal-strong); color:#F4FBFA; padding:11px 19px; border-radius:4px;
+    box-shadow: 0 8px 20px -8px rgba(14,127,121,.55), var(--shadow);
+    transition:transform .15s ease, background .15s ease; white-space:nowrap;
+  }
+  .nav-cta:hover{ background:var(--teal); transform:translateY(-1px); }
+  .wa-ico{ width:14px; height:14px; flex-shrink:0; }
+
+  /* -------- hero -------- */
+  .hero{ padding-block: 64px 92px; border-bottom:1px solid var(--line); }
+  .hero-center{ display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .hero-logo{ width:132px; height:132px; margin-top:22px; }
+  .hero-logo svg{ width:100%; height:100%; }
+  .hero-word{ font-size: clamp(42px, 6vw, 68px); margin-top:26px; letter-spacing:-.01em; }
+  .hero-word em{ font-style:normal; color:var(--teal-strong); }
+  .hero-tagline{ font-family:'Fraunces', serif; font-style:italic; font-weight:500; font-size:clamp(18px,2.3vw,23px); color:var(--lilac-strong); margin-top:10px; }
+  .hero-sub{ margin-top:24px; font-size:17px; color:var(--ink-soft); max-width:56ch; line-height:1.65; }
+  .credential{ margin-top:26px; display:flex; align-items:center; justify-content:center; gap:10px; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-soft); }
+  .credential .dot{ width:5px; height:5px; border-radius:50%; background:var(--lilac); }
+  .hero-actions{ margin-top:34px; display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+  .btn-primary{
+    display:inline-flex; align-items:center; gap:9px;
+    background:var(--lilac-strong); color:#FFFFFF; text-decoration:none;
+    font-weight:700; font-size:15px; padding:14px 26px; border-radius:4px;
+    box-shadow: 0 10px 24px -8px rgba(111,106,193,.55), var(--shadow);
+    transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary:hover{ transform:translateY(-2px); background:#5D57BE; box-shadow: 0 14px 28px -8px rgba(111,106,193,.65); }
+  .btn-secondary{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--teal-soft); color:var(--teal-strong); text-decoration:none;
+    font-weight:700; font-size:15px; padding:13px 24px; border-radius:4px;
+    border:1.5px solid var(--teal); transition:transform .15s ease, background .15s ease;
+  }
+  .btn-secondary:hover{ transform:translateY(-2px); background:var(--teal); color:#fff; }
+
+  .needle{ transform-origin:32px 32px; animation:sway 9s ease-in-out infinite; }
+  @keyframes sway{ 0%,100%{ transform:rotate(-6deg); } 50%{ transform:rotate(5deg); } }
+  @media (prefers-reduced-motion: reduce){ .needle{ animation:none; } }
+
+  /* -------- stats strip -------- */
+  .stats{ padding-block:40px; border-bottom:1px solid var(--line); }
+  .stats-row{ display:grid; grid-template-columns:repeat(5,1fr); gap:0; }
+  .stat{ padding-inline:22px; border-left:1px solid var(--line); }
+  .stat:first-child{ border-left:none; padding-left:0; }
+  .stat b{ display:block; font-family:'Fraunces', serif; font-weight:600; font-size:36px; color:var(--teal-strong); font-variant-numeric:tabular-nums; }
+  .stat:nth-child(2) b, .stat:nth-child(4) b{ color:var(--lilac-strong); }
+  .stat span{ display:block; margin-top:4px; font-size:12.5px; color:var(--ink-soft); line-height:1.4; }
+
+  /* -------- que es -------- */
+  .split{ display:grid; grid-template-columns: .8fr 1.2fr; gap:64px; }
+  .split .lede{ margin-top:16px; font-size:17px; max-width:none;}
+
+  /* -------- para quien -------- */
+  .audience{ display:grid; grid-template-columns:1fr 1fr; gap:0; margin-top:44px; border:1px solid var(--line); border-radius:4px; overflow:hidden; }
+  .audience > div{ padding:34px 36px; }
+  .audience > div:first-child{ background:var(--surface); border-right:1px solid var(--line); }
+  .audience > div:last-child{ background:var(--teal-strong); color:#F2FAF9; }
+  .audience h3{ font-size:22px; }
+  .audience > div:last-child h3{ color:#F2FAF9; }
+  .audience .role{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--lilac-strong); }
+  .audience > div:last-child .role{ color:#CFE9E5; }
+  .audience ul{ margin:18px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .audience li{ font-size:14.5px; line-height:1.5; padding-left:16px; position:relative; }
+  .audience li::before{ content:'—'; position:absolute; left:0; opacity:.6; }
+  .audience > div:first-child p{ color:var(--ink-soft); margin-top:10px; font-size:14.5px; line-height:1.55; }
+  .audience > div:last-child p{ color:#CFE9E5; margin-top:10px; font-size:14.5px; line-height:1.55; }
+
+  /* -------- la ruta / etapas -------- */
+  .route{ position:relative; margin-top:56px; padding-left:38px; }
+  .route::before{ content:''; position:absolute; left:9px; top:8px; bottom:8px; width:0; border-left:2px dashed var(--line); }
+  .waypoint{ position:relative; padding-bottom:52px; }
+  .waypoint:last-child{ padding-bottom:0; }
+  .waypoint::before{ content:''; position:absolute; left:-38px; top:2px; width:20px; height:20px; border-radius:50%; background:var(--surface); border:2px solid var(--stage); }
+  .waypoint::after{ content:''; position:absolute; left:-31px; top:9px; width:6px; height:6px; border-radius:50%; background:var(--stage); }
+  .waypoint:nth-child(1){ --stage:var(--teal-strong); }
+  .waypoint:nth-child(2){ --stage:var(--lilac-strong); }
+  .waypoint:nth-child(3){ --stage:var(--warning); }
+  .waypoint:nth-child(4){ --stage:var(--rose); }
+  .waypoint:nth-child(5){ --stage:var(--danger); }
+  .wp-head{ display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+  .wp-num{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--stage); font-weight:600; }
+  .waypoint h3{ font-size:23px; }
+  .wp-modules{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+  .wp-modules span{ font-size:13px; padding:7px 13px; border-radius:2px; background:var(--surface-2); border:1px solid var(--line); color:var(--ink-soft); }
+  .wp-modules span b{ color:var(--ink); font-weight:600; }
+
+  /* -------- motor brujula spotlight -------- */
+  .spotlight{ margin-top:20px; background:var(--teal-strong); color:#EAF9F7; border-radius:6px; padding:48px; display:grid; grid-template-columns:1.1fr .9fr; gap:44px; align-items:center; }
+  .spotlight .eyebrow{ color:#E4E1F7; }
+  .spotlight h3{ color:#FBFEFD; font-size:28px; margin-top:10px; }
+  .spotlight p{ color:#D3F1EE; margin-top:14px; font-size:15px; line-height:1.65; }
+  .spotlight-outputs{ display:flex; flex-direction:column; gap:14px; }
+  .output-card{ background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.20); border-radius:4px; padding:16px 18px; }
+  .output-card .eyebrow{ font-size:10.5px; color:#F0EEFC; }
+  .output-card p{ color:#F5FEFD; font-size:14px; margin-top:6px; }
+
+  /* -------- recursos grid -------- */
+  .grid3{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); margin-top:44px; border:1px solid var(--line); border-radius:4px; overflow:hidden; }
+  .cardx{ background:var(--surface); padding:26px 26px 28px; border-top:3px solid var(--teal); }
+  .cardx:nth-child(3n+2){ border-top-color:var(--lilac); }
+  .cardx:nth-child(3n){ border-top-color:var(--warning); }
+  .cardx .num{ font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:700; color:var(--teal-strong); }
+  .cardx:nth-child(3n+2) .num{ color:var(--lilac-strong); }
+  .cardx:nth-child(3n) .num{ color:var(--warning); }
+  .cardx h4{ font-family:'Fraunces',serif; font-weight:600; font-size:18.5px; margin-top:10px; }
+  .cardx p{ margin-top:9px; font-size:13.8px; line-height:1.55; color:var(--ink-soft); }
+
+  /* -------- tests -------- */
+  .tests{ margin-top:20px; border-top:1px solid var(--line); }
+  .test-row{ display:grid; grid-template-columns: 2fr 1fr 1fr; gap:20px; align-items:center; padding-block:20px; border-bottom:1px solid var(--line); }
+  .test-row .t-name{ font-family:'Fraunces',serif; font-size:17px; font-weight:600; }
+  .test-row .t-meta{ font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--ink-soft); }
+  .test-row .t-base{ font-size:13.5px; color:var(--ink-soft); }
+
+  /* -------- logbook / beneficios -------- */
+  .logbook{ margin-top:44px; background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:8px 0; }
+  .log-entry{ display:grid; grid-template-columns: 90px 1fr; gap:22px; padding:20px 32px; border-bottom:1px dashed var(--line); }
+  .log-entry:last-child{ border-bottom:none; }
+  .log-entry .l-tag{ font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:700; color:var(--teal-strong); padding-top:3px; }
+  .log-entry:nth-child(2) .l-tag{ color:var(--lilac-strong); }
+  .log-entry:nth-child(3) .l-tag{ color:var(--warning); }
+  .log-entry:nth-child(4) .l-tag{ color:var(--rose); }
+  .log-entry:nth-child(5) .l-tag{ color:var(--danger); }
+  .log-entry p{ font-size:15px; line-height:1.6; }
+  .log-entry p b{ font-weight:600; }
+
+  /* -------- sobre / credibility -------- */
+  .about{ display:grid; grid-template-columns: .7fr 1.3fr; gap:56px; align-items:center; }
+  .about-photo{ aspect-ratio:1; border-radius:6px; background:var(--teal-soft); display:flex; align-items:center; justify-content:center; border:1px solid var(--line); }
+  .about-photo svg{ width:46%; height:46%; }
+  .quote{ font-family:'Fraunces', serif; font-style:italic; font-size:24px; line-height:1.45; color:var(--ink); }
+  .quote + .qsig{ margin-top:20px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--ink-soft); }
+
+  /* -------- cta final -------- */
+  .cta-final{ text-align:center; padding-block:100px; }
+  .cta-final h2{ font-size:clamp(28px,4vw,42px); max-width:16ch; margin-inline:auto; }
+  .cta-final .lede{ margin-inline:auto; margin-top:16px; text-align:center; }
+  .cta-final .btn-primary{ margin-top:30px; font-size:16.5px; padding:16px 30px; }
+  .domain-tag{ display:inline-block; margin-top:22px; font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:13px; color:var(--lilac-strong); background:var(--lilac-soft); border:1px solid var(--lilac); padding:7px 16px; border-radius:20px; }
+
+  footer{ padding-block:34px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+  footer .eyebrow{ color:var(--ink-soft); }
+
+  @media (max-width: 860px){
+    .hero-grid, .split, .audience, .about, .spotlight{ grid-template-columns:1fr; }
+    .audience > div:first-child{ border-right:none; border-bottom:1px solid var(--line); }
+    .stats-row{ grid-template-columns:repeat(2,1fr); row-gap:24px; }
+    .stat{ border-left:none !important; padding-inline:0 !important; }
+    .grid3{ grid-template-columns:1fr; }
+    .test-row{ grid-template-columns:1fr; gap:6px; }
+    .hero{ padding-block:20px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<div class="nav">
+  <div class="brand">
+    <svg viewBox="0 0 64 64" fill="none">
+      <circle cx="32" cy="32" r="29" stroke="var(--teal)" stroke-width="3.5"/>
+      <circle cx="32" cy="7.5" r="1.6" fill="var(--lilac)"/>
+      <circle cx="32" cy="56.5" r="1.6" fill="var(--lilac)"/>
+      <circle cx="7.5" cy="32" r="1.6" fill="var(--lilac)"/>
+      <circle cx="56.5" cy="32" r="1.6" fill="var(--lilac)"/>
+      <path d="M32 13 L36 32 L32 36 L28 32 Z" fill="var(--lilac)"/>
+      <path d="M32 51 L28 32 L32 28 L36 32 Z" fill="var(--lilac)" opacity="0.55"/>
+      <path d="M13 32 L32 28 L36 32 L32 36 Z" fill="var(--lilac)" opacity="0.55"/>
+      <path d="M51 32 L32 36 L28 32 L32 28 Z" fill="var(--lilac)"/>
+      <path d="M46.5 17.5 L34.5 29.5 L32 32 L34.9 34.9 Z" fill="var(--teal)"/>
+      <path d="M46.5 17.5 L34.9 34.9 L32 32 L29.5 29.5 Z" fill="var(--teal)" opacity="0.45"/>
+      <circle cx="32" cy="32" r="4.2" fill="var(--surface)" stroke="var(--teal)" stroke-width="2.5"/>
+    </svg>
+    <span class="brand-word">Método <em>Brújula</em></span>
+  </div>
+  <a class="nav-cta" href="https://wa.me/5492216185376?text=Hola%20Irene%2C%20quiero%20conocer%20M%C3%A9todo%20Br%C3%BAjula.">
+    <svg class="wa-ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.29-1.38a9.9 9.9 0 0 0 4.7 1.2h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2Zm5.8 14.1c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.13.11-1.82-.12-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.79-4.17-4.94-4.36-.14-.2-1.18-1.57-1.18-3 0-1.42.75-2.12 1.02-2.41.27-.29.58-.36.78-.36l.56.01c.18 0 .42-.07.65.5.24.58.82 2 .89 2.15.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.16-.29.36-.42.48-.14.14-.28.28-.12.55.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.21 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.18-.28.37-.23.62-.14.26.09 1.63.77 1.91.91.28.14.47.21.53.33.07.12.07.68-.17 1.36Z"/></svg>
+    HABLEMOS POR WHATSAPP
+  </a>
+</div>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-center">
+    <p class="eyebrow">Orientación Vocacional y Ocupacional</p>
+    <div class="hero-logo">
+      <svg viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="29" stroke="var(--teal)" stroke-width="3.5"/>
+        <circle cx="32" cy="7.5" r="1.6" fill="var(--lilac)"/>
+        <circle cx="32" cy="56.5" r="1.6" fill="var(--lilac)"/>
+        <circle cx="7.5" cy="32" r="1.6" fill="var(--lilac)"/>
+        <circle cx="56.5" cy="32" r="1.6" fill="var(--lilac)"/>
+        <path d="M32 13 L36 32 L32 36 L28 32 Z" fill="var(--lilac)"/>
+        <path d="M32 51 L28 32 L32 28 L36 32 Z" fill="var(--lilac)" opacity="0.55"/>
+        <path d="M13 32 L32 28 L36 32 L32 36 Z" fill="var(--lilac)" opacity="0.55"/>
+        <path d="M51 32 L32 36 L28 32 L32 28 Z" fill="var(--lilac)"/>
+        <g class="needle">
+          <path d="M46.5 17.5 L34.5 29.5 L32 32 L34.9 34.9 Z" fill="var(--teal)"/>
+          <path d="M46.5 17.5 L34.9 34.9 L32 32 L29.5 29.5 Z" fill="var(--teal)" opacity="0.45"/>
+          <circle cx="32" cy="32" r="4.2" fill="var(--surface)" stroke="var(--teal)" stroke-width="2.5"/>
+        </g>
+      </svg>
+    </div>
+    <h1 class="hero-word">Método <em>Brújula</em></h1>
+    <p class="hero-tagline">Encontrá tu norte. Construí tu camino.</p>
+    <p class="hero-sub">Convierte un proceso de orientación vocacional en un recorrido guiado: 5 etapas, 12 módulos, tests propios y un motor de análisis que acompaña a la profesional en cada encuentro con su consultante.</p>
+    <div class="credential"><span class="dot"></span> Creado por Lic. Irene Morbidelli · Psicopedagoga · M.P. 260505</div>
+    <div class="hero-actions">
+      <a class="btn-primary" href="https://wa.me/5492216185376?text=Hola%20Irene%2C%20quiero%20conocer%20M%C3%A9todo%20Br%C3%BAjula.">Quiero conocerlo →</a>
+      <a class="btn-secondary" href="#la-ruta">Ver cómo está armado</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS ============ -->
+<section class="stats">
+  <div class="wrap stats-row">
+    <div class="stat"><b>5</b><span>Etapas del proceso</span></div>
+    <div class="stat"><b>12</b><span>Módulos de trabajo</span></div>
+    <div class="stat"><b>30+</b><span>Actividades propias</span></div>
+    <div class="stat"><b>4</b><span>Tests internos</span></div>
+    <div class="stat"><b>26</b><span>Campos profesionales para explorar</span></div>
+  </div>
+</section>
+
+<!-- ============ QUE ES ============ -->
+<section>
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">Qué es</p>
+      <h2 style="font-size:32px; margin-top:14px;">Un método, no un test suelto</h2>
+    </div>
+    <div>
+      <p class="lede">Método Brújula es una plataforma digital que sistematiza el proceso de orientación vocacional y ocupacional. No entrega un resultado aislado ni reduce a nadie a un porcentaje: acompaña un recorrido completo, con actividades, tests propios y un motor de análisis que va integrando cada dato que aparece a lo largo del proceso.</p>
+      <p class="lede" style="margin-top:16px;">Cada profesional se registra con sus propios datos y arma su consultorio digital: todo lo que crea a partir de ahí — fichas, sesiones, informes — queda guardado a su nombre. Cada consultante, a su vez, tiene su propia ficha y su propio espacio de trabajo, pensado para avanzar tanto en sesión como entre encuentros, a su ritmo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PARA QUIEN ============ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow lilac">Para quién es</p>
+    <div class="audience">
+      <div>
+        <p class="role">Profesionales</p>
+        <h3>Psicólogos, psicopedagogos y pedagogos</h3>
+        <p>También trabajadores sociales, docentes, psicoanalistas y cualquier profesional interesado en acompañar procesos de Orientación Vocacional y Ocupacional (OVO) — de forma individual o en grupos muy chicos, de hasta 3 personas.</p>
+        <ul>
+          <li>Se registra con su propia cuenta: todo lo que carga queda guardado a su nombre, de forma privada.</li>
+          <li>Arma su consultorio digital completo, con agenda, honorarios e informes.</li>
+          <li>Usa contenido ya elaborado, probado y respaldado en autores de referencia.</li>
+        </ul>
+      </div>
+      <div>
+        <p class="role">El consultante</p>
+        <h3>Adolescentes definiendo qué estudiar</h3>
+        <p>Estudiantes que están terminando el secundario, o que ya lo terminaron, y necesitan pensar hacia dónde encaminar su formación.</p>
+        <ul>
+          <li>Tiene su propio usuario, con actividades y tests a su ritmo.</li>
+          <li>Nunca ve un puntaje ni una etiqueta — solo su propio proceso.</li>
+          <li>Llega a cada sesión con material propio ya trabajado.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LA RUTA ============ -->
+<section id="la-ruta">
+  <div class="wrap">
+    <p class="eyebrow">Cómo está armado</p>
+    <h2 style="font-size:32px; margin-top:14px;">Cinco etapas, un mismo rumbo</h2>
+    <p class="lede" style="margin-top:14px;">El recorrido avanza en un solo sentido, de la introspección a la acción concreta. Cada etapa agrupa los módulos que la componen.</p>
+
+    <div class="route">
+      <div class="waypoint">
+        <div class="wp-head"><span class="wp-num">ETAPA 01</span><h3>Conocerte</h3></div>
+        <div class="wp-modules"><span><b>01</b> · Historia</span><span><b>02</b> · Identidad</span></div>
+      </div>
+      <div class="waypoint">
+        <div class="wp-head"><span class="wp-num">ETAPA 02</span><h3>Valorarte</h3></div>
+        <div class="wp-modules"><span><b>03</b> · Valores</span><span><b>04</b> · Deseos</span><span><b>05</b> · Mandatos</span></div>
+      </div>
+      <div class="waypoint">
+        <div class="wp-head"><span class="wp-num">ETAPA 03</span><h3>Explorar</h3></div>
+        <div class="wp-modules"><span><b>06</b> · Fortalezas</span><span><b>07</b> · Intereses</span><span><b>08</b> · Aptitudes</span><span><b>09</b> · Exploración</span></div>
+      </div>
+      <div class="waypoint">
+        <div class="wp-head"><span class="wp-num">ETAPA 04</span><h3>Decidir</h3></div>
+        <div class="wp-modules"><span><b>10</b> · Proyecto de Vida</span><span><b>11</b> · Carreras</span></div>
+      </div>
+      <div class="waypoint">
+        <div class="wp-head"><span class="wp-num">ETAPA 05</span><h3>Actuar</h3></div>
+        <div class="wp-modules"><span><b>12</b> · Plan de Acción</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MOTOR BRUJULA ============ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">El corazón del método</p>
+    <div class="spotlight">
+      <div>
+        <p class="eyebrow">Motor Brújula</p>
+        <h3>Cruza toda la evidencia del proceso — y siempre explica por qué</h3>
+        <p>Actividades, tests, sesiones, observaciones y reflexiones se integran en un mismo análisis. Ninguna sugerencia aparece como un porcentaje frío: cada una viene acompañada de la evidencia concreta que la sostiene, para que la profesional decida con su propio criterio.</p>
+      </div>
+      <div class="spotlight-outputs">
+        <div class="output-card"><p class="eyebrow">Perfil Brújula</p><p>Síntesis por dimensión, con evidencias reales del proceso.</p></div>
+        <div class="output-card"><p class="eyebrow">Mapa Brújula</p><p>Un radar visual interno del recorrido hasta el momento.</p></div>
+        <div class="output-card"><p class="eyebrow">Carta de Navegación</p><p>Áreas profesionales sugeridas, siempre con sus motivos.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTS ============ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Instrumentos propios</p>
+    <h2 style="font-size:32px; margin-top:14px;">Cuatro tests, de elaboración propia</h2>
+    <p class="lede" style="margin-top:14px;">Cada uno de 15 a 20 minutos. El puntaje es siempre de uso profesional — el consultante nunca ve un número.</p>
+    <div class="tests">
+      <div class="test-row">
+        <div class="t-name">Test de Intereses Profesionales</div>
+        <div class="t-meta">24 ítems · 12 áreas</div>
+        <div class="t-base">Catálogo de campos vocacionales</div>
+      </div>
+      <div class="test-row">
+        <div class="t-name">Cuestionario de Aptitudes</div>
+        <div class="t-meta">20 ítems · 10 aptitudes</div>
+        <div class="t-base">Facilidades naturales de pensar y hacer</div>
+      </div>
+      <div class="test-row">
+        <div class="t-name">Test de Inteligencias Múltiples</div>
+        <div class="t-meta">24 ítems · 8 inteligencias</div>
+        <div class="t-base">Modelo de Howard Gardner</div>
+      </div>
+      <div class="test-row">
+        <div class="t-name">Test de Estilo Personal</div>
+        <div class="t-meta">20 ítems · 5 rasgos</div>
+        <div class="t-base">Modelo de los Cinco Grandes</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RECURSOS GRID ============ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow lilac">Todo lo demás que incluye</p>
+    <h2 style="font-size:32px; margin-top:14px;">Un consultorio digital completo</h2>
+    <div class="grid3">
+      <div class="cardx">
+        <p class="num">01</p>
+        <h4>Ficha por consultante</h4>
+        <p>Historia completa de cada proceso. Al terminar, se archiva sin perder nada — para mantener despejada la vista y seguir trabajando con otros consultantes.</p>
+      </div>
+      <div class="cardx">
+        <p class="num">02</p>
+        <h4>Agenda y sesiones registradas</h4>
+        <p>Turnos organizados, y cada encuentro se puede escribir y guardar dentro de la misma app como parte del proceso.</p>
+      </div>
+      <div class="cardx">
+        <p class="num">03</p>
+        <h4>Honorarios</h4>
+        <p>Registrá lo que cobrás en cada sesión, generá los recibos y llevá un control claro de tus ingresos del consultorio.</p>
+      </div>
+      <div class="cardx">
+        <p class="num">04</p>
+        <h4>Estadísticas</h4>
+        <p>Un panel con la actividad general del consultorio: consultantes, procesos activos y avance del método.</p>
+      </div>
+      <div class="cardx">
+        <p class="num">05</p>
+        <h4>Mapa y Comparador de Carreras</h4>
+        <p>26 grandes campos profesionales para explorar antes de definir finalistas, y un comparador para contrastarlos lado a lado.</p>
+      </div>
+      <div class="cardx">
+        <p class="num">06</p>
+        <h4>Biblioteca para el profesional</h4>
+        <p>10 fichas de formación continua, con teoría, autores de referencia y claves para la práctica.</p>
+      </div>
+      <div class="cardx">
+        <p class="num">07</p>
+        <h4>Recursos por módulo</h4>
+        <p>Videos, imprimibles y material para enviar por WhatsApp o trabajar en sesión. Cada recurso se asigna como tarea, con su estado — pendiente o realizada — siempre visible.</p>
+      </div>
+      <div class="cardx">
+        <p class="num">08</p>
+        <h4>Asistente de IA</h4>
+        <p>Resúmenes de sesión, preguntas sugeridas e hipótesis de trabajo — siempre como borrador editable.</p>
+      </div>
+      <div class="cardx">
+        <p class="num">09</p>
+        <h4>Informes imprimibles</h4>
+        <p>Documentos listos para entregar al consultante y su familia al finalizar el proceso.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BENEFICIOS / LOGBOOK ============ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Los beneficios, en criollo</p>
+    <h2 style="font-size:32px; margin-top:14px;">Por qué lo eligen las profesionales</h2>
+    <div class="logbook">
+      <div class="log-entry"><span class="l-tag">TIEMPO</span><p><b>Ahorra horas de preparación:</b> el contenido de cada encuentro ya está armado, probado y respaldado en autores como Bohoslavsky, Rascovan, Savickas o Gelatt.</p></div>
+      <div class="log-entry"><span class="l-tag">ORDEN</span><p><b>Todo queda registrado:</b> se terminan las carpetas con hojas sueltas — cada ficha, sesión y respuesta vive en un mismo lugar, a nombre de la profesional.</p></div>
+      <div class="log-entry"><span class="l-tag">RITMO</span><p><b>El consultante avanza a su propio paso</b> entre sesión y sesión, sin perder continuidad en el proceso.</p></div>
+      <div class="log-entry"><span class="l-tag">CRITERIO</span><p><b>Ninguna sugerencia reemplaza el juicio profesional:</b> el Motor Brújula siempre explica su evidencia, nunca decide solo.</p></div>
+      <div class="log-entry"><span class="l-tag">ALCANCE</span><p><b>Funciona en cualquier dispositivo</b> con navegador: celular, tablet o computadora, sin instalar nada.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOBRE ============ -->
+<section>
+  <div class="wrap about">
+    <div class="about-photo">
+      <svg viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="29" stroke="var(--teal)" stroke-width="3.5"/>
+        <circle cx="32" cy="7.5" r="1.6" fill="var(--lilac)"/>
+        <circle cx="32" cy="56.5" r="1.6" fill="var(--lilac)"/>
+        <circle cx="7.5" cy="32" r="1.6" fill="var(--lilac)"/>
+        <circle cx="56.5" cy="32" r="1.6" fill="var(--lilac)"/>
+        <path d="M32 13 L36 32 L32 36 L28 32 Z" fill="var(--lilac)"/>
+        <path d="M32 51 L28 32 L32 28 L36 32 Z" fill="var(--lilac)" opacity="0.55"/>
+        <path d="M13 32 L32 28 L36 32 L32 36 Z" fill="var(--lilac)" opacity="0.55"/>
+        <path d="M51 32 L32 36 L28 32 L32 28 Z" fill="var(--lilac)"/>
+        <path d="M46.5 17.5 L34.5 29.5 L32 32 L34.9 34.9 Z" fill="var(--teal)"/>
+        <path d="M46.5 17.5 L34.9 34.9 L32 32 L29.5 29.5 Z" fill="var(--teal)" opacity="0.45"/>
+        <circle cx="32" cy="32" r="4.2" fill="var(--surface)" stroke="var(--teal)" stroke-width="2.5"/>
+      </svg>
+    </div>
+    <div>
+      <p class="eyebrow lilac">Quién lo creó</p>
+      <p class="quote" style="margin-top:16px;">“Orientar no es aplicar un test: es acompañar a alguien a encontrar su rumbo.”</p>
+      <p class="qsig">LIC. IRENE MORBIDELLI · PSICOPEDAGOGA · M.P. 260505</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA FINAL ============ -->
+<section class="cta-final">
+  <p class="eyebrow">¿Sumamos tu consultorio?</p>
+  <h2>Empezá a trabajar con Método Brújula</h2>
+  <p class="lede">Contame un poco de tu práctica y te cuento cómo ponerlo en marcha.</p>
+  <a class="btn-primary" href="https://wa.me/5492216185376?text=Hola%20Irene%2C%20quiero%20conocer%20M%C3%A9todo%20Br%C3%BAjula.">
+    <svg class="wa-ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.29-1.38a9.9 9.9 0 0 0 4.7 1.2h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2Zm5.8 14.1c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.13.11-1.82-.12-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.79-4.17-4.94-4.36-.14-.2-1.18-1.57-1.18-3 0-1.42.75-2.12 1.02-2.41.27-.29.58-.36.78-.36l.56.01c.18 0 .42-.07.65.5.24.58.82 2 .89 2.15.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.16-.29.36-.42.48-.14.14-.28.28-.12.55.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.21 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.18-.28.37-.23.62-.14.26.09 1.63.77 1.91.91.28.14.47.21.53.33.07.12.07.68-.17 1.36Z"/></svg>
+    Hablemos por WhatsApp
+  </a>
+  <div><span class="domain-tag">metodobrujula.ar</span></div>
+</section>
+
+<footer>
+  <span class="eyebrow">© Método Brújula · Lic. Irene Morbidelli</span>
+  <span class="eyebrow">Orientación vocacional y ocupacional</span>
+</footer>
+
+</body>
+</html>
