@@ -1,4 +1,5 @@
 import { db } from './db'
+import { isCloudEnabled } from '@/services/cloud/config'
 
 // Export/import de TODOS los datos como JSON versionado.
 // Mientras la persistencia sea LocalStorage, esta es la copia de seguridad
@@ -34,6 +35,13 @@ interface BackupFile {
 export async function exportBackup(): Promise<void> {
   const data = {} as BackupFile['data']
   for (const name of COLLECTIONS) {
+    // En modo nube el login lo maneja Supabase Auth: no existe una tabla
+    // 'users' propia, así que esa colección no aplica (evita abortar todo
+    // el export por una tabla que nunca debió consultarse).
+    if (name === 'users' && isCloudEnabled()) {
+      data[name] = []
+      continue
+    }
     data[name] = await (db[name] as { list: () => Promise<unknown[]> }).list()
   }
   const payload: BackupFile = {
