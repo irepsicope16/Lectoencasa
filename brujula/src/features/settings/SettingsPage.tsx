@@ -442,8 +442,12 @@ export default function SettingsPage() {
             <Button
               size="sm"
               onClick={async () => {
-                await exportBackup()
-                toast.success('Copia de seguridad descargada')
+                try {
+                  await exportBackup()
+                  toast.success('Copia de seguridad descargada')
+                } catch (e) {
+                  toast.error(e instanceof Error ? e.message : 'No se pudo generar la copia de seguridad')
+                }
               }}
             >
               <Download /> Exportar copia de seguridad
