@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { Cloud, CloudUpload, Database, Download, Eye, IdCard, Moon, Paintbrush, RefreshCcw, Sparkles, Sun, Upload } from 'lucide-react'
-import { exportBackup, importBackup } from '@/services/storage/backup'
+import { prepareBackup, importBackup, type PreparedBackup } from '@/services/storage/backup'
 import { getCloudConfig, isCloudEnabled, saveCloudConfig } from '@/services/cloud/config'
 import { toast } from '@/components/ui/toast'
 import { FadeIn, PageHeader } from '@/components/shared'
@@ -36,6 +36,8 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false)
   const [resetOpen, setResetOpen] = useState(false)
   const importRef = useRef<HTMLInputElement>(null)
+  const [backupReady, setBackupReady] = useState<PreparedBackup | null>(null)
+  const [backupPreparing, setBackupPreparing] = useState(false)
 
   const [perfil, setPerfil] = useState({
     nombre: user?.nombre ?? '',
@@ -439,19 +441,40 @@ export default function SettingsPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-wrap items-center gap-2">
-            <Button
-              size="sm"
-              onClick={async () => {
-                try {
-                  await exportBackup()
-                  toast.success('Copia de seguridad descargada')
-                } catch (e) {
-                  toast.error(e instanceof Error ? e.message : 'No se pudo generar la copia de seguridad')
-                }
-              }}
-            >
-              <Download /> Exportar copia de seguridad
-            </Button>
+            {backupReady ? (
+              <Button size="sm" asChild>
+                <a
+                  href={backupReady.url}
+                  download={backupReady.filename}
+                  onClick={() => {
+                    toast.success('Copia de seguridad descargada')
+                    setTimeout(() => {
+                      URL.revokeObjectURL(backupReady.url)
+                      setBackupReady(null)
+                    }, 0)
+                  }}
+                >
+                  <Download /> Descargar {backupReady.filename}
+                </a>
+              </Button>
+            ) : (
+              <Button
+                size="sm"
+                disabled={backupPreparing}
+                onClick={async () => {
+                  setBackupPreparing(true)
+                  try {
+                    setBackupReady(await prepareBackup())
+                  } catch (e) {
+                    toast.error(e instanceof Error ? e.message : 'No se pudo generar la copia de seguridad')
+                  } finally {
+                    setBackupPreparing(false)
+                  }
+                }}
+              >
+                <Download /> {backupPreparing ? 'Preparando…' : 'Exportar copia de seguridad'}
+              </Button>
+            )}
             <Button variant="outline" size="sm" onClick={() => importRef.current?.click()}>
               <Upload /> Importar copia
             </Button>

@@ -32,7 +32,18 @@ interface BackupFile {
   data: Record<CollectionName, unknown[]>
 }
 
-export async function exportBackup(): Promise<void> {
+export interface PreparedBackup {
+  url: string
+  filename: string
+}
+
+// En modo nube, armar el backup implica varias consultas de red seguidas
+// (una por colección). Si además disparáramos la descarga automáticamente
+// al terminar, el navegador puede considerar que ya pasó demasiado tiempo
+// desde el click original y bloquearla en silencio (sin error ni aviso).
+// Por eso separamos "preparar" (async, puede tardar) de "descargar"
+// (un <a href download> real que el usuario clickea, sin JS de por medio).
+export async function prepareBackup(): Promise<PreparedBackup> {
   const data = {} as BackupFile['data']
   for (const name of COLLECTIONS) {
     // En modo nube el login lo maneja Supabase Auth: no existe una tabla
@@ -51,13 +62,10 @@ export async function exportBackup(): Promise<void> {
     data,
   }
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' })
-  const a = document.createElement('a')
-  a.href = URL.createObjectURL(blob)
-  a.download = `metodo-brujula-backup-${new Date().toISOString().slice(0, 10)}.json`
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(a.href)
+  return {
+    url: URL.createObjectURL(blob),
+    filename: `metodo-brujula-backup-${new Date().toISOString().slice(0, 10)}.json`,
+  }
 }
 
 export async function importBackup(file: File): Promise<{ ok: boolean; error?: string }> {
