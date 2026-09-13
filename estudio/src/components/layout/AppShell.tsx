@@ -4,8 +4,9 @@ import { X } from 'lucide-react'
 import { Sidebar } from './Sidebar'
 import { Navbar } from './Navbar'
 import { useUIStore } from '@/stores/uiStore'
+import type { UserRole } from '@/types'
 
-export function AppShell() {
+export function AppShell({ role }: { role: UserRole }) {
   const mobileNavOpen = useUIStore((s) => s.mobileNavOpen)
   const setMobileNavOpen = useUIStore((s) => s.setMobileNavOpen)
   const location = useLocation()
@@ -17,14 +18,14 @@ export function AppShell() {
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background">
       <div className="hidden lg:flex">
-        <Sidebar />
+        <Sidebar role={role} />
       </div>
 
       {mobileNavOpen && (
         <>
           <div className="fixed inset-0 z-40 bg-black/30 lg:hidden" onClick={() => setMobileNavOpen(false)} />
           <div className="fixed inset-y-0 left-0 z-50 lg:hidden">
-            <Sidebar />
+            <Sidebar role={role} />
             <button
               onClick={() => setMobileNavOpen(false)}
               className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-md bg-surface-2 text-muted-foreground"

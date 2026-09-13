@@ -24,7 +24,8 @@ export default function LoginPage() {
       setError(res.error)
       return
     }
-    navigate('/pro')
+    const loggedUser = useAuthStore.getState().user
+    navigate(loggedUser?.role === 'estudiante' ? '/mi' : '/pro')
   }
 
   return (
@@ -32,7 +33,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="mb-6 flex flex-col items-center gap-2 text-center">
           <BrandCover className="max-w-[220px]" />
-          <p className="text-[13px] text-muted-foreground">Acceso profesional</p>
+          <p className="text-[13px] text-muted-foreground">Acceso a la plataforma</p>
         </div>
         <Card>
           <CardContent className="pt-5">
@@ -51,7 +52,9 @@ export default function LoginPage() {
               </Button>
             </form>
             <p className="mt-4 text-center text-[12px] text-faint">
-              Cuenta demo precargada: <span className="font-medium text-muted-foreground">irene@metodoestudio.demo</span> / <span className="font-medium text-muted-foreground">estudio</span>
+              Cuenta demo profesional: <span className="font-medium text-muted-foreground">irene@metodoestudio.demo</span> / <span className="font-medium text-muted-foreground">estudio</span>
+              <br />
+              Cuenta demo estudiante: <span className="font-medium text-muted-foreground">camila.tutor@demo.com</span> / <span className="font-medium text-muted-foreground">estudio</span>
             </p>
           </CardContent>
         </Card>
