@@ -77,6 +77,32 @@ export default function ModuleDetailProPage() {
                   </ul>
                 </div>
               ))}
+              {mod.id === 'proyecto_vida' && (
+                <div className="rounded-lg border border-dashed p-3.5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="text-[13.5px] font-medium">Mapa de Carreras</p>
+                    <Badge variant="aqua">Herramienta interactiva</Badge>
+                  </div>
+                  <p className="mt-1 text-[12.5px] text-muted-foreground">
+                    Recorrido por 26 campos de estudio/trabajo, marcando la primera reacción a cada uno (me
+                    interesa, quiero saber más, no me interesa). Se completa desde la ficha de cada consultante,
+                    pestaña Módulos → este módulo.
+                  </p>
+                </div>
+              )}
+              {mod.id === 'carreras' && (
+                <div className="rounded-lg border border-dashed p-3.5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="text-[13.5px] font-medium">Comparador de Carreras</p>
+                    <Badge variant="aqua">Herramienta interactiva</Badge>
+                  </div>
+                  <p className="mt-1 text-[12.5px] text-muted-foreground">
+                    Carga hasta 3 carreras finalistas y las valora con el consultante según 5 criterios propios
+                    (entusiasmo, valores, estilo de vida, salida laboral, viabilidad). Se completa desde la
+                    ficha de cada consultante, pestaña Módulos → este módulo.
+                  </p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
