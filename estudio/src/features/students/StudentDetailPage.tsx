@@ -9,6 +9,7 @@ import { ResumenTab } from './tabs/ResumenTab'
 import { EntrevistaTab } from './tabs/EntrevistaTab'
 import { AutoperfilTab } from './tabs/AutoperfilTab'
 import { IntegracionTab } from './tabs/IntegracionTab'
+import { EvaluacionTab } from './tabs/EvaluacionTab'
 import { PrioridadesTab } from './tabs/PrioridadesTab'
 import { PlanTab } from './tabs/PlanTab'
 import { SessionsTab } from './tabs/SessionsTab'
@@ -47,6 +48,7 @@ export default function StudentDetailPage() {
           <TabsTrigger value="entrevista">Entrevista</TabsTrigger>
           <TabsTrigger value="autoperfil">Autoperfil</TabsTrigger>
           <TabsTrigger value="integracion">Integración</TabsTrigger>
+          <TabsTrigger value="evaluacion">Evaluación</TabsTrigger>
           <TabsTrigger value="prioridades">Prioridades</TabsTrigger>
           <TabsTrigger value="plan">Plan</TabsTrigger>
           <TabsTrigger value="sesiones">Sesiones</TabsTrigger>
@@ -62,6 +64,9 @@ export default function StudentDetailPage() {
         </TabsContent>
         <TabsContent value="integracion">
           <IntegracionTab student={student} />
+        </TabsContent>
+        <TabsContent value="evaluacion">
+          <EvaluacionTab student={student} />
         </TabsContent>
         <TabsContent value="prioridades">
           <PrioridadesTab student={student} />

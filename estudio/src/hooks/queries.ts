@@ -10,6 +10,7 @@ import type {
   PriorityDecision,
   QuestionnaireResponse,
   Session,
+  StoredFile,
   Student,
 } from '@/types'
 
@@ -309,5 +310,34 @@ export function useDeleteEvent() {
   return useMutation({
     mutationFn: (id: string) => db.events.remove(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['events'] }),
+  })
+}
+
+// ---------- Evaluación (archivos: screenings, tests) ----------
+
+export function useFiles(studentId?: string) {
+  return useQuery({
+    queryKey: ['files', studentId],
+    queryFn: async () => {
+      const rows = await db.files.query((f) => f.studentId === studentId)
+      return rows.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    },
+    enabled: !!studentId,
+  })
+}
+
+export function useCreateFile() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (data: Omit<StoredFile, 'id' | 'createdAt' | 'updatedAt'>) => db.files.create(data),
+    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['files', vars.studentId] }),
+  })
+}
+
+export function useDeleteFile() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => db.files.remove(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['files'] }),
   })
 }

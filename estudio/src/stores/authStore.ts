@@ -3,15 +3,18 @@ import { persist } from 'zustand/middleware'
 import type { User } from '@/types'
 import { db } from '@/services/storage/db'
 
+type ProfileEditable = Pick<User, 'nombre' | 'apellido' | 'titulo'>
+
 interface AuthState {
   user: User | null
   login: (email: string, password: string) => Promise<{ ok: boolean; error?: string }>
   logout: () => void
+  updateProfile: (patch: Partial<ProfileEditable>) => Promise<void>
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       login: async (email, password) => {
         const users = await db.users.list()
@@ -22,6 +25,12 @@ export const useAuthStore = create<AuthState>()(
         return { ok: true }
       },
       logout: () => set({ user: null }),
+      updateProfile: async (patch) => {
+        const current = get().user
+        if (!current) return
+        await db.users.update(current.id, patch)
+        set({ user: { ...current, ...patch } })
+      },
     }),
     { name: 'me:auth' },
   ),

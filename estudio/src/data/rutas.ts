@@ -75,6 +75,7 @@ export const RUTAS: Ruta[] = [
       'Ejemplos propios',
       'Flashcards bien diseñadas',
       'Autoevaluación',
+      'Mapas conceptuales',
     ],
   },
   {

@@ -104,8 +104,8 @@ paleta que trajo la usuaria — logo real, no una propuesta de Claude:
   botón "Solicitar acceso" por WhatsApp. `/login` sigue existiendo para quien
   ya tiene cuenta.
   - El botón de WhatsApp reusa el mismo número que ya tiene Brújula en su
-    sidebar (5492216185376). **Confirmar si es el canal correcto para
-    Método Estudio** o si conviene uno propio.
+    sidebar (5492216185376), con un mensaje adaptado — confirmado
+    explícitamente por la usuaria el 14/09/2026.
 
 ## ✅ Ficha consolidada, agenda, honorarios y portal del estudiante (14/09/2026)
 
@@ -147,6 +147,72 @@ A pedido explícito: paridad de gestión de consultorio con Método Brújula.
     (`RequireRole`), igual que en Brújula.
   - `AppShell`/`Sidebar` ahora reciben `role` y muestran nav distinto por rol.
 
+## ✅ Evaluación, Ajustes y revisión de navegación (14/09/2026)
+
+A pedido explícito: completar lo que faltaba copiar de Método Brújula del
+lado profesional, y una pestaña nueva para subir instrumentos antes del plan.
+
+- **Pestaña Evaluación** (`tabs/EvaluacionTab.tsx`, nueva pestaña en la ficha
+  del estudiante, entre Integración y Prioridades): subida de screenings,
+  tests u otros documentos de evaluación por estudiante, con tipo
+  (screening/test/otro), tope de 700KB por archivo en esta versión
+  LocalStorage (igual que `FilesTab.tsx` de Brújula), descarga y borrado.
+  Si un archivo pesa más del máximo, se guarda la referencia (nombre, peso,
+  tipo) pero no el contenido, con aviso explícito. Nuevo tipo `StoredFile`
+  (`types/index.ts`) y colección `db.files` (con cascada al borrar un
+  estudiante).
+- **Página Ajustes** (`features/settings/SettingsPage.tsx`, ruta
+  `/pro/ajustes`, nuevo ítem en el menú lateral): perfil profesional
+  editable (nombre, apellido, título), tema claro/oscuro/sistema, y datos
+  (exportar/importar copia de seguridad en JSON, restablecer a los datos de
+  demostración con confirmación). Mismo patrón que la de Brújula, sin los
+  paneles de nube/IA que no existen en Método Estudio. Nuevo
+  `updateProfile` en `stores/authStore.ts`, `services/storage/backup.ts` y
+  `resetDemoData()` en `data/seed.ts`.
+- **Navegación revisada**: el menú lateral ahora muestra los cinco destinos
+  del rol profesional (Inicio, Estudiantes, Agenda, Honorarios, Ajustes)
+  siempre con ícono y etiqueta visibles, sin colapsar — se verificó que no
+  falte ningún botón para moverse dentro de la plataforma. No se copiaron
+  de Brújula la Biblioteca, el Método ni Estadísticas porque no forman
+  parte del alcance acordado (flujo core) — quedan en el backlog si se
+  decide sumarlas.
+
+## ✅ Biblioteca de herramientas y soporte por WhatsApp (14/09/2026)
+
+A pedido explícito: sumar lo que faltaba para la paridad de navegación con
+Método Brújula (menos Estadísticas, fuera de alcance por ahora).
+
+- **Biblioteca** (`features/biblioteca/BibliotecaPage.tsx`, ruta
+  `/pro/biblioteca`, segundo ítem del menú): una ficha (qué es / para qué
+  sirve / cómo aplicarla) por cada una de las 56 herramientas de las 8 rutas
+  de la tabla 18 (se sumó "Mapas conceptuales" en Aprender y recordar),
+  agrupadas por ruta con sus dimensiones. A diferencia de la Biblioteca de
+  Brújula (fichas de bibliografía de orientación vocacional, con PDFs que la
+  usuaria fue enviando), esta es contenido nuevo redactado a partir de los
+  fundamentos del documento (`data/biblioteca.ts`) — no hay bibliografía
+  externa que cargar todavía. Queda pendiente, si se quiere más adelante,
+  sumar el resto de los campos de la "ficha de actividad" completa del
+  Anexo A (población, modalidad, duración, materiales, consigna, variantes,
+  precauciones) — hoy solo se cubren los tres primeros.
+- **Nivel de complejidad (14/09/2026, a pedido explícito)**: cada
+  herramienta suma un `nivel` 1 (inicial), 2 (medio) o 3 (avanzado) —
+  independiente de la edad, porque un estudiante de nivel superior puede
+  necesitar arrancar por el Nivel 1. La Biblioteca tiene un filtro por
+  nivel. **Es un primer borrador mío a revisar**: asigné los 56 niveles con
+  criterio general de complejidad, no es una escala validada ni una
+  decisión clínica tomada por la plataforma — Irene puede pedir que se
+  ajuste cualquier herramienta editando `data/biblioteca.ts`. Con el criterio
+  actual, el Nivel 3 quedó concentrado casi todo en la ruta "Construir
+  autonomía" (elección de estrategias, transferencia, plan personal,
+  reducción de ayudas) — vale la pena revisar si eso refleja la intención
+  real o si otras herramientas de otras rutas también deberían subir de
+  nivel para usos más universitarios. Todavía no hay un campo de "nivel
+  actual" en la ficha del estudiante ni una sugerencia automática de nivel
+  de partida — el profesional elige el nivel a mostrar/usar por su cuenta.
+- **Soporte por WhatsApp**: botón en el pie del menú lateral profesional,
+  mismo número que Brújula (5492216185376) con un mensaje adaptado a
+  Método Estudio — confirmado explícitamente por la usuaria.
+
 ## 🟡 Decisiones pendientes (explícitas en el documento, §17 — no resueltas por el desarrollo)
 
 - Nombre comercial definitivo y disponibilidad marcaria (se usó "Método
@@ -163,9 +229,11 @@ A pedido explícito: paridad de gestión de consultorio con Método Brújula.
 1. **Tareas breves de desempeño** (§6, tabla 13): batería T1-T8 con escala
    observacional (tabla 14) — hoy el criterio "evidencia en tarea breve" de
    la tabla 17 queda en 0 porque no hay tareas todavía.
-2. **Biblioteca completa** (P10) con ficha por actividad (Anexo A):
-   población, modalidad, duración, variantes, precauciones. Hoy solo hay
-   nombres de herramientas por ruta.
+2. **Biblioteca completa** (P10) con ficha por actividad (Anexo A) ampliada:
+   la Biblioteca ya tiene qué es / para qué sirve / cómo aplicarla por
+   herramienta (14/09/2026); falta población, modalidad, duración,
+   materiales, consigna para estudiante, variantes y precauciones por cada
+   una, como pide el Anexo A completo.
 3. **Evolución del plan a lo largo de ciclos**: la pestaña Sesiones ya
    registra el historial; falta comparar objetivos entre revisiones
    sucesivas (qué se mantuvo, qué se graduó, qué se reemplazó).

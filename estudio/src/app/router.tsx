@@ -8,10 +8,12 @@ import { AppShell } from '@/components/layout/AppShell'
 const LandingPage = lazy(() => import('@/features/home/LandingPage'))
 const LoginPage = lazy(() => import('@/features/auth/LoginPage'))
 const ProDashboard = lazy(() => import('@/features/dashboard/ProDashboard'))
+const BibliotecaPage = lazy(() => import('@/features/biblioteca/BibliotecaPage'))
 const StudentsPage = lazy(() => import('@/features/students/StudentsPage'))
 const StudentDetailPage = lazy(() => import('@/features/students/StudentDetailPage'))
 const AgendaPage = lazy(() => import('@/features/agenda/AgendaPage'))
 const HonorariosPage = lazy(() => import('@/features/agenda/HonorariosPage'))
+const SettingsPage = lazy(() => import('@/features/settings/SettingsPage'))
 const MyDashboard = lazy(() => import('@/features/dashboard/MyDashboard'))
 
 function Page({ children }: { children: React.ReactNode }) {
@@ -33,10 +35,12 @@ export const router = createHashRouter([
         element: <AppShell role="profesional" />,
         children: [
           { index: true, element: <Page><ProDashboard /></Page> },
+          { path: 'biblioteca', element: <Page><BibliotecaPage /></Page> },
           { path: 'estudiantes', element: <Page><StudentsPage /></Page> },
           { path: 'estudiantes/:id', element: <Page><StudentDetailPage /></Page> },
           { path: 'agenda', element: <Page><AgendaPage /></Page> },
           { path: 'honorarios', element: <Page><HonorariosPage /></Page> },
+          { path: 'ajustes', element: <Page><SettingsPage /></Page> },
         ],
       },
     ],

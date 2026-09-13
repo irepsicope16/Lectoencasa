@@ -22,6 +22,13 @@ export async function seedIfNeeded() {
   localStorage.setItem(SEED_FLAG, SEED_VERSION)
 }
 
+/** Borra todo lo cargado y vuelve a los datos de demostración originales. */
+export async function resetDemoData() {
+  await db.clearAll()
+  await sembrar()
+  localStorage.setItem(SEED_FLAG, SEED_VERSION)
+}
+
 async function sembrar() {
   const profesional = await db.users.create({
     role: 'profesional',
