@@ -480,7 +480,8 @@ export default function PrintReportPage() {
         <footer className="mt-10 border-t border-neutral-200 pt-4 text-[11px] leading-relaxed text-neutral-500">
           <p>{snap.notaMetodologica}</p>
           <p className="mt-2">
-            Método Brújula · Lic. Irene Morbidelli · Encontrá tu norte. Construí tu camino. — Documento generado el{' '}
+            Método Brújula{user?.role === 'profesional' ? ` · ${nombreCompleto(user)}` : ''} · Encontrá tu norte.
+            Construí tu camino. — Documento generado el{' '}
             {fechaLarga(snap.generadoEl)}.
           </p>
         </footer>

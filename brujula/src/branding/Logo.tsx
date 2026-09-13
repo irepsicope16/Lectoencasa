@@ -47,7 +47,7 @@ export function Isotipo({ className, size = 32 }: LogoProps) {
   )
 }
 
-export function LogoHorizontal({ className, size = 30 }: LogoProps) {
+export function LogoHorizontal({ className, size = 30, subtitle = 'Lic. Irene Morbidelli' }: LogoProps & { subtitle?: string }) {
   return (
     <div className={cn('flex items-center gap-2.5', className)}>
       <Isotipo size={size} />
@@ -55,9 +55,7 @@ export function LogoHorizontal({ className, size = 30 }: LogoProps) {
         <span className="text-[15px] font-semibold tracking-tight text-foreground">
           Método <span className="text-primary">Brújula</span>
         </span>
-        <span className="mt-0.5 text-[10px] font-medium tracking-[0.14em] text-faint uppercase">
-          Lic. Irene Morbidelli
-        </span>
+        <span className="mt-0.5 text-[10px] font-medium tracking-[0.14em] text-faint uppercase">{subtitle}</span>
       </div>
     </div>
   )
