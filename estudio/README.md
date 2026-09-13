@@ -6,8 +6,9 @@ perfil multidimensional (no una etiqueta única) a partir de autoinforme,
 cuestionario de referente y observación profesional, y lo transforma en
 prioridades y un plan de intervención editable.
 
-Nombre y branding son de trabajo (ver PROJECT_STATUS.md, "Decisiones
-pendientes"). Plataforma independiente de Método Brújula.
+Plataforma independiente de Método Brújula. El nombre comercial definitivo
+todavía está pendiente (ver PROJECT_STATUS.md); la identidad visual (logo,
+paleta y tipografía) ya es la definitiva.
 
 ## Desarrollo
 

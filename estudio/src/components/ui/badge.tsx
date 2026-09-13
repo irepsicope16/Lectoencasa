@@ -10,6 +10,7 @@ const badgeVariants = cva(
         default: 'bg-surface-2 text-muted-foreground',
         primario: 'bg-primary-soft text-primary-strong',
         acento: 'bg-accent-soft text-accent-strong',
+        secundario: 'bg-secondary-soft text-secondary-strong',
         amber: 'bg-warning-soft text-warning',
         danger: 'bg-danger-soft text-danger',
         outline: 'border text-muted-foreground',

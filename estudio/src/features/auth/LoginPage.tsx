@@ -4,7 +4,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { Button } from '@/components/ui/button'
 import { Input, Label, FieldError } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
-import { Isotipo } from '@/branding/Logo'
+import { BrandCover } from '@/branding/Logo'
 
 export default function LoginPage() {
   const login = useAuthStore((s) => s.login)
@@ -31,8 +31,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex flex-col items-center gap-2 text-center">
-          <Isotipo size={44} />
-          <h1 className="font-display text-lg font-semibold tracking-tight">Método Estudio</h1>
+          <BrandCover className="max-w-[220px]" />
           <p className="text-[13px] text-muted-foreground">Acceso profesional</p>
         </div>
         <Card>

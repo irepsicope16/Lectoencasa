@@ -52,7 +52,7 @@ export default function ProDashboard() {
 
       <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-3">
         <StatCard icon={Users} label="Estudiantes activos" value={activos.length} tone="primario" />
-        <StatCard icon={GraduationCap} label="En proceso" value={enProceso} tone="acento" />
+        <StatCard icon={GraduationCap} label="En proceso" value={enProceso} tone="secundario" />
         <StatCard icon={AlertTriangle} label="Alertas abiertas" value={openAlerts.length} tone="neutro" />
       </div>
 

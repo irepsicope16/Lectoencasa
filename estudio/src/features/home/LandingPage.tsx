@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Isotipo } from '@/branding/Logo'
-import { HeroIllustration } from '@/branding/HeroIllustration'
+import { Isotipo, BrandCover } from '@/branding/Logo'
 import { Button } from '@/components/ui/button'
 import { AvisoOrientativo } from '@/components/shared'
 
@@ -65,7 +64,7 @@ export default function LandingPage() {
               El acceso lo habilita la profesional después de coordinar — no hay registro abierto.
             </p>
           </div>
-          <HeroIllustration className="max-w-[440px] justify-self-center lg:justify-self-end" />
+          <BrandCover className="max-w-[380px] justify-self-center lg:justify-self-end" />
         </section>
 
         <section className="mt-20">
