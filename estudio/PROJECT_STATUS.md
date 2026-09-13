@@ -104,8 +104,8 @@ paleta que trajo la usuaria — logo real, no una propuesta de Claude:
   botón "Solicitar acceso" por WhatsApp. `/login` sigue existiendo para quien
   ya tiene cuenta.
   - El botón de WhatsApp reusa el mismo número que ya tiene Brújula en su
-    sidebar (5492216185376). **Confirmar si es el canal correcto para
-    Método Estudio** o si conviene uno propio.
+    sidebar (5492216185376), con un mensaje adaptado — confirmado
+    explícitamente por la usuaria el 14/09/2026.
 
 ## ✅ Ficha consolidada, agenda, honorarios y portal del estudiante (14/09/2026)
 
@@ -177,6 +177,26 @@ lado profesional, y una pestaña nueva para subir instrumentos antes del plan.
   parte del alcance acordado (flujo core) — quedan en el backlog si se
   decide sumarlas.
 
+## ✅ Biblioteca de herramientas y soporte por WhatsApp (14/09/2026)
+
+A pedido explícito: sumar lo que faltaba para la paridad de navegación con
+Método Brújula (menos Estadísticas, fuera de alcance por ahora).
+
+- **Biblioteca** (`features/biblioteca/BibliotecaPage.tsx`, ruta
+  `/pro/biblioteca`, segundo ítem del menú): una ficha (qué es / para qué
+  sirve / cómo aplicarla) por cada una de las 55 herramientas de las 8 rutas
+  de la tabla 18, agrupadas por ruta con sus dimensiones. A diferencia de la
+  Biblioteca de Brújula (fichas de bibliografía de orientación vocacional,
+  con PDFs que la usuaria fue enviando), esta es contenido nuevo redactado
+  a partir de los fundamentos del documento (`data/biblioteca.ts`) — no hay
+  bibliografía externa que cargar todavía. Queda pendiente, si se quiere
+  más adelante, sumar el resto de los campos de la "ficha de actividad"
+  completa del Anexo A (población, modalidad, duración, materiales,
+  consigna, variantes, precauciones) — hoy solo se cubren los tres primeros.
+- **Soporte por WhatsApp**: botón en el pie del menú lateral profesional,
+  mismo número que Brújula (5492216185376) con un mensaje adaptado a
+  Método Estudio — confirmado explícitamente por la usuaria.
+
 ## 🟡 Decisiones pendientes (explícitas en el documento, §17 — no resueltas por el desarrollo)
 
 - Nombre comercial definitivo y disponibilidad marcaria (se usó "Método
@@ -193,9 +213,11 @@ lado profesional, y una pestaña nueva para subir instrumentos antes del plan.
 1. **Tareas breves de desempeño** (§6, tabla 13): batería T1-T8 con escala
    observacional (tabla 14) — hoy el criterio "evidencia en tarea breve" de
    la tabla 17 queda en 0 porque no hay tareas todavía.
-2. **Biblioteca completa** (P10) con ficha por actividad (Anexo A):
-   población, modalidad, duración, variantes, precauciones. Hoy solo hay
-   nombres de herramientas por ruta.
+2. **Biblioteca completa** (P10) con ficha por actividad (Anexo A) ampliada:
+   la Biblioteca ya tiene qué es / para qué sirve / cómo aplicarla por
+   herramienta (14/09/2026); falta población, modalidad, duración,
+   materiales, consigna para estudiante, variantes y precauciones por cada
+   una, como pide el Anexo A completo.
 3. **Evolución del plan a lo largo de ciclos**: la pestaña Sesiones ya
    registra el historial; falta comparar objetivos entre revisiones
    sucesivas (qué se mantuvo, qué se graduó, qué se reemplazó).

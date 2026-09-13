@@ -1,11 +1,12 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Calendar, Home, Settings, Users, Wallet } from 'lucide-react'
+import { BookOpen, Calendar, Home, MessageCircle, Settings, Users, Wallet } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Isotipo } from '@/branding/Logo'
 import type { UserRole } from '@/types'
 
 const proNav = [
   { to: '/pro', icon: Home, label: 'Inicio', end: true },
+  { to: '/pro/biblioteca', icon: BookOpen, label: 'Biblioteca' },
   { to: '/pro/estudiantes', icon: Users, label: 'Estudiantes' },
   { to: '/pro/agenda', icon: Calendar, label: 'Agenda' },
   { to: '/pro/honorarios', icon: Wallet, label: 'Honorarios' },
@@ -54,6 +55,22 @@ export function Sidebar({ role }: { role: UserRole }) {
           ))}
         </ul>
       </nav>
+
+      {role === 'profesional' && (
+        <div className="border-t p-2">
+          <a
+            href="https://wa.me/5492216185376?text=Hola%20Irene%2C%20tengo%20una%20consulta%20sobre%20M%C3%A9todo%20Estudio."
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#1faa59' }}
+            className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] font-medium transition-colors hover:bg-[#1faa59]/10"
+            aria-label="Soporte por WhatsApp"
+          >
+            <MessageCircle className="h-4 w-4 shrink-0" />
+            <span>Soporte por WhatsApp</span>
+          </a>
+        </div>
+      )}
     </aside>
   )
 }
