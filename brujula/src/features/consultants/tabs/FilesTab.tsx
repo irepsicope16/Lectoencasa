@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Label, NativeSelect } from '@/components/ui/input'
 import { EmptyState } from '@/components/shared'
 import { useCreate, useFiles, useRemove } from '@/hooks/queries'
-import { downloadStoredFile } from '@/lib/files'
+import { dataUrlBytes, downloadStoredFile, imageToCompressedDataUrl } from '@/lib/files'
 import { toast } from '@/components/ui/toast'
 import { fechaCorta, formatBytes } from '@/lib/utils'
 import { MODULES, MODULE_MAP } from '@/data/modules'
@@ -44,9 +44,17 @@ export function FilesTab({ consultant }: { consultant: Consultant }) {
     e.target.value = ''
     if (!file) return
     setError('')
-    if (file.size > maxBytes) {
+
+    // Las fotos (dibujos, técnicas proyectivas, etc.) se comprimen antes de
+    // subirlas: una foto de celular de varios MB queda en unos cientos de
+    // KB sin perder legibilidad, así casi nunca chocan con el límite.
+    const esImagen = file.type.startsWith('image/')
+    const dataUrl = esImagen ? await imageToCompressedDataUrl(file).catch(() => undefined) : undefined
+    const tamano = dataUrl ? dataUrlBytes(dataUrl) : file.size
+
+    if (tamano > maxBytes) {
       setError(
-        `El archivo pesa ${formatBytes(file.size)} y el máximo es ${formatBytes(maxBytes)}${isCloudEnabled() ? '' : ' (modo local, sin conexión a la nube)'}. Se guardará solo el nombre como referencia, sin el contenido — no vas a poder abrirlo desde acá.`,
+        `El archivo pesa ${formatBytes(tamano)}${esImagen ? ' incluso comprimido' : ''} y el máximo es ${formatBytes(maxBytes)}${isCloudEnabled() ? '' : ' (modo local, sin conexión a la nube)'}. Se guardará solo el nombre como referencia, sin el contenido — no vas a poder abrirlo desde acá.`,
       )
       await createFile.mutateAsync({
         consultantId: consultant.id,
@@ -58,19 +66,22 @@ export function FilesTab({ consultant }: { consultant: Consultant }) {
       })
       return
     }
-    const dataUrl = await new Promise<string>((resolve, reject) => {
-      const reader = new FileReader()
-      reader.onload = () => resolve(reader.result as string)
-      reader.onerror = reject
-      reader.readAsDataURL(file)
-    })
+
+    const contenido =
+      dataUrl ??
+      (await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => resolve(reader.result as string)
+        reader.onerror = reject
+        reader.readAsDataURL(file)
+      }))
     await createFile.mutateAsync({
       consultantId: consultant.id,
       moduleId: (moduleId || undefined) as ModuleId | undefined,
       nombre: file.name,
-      mimeType: file.type || 'application/octet-stream',
-      tamano: file.size,
-      dataUrl,
+      mimeType: dataUrl ? 'image/jpeg' : file.type || 'application/octet-stream',
+      tamano,
+      dataUrl: contenido,
       subidoPor: 'profesional',
     })
     toast.success(`«${file.name}» subido`)
