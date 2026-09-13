@@ -1,0 +1,161 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================================
+   Método Estudio — Design tokens (placeholder de marca)
+   Paleta: verde bosque (primary) · terracota (accent). Pendiente
+   de identidad visual definitiva — ver PROJECT_STATUS.md.
+   ============================================================ */
+
+:root {
+  --background: #f7f6f2;
+  --surface: #ffffff;
+  --surface-2: #f1efe9;
+  --foreground: #201f1c;
+  --muted-foreground: #6b6459;
+  --faint-foreground: #8a8377;
+
+  --primary: #2f6f6b;
+  --primary-strong: #235450;
+  --primary-soft: #e5efee;
+  --primary-foreground: #ffffff;
+
+  --accent: #c1622f;
+  --accent-strong: #a34f24;
+  --accent-soft: #fbeae1;
+  --accent-foreground: #ffffff;
+
+  --border: #e7e3da;
+  --border-strong: #d8d3c6;
+  --ring: #2f6f6b55;
+
+  --danger: #c04832;
+  --danger-soft: #fbe9e5;
+  --warning: #b3821f;
+  --warning-soft: #f8efd9;
+
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: #16181a;
+  --surface: #1d2022;
+  --surface-2: #24272a;
+  --foreground: #ececea;
+  --muted-foreground: #a8a99f;
+  --faint-foreground: #83857c;
+
+  --primary: #4fa39d;
+  --primary-strong: #6fbab4;
+  --primary-soft: #1c332f;
+  --primary-foreground: #0a1513;
+
+  --accent: #e08653;
+  --accent-strong: #e89c71;
+  --accent-soft: #3a2417;
+  --accent-foreground: #170e07;
+
+  --border: #2c2f31;
+  --border-strong: #393c3e;
+  --ring: #4fa39d66;
+
+  --danger: #dd6a54;
+  --danger-soft: #3a2019;
+  --warning: #d2a750;
+  --warning-soft: #362c16;
+}
+
+@theme inline {
+  --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-faint: var(--faint-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-ring: var(--ring);
+
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.25rem);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
+  ::selection {
+    background: var(--primary-soft);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 8px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #1d1f24 !important;
+    font-size: 12px;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-page {
+    page-break-after: always;
+  }
+  @page {
+    margin: 18mm 16mm;
+  }
+}
