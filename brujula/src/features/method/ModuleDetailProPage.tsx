@@ -138,36 +138,31 @@ export default function ModuleDetailProPage() {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clapperboard className="h-4 w-4 text-primary" /> Videos
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2.5">
-              {mod.videos.map((v) => (
-                <div key={v.id} className="rounded-lg border p-3">
-                  <p className="text-[13px] font-medium">{v.titulo}</p>
-                  <p className="text-[12px] text-muted-foreground">{v.descripcion}</p>
-                  <div className="mt-2 flex items-center gap-2">
-                    <Button variant="outline" size="sm" asChild>
-                      <a href={v.url} target="_blank" rel="noreferrer">
-                        <ExternalLink /> Ver video
-                      </a>
-                    </Button>
-                    <span className="text-[11px] text-faint">{v.duracion}</span>
+          {mod.videos.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Clapperboard className="h-4 w-4 text-primary" /> Videos
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2.5">
+                {mod.videos.map((v) => (
+                  <div key={v.id} className="rounded-lg border p-3">
+                    <p className="text-[13px] font-medium">{v.titulo}</p>
+                    <p className="text-[12px] text-muted-foreground">{v.descripcion}</p>
+                    <div className="mt-2 flex items-center gap-2">
+                      <Button variant="outline" size="sm" asChild>
+                        <a href={v.url} target="_blank" rel="noreferrer">
+                          <ExternalLink /> Ver video
+                        </a>
+                      </Button>
+                      <span className="text-[11px] text-faint">{v.duracion}</span>
+                    </div>
                   </div>
-                </div>
-              ))}
-              {mod.videos.length === 0 && (
-                <p className="rounded-lg border border-dashed p-3 text-[12px] leading-relaxed text-muted-foreground">
-                  Este módulo no tiene un video fijo del método. Podés asignar el video que prefieras
-                  (YouTube u otro) a cada consultante desde su ficha → Actividades →{' '}
-                  <span className="font-medium text-foreground">Asignar video</span>.
-                </p>
-              )}
-            </CardContent>
-          </Card>
+                ))}
+              </CardContent>
+            </Card>
+          )}
 
           <Card>
             <CardHeader>
