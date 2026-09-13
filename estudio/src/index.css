@@ -1,0 +1,171 @@
+@import 'tailwindcss';
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+@import '@fontsource-variable/source-serif-4/standard.css';
+@import '@fontsource-variable/source-serif-4/standard-italic.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================================
+   Método Estudio — Design tokens · "Fichero"
+   La ficha de repaso como objeto de marca: tinta + la regla roja
+   y el renglón celeste de una ficha real, con un toque de
+   resaltador. Ver estudio/PROJECT_STATUS.md y la propuesta de
+   identidad para el razonamiento completo.
+   ============================================================ */
+
+:root {
+  --background: #faf6ee;
+  --surface: #fffdf8;
+  --surface-2: #f1ebda;
+  --foreground: #232842;
+  --muted-foreground: #6f6a5c;
+  --faint-foreground: #8f8977;
+
+  --primary: #b3433a;
+  --primary-strong: #8f332c;
+  --primary-soft: #f5e3e0;
+  --primary-foreground: #fffaf5;
+
+  --accent: #3f6a96;
+  --accent-strong: #2e5479;
+  --accent-soft: #e4edf5;
+  --accent-foreground: #ffffff;
+
+  --border: #e4dcc8;
+  --border-strong: #d3c7a9;
+  --ring: #b3433a55;
+
+  --danger: #c23b2e;
+  --danger-soft: #fbe6e1;
+  --warning: #b3821f;
+  --warning-soft: #f8efd9;
+
+  --radius: 0.65rem;
+}
+
+.dark {
+  --background: #1b1d22;
+  --surface: #242731;
+  --surface-2: #2b2e38;
+  --foreground: #ede7d9;
+  --muted-foreground: #b0a998;
+  --faint-foreground: #8c8677;
+
+  --primary: #d17a72;
+  --primary-strong: #e2938c;
+  --primary-soft: #3a231f;
+  --primary-foreground: #241210;
+
+  --accent: #7fa8cf;
+  --accent-strong: #9dc0e2;
+  --accent-soft: #1f2f3f;
+  --accent-foreground: #0d1822;
+
+  --border: #34363f;
+  --border-strong: #40424d;
+  --ring: #d17a7266;
+
+  --danger: #e2726a;
+  --danger-soft: #3a201c;
+  --warning: #d2a750;
+  --warning-soft: #362c16;
+}
+
+@theme inline {
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Source Serif 4 Variable', 'Source Serif 4', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-faint: var(--faint-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-ring: var(--ring);
+
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.25rem);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
+  ::selection {
+    background: var(--primary-soft);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 8px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #1d1f24 !important;
+    font-size: 12px;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-page {
+    page-break-after: always;
+  }
+  @page {
+    margin: 18mm 16mm;
+  }
+}
