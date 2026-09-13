@@ -184,15 +184,31 @@ Método Brújula (menos Estadísticas, fuera de alcance por ahora).
 
 - **Biblioteca** (`features/biblioteca/BibliotecaPage.tsx`, ruta
   `/pro/biblioteca`, segundo ítem del menú): una ficha (qué es / para qué
-  sirve / cómo aplicarla) por cada una de las 55 herramientas de las 8 rutas
-  de la tabla 18, agrupadas por ruta con sus dimensiones. A diferencia de la
-  Biblioteca de Brújula (fichas de bibliografía de orientación vocacional,
-  con PDFs que la usuaria fue enviando), esta es contenido nuevo redactado
-  a partir de los fundamentos del documento (`data/biblioteca.ts`) — no hay
-  bibliografía externa que cargar todavía. Queda pendiente, si se quiere
-  más adelante, sumar el resto de los campos de la "ficha de actividad"
-  completa del Anexo A (población, modalidad, duración, materiales,
-  consigna, variantes, precauciones) — hoy solo se cubren los tres primeros.
+  sirve / cómo aplicarla) por cada una de las 56 herramientas de las 8 rutas
+  de la tabla 18 (se sumó "Mapas conceptuales" en Aprender y recordar),
+  agrupadas por ruta con sus dimensiones. A diferencia de la Biblioteca de
+  Brújula (fichas de bibliografía de orientación vocacional, con PDFs que la
+  usuaria fue enviando), esta es contenido nuevo redactado a partir de los
+  fundamentos del documento (`data/biblioteca.ts`) — no hay bibliografía
+  externa que cargar todavía. Queda pendiente, si se quiere más adelante,
+  sumar el resto de los campos de la "ficha de actividad" completa del
+  Anexo A (población, modalidad, duración, materiales, consigna, variantes,
+  precauciones) — hoy solo se cubren los tres primeros.
+- **Nivel de complejidad (14/09/2026, a pedido explícito)**: cada
+  herramienta suma un `nivel` 1 (inicial), 2 (medio) o 3 (avanzado) —
+  independiente de la edad, porque un estudiante de nivel superior puede
+  necesitar arrancar por el Nivel 1. La Biblioteca tiene un filtro por
+  nivel. **Es un primer borrador mío a revisar**: asigné los 56 niveles con
+  criterio general de complejidad, no es una escala validada ni una
+  decisión clínica tomada por la plataforma — Irene puede pedir que se
+  ajuste cualquier herramienta editando `data/biblioteca.ts`. Con el criterio
+  actual, el Nivel 3 quedó concentrado casi todo en la ruta "Construir
+  autonomía" (elección de estrategias, transferencia, plan personal,
+  reducción de ayudas) — vale la pena revisar si eso refleja la intención
+  real o si otras herramientas de otras rutas también deberían subir de
+  nivel para usos más universitarios. Todavía no hay un campo de "nivel
+  actual" en la ficha del estudiante ni una sugerencia automática de nivel
+  de partida — el profesional elige el nivel a mostrar/usar por su cuenta.
 - **Soporte por WhatsApp**: botón en el pie del menú lateral profesional,
   mismo número que Brújula (5492216185376) con un mensaje adaptado a
   Método Estudio — confirmado explícitamente por la usuaria.
