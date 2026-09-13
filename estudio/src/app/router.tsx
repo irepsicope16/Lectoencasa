@@ -5,6 +5,7 @@ import { AppShell } from '@/components/layout/AppShell'
 
 // Hash router: funciona en hosting estático (GitHub Pages) sin config de servidor.
 
+const LandingPage = lazy(() => import('@/features/home/LandingPage'))
 const LoginPage = lazy(() => import('@/features/auth/LoginPage'))
 const ProDashboard = lazy(() => import('@/features/dashboard/ProDashboard'))
 const StudentsPage = lazy(() => import('@/features/students/StudentsPage'))
@@ -19,6 +20,7 @@ function Page({ children }: { children: React.ReactNode }) {
 }
 
 export const router = createHashRouter([
+  { path: '/', element: <Page><LandingPage /></Page> },
   { path: '/login', element: <Page><LoginPage /></Page> },
   {
     element: <RequireAuth />,
@@ -34,6 +36,5 @@ export const router = createHashRouter([
       },
     ],
   },
-  { path: '/', element: <Navigate to="/pro" replace /> },
-  { path: '*', element: <Navigate to="/pro" replace /> },
+  { path: '*', element: <Navigate to="/" replace /> },
 ])

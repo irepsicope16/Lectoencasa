@@ -76,18 +76,32 @@ información evocativa) + IBM Plex Sans (texto) + IBM Plex Mono (códigos de
 ítem, etiquetas). Fundamentos y alternativa descartada ("Agenda") en la
 propuesta de identidad presentada a la usuaria. Tokens en `src/index.css`.
 
+## ✅ Portada pública y modelo de acceso (definidos el 13/09/2026)
+
+- **Acceso cerrado, confirmado**: la profesional da de alta cada cuenta a
+  mano después de coordinar el pago — no hay ni habrá autoregistro público
+  por ahora. No se construyó formulario de registro (no hace falta).
+- **Portada pública** en `/` (`src/features/home/LandingPage.tsx`): hero con
+  copy real del método, ilustración de escritorio con fichas
+  (`src/branding/HeroIllustration.tsx`), tres pasos del proceso (entrevista →
+  autoperfil → plan), aviso orientativo obligatorio y botón "Solicitar
+  acceso" por WhatsApp. `/login` sigue existiendo para quien ya tiene cuenta.
+  - La ilustración se dibujó a mano en SVG (no un raster externo): se
+    intentó generar una imagen con IA (Gamma), pero el proxy de red de esta
+    sesión bloquea `cdn.gamma.app` y no se pudo descargar ni verificar el
+    resultado antes de publicarlo en un sitio público — se optó por no
+    arriesgar algo sin ver. Si preferís una foto o ilustración distinta,
+    decime y la genero de nuevo (o subila vos y la reemplazo).
+  - El botón de WhatsApp reusa el mismo número que ya tiene Brújula en su
+    sidebar (5492216185376). **Confirmar si es el canal correcto para
+    Método Estudio** o si conviene uno propio.
+
 ## 🟡 Decisiones pendientes (explícitas en el documento, §17 — no resueltas por el desarrollo)
 
 - Nombre comercial definitivo y disponibilidad marcaria (se usó "Método
   Estudio", el nombre de trabajo del documento).
 - Isotipo: se implementó "fichero apilado" (recomendado); quedan sin
   construir las otras dos variantes propuestas si se prefiere cambiar.
-- Modelo de acceso: hoy cerrado (la profesional da de alta cada cuenta, sin
-  registro público). Ver la propuesta de identidad para el contraste con el
-  autoregistro multi-profesional de Brújula — no se avanzó, a la espera de
-  definición.
-- Portada pública: hoy la app entra directo a `/login`. Se mockeó una
-  portada posible en la propuesta de identidad; no se construyó todavía.
 - Qué profesiones podrán registrarse y permisos por rol (hoy: un solo rol
   profesional; sin registro público ni multi-profesional).
 - Países de lanzamiento y requisitos legales específicos.
