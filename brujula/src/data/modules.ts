@@ -1,5 +1,11 @@
 import type { ModuleDefinition, ModuleId } from '@/types'
-import { TEST_APTITUDES, TEST_ESTILO_PERSONAL, TEST_INTELIGENCIAS, TEST_INTERESES } from './tests'
+import {
+  TEST_APTITUDES,
+  TEST_DIFICULTADES_DECISION,
+  TEST_ESTILO_PERSONAL,
+  TEST_INTELIGENCIAS,
+  TEST_INTERESES,
+} from './tests'
 import { EVALUACION_PROCESO } from './evaluacionProceso'
 
 // ============================================================
@@ -802,6 +808,7 @@ export const MODULES: ModuleDefinition[] = [
       'Analizar planes de estudio e instituciones reales',
     ],
     actividades: [
+      TEST_DIFICULTADES_DECISION,
       {
         id: 'carreras-ruta-investigacion',
         titulo: 'Ruta de Investigación de Carreras',

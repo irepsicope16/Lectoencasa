@@ -173,3 +173,54 @@ export const TEST_ESTILO_PERSONAL: ModuleActivityTemplate = {
     item('Estabilidad emocional', 'En general, me siento seguro/a de mí mismo/a.'),
   ],
 }
+
+// ---------- Cuestionario de Dificultades para Decidir ----------
+// Inspirado en el modelo de dificultades en la toma de decisiones de carrera
+// de Itamar Gati (CDDQ) y en los estilos de decisión de Harren (CDM-R): no
+// reproduce ninguno de los dos instrumentos, es de elaboración propia. A
+// diferencia de los otros tests, acá un puntaje alto NO es "más" de algo
+// positivo: señala en qué parte del proceso de decidir se está trabando el
+// consultante (falta de disposición, falta de información o conflictos),
+// para que la profesional pueda intervenir puntualmente ahí. Pensado para
+// el módulo Carreras, cuando ya hay opciones finalistas y se acerca el
+// momento de elegir.
+n = 400
+export const TEST_DIFICULTADES_DECISION: ModuleActivityTemplate = {
+  id: 'test-dificultades-decision',
+  titulo: 'Cuestionario de Dificultades para Decidir',
+  descripcion:
+    'Puntuá cada frase del 1 (nada que ver conmigo) al 5 (totalmente yo). Ojo: acá un puntaje alto no es mejor ni peor, señala en qué parte de decidir te está costando más, para poder trabajarla puntualmente.',
+  tipo: 'ejercicio',
+  duracionMin: 12,
+  dimensiones: ['exploracion'],
+  preguntas: [
+    item('Motivación para decidir', 'Siento que todavía no tengo ganas de ponerme a pensar en esto en serio.'),
+    item('Motivación para decidir', 'Prefiero postergar esta decisión todo lo que pueda.'),
+    item(
+      'Indecisión general',
+      'Me cuesta decidirme en general, no solo con esto: hasta elegir qué ver o qué comer me lleva rato.',
+    ),
+    item('Indecisión general', 'Suelo dar vueltas mucho antes de animarme a elegir algo.'),
+    item('Creencias que traban', 'Creo que existe una única carrera perfecta para mí y tengo que encontrarla.'),
+    item('Creencias que traban', 'Pienso que si me equivoco al elegir, voy a estar perdiendo el tiempo.'),
+    item('Información sobre mí mismo/a', 'No tengo muy claro qué es lo que realmente me gusta o me interesa.'),
+    item('Información sobre mí mismo/a', 'Me cuesta identificar en qué soy bueno/a o qué se me facilita.'),
+    item('Información sobre las opciones', 'No conozco lo suficiente las carreras u oficios que podrían interesarme.'),
+    item(
+      'Información sobre las opciones',
+      'Siento que me faltan datos concretos sobre cómo es estudiar o trabajar en lo que me gusta.',
+    ),
+    item('Información sobre el proceso', 'No sé bien por dónde empezar para tomar esta decisión.'),
+    item('Información sobre el proceso', 'Me resulta confuso todo lo que hay que averiguar y organizar para elegir.'),
+    item('Conflictos internos', 'Dudo entre dos o más opciones que me gustan casi por igual.'),
+    item('Conflictos internos', 'Cuando me inclino por algo, enseguida me surgen dudas que me hacen volver atrás.'),
+    item(
+      'Conflictos externos',
+      'Lo que a mí me gustaría elegir no coincide con lo que esperan de mí en mi familia.',
+    ),
+    item(
+      'Conflictos externos',
+      'Siento que tengo que elegir pensando en lo que otros van a opinar, más que en lo que yo quiero.',
+    ),
+  ],
+}
