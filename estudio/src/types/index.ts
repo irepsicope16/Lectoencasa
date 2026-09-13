@@ -14,6 +14,7 @@ export interface User {
   email: string
   password: string // demo/local
   titulo?: string // solo rol profesional
+  matricula?: string // solo rol profesional, p. ej. "MP 260505"
   /** Solo rol estudiante: vincula la cuenta con su ficha. */
   studentId?: string
   createdAt: string

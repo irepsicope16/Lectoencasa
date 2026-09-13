@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware'
 import type { User } from '@/types'
 import { db } from '@/services/storage/db'
 
-type ProfileEditable = Pick<User, 'nombre' | 'apellido' | 'titulo'>
+type ProfileEditable = Pick<User, 'nombre' | 'apellido' | 'titulo' | 'matricula'>
 
 interface AuthState {
   user: User | null

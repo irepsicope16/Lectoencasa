@@ -25,6 +25,7 @@ export default function SettingsPage() {
     nombre: user?.nombre ?? '',
     apellido: user?.apellido ?? '',
     titulo: user?.titulo ?? '',
+    matricula: user?.matricula ?? '',
   })
   const [perfilSaving, setPerfilSaving] = useState(false)
   const [perfilSaved, setPerfilSaved] = useState(false)
@@ -69,12 +70,20 @@ export default function SettingsPage() {
                 <Label>Apellido</Label>
                 <Input value={perfil.apellido} onChange={(e) => setPerfil({ ...perfil, apellido: e.target.value })} />
               </div>
-              <div className="sm:col-span-2">
+              <div>
                 <Label>Título profesional</Label>
                 <Input
                   value={perfil.titulo}
                   onChange={(e) => setPerfil({ ...perfil, titulo: e.target.value })}
                   placeholder="Lic. en Psicopedagogía"
+                />
+              </div>
+              <div>
+                <Label>Matrícula</Label>
+                <Input
+                  value={perfil.matricula}
+                  onChange={(e) => setPerfil({ ...perfil, matricula: e.target.value })}
+                  placeholder="MP 260505"
                 />
               </div>
             </div>
