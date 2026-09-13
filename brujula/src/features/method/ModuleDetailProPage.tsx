@@ -85,8 +85,10 @@ export default function ModuleDetailProPage() {
                   </div>
                   <p className="mt-1 text-[12.5px] text-muted-foreground">
                     Recorrido por 26 campos de estudio/trabajo, marcando la primera reacción a cada uno (me
-                    interesa, quiero saber más, no me interesa). Se completa desde la ficha de cada consultante,
-                    pestaña Módulos → este módulo.
+                    interesa, quiero saber más, no me interesa).
+                  </p>
+                  <p className="mt-2 text-[13.5px] font-bold text-primary-strong">
+                    Se completa desde Consultantes → la ficha del consultante → pestaña Módulos → este módulo.
                   </p>
                 </div>
               )}
@@ -98,8 +100,10 @@ export default function ModuleDetailProPage() {
                   </div>
                   <p className="mt-1 text-[12.5px] text-muted-foreground">
                     Carga hasta 3 carreras finalistas y las valora con el consultante según 5 criterios propios
-                    (entusiasmo, valores, estilo de vida, salida laboral, viabilidad). Se completa desde la
-                    ficha de cada consultante, pestaña Módulos → este módulo.
+                    (entusiasmo, valores, estilo de vida, salida laboral, viabilidad).
+                  </p>
+                  <p className="mt-2 text-[13.5px] font-bold text-primary-strong">
+                    Se completa desde Consultantes → la ficha del consultante → pestaña Módulos → este módulo.
                   </p>
                 </div>
               )}
