@@ -178,7 +178,8 @@ export default function PrintConsentPage() {
         </div>
 
         <footer className="mt-10 border-t border-neutral-200 pt-4 text-[11px] leading-relaxed text-neutral-500">
-          Método Brújula · Lic. Irene Morbidelli · Encontrá tu norte. Construí tu camino.
+          Método Brújula{user?.role === 'profesional' ? ` · ${nombreCompleto(user)}` : ''} · Encontrá tu norte.
+          Construí tu camino.
         </footer>
       </div>
     </div>

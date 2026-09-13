@@ -23,7 +23,7 @@ import { Isotipo, LogoHorizontal } from '@/branding/Logo'
 import { useUIStore } from '@/stores/uiStore'
 import { useAuthStore } from '@/stores/authStore'
 import { isOwner } from '@/lib/membership'
-import { cn } from '@/lib/utils'
+import { cn, nombreCompleto } from '@/lib/utils'
 import { STAGES } from '@/lib/constants'
 import { MODULES } from '@/data/modules'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/misc'
@@ -78,7 +78,14 @@ export function Sidebar({ role }: { role: UserRole }) {
           className="cursor-pointer"
           aria-label="Ir al inicio"
         >
-          {collapsed ? <Isotipo size={28} /> : <LogoHorizontal size={28} />}
+          {collapsed ? (
+            <Isotipo size={28} />
+          ) : (
+            <LogoHorizontal
+              size={28}
+              subtitle={role === 'profesional' && user ? nombreCompleto(user) : undefined}
+            />
+          )}
         </button>
       </div>
 
