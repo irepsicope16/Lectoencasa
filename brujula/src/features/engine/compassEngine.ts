@@ -74,6 +74,7 @@ interface Signals {
   deseos: Signal[]
   mandatos: Signal[]
   identidad: Signal[]
+  exploracion: Signal[]
 }
 
 /** extrae las opciones elegidas de una respuesta tipo selección ("A, B, C") */
@@ -85,7 +86,16 @@ function splitSelection(text: string): string[] {
 }
 
 function collectSignals(input: EngineInput): Signals {
-  const s: Signals = { valores: [], fortalezas: [], intereses: [], aptitudes: [], deseos: [], mandatos: [], identidad: [] }
+  const s: Signals = {
+    valores: [],
+    fortalezas: [],
+    intereses: [],
+    aptitudes: [],
+    deseos: [],
+    mandatos: [],
+    identidad: [],
+    exploracion: [],
+  }
   const done = input.activities.filter((a) => a.respuestas.length > 0)
 
   for (const act of done) {
@@ -168,6 +178,11 @@ function collectSignals(input: EngineInput): Signals {
       else if (act.moduleId === 'fortalezas') s.fortalezas.push(señal)
       else if (act.moduleId === 'valores') s.valores.push(señal)
       else if (act.moduleId === 'identidad') s.identidad.push(señal)
+      // Cuestionario de Dificultades para Decidir (módulo Carreras): a
+      // diferencia de los demás tests, acá la categoría destacada (prom >= 4)
+      // señala una dificultad, no una fortaleza — igual sirve como evidencia
+      // de la dimensión "exploración" (cómo transita el momento de decidir).
+      else if (act.moduleId === 'carreras') s.exploracion.push(señal)
     }
   }
 
@@ -281,7 +296,9 @@ function buildProfile(input: EngineInput, signals: Signals): ProfileDimension[] 
       aptitudes: destacados.length
         ? `Facilidades naturales observadas: ${destacados.slice(0, 3).join(', ')}.`
         : 'Aptitudes por relevar; cruzar con evidencia escolar.',
-      exploracion: 'Exploración del mundo formativo y laboral: cada contacto real desarma fantasías y aporta datos propios.',
+      exploracion: destacados.length
+        ? `Dificultades detectadas al momento de decidir: ${destacados.slice(0, 3).join(', ').toLowerCase()}. Trabajarlas puntualmente puede destrabar el proceso.`
+        : 'Exploración del mundo formativo y laboral: cada contacto real desarma fantasías y aporta datos propios.',
     }
 
     return {
