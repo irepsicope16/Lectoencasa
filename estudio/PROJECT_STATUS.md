@@ -65,16 +65,30 @@ prioridades y plan. **Quedan fuera** de esta primera etapa los pasos 8-10
 - Dark/light mode sin flash. Aviso orientativo obligatorio visible en los
   pasos clínicos clave.
 
-## ✅ Identidad visual — "Fichero" (definida el 13/09/2026)
+## ✅ Identidad visual definitiva (14/09/2026)
 
-Paleta y tipografía definitivas, elegidas para diferenciarse a propósito de
-Método Brújula (verde agua / lavanda): tinta azul-marino, la regla roja y el
-renglón celeste de una ficha de repaso real, con un resaltador amarillo como
-tercer acento. Isotipo: fichero apilado (`src/branding/Logo.tsx`). Tipografía
-Source Serif 4 (display, itálica reservada para citas del estudiante e
-información evocativa) + IBM Plex Sans (texto) + IBM Plex Mono (códigos de
-ítem, etiquetas). Fundamentos y alternativa descartada ("Agenda") en la
-propuesta de identidad presentada a la usuaria. Tokens en `src/index.css`.
+Reemplaza la propuesta provisoria "Fichero" (13/09/2026) por el isotipo y la
+paleta que trajo la usuaria — logo real, no una propuesta de Claude:
+
+- **Isotipo**: la "E" de Método Estudio (barra roja + tres píldoras
+  perfil/estrategias/seguimiento), provisto en dos archivos
+  (`src/assets/branding/logo-completo.webp` para uso grande — portada, login
+  — e `icon-mark.png`, un recorte cuadrado del isotipo solo, para sidebar y
+  favicon). Componentes en `src/branding/Logo.tsx`: `Isotipo`,
+  `LogoHorizontal`, `BrandCover`.
+- **Paleta**, muestreada por color directamente del logo (`src/index.css`):
+  `--primary` azul-marino #223346 (bordes/tinta del isotipo, color dominante
+  → botón principal), `--accent` rojo #ab5246 (la barra vertical y el
+  subrayado → botón de énfasis, áreas a fortalecer), `--secondary` azul
+  acero #5e7688 (píldora "Estrategias" → tercer color de botón/badge, nuevo
+  token agregado a los componentes de UI). `--danger` se mantuvo distinto
+  del rojo de marca para no confundir alerta con botón de marca.
+- **Jerarquía tipográfica reforzada**: títulos de página, de tarjeta y
+  valores de estadística ahora más grandes (Source Serif 4), a pedido
+  explícito de la usuaria.
+- Se sacó la ilustración de escritorio dibujada a mano (`HeroIllustration.tsx`,
+  ya no existe): la portada ahora usa el logo real de la usuaria como imagen
+  principal, no una ilustración generada.
 
 ## ✅ Portada pública y modelo de acceso (definidos el 13/09/2026)
 
@@ -82,16 +96,10 @@ propuesta de identidad presentada a la usuaria. Tokens en `src/index.css`.
   mano después de coordinar el pago — no hay ni habrá autoregistro público
   por ahora. No se construyó formulario de registro (no hace falta).
 - **Portada pública** en `/` (`src/features/home/LandingPage.tsx`): hero con
-  copy real del método, ilustración de escritorio con fichas
-  (`src/branding/HeroIllustration.tsx`), tres pasos del proceso (entrevista →
-  autoperfil → plan), aviso orientativo obligatorio y botón "Solicitar
-  acceso" por WhatsApp. `/login` sigue existiendo para quien ya tiene cuenta.
-  - La ilustración se dibujó a mano en SVG (no un raster externo): se
-    intentó generar una imagen con IA (Gamma), pero el proxy de red de esta
-    sesión bloquea `cdn.gamma.app` y no se pudo descargar ni verificar el
-    resultado antes de publicarlo en un sitio público — se optó por no
-    arriesgar algo sin ver. Si preferís una foto o ilustración distinta,
-    decime y la genero de nuevo (o subila vos y la reemplazo).
+  copy real del método, el logo como imagen principal, tres pasos del
+  proceso (entrevista → autoperfil → plan), aviso orientativo obligatorio y
+  botón "Solicitar acceso" por WhatsApp. `/login` sigue existiendo para quien
+  ya tiene cuenta.
   - El botón de WhatsApp reusa el mismo número que ya tiene Brújula en su
     sidebar (5492216185376). **Confirmar si es el canal correcto para
     Método Estudio** o si conviene uno propio.
@@ -100,8 +108,9 @@ propuesta de identidad presentada a la usuaria. Tokens en `src/index.css`.
 
 - Nombre comercial definitivo y disponibilidad marcaria (se usó "Método
   Estudio", el nombre de trabajo del documento).
-- Isotipo: se implementó "fichero apilado" (recomendado); quedan sin
-  construir las otras dos variantes propuestas si se prefiere cambiar.
+- Logo en informes/páginas imprimibles: el isotipo ya está listo para
+  incorporarse (`Isotipo`/`BrandCover`) apenas se construya el informe
+  exportable (P14, todavía backlog — ver más abajo).
 - Qué profesiones podrán registrarse y permisos por rol (hoy: un solo rol
   profesional; sin registro público ni multi-profesional).
 - Países de lanzamiento y requisitos legales específicos.

@@ -10,34 +10,39 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ============================================================
-   Método Estudio — Design tokens · "Fichero"
-   La ficha de repaso como objeto de marca: tinta + la regla roja
-   y el renglón celeste de una ficha real, con un toque de
-   resaltador. Ver estudio/PROJECT_STATUS.md y la propuesta de
-   identidad para el razonamiento completo.
+   Método Estudio — Design tokens
+   Paleta tomada directamente del isotipo definitivo (la "E" de
+   fichas): tinta azul-marino (primario), rojo de la barra/subrayado
+   (acento) y el azul acero de "Estrategias" (secundario). Ver
+   src/branding/Logo.tsx y PROJECT_STATUS.md.
    ============================================================ */
 
 :root {
   --background: #faf6ee;
   --surface: #fffdf8;
   --surface-2: #f1ebda;
-  --foreground: #232842;
-  --muted-foreground: #6f6a5c;
-  --faint-foreground: #8f8977;
+  --foreground: #223346;
+  --muted-foreground: #5c6b78;
+  --faint-foreground: #838f99;
 
-  --primary: #b3433a;
-  --primary-strong: #8f332c;
-  --primary-soft: #f5e3e0;
-  --primary-foreground: #fffaf5;
+  --primary: #223346;
+  --primary-strong: #16222f;
+  --primary-soft: #e3e8ec;
+  --primary-foreground: #ffffff;
 
-  --accent: #3f6a96;
-  --accent-strong: #2e5479;
-  --accent-soft: #e4edf5;
+  --accent: #ab5246;
+  --accent-strong: #8a4038;
+  --accent-soft: #f5e4e1;
   --accent-foreground: #ffffff;
+
+  --secondary: #5e7686;
+  --secondary-strong: #48606f;
+  --secondary-soft: #e6ebee;
+  --secondary-foreground: #ffffff;
 
   --border: #e4dcc8;
   --border-strong: #d3c7a9;
-  --ring: #b3433a55;
+  --ring: #22334655;
 
   --danger: #c23b2e;
   --danger-soft: #fbe6e1;
@@ -55,19 +60,24 @@
   --muted-foreground: #b0a998;
   --faint-foreground: #8c8677;
 
-  --primary: #d17a72;
-  --primary-strong: #e2938c;
-  --primary-soft: #3a231f;
-  --primary-foreground: #241210;
+  --primary: #8ba0b2;
+  --primary-strong: #a6b8c6;
+  --primary-soft: #232f39;
+  --primary-foreground: #12191f;
 
-  --accent: #7fa8cf;
-  --accent-strong: #9dc0e2;
-  --accent-soft: #1f2f3f;
-  --accent-foreground: #0d1822;
+  --accent: #d99184;
+  --accent-strong: #e6ab9f;
+  --accent-soft: #3a2420;
+  --accent-foreground: #241210;
+
+  --secondary: #93aebc;
+  --secondary-strong: #aec4cf;
+  --secondary-soft: #1f2f37;
+  --secondary-foreground: #0d1418;
 
   --border: #34363f;
   --border-strong: #40424d;
-  --ring: #d17a7266;
+  --ring: #8ba0b266;
 
   --danger: #e2726a;
   --danger-soft: #3a201c;
@@ -96,6 +106,11 @@
   --color-accent-strong: var(--accent-strong);
   --color-accent-soft: var(--accent-soft);
   --color-accent-foreground: var(--accent-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-strong: var(--secondary-strong);
+  --color-secondary-soft: var(--secondary-soft);
+  --color-secondary-foreground: var(--secondary-foreground);
 
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
