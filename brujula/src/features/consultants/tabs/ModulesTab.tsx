@@ -17,6 +17,8 @@ import { STAGE_HEX, STAGES } from '@/lib/constants'
 import { moduleActivityStats } from '@/lib/progress'
 import type { Consultant, ModuleDefinition, ModuleProgress, ModuleProgressStatus } from '@/types'
 import { cn } from '@/lib/utils'
+import { CareerMapTab } from './CareerMapTab'
+import { ComparadorTab } from './ComparadorTab'
 
 const STATUS_META: Record<ModuleProgressStatus, { label: string; icon: typeof Circle; cls: string }> = {
   no_iniciado: { label: 'No iniciado', icon: Circle, cls: 'text-faint' },
@@ -145,6 +147,17 @@ export function ModulesTab({ consultant }: { consultant: Consultant }) {
                     ))}
                   </ul>
                 </div>
+
+                {selected.id === 'proyecto_vida' && (
+                  <div className="border-t pt-4">
+                    <CareerMapTab consultant={consultant} />
+                  </div>
+                )}
+                {selected.id === 'carreras' && (
+                  <div className="border-t pt-4">
+                    <ComparadorTab consultant={consultant} />
+                  </div>
+                )}
 
                 {progressOf(selected.id)?.notasConsultante && (
                   <div className="rounded-lg border border-accent/30 bg-accent-soft/50 p-3">

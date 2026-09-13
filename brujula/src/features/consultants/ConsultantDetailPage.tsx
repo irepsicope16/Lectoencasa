@@ -31,8 +31,6 @@ import { SessionsTab } from './tabs/SessionsTab'
 import { ActivitiesTab } from './tabs/ActivitiesTab'
 import { FilesTab } from './tabs/FilesTab'
 import { CompassTab } from './tabs/CompassTab'
-import { CareerMapTab } from './tabs/CareerMapTab'
-import { ComparadorTab } from './tabs/ComparadorTab'
 import { AITab } from './tabs/AITab'
 import { ReportsTab } from './tabs/ReportsTab'
 
@@ -153,8 +151,6 @@ export default function ConsultantDetailPage() {
             ['actividades', 'Actividades'],
             ['archivos', 'Archivos'],
             ['motor', 'Motor Brújula'],
-            ['mapa', 'Mapa de Carreras'],
-            ['comparador', 'Comparador de Carreras'],
             ['ia', 'Asistente IA'],
             ['informes', 'Informes'],
           ].map(([v, l]) => (
@@ -170,8 +166,6 @@ export default function ConsultantDetailPage() {
         <TabsContent value="actividades"><ActivitiesTab consultant={consultant} /></TabsContent>
         <TabsContent value="archivos"><FilesTab consultant={consultant} /></TabsContent>
         <TabsContent value="motor"><CompassTab consultant={consultant} /></TabsContent>
-        <TabsContent value="mapa"><CareerMapTab consultant={consultant} /></TabsContent>
-        <TabsContent value="comparador"><ComparadorTab consultant={consultant} /></TabsContent>
         <TabsContent value="ia"><AITab consultant={consultant} /></TabsContent>
         <TabsContent value="informes"><ReportsTab consultant={consultant} /></TabsContent>
       </Tabs>
