@@ -178,11 +178,13 @@ function collectSignals(input: EngineInput): Signals {
       else if (act.moduleId === 'fortalezas') s.fortalezas.push(señal)
       else if (act.moduleId === 'valores') s.valores.push(señal)
       else if (act.moduleId === 'identidad') s.identidad.push(señal)
-      // Cuestionario de Dificultades para Decidir (módulo Carreras): a
-      // diferencia de los demás tests, acá la categoría destacada (prom >= 4)
-      // señala una dificultad, no una fortaleza — igual sirve como evidencia
-      // de la dimensión "exploración" (cómo transita el momento de decidir).
-      else if (act.moduleId === 'carreras') s.exploracion.push(señal)
+      // Cuestionario de Dificultades para Decidir: a diferencia de los demás
+      // tests, acá la categoría destacada (prom >= 4) señala una dificultad,
+      // no una fortaleza — igual sirve como evidencia de la dimensión
+      // "exploración" (cómo transita el momento de decidir). Se identifica
+      // por el id de la actividad, no por su módulo, para poder reubicarla
+      // en el método sin tener que tocar el motor.
+      else if (act.templateId === 'test-dificultades-decision') s.exploracion.push(señal)
     }
   }
 

@@ -732,6 +732,7 @@ export const MODULES: ModuleDefinition[] = [
       'Formular el proyecto en palabras propias',
     ],
     actividades: [
+      TEST_DIFICULTADES_DECISION,
       {
         id: 'proyecto-vision',
         titulo: 'Mi visión a 10 años',
@@ -808,7 +809,6 @@ export const MODULES: ModuleDefinition[] = [
       'Analizar planes de estudio e instituciones reales',
     ],
     actividades: [
-      TEST_DIFICULTADES_DECISION,
       {
         id: 'carreras-ruta-investigacion',
         titulo: 'Ruta de Investigación de Carreras',
