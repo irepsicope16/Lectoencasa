@@ -17,7 +17,7 @@ export function PageHeader({
   return (
     <div className={cn('mb-6 flex flex-wrap items-end justify-between gap-3', className)}>
       <div>
-        <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
+        <h1 className="font-display text-xl font-semibold tracking-tight">{title}</h1>
         {subtitle && <p className="mt-0.5 text-[13px] text-muted-foreground">{subtitle}</p>}
       </div>
       {actions && <div className="flex items-center gap-2">{actions}</div>}
@@ -55,13 +55,13 @@ export function StatCard({
   label,
   value,
   hint,
-  tone = 'verde',
+  tone = 'primario',
 }: {
   icon: LucideIcon
   label: string
   value: React.ReactNode
   hint?: string
-  tone?: 'verde' | 'terracota' | 'neutro'
+  tone?: 'primario' | 'acento' | 'neutro'
 }) {
   return (
     <div className="rounded-xl border bg-surface p-4 shadow-[0_1px_2px_rgba(16,24,32,0.04),0_4px_14px_-6px_rgba(16,24,32,0.07)]">
@@ -69,8 +69,8 @@ export function StatCard({
         <div
           className={cn(
             'flex h-7 w-7 items-center justify-center rounded-lg',
-            tone === 'verde' && 'bg-primary-soft text-primary-strong',
-            tone === 'terracota' && 'bg-accent-soft text-accent-strong',
+            tone === 'primario' && 'bg-primary-soft text-primary-strong',
+            tone === 'acento' && 'bg-accent-soft text-accent-strong',
             tone === 'neutro' && 'bg-surface-2 text-muted-foreground',
           )}
         >

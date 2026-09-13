@@ -85,7 +85,7 @@ export function PlanTab({ student }: { student: Student }) {
                     <p className="mt-1 text-[12.5px] text-muted-foreground">Necesidad: {g.necesidadPriorizada}</p>
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {g.herramientas.map((h) => (
-                        <Badge key={h} variant="verde">
+                        <Badge key={h} variant="primario">
                           {h}
                         </Badge>
                       ))}
@@ -96,7 +96,7 @@ export function PlanTab({ student }: { student: Student }) {
                       <span>Inicio: {fechaCorta(g.fechaInicio)}</span>
                       <span>Revisión: {fechaCorta(g.fechaRevision)}</span>
                     </div>
-                    {g.vozEstudiante && <p className="mt-2 text-[12.5px] italic text-muted-foreground">"{g.vozEstudiante}"</p>}
+                    {g.vozEstudiante && <p className="font-display mt-2 text-[13.5px] italic text-muted-foreground">"{g.vozEstudiante}"</p>}
                   </div>
                 ))
               )}

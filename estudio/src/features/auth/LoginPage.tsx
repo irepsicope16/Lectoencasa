@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { GraduationCap } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
 import { Button } from '@/components/ui/button'
 import { Input, Label, FieldError } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
+import { Isotipo } from '@/branding/Logo'
 
 export default function LoginPage() {
   const login = useAuthStore((s) => s.login)
@@ -31,10 +31,8 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex flex-col items-center gap-2 text-center">
-          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <GraduationCap className="h-5 w-5" />
-          </span>
-          <h1 className="text-lg font-semibold tracking-tight">Método Estudio</h1>
+          <Isotipo size={44} />
+          <h1 className="font-display text-lg font-semibold tracking-tight">Método Estudio</h1>
           <p className="text-[13px] text-muted-foreground">Acceso profesional</p>
         </div>
         <Card>

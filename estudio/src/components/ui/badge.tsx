@@ -8,8 +8,8 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default: 'bg-surface-2 text-muted-foreground',
-        verde: 'bg-primary-soft text-primary-strong',
-        terracota: 'bg-accent-soft text-accent-strong',
+        primario: 'bg-primary-soft text-primary-strong',
+        acento: 'bg-accent-soft text-accent-strong',
         amber: 'bg-warning-soft text-warning',
         danger: 'bg-danger-soft text-danger',
         outline: 'border text-muted-foreground',

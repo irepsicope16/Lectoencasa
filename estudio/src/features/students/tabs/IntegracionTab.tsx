@@ -147,7 +147,7 @@ export function IntegracionTab({ student }: { student: Student }) {
                 ) : (
                   <div className="flex flex-wrap gap-1.5">
                     {fortalezas.map((d) => (
-                      <Badge key={d} variant="verde">
+                      <Badge key={d} variant="primario">
                         {d} · {DIMENSIONES[d].nombre}
                       </Badge>
                     ))}
@@ -165,7 +165,7 @@ export function IntegracionTab({ student }: { student: Student }) {
                 ) : (
                   <div className="flex flex-wrap gap-1.5">
                     {aFortalecer.map((d) => (
-                      <Badge key={d} variant="terracota">
+                      <Badge key={d} variant="acento">
                         {d} · {DIMENSIONES[d].nombre}
                       </Badge>
                     ))}

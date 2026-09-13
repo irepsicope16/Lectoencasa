@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { GraduationCap, Home, Users } from 'lucide-react'
+import { Home, Users } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Isotipo } from '@/branding/Logo'
 
 const nav = [
   { to: '/pro', icon: Home, label: 'Inicio', end: true },
@@ -14,10 +15,8 @@ export function Sidebar() {
     <aside className="flex h-full w-[228px] shrink-0 flex-col border-r bg-surface">
       <div className="flex h-14 items-center gap-2 border-b px-4">
         <button onClick={() => navigate('/pro')} className="flex cursor-pointer items-center gap-2" aria-label="Ir al inicio">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <GraduationCap className="h-4 w-4" />
-          </span>
-          <span className="text-[14px] font-semibold tracking-tight">Método Estudio</span>
+          <Isotipo size={28} />
+          <span className="font-display text-[14.5px] font-semibold tracking-tight">Método Estudio</span>
         </button>
       </div>
 

@@ -65,12 +65,29 @@ prioridades y plan. **Quedan fuera** de esta primera etapa los pasos 8-10
 - Dark/light mode sin flash. Aviso orientativo obligatorio visible en los
   pasos clínicos clave.
 
+## ✅ Identidad visual — "Fichero" (definida el 13/09/2026)
+
+Paleta y tipografía definitivas, elegidas para diferenciarse a propósito de
+Método Brújula (verde agua / lavanda): tinta azul-marino, la regla roja y el
+renglón celeste de una ficha de repaso real, con un resaltador amarillo como
+tercer acento. Isotipo: fichero apilado (`src/branding/Logo.tsx`). Tipografía
+Source Serif 4 (display, itálica reservada para citas del estudiante e
+información evocativa) + IBM Plex Sans (texto) + IBM Plex Mono (códigos de
+ítem, etiquetas). Fundamentos y alternativa descartada ("Agenda") en la
+propuesta de identidad presentada a la usuaria. Tokens en `src/index.css`.
+
 ## 🟡 Decisiones pendientes (explícitas en el documento, §17 — no resueltas por el desarrollo)
 
 - Nombre comercial definitivo y disponibilidad marcaria (se usó "Método
   Estudio", el nombre de trabajo del documento).
-- Identidad visual: paleta verde bosque / terracota es un placeholder,
-  distinto de Brújula a propósito, pendiente de definición de marca.
+- Isotipo: se implementó "fichero apilado" (recomendado); quedan sin
+  construir las otras dos variantes propuestas si se prefiere cambiar.
+- Modelo de acceso: hoy cerrado (la profesional da de alta cada cuenta, sin
+  registro público). Ver la propuesta de identidad para el contraste con el
+  autoregistro multi-profesional de Brújula — no se avanzó, a la espera de
+  definición.
+- Portada pública: hoy la app entra directo a `/login`. Se mockeó una
+  portada posible en la propuesta de identidad; no se construyó todavía.
 - Qué profesiones podrán registrarse y permisos por rol (hoy: un solo rol
   profesional; sin registro público ni multi-profesional).
 - Países de lanzamiento y requisitos legales específicos.
