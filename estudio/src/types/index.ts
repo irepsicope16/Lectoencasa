@@ -207,6 +207,23 @@ export interface Ruta {
   herramientas: string[]
 }
 
+// ---------- Evaluación: screenings y tests subidos (previo al plan) ----------
+
+export type StoredFileTipo = 'screening' | 'test' | 'otro'
+
+export interface StoredFile {
+  id: string
+  studentId: string
+  nombre: string
+  mimeType: string
+  tamano: number // bytes
+  dataUrl?: string // sin valor = pesaba más del máximo local; se guarda solo la referencia
+  descripcion?: string
+  tipo: StoredFileTipo
+  createdAt: string
+  updatedAt: string
+}
+
 // ---------- Sesiones y agenda (gestión de consultorio, no forman parte
 // del Documento Maestro clínico — se agregan para paridad de práctica con
 // Método Brújula) ----------

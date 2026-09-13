@@ -12,6 +12,7 @@ const StudentsPage = lazy(() => import('@/features/students/StudentsPage'))
 const StudentDetailPage = lazy(() => import('@/features/students/StudentDetailPage'))
 const AgendaPage = lazy(() => import('@/features/agenda/AgendaPage'))
 const HonorariosPage = lazy(() => import('@/features/agenda/HonorariosPage'))
+const SettingsPage = lazy(() => import('@/features/settings/SettingsPage'))
 const MyDashboard = lazy(() => import('@/features/dashboard/MyDashboard'))
 
 function Page({ children }: { children: React.ReactNode }) {
@@ -37,6 +38,7 @@ export const router = createHashRouter([
           { path: 'estudiantes/:id', element: <Page><StudentDetailPage /></Page> },
           { path: 'agenda', element: <Page><AgendaPage /></Page> },
           { path: 'honorarios', element: <Page><HonorariosPage /></Page> },
+          { path: 'ajustes', element: <Page><SettingsPage /></Page> },
         ],
       },
     ],

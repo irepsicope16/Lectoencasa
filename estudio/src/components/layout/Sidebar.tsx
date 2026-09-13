@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Calendar, Home, Users, Wallet } from 'lucide-react'
+import { Calendar, Home, Settings, Users, Wallet } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Isotipo } from '@/branding/Logo'
 import type { UserRole } from '@/types'
@@ -9,6 +9,7 @@ const proNav = [
   { to: '/pro/estudiantes', icon: Users, label: 'Estudiantes' },
   { to: '/pro/agenda', icon: Calendar, label: 'Agenda' },
   { to: '/pro/honorarios', icon: Wallet, label: 'Honorarios' },
+  { to: '/pro/ajustes', icon: Settings, label: 'Ajustes' },
 ]
 
 const estudianteNav = [{ to: '/mi', icon: Home, label: 'Mi camino', end: true }]

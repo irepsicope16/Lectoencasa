@@ -10,6 +10,7 @@ import type {
   PriorityDecision,
   QuestionnaireResponse,
   Session,
+  StoredFile,
   Student,
   User,
 } from '@/types'
@@ -33,6 +34,7 @@ export const db = {
   goals: new Repository<Goal>(driver, 'goals'),
   sessions: new Repository<Session>(driver, 'sessions'),
   events: new Repository<CalendarEvent>(driver, 'calendar_events'),
+  files: new Repository<StoredFile>(driver, 'files'),
   clearAll: () => driver.clearAll(),
 }
 
@@ -48,6 +50,7 @@ export async function deleteStudentCascade(studentId: string): Promise<void> {
     db.goals,
     db.sessions,
     db.events,
+    db.files,
   ] as const
   for (const repo of collections) {
     const rows = (await repo.list()) as { id: string; studentId?: string }[]

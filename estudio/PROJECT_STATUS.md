@@ -147,6 +147,36 @@ A pedido explícito: paridad de gestión de consultorio con Método Brújula.
     (`RequireRole`), igual que en Brújula.
   - `AppShell`/`Sidebar` ahora reciben `role` y muestran nav distinto por rol.
 
+## ✅ Evaluación, Ajustes y revisión de navegación (14/09/2026)
+
+A pedido explícito: completar lo que faltaba copiar de Método Brújula del
+lado profesional, y una pestaña nueva para subir instrumentos antes del plan.
+
+- **Pestaña Evaluación** (`tabs/EvaluacionTab.tsx`, nueva pestaña en la ficha
+  del estudiante, entre Integración y Prioridades): subida de screenings,
+  tests u otros documentos de evaluación por estudiante, con tipo
+  (screening/test/otro), tope de 700KB por archivo en esta versión
+  LocalStorage (igual que `FilesTab.tsx` de Brújula), descarga y borrado.
+  Si un archivo pesa más del máximo, se guarda la referencia (nombre, peso,
+  tipo) pero no el contenido, con aviso explícito. Nuevo tipo `StoredFile`
+  (`types/index.ts`) y colección `db.files` (con cascada al borrar un
+  estudiante).
+- **Página Ajustes** (`features/settings/SettingsPage.tsx`, ruta
+  `/pro/ajustes`, nuevo ítem en el menú lateral): perfil profesional
+  editable (nombre, apellido, título), tema claro/oscuro/sistema, y datos
+  (exportar/importar copia de seguridad en JSON, restablecer a los datos de
+  demostración con confirmación). Mismo patrón que la de Brújula, sin los
+  paneles de nube/IA que no existen en Método Estudio. Nuevo
+  `updateProfile` en `stores/authStore.ts`, `services/storage/backup.ts` y
+  `resetDemoData()` en `data/seed.ts`.
+- **Navegación revisada**: el menú lateral ahora muestra los cinco destinos
+  del rol profesional (Inicio, Estudiantes, Agenda, Honorarios, Ajustes)
+  siempre con ícono y etiqueta visibles, sin colapsar — se verificó que no
+  falte ningún botón para moverse dentro de la plataforma. No se copiaron
+  de Brújula la Biblioteca, el Método ni Estadísticas porque no forman
+  parte del alcance acordado (flujo core) — quedan en el backlog si se
+  decide sumarlas.
+
 ## 🟡 Decisiones pendientes (explícitas en el documento, §17 — no resueltas por el desarrollo)
 
 - Nombre comercial definitivo y disponibilidad marcaria (se usó "Método
