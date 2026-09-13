@@ -1,20 +1,30 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Home, Users } from 'lucide-react'
+import { Calendar, Home, Users, Wallet } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Isotipo } from '@/branding/Logo'
+import type { UserRole } from '@/types'
 
-const nav = [
+const proNav = [
   { to: '/pro', icon: Home, label: 'Inicio', end: true },
   { to: '/pro/estudiantes', icon: Users, label: 'Estudiantes' },
+  { to: '/pro/agenda', icon: Calendar, label: 'Agenda' },
+  { to: '/pro/honorarios', icon: Wallet, label: 'Honorarios' },
 ]
 
-export function Sidebar() {
+const estudianteNav = [{ to: '/mi', icon: Home, label: 'Mi camino', end: true }]
+
+export function Sidebar({ role }: { role: UserRole }) {
   const navigate = useNavigate()
+  const nav = role === 'profesional' ? proNav : estudianteNav
 
   return (
     <aside className="flex h-full w-[228px] shrink-0 flex-col border-r bg-surface">
       <div className="flex h-14 items-center gap-2 border-b px-4">
-        <button onClick={() => navigate('/pro')} className="flex cursor-pointer items-center gap-2" aria-label="Ir al inicio">
+        <button
+          onClick={() => navigate(role === 'profesional' ? '/pro' : '/mi')}
+          className="flex cursor-pointer items-center gap-2"
+          aria-label="Ir al inicio"
+        >
           <Isotipo size={28} />
           <span className="font-display text-[14.5px] font-semibold tracking-tight">Método Estudio</span>
         </button>

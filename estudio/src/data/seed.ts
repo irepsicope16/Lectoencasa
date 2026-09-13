@@ -13,7 +13,7 @@ const SEED_FLAG = 'me:seed:version'
 
 export async function seedIfNeeded() {
   if (localStorage.getItem(SEED_FLAG) === SEED_VERSION) return
-  const existentes = await db.professionals.list()
+  const existentes = await db.users.list()
   if (existentes.length > 0) {
     localStorage.setItem(SEED_FLAG, SEED_VERSION)
     return
@@ -23,7 +23,8 @@ export async function seedIfNeeded() {
 }
 
 async function sembrar() {
-  const profesional = await db.professionals.create({
+  const profesional = await db.users.create({
+    role: 'profesional',
     nombre: 'Irene',
     apellido: 'Morbidelli',
     email: 'irene@metodoestudio.demo',
@@ -215,5 +216,46 @@ async function sembrar() {
     fechaInicio: '2026-09-08',
     fechaRevision: '2026-10-06',
     estado: 'activo',
+  })
+
+  // ---------- Cuenta de acceso al portal del estudiante ----------
+  await db.users.create({
+    role: 'estudiante',
+    nombre: student.nombre,
+    apellido: student.apellido,
+    email: student.contacto,
+    password: 'estudio',
+    studentId: student.id,
+  })
+
+  // ---------- Sesiones y agenda ----------
+  await db.sessions.create({
+    studentId: student.id,
+    fecha: '2026-09-08T15:00:00.000Z',
+    duracionMin: 45,
+    modalidad: 'presencial',
+    estado: 'realizada',
+    titulo: 'Entrevista inicial',
+    notas: 'Primer encuentro con Camila y su mamá. Buen rapport, motivada para empezar.',
+    proximosPasos: 'Autoperfil en la próxima sesión.',
+    monto: 15000,
+    cobrado: true,
+  })
+  await db.sessions.create({
+    studentId: student.id,
+    fecha: '2026-09-15T15:00:00.000Z',
+    duracionMin: 45,
+    modalidad: 'presencial',
+    estado: 'realizada',
+    titulo: 'Integración y devolución del plan',
+    notas: 'Se comparte el plan de trabajo. Camila elige empezar por lectura por capas.',
+    monto: 15000,
+    cobrado: false,
+  })
+  await db.events.create({
+    fecha: '2026-09-29T15:00:00.000Z',
+    titulo: 'Sesión de seguimiento — Camila Sosa',
+    tipo: 'sesion',
+    studentId: student.id,
   })
 }

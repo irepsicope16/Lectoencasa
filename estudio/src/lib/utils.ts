@@ -31,6 +31,14 @@ export function fechaLarga(iso: string): string {
   }
 }
 
+export function fechaHora(iso: string): string {
+  try {
+    return format(parseISO(iso), "d MMM · HH:mm 'h'", { locale: es })
+  } catch {
+    return iso
+  }
+}
+
 export function haceCuanto(iso: string): string {
   try {
     return formatDistanceToNow(parseISO(iso), { addSuffix: true, locale: es })

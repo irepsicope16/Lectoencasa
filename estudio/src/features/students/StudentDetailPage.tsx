@@ -5,11 +5,13 @@ import { PageHeader, FadeIn } from '@/components/shared'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { edad, nombreCompleto } from '@/lib/utils'
+import { ResumenTab } from './tabs/ResumenTab'
 import { EntrevistaTab } from './tabs/EntrevistaTab'
 import { AutoperfilTab } from './tabs/AutoperfilTab'
 import { IntegracionTab } from './tabs/IntegracionTab'
 import { PrioridadesTab } from './tabs/PrioridadesTab'
 import { PlanTab } from './tabs/PlanTab'
+import { SessionsTab } from './tabs/SessionsTab'
 import type { Student } from '@/types'
 
 const ESTADO_LABEL: Record<Student['estado'], string> = {
@@ -39,14 +41,19 @@ export default function StudentDetailPage() {
         actions={<Badge variant="outline">{ESTADO_LABEL[student.estado]}</Badge>}
       />
 
-      <Tabs defaultValue="entrevista">
+      <Tabs defaultValue="resumen">
         <TabsList>
+          <TabsTrigger value="resumen">Resumen</TabsTrigger>
           <TabsTrigger value="entrevista">Entrevista</TabsTrigger>
           <TabsTrigger value="autoperfil">Autoperfil</TabsTrigger>
           <TabsTrigger value="integracion">Integración</TabsTrigger>
           <TabsTrigger value="prioridades">Prioridades</TabsTrigger>
           <TabsTrigger value="plan">Plan</TabsTrigger>
+          <TabsTrigger value="sesiones">Sesiones</TabsTrigger>
         </TabsList>
+        <TabsContent value="resumen">
+          <ResumenTab student={student} />
+        </TabsContent>
         <TabsContent value="entrevista">
           <EntrevistaTab student={student} />
         </TabsContent>
@@ -61,6 +68,9 @@ export default function StudentDetailPage() {
         </TabsContent>
         <TabsContent value="plan">
           <PlanTab student={student} />
+        </TabsContent>
+        <TabsContent value="sesiones">
+          <SessionsTab student={student} />
         </TabsContent>
       </Tabs>
     </FadeIn>

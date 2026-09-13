@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { createHashRouter, Navigate } from 'react-router-dom'
-import { RequireAuth } from '@/features/auth/guards'
+import { RequireRole } from '@/features/auth/guards'
 import { AppShell } from '@/components/layout/AppShell'
 
 // Hash router: funciona en hosting estático (GitHub Pages) sin config de servidor.
@@ -10,6 +10,9 @@ const LoginPage = lazy(() => import('@/features/auth/LoginPage'))
 const ProDashboard = lazy(() => import('@/features/dashboard/ProDashboard'))
 const StudentsPage = lazy(() => import('@/features/students/StudentsPage'))
 const StudentDetailPage = lazy(() => import('@/features/students/StudentDetailPage'))
+const AgendaPage = lazy(() => import('@/features/agenda/AgendaPage'))
+const HonorariosPage = lazy(() => import('@/features/agenda/HonorariosPage'))
+const MyDashboard = lazy(() => import('@/features/dashboard/MyDashboard'))
 
 function Page({ children }: { children: React.ReactNode }) {
   return (
@@ -23,16 +26,28 @@ export const router = createHashRouter([
   { path: '/', element: <Page><LandingPage /></Page> },
   { path: '/login', element: <Page><LoginPage /></Page> },
   {
-    element: <RequireAuth />,
+    element: <RequireRole role="profesional" />,
     children: [
       {
         path: '/pro',
-        element: <AppShell />,
+        element: <AppShell role="profesional" />,
         children: [
           { index: true, element: <Page><ProDashboard /></Page> },
           { path: 'estudiantes', element: <Page><StudentsPage /></Page> },
           { path: 'estudiantes/:id', element: <Page><StudentDetailPage /></Page> },
+          { path: 'agenda', element: <Page><AgendaPage /></Page> },
+          { path: 'honorarios', element: <Page><HonorariosPage /></Page> },
         ],
+      },
+    ],
+  },
+  {
+    element: <RequireRole role="estudiante" />,
+    children: [
+      {
+        path: '/mi',
+        element: <AppShell role="estudiante" />,
+        children: [{ index: true, element: <Page><MyDashboard /></Page> }],
       },
     ],
   },

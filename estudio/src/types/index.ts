@@ -4,13 +4,18 @@
 // IDs uuid y timestamps ISO-8601, espejo de un futuro esquema Postgres.
 // ============================================================
 
-export interface Professional {
+export type UserRole = 'profesional' | 'estudiante'
+
+export interface User {
   id: string
+  role: UserRole
   nombre: string
   apellido: string
   email: string
   password: string // demo/local
-  titulo?: string
+  titulo?: string // solo rol profesional
+  /** Solo rol estudiante: vincula la cuenta con su ficha. */
+  studentId?: string
   createdAt: string
   updatedAt: string
 }
@@ -200,4 +205,42 @@ export interface Ruta {
   nombre: string
   dimensiones: DimensionId[]
   herramientas: string[]
+}
+
+// ---------- Sesiones y agenda (gestión de consultorio, no forman parte
+// del Documento Maestro clínico — se agregan para paridad de práctica con
+// Método Brújula) ----------
+
+export type SessionStatus = 'programada' | 'realizada' | 'cancelada'
+export type SessionMode = 'presencial' | 'virtual'
+
+export interface Session {
+  id: string
+  studentId: string
+  fecha: string // ISO datetime
+  duracionMin: number
+  modalidad: SessionMode
+  estado: SessionStatus
+  titulo: string
+  notas: string
+  proximosPasos?: string
+  /** Honorario de la sesión. Sin valor = no se registró monto. */
+  monto?: number
+  /** Sin valor = no se registró monto, tampoco aplica estado de cobro. */
+  cobrado?: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface CalendarEvent {
+  id: string
+  fecha: string // ISO datetime
+  titulo: string
+  tipo: 'sesion' | 'tarea' | 'recordatorio'
+  studentId?: string
+  sessionId?: string
+  notas?: string
+  completado?: boolean
+  createdAt: string
+  updatedAt: string
 }

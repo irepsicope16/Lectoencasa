@@ -10,18 +10,21 @@ Vite + TypeScript estricto + Tailwind v4), arquitectura melliza a Método
 Brújula pero **plataforma independiente** (carpeta, login y storage propios,
 sin compartir datos con Brújula — decisión explícita del 13/09/2026).
 
-Cubre, del orden de implementación recomendado en el documento maestro
-(§18): **1 a 7** — datos y permisos, alta y entrevista, autoperfil y
-guardado, cálculo por dimensiones, vista de integración profesional,
-prioridades y plan. **Quedan fuera** de esta primera etapa los pasos 8-10
-(portal estudiante, seguimiento, informe exportable) — ver backlog.
+Cubre el flujo core del documento maestro (§18, pasos 1-7 y 9): datos y
+permisos, alta y entrevista, autoperfil y guardado, cálculo por
+dimensiones, integración profesional, prioridades, plan y seguimiento de
+sesiones. Suma además, a pedido explícito, gestión de consultorio a la par
+de Método Brújula (agenda, honorarios) y el **portal del estudiante**
+(paso 8) con cuenta de acceso automática. **Queda fuera** de esta etapa el
+informe exportable (paso 10) — ver backlog.
 
 ## ✅ Completamente terminado
 
 ### Núcleo y arquitectura
 - Modelo de dominio completo (`src/types/index.ts`), fiel al Documento
-  Maestro: Professional, Student, Intake, QuestionnaireResponse,
-  DimensionSnapshot, Alert, PriorityDecision, Goal.
+  Maestro: User (rol `profesional`/`estudiante`), Student, Intake,
+  QuestionnaireResponse, DimensionSnapshot, Alert, PriorityDecision, Goal,
+  Session, CalendarEvent.
 - Persistencia con patrón repositorio (`services/storage/`), igual al de
   Método Brújula: API async sobre LocalStorage, migrable a un backend real
   sin tocar la UI.
@@ -104,13 +107,50 @@ paleta que trajo la usuaria — logo real, no una propuesta de Claude:
     sidebar (5492216185376). **Confirmar si es el canal correcto para
     Método Estudio** o si conviene uno propio.
 
+## ✅ Ficha consolidada, agenda, honorarios y portal del estudiante (14/09/2026)
+
+A pedido explícito: paridad de gestión de consultorio con Método Brújula.
+
+- **Pestaña Resumen** (primera pestaña de la ficha, `tabs/ResumenTab.tsx`):
+  datos del estudiante, estado del proceso (entrevista/autoperfil/
+  integración/plan de un vistazo, con barra de progreso del autoperfil),
+  alerta abierta destacada, fortalezas/áreas a fortalecer y plan activo —
+  todo junto, sin tener que recorrer las otras pestañas.
+- **Sesiones** (`tabs/SessionsTab.tsx` + tipo `Session`): registro de
+  sesiones con modalidad, estado, notas, próximos pasos y honorario
+  opcional. Nueva pestaña en la ficha del estudiante.
+- **Agenda** (`features/agenda/AgendaPage.tsx`, ruta `/pro/agenda`):
+  calendario mensual con sesiones y recordatorios (tipo `CalendarEvent`),
+  detalle del día seleccionado, alta rápida de recordatorio/tarea
+  vinculado o no a un estudiante.
+- **Honorarios** (`features/agenda/HonorariosPage.tsx`, ruta
+  `/pro/honorarios`): todas las sesiones con monto registrado, filtro por
+  mes, totales cobrado/pendiente, marcar cobrada/pendiente en un clic.
+  Honorarios y Agenda no están en el Documento Maestro clínico — son
+  gestión de consultorio, agregadas por paridad con Brújula.
+- **Portal del estudiante** (rol `estudiante`, rutas `/mi`): al crear un
+  estudiante con un email de contacto se genera automáticamente su cuenta
+  de acceso (`features/auth/accounts.ts`, `ensureStudentAccount` — mismo
+  patrón que `ensureConsultantAccount` de Brújula) y la profesional ve las
+  credenciales una sola vez en un diálogo con botón de copiar. El estudiante
+  entra a `/mi` (`features/dashboard/MyDashboard.tsx`) y ve: el aviso no
+  clínico (`MENSAJES.resultadoEstudiante`), su propio autoperfil si no lo
+  completó (reutiliza `AutoperfilTab`, el mismo componente que usa la
+  profesional), y su plan activo en lenguaje llano (sin códigos de
+  dimensión ni jerga clínica).
+  - **Sigue siendo acceso cerrado**: la cuenta la genera la profesional al
+    cargar la ficha, nunca un autoregistro público — mismo criterio que la
+    decisión del 13/09/2026 sobre cuentas profesionales.
+  - Refactor de `Professional` a `User` con `role` unificado
+    (`profesional`/`estudiante`) en `types/index.ts`, `services/storage/db.ts`
+    (colección `users`), `stores/authStore.ts` y `features/auth/guards.tsx`
+    (`RequireRole`), igual que en Brújula.
+  - `AppShell`/`Sidebar` ahora reciben `role` y muestran nav distinto por rol.
+
 ## 🟡 Decisiones pendientes (explícitas en el documento, §17 — no resueltas por el desarrollo)
 
 - Nombre comercial definitivo y disponibilidad marcaria (se usó "Método
   Estudio", el nombre de trabajo del documento).
-- Logo en informes/páginas imprimibles: el isotipo ya está listo para
-  incorporarse (`Isotipo`/`BrandCover`) apenas se construya el informe
-  exportable (P14, todavía backlog — ver más abajo).
 - Qué profesiones podrán registrarse y permisos por rol (hoy: un solo rol
   profesional; sin registro público ni multi-profesional).
 - Países de lanzamiento y requisitos legales específicos.
@@ -120,27 +160,32 @@ paleta que trajo la usuaria — logo real, no una propuesta de Claude:
 
 ## 🔜 Backlog priorizado (pasos 8-10 del documento + mejoras técnicas)
 
-1. **Portal de estudiante** (P12): acceso por invitación, separado del login
-   profesional, con vista sin lenguaje técnico (`resultadoEstudiante` en
-   `data/mensajes.ts` ya está escrito para ese momento).
-2. **Tareas breves de desempeño** (§6, tabla 13): batería T1-T8 con escala
+1. **Tareas breves de desempeño** (§6, tabla 13): batería T1-T8 con escala
    observacional (tabla 14) — hoy el criterio "evidencia en tarea breve" de
    la tabla 17 queda en 0 porque no hay tareas todavía.
-3. **Biblioteca completa** (P10) con ficha por actividad (Anexo A):
+2. **Biblioteca completa** (P10) con ficha por actividad (Anexo A):
    población, modalidad, duración, variantes, precauciones. Hoy solo hay
    nombres de herramientas por ruta.
-4. **Seguimiento de sesión** (P13) y evolución del plan a lo largo de
-   ciclos.
-5. **Informe exportable** (P14): solo tras validación profesional, texto
-   editable, sin diagnósticos ni comparaciones normativas.
-6. Archivo de configuración administrable para versiones de cuestionario y
+3. **Evolución del plan a lo largo de ciclos**: la pestaña Sesiones ya
+   registra el historial; falta comparar objetivos entre revisiones
+   sucesivas (qué se mantuvo, qué se graduó, qué se reemplazó).
+4. **Informe exportable** (P14): solo tras validación profesional, texto
+   editable, sin diagnósticos ni comparaciones normativas. El isotipo ya
+   está listo para incorporarse (`Isotipo`/`BrandCover`) en cuanto se
+   construya.
+5. Archivo de configuración administrable para versiones de cuestionario y
    umbrales (hoy hardcodeado en `data/items.ts` y `estudioEngine.ts`, tal
    como pide el documento para la v1 — "editable desde una configuración
    administrativa después de una etapa piloto").
-7. Tests unitarios del motor (`estudioEngine` es puro y fácilmente testeable
+6. Tests unitarios del motor (`estudioEngine` es puro y fácilmente testeable
    con vitest — inversión de ítems, completitud, discrepancias).
-8. Migración a backend real (hoy LocalStorage, mismo patrón repositorio que
+7. Migración a backend real (hoy LocalStorage, mismo patrón repositorio que
    Brújula) si se valida el prototipo con usuarios reales.
+8. El alta de estudiante ahora pide un email de contacto (antes aceptaba
+   teléfono) porque ese email es el que usa la cuenta del portal
+   (`ensureStudentAccount`) — si en algún caso no hay email, no se genera
+   cuenta y el estudiante queda sin acceso a `/mi` (no bloquea el resto del
+   flujo, pero conviene decidir un fallback si se da seguido).
 
 ## Decisiones técnicas clave (no revertir sin razón)
 

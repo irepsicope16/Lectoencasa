@@ -2,12 +2,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { db, deleteStudentCascade } from '@/services/storage/db'
 import type {
   Alert,
+  CalendarEvent,
   DimensionSnapshot,
   Goal,
   Intake,
   OpenAnswer,
   PriorityDecision,
   QuestionnaireResponse,
+  Session,
   Student,
 } from '@/types'
 
@@ -224,5 +226,88 @@ export function useUpdateGoal() {
   return useMutation({
     mutationFn: ({ id, patch }: { id: string; patch: Partial<Goal> }) => db.goals.update(id, patch),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['goals'] }),
+  })
+}
+
+// ---------- Sesiones ----------
+
+export function useSessions(studentId?: string) {
+  return useQuery({
+    queryKey: ['sessions', studentId],
+    queryFn: async () => {
+      const rows = await db.sessions.query((s) => s.studentId === studentId)
+      return rows.sort((a, b) => b.fecha.localeCompare(a.fecha))
+    },
+    enabled: !!studentId,
+  })
+}
+
+/** Todas las sesiones de los estudiantes de esta profesional (para la Agenda). */
+export function useAllSessions(professionalId?: string) {
+  return useQuery({
+    queryKey: ['all-sessions', professionalId],
+    queryFn: async () => {
+      const students = await db.students.query((s) => s.professionalId === professionalId)
+      const ids = new Set(students.map((s) => s.id))
+      const rows = await db.sessions.list()
+      return rows.filter((s) => ids.has(s.studentId))
+    },
+    enabled: !!professionalId,
+  })
+}
+
+export function useCreateSession() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (data: Omit<Session, 'id' | 'createdAt' | 'updatedAt'>) => db.sessions.create(data),
+    onSuccess: (_d, vars) => {
+      qc.invalidateQueries({ queryKey: ['sessions', vars.studentId] })
+      qc.invalidateQueries({ queryKey: ['all-sessions'] })
+    },
+  })
+}
+
+export function useUpdateSession() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, patch }: { id: string; patch: Partial<Session> }) => db.sessions.update(id, patch),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['sessions'] })
+      qc.invalidateQueries({ queryKey: ['all-sessions'] })
+    },
+  })
+}
+
+// ---------- Agenda (eventos: sesión, tarea, recordatorio) ----------
+
+export function useEvents(professionalId?: string) {
+  return useQuery({
+    queryKey: ['events', professionalId],
+    queryFn: () => db.events.list(),
+    enabled: !!professionalId,
+  })
+}
+
+export function useCreateEvent() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (data: Omit<CalendarEvent, 'id' | 'createdAt' | 'updatedAt'>) => db.events.create(data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['events'] }),
+  })
+}
+
+export function useUpdateEvent() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, patch }: { id: string; patch: Partial<CalendarEvent> }) => db.events.update(id, patch),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['events'] }),
+  })
+}
+
+export function useDeleteEvent() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => db.events.remove(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['events'] }),
   })
 }

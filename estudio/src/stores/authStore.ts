@@ -1,10 +1,10 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { Professional } from '@/types'
+import type { User } from '@/types'
 import { db } from '@/services/storage/db'
 
 interface AuthState {
-  user: Professional | null
+  user: User | null
   login: (email: string, password: string) => Promise<{ ok: boolean; error?: string }>
   logout: () => void
 }
@@ -14,7 +14,7 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       user: null,
       login: async (email, password) => {
-        const users = await db.professionals.list()
+        const users = await db.users.list()
         const found = users.find((u) => u.email.toLowerCase() === email.trim().toLowerCase())
         if (!found) return { ok: false, error: 'No existe una cuenta con ese email.' }
         if (found.password !== password) return { ok: false, error: 'La contraseña no es correcta.' }
