@@ -11,6 +11,7 @@ import { ACTIVIDADES } from '@/data/actividades'
 import { FICHAS_POR_RUTA, type NivelHerramienta } from '@/data/biblioteca'
 import { ITEMS } from '@/data/items'
 import { CatalogoActividadCard } from '../shared/CatalogoActividadCard'
+import { moduleCardStyle } from '@/lib/moduleColors'
 import type { ActividadCatalogo, Student } from '@/types'
 
 const NIVEL_INFO: Record<NivelHerramienta, { titulo: string; subtitulo: string }> = {
@@ -120,7 +121,7 @@ export function RecorridoTab({ student, onNavigateTab }: { student: Student; onN
               <h3 className="mb-2.5 text-[13.5px] font-semibold tracking-tight">{ruta.nombre}</h3>
               <div className="grid gap-2.5 lg:grid-cols-2">
                 {fichas.map((ficha) => (
-                  <div key={ficha.herramienta} className="rounded-xl border bg-surface-2 p-3.5">
+                  <div key={ficha.herramienta} className="rounded-xl border border-t-[3px] p-3.5" style={moduleCardStyle(ruta.id)}>
                     <div className="mb-1 flex items-center gap-1.5">
                       <Badge variant="outline">Ficha</Badge>
                       <p className="text-[13px] font-medium">{ficha.herramienta}</p>
@@ -129,7 +130,13 @@ export function RecorridoTab({ student, onNavigateTab }: { student: Student; onN
                   </div>
                 ))}
                 {actividades.map((actividad) => (
-                  <CatalogoActividadCard key={actividad.id} actividad={actividad} sesiones={sesiones} onAsignar={(sessionId) => asignar(actividad, sessionId)} />
+                  <CatalogoActividadCard
+                    key={actividad.id}
+                    actividad={actividad}
+                    sesiones={sesiones}
+                    onAsignar={(sessionId) => asignar(actividad, sessionId)}
+                    moduleStyle={moduleCardStyle(ruta.id)}
+                  />
                 ))}
               </div>
             </section>
