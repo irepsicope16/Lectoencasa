@@ -37,6 +37,7 @@ async function sembrar() {
     email: 'irene@metodoestudio.demo',
     password: 'estudio',
     titulo: 'Lic. en Psicopedagogía',
+    matricula: 'MP 260505',
   })
 
   const student = await db.students.create({

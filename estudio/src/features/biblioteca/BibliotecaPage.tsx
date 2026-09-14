@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BookOpen } from 'lucide-react'
+import { BookOpen, Clapperboard, ExternalLink, Printer } from 'lucide-react'
 import { FadeIn, PageHeader } from '@/components/shared'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { RUTAS } from '@/data/rutas'
 import { FICHAS_POR_RUTA, type NivelHerramienta } from '@/data/biblioteca'
 import { DIMENSIONES } from '@/data/items'
+import { VIDEOS } from '@/data/videos'
 import { cn } from '@/lib/utils'
 
 const NIVEL_LABEL: Record<NivelHerramienta, string> = {
@@ -55,7 +56,8 @@ export default function BibliotecaPage() {
       <div className="space-y-8">
         {RUTAS.map((ruta) => {
           const fichas = (FICHAS_POR_RUTA[ruta.id] ?? []).filter((f) => filtro === 'todos' || f.nivel === filtro)
-          if (fichas.length === 0) return null
+          const videos = VIDEOS.filter((v) => v.rutaId === ruta.id)
+          if (fichas.length === 0 && videos.length === 0) return null
           return (
             <section key={ruta.id}>
               <div className="mb-3 flex flex-wrap items-center gap-2">
@@ -70,6 +72,7 @@ export default function BibliotecaPage() {
                 </div>
               </div>
 
+              {fichas.length > 0 && (
               <div className="grid gap-3 lg:grid-cols-2">
                 {fichas.map((ficha) => (
                   <Card key={ficha.herramienta}>
@@ -98,9 +101,52 @@ export default function BibliotecaPage() {
                   </Card>
                 ))}
               </div>
+              )}
+
+              {videos.length > 0 && (
+                <div className="mt-3 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+                  {videos.map((v) => (
+                    <div key={v.id} className="flex flex-col gap-2 rounded-xl border bg-surface-2 p-3.5">
+                      <div className="flex items-center gap-1.5 text-faint">
+                        <Clapperboard className="h-3.5 w-3.5" />
+                        <span className="text-[11px] font-semibold uppercase tracking-wide">Video</span>
+                      </div>
+                      <p className="text-[13px] font-medium leading-snug">{v.titulo}</p>
+                      <p className="text-[12px] text-muted-foreground">{v.descripcion}</p>
+                      <Button variant="outline" size="sm" className="mt-1 w-fit" asChild>
+                        <a href={v.url} target="_blank" rel="noopener noreferrer">
+                          Ver video <ExternalLink className="h-3.5 w-3.5" />
+                        </a>
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </section>
           )
         })}
+      </div>
+
+      <div className="mt-8 rounded-xl border bg-surface p-4">
+        <div className="mb-2.5 flex items-center gap-2">
+          <Printer className="h-4 w-4 text-primary" />
+          <h2 className="text-[14px] font-semibold tracking-tight">Imprimibles</h2>
+        </div>
+        <p className="mb-3 text-[12.5px] text-muted-foreground">
+          Materiales en blanco para imprimir y llevarse a sesión o a casa.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" asChild>
+            <a href="#/print/acentuacion" target="_blank" rel="noopener noreferrer">
+              Guía de acentuación <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </Button>
+          <Button variant="outline" size="sm" asChild>
+            <a href="#/print/pasos-estudio" target="_blank" rel="noopener noreferrer">
+              Pasos para estudiar <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </Button>
+        </div>
       </div>
 
       <p className="mt-8 text-[11.5px] text-faint">

@@ -1,6 +1,7 @@
 import { LocalStorageDriver } from './driver'
 import { Repository } from './repository'
 import type {
+  ActividadAsignada,
   Alert,
   CalendarEvent,
   DimensionSnapshot,
@@ -35,6 +36,7 @@ export const db = {
   sessions: new Repository<Session>(driver, 'sessions'),
   events: new Repository<CalendarEvent>(driver, 'calendar_events'),
   files: new Repository<StoredFile>(driver, 'files'),
+  asignaciones: new Repository<ActividadAsignada>(driver, 'asignaciones'),
   clearAll: () => driver.clearAll(),
 }
 
@@ -51,6 +53,7 @@ export async function deleteStudentCascade(studentId: string): Promise<void> {
     db.sessions,
     db.events,
     db.files,
+    db.asignaciones,
   ] as const
   for (const repo of collections) {
     const rows = (await repo.list()) as { id: string; studentId?: string }[]

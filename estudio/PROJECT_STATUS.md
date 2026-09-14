@@ -213,6 +213,40 @@ Método Brújula (menos Estadísticas, fuera de alcance por ahora).
   mismo número que Brújula (5492216185376) con un mensaje adaptado a
   Método Estudio — confirmado explícitamente por la usuaria.
 
+## ✅ Actividades por sesión, videos e imprimibles (14/09/2026)
+
+A pedido explícito, a partir de material que la usuaria compartió (técnicas
+de estudio de distintos autores/plataformas y un método comercial) —
+reformulado con redacción propia, nunca copiado, por tratarse de material de
+terceros con derechos de autor explícitos en varios casos.
+
+- **Catálogo de actividades** (`data/actividades.ts`, tipo `ActividadCatalogo`):
+  26 actividades concretas (con consigna, no solo descripción de técnica)
+  repartidas en las 8 rutas y los 3 niveles ya definidos en la Biblioteca.
+- **Pestaña Actividades** (`features/students/tabs/ActividadesTab.tsx`,
+  nueva pestaña en la ficha del estudiante, entre Plan y Sesiones): permite
+  asignar cualquier actividad del catálogo a una **sesión puntual del
+  estudiante** (o dejarla sin sesión) y marcarla pendiente/completada.
+  A diferencia de Método Brújula, donde la actividad y la sesión no se
+  conectan, acá sí — colección `db.asignaciones` (tipo `ActividadAsignada`),
+  con cascada al borrar el estudiante.
+- **Videos sugeridos** (`data/videos.ts`, tipo `RecursoVideo`): 3 links
+  reales de YouTube, verificados y aprobados por la usuaria, mostrados como
+  tarjeta con link externo dentro de la sección de la ruta correspondiente
+  en la Biblioteca — igual patrón que Método Brújula (no se incrustan).
+- **Imprimibles** (`features/print/`, rutas públicas `/print/acentuacion` y
+  `/print/pasos-estudio`): páginas HTML con una plantilla en blanco y un
+  botón "Imprimir" que llama a `window.print()` del navegador — mismo
+  mecanismo que Método Brújula (sin librería de PDF). Accesibles desde un
+  apartado nuevo al pie de la Biblioteca. La "Guía de acentuación" surge de
+  una idea de la usuaria (regla de tildación); "Pasos para estudiar" es una
+  secuencia propia armada con herramientas que ya existían en la Biblioteca
+  (Rutina de inicio → Lectura por capas → Idea principal → Resumen/Mapas
+  conceptuales → Recuperación activa → Explicación con propias palabras).
+- Antes de construir todo esto, se armó y aprobó una vista previa como
+  Artifact (borrador visual + contenido) — quedó como referencia de estilo
+  para futuros imprimibles.
+
 ## 🟡 Decisiones pendientes (explícitas en el documento, §17 — no resueltas por el desarrollo)
 
 - Nombre comercial definitivo y disponibilidad marcaria (se usó "Método

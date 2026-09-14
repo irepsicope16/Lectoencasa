@@ -15,6 +15,8 @@ const AgendaPage = lazy(() => import('@/features/agenda/AgendaPage'))
 const HonorariosPage = lazy(() => import('@/features/agenda/HonorariosPage'))
 const SettingsPage = lazy(() => import('@/features/settings/SettingsPage'))
 const MyDashboard = lazy(() => import('@/features/dashboard/MyDashboard'))
+const PrintAcentuacionPage = lazy(() => import('@/features/print/PrintAcentuacionPage'))
+const PrintPasosEstudioPage = lazy(() => import('@/features/print/PrintPasosEstudioPage'))
 
 function Page({ children }: { children: React.ReactNode }) {
   return (
@@ -27,6 +29,8 @@ function Page({ children }: { children: React.ReactNode }) {
 export const router = createHashRouter([
   { path: '/', element: <Page><LandingPage /></Page> },
   { path: '/login', element: <Page><LoginPage /></Page> },
+  { path: '/print/acentuacion', element: <Page><PrintAcentuacionPage /></Page> },
+  { path: '/print/pasos-estudio', element: <Page><PrintPasosEstudioPage /></Page> },
   {
     element: <RequireRole role="profesional" />,
     children: [
