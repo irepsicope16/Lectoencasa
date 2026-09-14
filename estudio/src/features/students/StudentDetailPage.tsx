@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { useStudent } from '@/hooks/queries'
@@ -5,6 +6,7 @@ import { PageHeader, FadeIn } from '@/components/shared'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { edad, nombreCompleto } from '@/lib/utils'
+import { RecorridoTab } from './tabs/RecorridoTab'
 import { ResumenTab } from './tabs/ResumenTab'
 import { EntrevistaTab } from './tabs/EntrevistaTab'
 import { AutoperfilTab } from './tabs/AutoperfilTab'
@@ -28,6 +30,7 @@ const ESTADO_LABEL: Record<Student['estado'], string> = {
 export default function StudentDetailPage() {
   const { id } = useParams<{ id: string }>()
   const { data: student, isLoading } = useStudent(id)
+  const [tab, setTab] = useState('resumen')
 
   if (isLoading) return <div className="p-6 text-sm text-faint">Cargando…</div>
   if (!student) return <div className="p-6 text-sm text-faint">No se encontró el estudiante.</div>
@@ -43,9 +46,10 @@ export default function StudentDetailPage() {
         actions={<Badge variant="outline">{ESTADO_LABEL[student.estado]}</Badge>}
       />
 
-      <Tabs defaultValue="resumen">
+      <Tabs value={tab} onValueChange={setTab}>
         <TabsList>
           <TabsTrigger value="resumen">Resumen</TabsTrigger>
+          <TabsTrigger value="recorrido">Recorrido</TabsTrigger>
           <TabsTrigger value="entrevista">Entrevista</TabsTrigger>
           <TabsTrigger value="autoperfil">Autoperfil</TabsTrigger>
           <TabsTrigger value="integracion">Integración</TabsTrigger>
@@ -57,6 +61,9 @@ export default function StudentDetailPage() {
         </TabsList>
         <TabsContent value="resumen">
           <ResumenTab student={student} />
+        </TabsContent>
+        <TabsContent value="recorrido">
+          <RecorridoTab student={student} onNavigateTab={setTab} />
         </TabsContent>
         <TabsContent value="entrevista">
           <EntrevistaTab student={student} />

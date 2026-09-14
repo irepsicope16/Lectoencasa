@@ -247,6 +247,39 @@ terceros con derechos de autor explícitos en varios casos.
   Artifact (borrador visual + contenido) — quedó como referencia de estilo
   para futuros imprimibles.
 
+## ✅ Recorrido por niveles (14/09/2026)
+
+A pedido explícito: una forma de navegar por Nivel 1/2/3 que una en un solo
+lugar la evaluación inicial y el contenido de la Biblioteca/Actividades,
+sin tocar el resto de la navegación existente (decisión tomada junto con la
+usuaria: vista nueva, no reemplazo de las pestañas actuales).
+
+- **Pestaña Recorrido** (`features/students/tabs/RecorridoTab.tsx`, nueva
+  primera pestaña adicional en la ficha del estudiante, junto a Resumen):
+  3 botones grandes Nivel 1/2/3, con la etiqueta de cada uno en las propias
+  palabras de la usuaria ("Arranque", "Secundario", "Ingreso a la
+  universidad"). El botón **Nivel 1** muestra el estado de la Entrevista, el
+  Autoperfil y la Evaluación (completo/pendiente, con conteo) y al tocarlos
+  saltan directo a esa pestaña — para esto las pestañas de la ficha pasaron
+  a ser controladas (`useState` en `StudentDetailPage.tsx` en vez de
+  `defaultValue`). Los tres niveles muestran, agrupadas por ruta, las
+  fichas de la Biblioteca y las actividades del catálogo de ese nivel, con
+  la misma tarjeta de asignar-a-sesión que la pestaña Actividades
+  (extraída a `features/students/shared/CatalogoActividadCard.tsx` para no
+  duplicar la lógica).
+- **Portal del estudiante** (`features/dashboard/MyDashboard.tsx`): mismos
+  3 botones de nivel, versión simplificada — Nivel 1 muestra el estado del
+  propio autoperfil, y cada nivel lista las actividades que la profesional
+  le asignó de ese nivel (solo lectura: marcar completada sigue siendo
+  una acción de la profesional, no del estudiante, por ahora).
+- **Importante, para no perder de vista**: la entrevista y el autoperfil
+  siguen siendo un proceso fijo que cada estudiante hace una sola vez al
+  principio — no son "contenido de nivel 1" que se repite o se filtra.
+  El Recorrido los muestra ahí por conveniencia de navegación, pero
+  Integración, Prioridades y Plan (que son criterio profesional, no
+  contenido catalogable) deliberadamente no se movieron a esta vista de
+  niveles.
+
 ## 🟡 Decisiones pendientes (explícitas en el documento, §17 — no resueltas por el desarrollo)
 
 - Nombre comercial definitivo y disponibilidad marcaria (se usó "Método
