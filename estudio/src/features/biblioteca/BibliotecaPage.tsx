@@ -9,6 +9,7 @@ import { FICHAS_POR_RUTA, type NivelHerramienta } from '@/data/biblioteca'
 import { DIMENSIONES } from '@/data/items'
 import { VIDEOS } from '@/data/videos'
 import { cn } from '@/lib/utils'
+import { moduleCardStyle, RUTA_COLOR } from '@/lib/moduleColors'
 
 const NIVEL_LABEL: Record<NivelHerramienta, string> = {
   1: 'Nivel 1 · inicial',
@@ -61,7 +62,7 @@ export default function BibliotecaPage() {
           return (
             <section key={ruta.id}>
               <div className="mb-3 flex flex-wrap items-center gap-2">
-                <BookOpen className="h-4 w-4 text-primary" />
+                <BookOpen className="h-4 w-4" style={{ color: RUTA_COLOR[ruta.id]?.color }} />
                 <h2 className="text-[15px] font-semibold tracking-tight">{ruta.nombre}</h2>
                 <div className="flex flex-wrap gap-1">
                   {ruta.dimensiones.map((d) => (
@@ -75,7 +76,7 @@ export default function BibliotecaPage() {
               {fichas.length > 0 && (
               <div className="grid gap-3 lg:grid-cols-2">
                 {fichas.map((ficha) => (
-                  <Card key={ficha.herramienta}>
+                  <Card key={ficha.herramienta} className="border-t-[3px]" style={moduleCardStyle(ruta.id)}>
                     <CardHeader>
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <CardTitle className="text-[14px]">{ficha.herramienta}</CardTitle>

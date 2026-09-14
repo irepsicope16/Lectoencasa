@@ -280,6 +280,35 @@ usuaria: vista nueva, no reemplazo de las pestañas actuales).
   contenido catalogable) deliberadamente no se movieron a esta vista de
   niveles.
 
+## ✅ Color por módulo + navegación destacada (14/09/2026)
+
+A pedido explícito: identificar cada ruta con un color propio en sus
+fichas ("como una sombra, como desplegado") y destacar con rojo los
+botones de navegación (sidebar y pestañas). Propuesto primero como
+Artifact y aprobado por la usuaria antes de tocar código.
+
+- **Tokens de color por módulo** (`src/index.css`, `:root`/`.dark`/`@theme
+  inline`): 8 rutas → 8 colores distintos, cada uno con una variante
+  "soft" para el fondo. 3 reutilizan tokens de marca ya existentes
+  (secundario → Comprender, acento → Prepararse y evaluarse, primario →
+  Construir autonomía); los otros 5 son nuevos (ámbar → Organizar, verde
+  azulado → Sostener la atención, ciruela → Escribir, índigo → Aprender y
+  recordar, verde bosque → Regular y persistir), definidos para modo claro
+  y oscuro.
+- **`src/lib/moduleColors.ts`** (nuevo): `RUTA_COLOR` (mapa ruta→color) y
+  `moduleCardStyle(rutaId)`, que arma el estilo de borde superior +
+  sombra + fondo tintado de una ficha según su ruta.
+- Aplicado en **Biblioteca** (fichas + ícono del encabezado de cada
+  ruta), **Recorrido** (fichas fijas y tarjetas de actividad de cada
+  nivel) y **Actividades** (fichas del catálogo + borde izquierdo
+  coloreado en la lista de asignadas). Deliberadamente **separado** del
+  sistema de color por Nivel (badges): son dos dimensiones distintas y no
+  se mezclan en una misma tarjeta.
+- **Navegación destacada**: el ítem activo del sidebar (`Sidebar.tsx`) y
+  la pestaña activa (`components/ui/tabs.tsx`) pasan a fondo rojo/terracota
+  sólido (`--accent`) con texto claro y una sombra elevada, en vez del
+  resaltado gris sutil anterior — mismo criterio en toda la app.
+
 ## 🟡 Decisiones pendientes (explícitas en el documento, §17 — no resueltas por el desarrollo)
 
 - Nombre comercial definitivo y disponibilidad marcaria (se usó "Método

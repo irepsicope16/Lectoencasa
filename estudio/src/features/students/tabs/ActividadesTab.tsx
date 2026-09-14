@@ -10,6 +10,7 @@ import { fechaCorta } from '@/lib/utils'
 import { RUTAS } from '@/data/rutas'
 import { ACTIVIDADES } from '@/data/actividades'
 import { CatalogoActividadCard, NIVEL_BADGE_VARIANT, NIVEL_LABEL } from '../shared/CatalogoActividadCard'
+import { moduleCardStyle, RUTA_COLOR } from '@/lib/moduleColors'
 import type { ActividadCatalogo, NivelActividad, Student } from '@/types'
 
 type FiltroNivel = 'todos' | NivelActividad
@@ -68,7 +69,11 @@ export function ActividadesTab({ student }: { student: Student }) {
               {asignadas
                 .filter((a) => filtro === 'todos' || a.nivel === filtro)
                 .map((a) => (
-                  <div key={a.id} className="flex items-center gap-3 rounded-xl border bg-surface p-3.5">
+                  <div
+                    key={a.id}
+                    className="flex items-center gap-3 rounded-xl border border-l-[3px] bg-surface p-3.5"
+                    style={{ borderLeftColor: a.rutaId ? RUTA_COLOR[a.rutaId]?.color : undefined }}
+                  >
                     <button
                       onClick={() =>
                         updateAsignacion.mutate({
@@ -111,7 +116,13 @@ export function ActividadesTab({ student }: { student: Student }) {
               <h3 className="mb-2.5 text-[13.5px] font-semibold tracking-tight">{ruta.nombre}</h3>
               <div className="grid gap-2.5 lg:grid-cols-2">
                 {fichas.map((actividad) => (
-                  <CatalogoActividadCard key={actividad.id} actividad={actividad} sesiones={sesiones} onAsignar={(sessionId) => asignar(actividad, sessionId)} />
+                  <CatalogoActividadCard
+                    key={actividad.id}
+                    actividad={actividad}
+                    sesiones={sesiones}
+                    onAsignar={(sessionId) => asignar(actividad, sessionId)}
+                    moduleStyle={moduleCardStyle(ruta.id)}
+                  />
                 ))}
               </div>
             </section>

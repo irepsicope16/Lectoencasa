@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { NativeSelect } from '@/components/ui/input'
@@ -16,14 +16,16 @@ export function CatalogoActividadCard({
   actividad,
   sesiones,
   onAsignar,
+  moduleStyle,
 }: {
   actividad: ActividadCatalogo
   sesiones: { id: string; label: string }[]
   onAsignar: (sessionId: string) => void
+  moduleStyle?: CSSProperties
 }) {
   const [sessionId, setSessionId] = useState('')
   return (
-    <div className="rounded-xl border bg-surface p-3.5">
+    <div className={`rounded-xl border p-3.5 ${moduleStyle ? 'border-t-[3px]' : 'bg-surface'}`} style={moduleStyle}>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
           <p className="text-[13.5px] font-medium">{actividad.titulo}</p>

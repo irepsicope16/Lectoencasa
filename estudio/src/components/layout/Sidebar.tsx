@@ -41,10 +41,10 @@ export function Sidebar({ role }: { role: UserRole }) {
                 end={item.end}
                 className={({ isActive }) =>
                   cn(
-                    'flex items-center gap-2.5 rounded-lg border px-2.5 py-1.5 text-[13px] font-medium shadow-[0_1px_2px_rgba(16,24,32,0.03)] transition-colors',
+                    'flex items-center gap-2.5 rounded-lg border px-2.5 py-1.5 text-[13px] font-medium transition-all',
                     isActive
-                      ? 'border-primary/25 bg-primary-soft text-primary-strong'
-                      : 'border-transparent text-muted-foreground hover:bg-surface-2 hover:text-foreground',
+                      ? 'border-transparent bg-accent text-accent-foreground shadow-[0_6px_14px_-6px_var(--accent)]'
+                      : 'border-transparent text-muted-foreground shadow-[0_1px_2px_rgba(16,24,32,0.03)] hover:bg-surface-2 hover:text-foreground',
                   )
                 }
               >
