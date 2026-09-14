@@ -4,54 +4,15 @@ import { useAsignaciones, useCreateAsignacion, useDeleteAsignacion, useSessions,
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { NativeSelect } from '@/components/ui/input'
 import { AvisoOrientativo, EmptyState } from '@/components/shared'
 import { toast } from '@/components/ui/toast'
 import { fechaCorta } from '@/lib/utils'
 import { RUTAS } from '@/data/rutas'
 import { ACTIVIDADES } from '@/data/actividades'
+import { CatalogoActividadCard, NIVEL_BADGE_VARIANT, NIVEL_LABEL } from '../shared/CatalogoActividadCard'
 import type { ActividadCatalogo, NivelActividad, Student } from '@/types'
 
-const NIVEL_LABEL: Record<NivelActividad, string> = { 1: 'Nivel 1', 2: 'Nivel 2', 3: 'Nivel 3' }
-const NIVEL_BADGE_VARIANT: Record<NivelActividad, 'default' | 'primario' | 'acento'> = { 1: 'default', 2: 'primario', 3: 'acento' }
-
 type FiltroNivel = 'todos' | NivelActividad
-
-function CatalogoCard({
-  actividad,
-  sesiones,
-  onAsignar,
-}: {
-  actividad: ActividadCatalogo
-  sesiones: { id: string; label: string }[]
-  onAsignar: (sessionId: string) => void
-}) {
-  const [sessionId, setSessionId] = useState('')
-  return (
-    <div className="rounded-xl border bg-surface p-3.5">
-      <div className="flex flex-wrap items-start justify-between gap-2">
-        <div>
-          <p className="text-[13.5px] font-medium">{actividad.titulo}</p>
-          <p className="mt-1 text-[12.5px] text-muted-foreground">{actividad.descripcion}</p>
-        </div>
-        <Badge variant={NIVEL_BADGE_VARIANT[actividad.nivel]}>{NIVEL_LABEL[actividad.nivel]}</Badge>
-      </div>
-      <div className="mt-3 flex flex-wrap items-center gap-2">
-        <NativeSelect className="w-52" value={sessionId} onChange={(e) => setSessionId(e.target.value)}>
-          <option value="">Sin sesión asignada</option>
-          {sesiones.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.label}
-            </option>
-          ))}
-        </NativeSelect>
-        <Button size="sm" variant="outline" onClick={() => onAsignar(sessionId)}>
-          Asignar
-        </Button>
-      </div>
-    </div>
-  )
-}
 
 export function ActividadesTab({ student }: { student: Student }) {
   const { data: sesionesRaw = [] } = useSessions(student.id)
@@ -150,7 +111,7 @@ export function ActividadesTab({ student }: { student: Student }) {
               <h3 className="mb-2.5 text-[13.5px] font-semibold tracking-tight">{ruta.nombre}</h3>
               <div className="grid gap-2.5 lg:grid-cols-2">
                 {fichas.map((actividad) => (
-                  <CatalogoCard key={actividad.id} actividad={actividad} sesiones={sesiones} onAsignar={(sessionId) => asignar(actividad, sessionId)} />
+                  <CatalogoActividadCard key={actividad.id} actividad={actividad} sesiones={sesiones} onAsignar={(sessionId) => asignar(actividad, sessionId)} />
                 ))}
               </div>
             </section>
