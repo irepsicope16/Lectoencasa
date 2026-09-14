@@ -262,3 +262,51 @@ export interface CalendarEvent {
   createdAt: string
   updatedAt: string
 }
+
+// ---------- Actividades (catálogo por ruta/nivel + asignación al estudiante) ----------
+
+export type NivelActividad = 1 | 2 | 3
+export type EstadoAsignacion = 'pendiente' | 'completada'
+
+/** Ficha del catálogo estático (`data/actividades.ts`), una por ruta/nivel. */
+export interface ActividadCatalogo {
+  id: string
+  rutaId: string
+  nivel: NivelActividad
+  titulo: string
+  descripcion: string
+  fuente?: string // referencia interna de dónde se tomó la idea (no se muestra al estudiante)
+}
+
+/**
+ * Instancia asignada a un estudiante: nace de una ActividadCatalogo (`actividadId`)
+ * o es una actividad libre. `sessionId` la liga a una sesión puntual — a
+ * diferencia de Método Brújula, donde la actividad y la sesión no se conectan.
+ */
+export interface ActividadAsignada {
+  id: string
+  studentId: string
+  sessionId?: string
+  actividadId?: string
+  rutaId?: string
+  nivel?: NivelActividad
+  titulo: string
+  descripcion: string
+  estado: EstadoAsignacion
+  fechaAsignada: string
+  fechaCompletada?: string
+  notas?: string
+  createdAt: string
+  updatedAt: string
+}
+
+// ---------- Videos sugeridos por ruta (catálogo estático, `data/videos.ts`) ----------
+
+export interface RecursoVideo {
+  id: string
+  rutaId: string
+  titulo: string
+  descripcion: string
+  url: string
+  duracion: string
+}

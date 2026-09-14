@@ -35,9 +35,10 @@ primera vez en LocalStorage.
 Flujo core del Documento Maestro V1: alta de estudiante → entrevista +
 indicadores lectores → autoperfil de 8 dimensiones / 56 ítems → evaluación
 (screenings/tests subidos) → cálculo → integración profesional →
-prioridades → plan → seguimiento de sesiones. Suma gestión de consultorio
-(agenda, honorarios, ajustes de cuenta) y portal del estudiante con cuenta
-de acceso automática, a la par de Método Brújula. Ver
+prioridades → plan → actividades asignadas por sesión → seguimiento de
+sesiones. Suma gestión de consultorio (agenda, honorarios, ajustes de
+cuenta), portal del estudiante con cuenta de acceso automática, Biblioteca
+de herramientas con videos e imprimibles, a la par de Método Brújula. Ver
 [PROJECT_STATUS.md](./PROJECT_STATUS.md) para lo que queda fuera de esta
 etapa (tareas breves, biblioteca completa de actividades, informe
 exportable).

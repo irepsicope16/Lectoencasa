@@ -12,6 +12,7 @@ import { IntegracionTab } from './tabs/IntegracionTab'
 import { EvaluacionTab } from './tabs/EvaluacionTab'
 import { PrioridadesTab } from './tabs/PrioridadesTab'
 import { PlanTab } from './tabs/PlanTab'
+import { ActividadesTab } from './tabs/ActividadesTab'
 import { SessionsTab } from './tabs/SessionsTab'
 import type { Student } from '@/types'
 
@@ -51,6 +52,7 @@ export default function StudentDetailPage() {
           <TabsTrigger value="evaluacion">Evaluación</TabsTrigger>
           <TabsTrigger value="prioridades">Prioridades</TabsTrigger>
           <TabsTrigger value="plan">Plan</TabsTrigger>
+          <TabsTrigger value="actividades">Actividades</TabsTrigger>
           <TabsTrigger value="sesiones">Sesiones</TabsTrigger>
         </TabsList>
         <TabsContent value="resumen">
@@ -73,6 +75,9 @@ export default function StudentDetailPage() {
         </TabsContent>
         <TabsContent value="plan">
           <PlanTab student={student} />
+        </TabsContent>
+        <TabsContent value="actividades">
+          <ActividadesTab student={student} />
         </TabsContent>
         <TabsContent value="sesiones">
           <SessionsTab student={student} />

@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { db, deleteStudentCascade } from '@/services/storage/db'
 import type {
+  ActividadAsignada,
   Alert,
   CalendarEvent,
   DimensionSnapshot,
@@ -339,5 +340,42 @@ export function useDeleteFile() {
   return useMutation({
     mutationFn: (id: string) => db.files.remove(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['files'] }),
+  })
+}
+
+// ---------- Actividades asignadas ----------
+
+export function useAsignaciones(studentId?: string) {
+  return useQuery({
+    queryKey: ['asignaciones', studentId],
+    queryFn: async () => {
+      const rows = await db.asignaciones.query((a) => a.studentId === studentId)
+      return rows.sort((a, b) => b.fechaAsignada.localeCompare(a.fechaAsignada))
+    },
+    enabled: !!studentId,
+  })
+}
+
+export function useCreateAsignacion() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (data: Omit<ActividadAsignada, 'id' | 'createdAt' | 'updatedAt'>) => db.asignaciones.create(data),
+    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['asignaciones', vars.studentId] }),
+  })
+}
+
+export function useUpdateAsignacion() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, ...patch }: { id: string } & Partial<ActividadAsignada>) => db.asignaciones.update(id, patch),
+    onSuccess: (row) => qc.invalidateQueries({ queryKey: ['asignaciones', row.studentId] }),
+  })
+}
+
+export function useDeleteAsignacion() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => db.asignaciones.remove(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['asignaciones'] }),
   })
 }

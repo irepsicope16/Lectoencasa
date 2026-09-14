@@ -18,6 +18,7 @@ const COLLECTIONS = [
   'sessions',
   'events',
   'files',
+  'asignaciones',
 ] as const
 
 type CollectionName = (typeof COLLECTIONS)[number]
