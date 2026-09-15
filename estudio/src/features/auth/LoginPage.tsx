@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '@/stores/authStore'
 import { Button } from '@/components/ui/button'
 import { Input, Label, FieldError } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
 import { BrandCover } from '@/branding/Logo'
+import { isCloudEnabled } from '@/services/cloud/config'
 
 export default function LoginPage() {
   const login = useAuthStore((s) => s.login)
@@ -43,7 +44,17 @@ export default function LoginPage() {
                 <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
               </div>
               <div>
-                <Label htmlFor="password">Contraseña</Label>
+                <div className="flex items-baseline justify-between">
+                  <Label htmlFor="password">Contraseña</Label>
+                  {isCloudEnabled() && (
+                    <Link
+                      to="/recuperar-contrasena"
+                      className="text-[12px] text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+                    >
+                      ¿Olvidaste tu contraseña?
+                    </Link>
+                  )}
+                </div>
                 <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
               </div>
               <FieldError>{error}</FieldError>
@@ -51,11 +62,21 @@ export default function LoginPage() {
                 {loading ? 'Ingresando…' : 'Ingresar'}
               </Button>
             </form>
-            <p className="mt-4 text-center text-[12px] text-faint">
-              Cuenta demo profesional: <span className="font-medium text-muted-foreground">irene@metodoestudio.demo</span> / <span className="font-medium text-muted-foreground">estudio</span>
-              <br />
-              Cuenta demo estudiante: <span className="font-medium text-muted-foreground">camila.tutor@demo.com</span> / <span className="font-medium text-muted-foreground">estudio</span>
-            </p>
+
+            {isCloudEnabled() ? (
+              <p className="mt-4 text-center text-[13px] text-muted-foreground">
+                ¿Sos profesional y todavía no tenés cuenta?{' '}
+                <Link to="/registro" className="font-medium text-primary underline-offset-2 hover:underline">
+                  Registrate
+                </Link>
+              </p>
+            ) : (
+              <p className="mt-4 text-center text-[12px] text-faint">
+                Cuenta demo profesional: <span className="font-medium text-muted-foreground">irene@metodoestudio.demo</span> / <span className="font-medium text-muted-foreground">estudio</span>
+                <br />
+                Cuenta demo estudiante: <span className="font-medium text-muted-foreground">camila.tutor@demo.com</span> / <span className="font-medium text-muted-foreground">estudio</span>
+              </p>
+            )}
           </CardContent>
         </Card>
       </div>

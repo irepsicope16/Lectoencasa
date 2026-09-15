@@ -1,5 +1,7 @@
 import { LocalStorageDriver } from './driver'
 import { Repository } from './repository'
+import { SupabaseRepository } from './supabaseRepository'
+import { isCloudEnabled } from '@/services/cloud/config'
 import type {
   ActividadAsignada,
   Alert,
@@ -17,26 +19,51 @@ import type {
 } from '@/types'
 
 // ------------------------------------------------------------
-// Punto único de acceso a datos (LocalStorage hoy; misma API que
-// tendría un repositorio remoto — ver services/storage/repository.ts).
+// Punto único de acceso a datos.
+// Modo local  → LocalStorage (por defecto, sin configuración).
+// Modo nube   → Supabase (activado desde Ajustes → Nube).
+// Ambos repos implementan la MISMA API: la UI no distingue.
 // ------------------------------------------------------------
 
+interface BaseRow {
+  id: string
+  createdAt: string
+  updatedAt: string
+}
+
+/** Contrato común de repositorio (local y remoto). */
+export interface DataRepository<T extends BaseRow> {
+  readonly collection: string
+  list(): Promise<T[]>
+  get(id: string): Promise<T | undefined>
+  query(predicate: (row: T) => boolean): Promise<T[]>
+  create(data: Omit<T, 'id' | 'createdAt' | 'updatedAt'> & Partial<BaseRow>): Promise<T>
+  update(id: string, patch: Partial<T>): Promise<T>
+  remove(id: string): Promise<void>
+  bulkCreate(items: T[]): Promise<void>
+}
+
+const cloud = isCloudEnabled()
 const driver = new LocalStorageDriver()
 
+function repo<T extends BaseRow>(collection: string): DataRepository<T> {
+  return cloud ? new SupabaseRepository<T>(collection) : new Repository<T>(driver, collection)
+}
+
 export const db = {
-  users: new Repository<User>(driver, 'users'),
-  students: new Repository<Student>(driver, 'students'),
-  intakes: new Repository<Intake>(driver, 'intakes'),
-  responses: new Repository<QuestionnaireResponse>(driver, 'questionnaire_responses'),
-  openAnswers: new Repository<OpenAnswer>(driver, 'open_answers'),
-  snapshots: new Repository<DimensionSnapshot>(driver, 'dimension_snapshots'),
-  alerts: new Repository<Alert>(driver, 'alerts'),
-  priorities: new Repository<PriorityDecision>(driver, 'priority_decisions'),
-  goals: new Repository<Goal>(driver, 'goals'),
-  sessions: new Repository<Session>(driver, 'sessions'),
-  events: new Repository<CalendarEvent>(driver, 'calendar_events'),
-  files: new Repository<StoredFile>(driver, 'files'),
-  asignaciones: new Repository<ActividadAsignada>(driver, 'asignaciones'),
+  users: repo<User>('users'),
+  students: repo<Student>('students'),
+  intakes: repo<Intake>('intakes'),
+  responses: repo<QuestionnaireResponse>('questionnaire_responses'),
+  openAnswers: repo<OpenAnswer>('open_answers'),
+  snapshots: repo<DimensionSnapshot>('dimension_snapshots'),
+  alerts: repo<Alert>('alerts'),
+  priorities: repo<PriorityDecision>('priority_decisions'),
+  goals: repo<Goal>('goals'),
+  sessions: repo<Session>('sessions'),
+  events: repo<CalendarEvent>('calendar_events'),
+  files: repo<StoredFile>('files'),
+  asignaciones: repo<ActividadAsignada>('asignaciones'),
   clearAll: () => driver.clearAll(),
 }
 

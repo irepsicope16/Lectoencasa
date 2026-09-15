@@ -15,6 +15,8 @@ export interface User {
   password: string // demo/local
   titulo?: string // solo rol profesional
   matricula?: string // solo rol profesional, p. ej. "MP 260505"
+  /** Solo rol profesional, modo nube: sin valor = sin restricción (dueña de la plataforma, cuentas locales). */
+  membershipExpiresAt?: string
   /** Solo rol estudiante: vincula la cuenta con su ficha. */
   studentId?: string
   createdAt: string

@@ -1,9 +1,11 @@
 import { useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { Database, Download, IdCard, Moon, Paintbrush, RefreshCcw, Sun, Upload } from 'lucide-react'
+import { Cloud, CloudUpload, Database, Download, IdCard, Moon, Paintbrush, RefreshCcw, Sun, Upload } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
 import { useUIStore, type Theme } from '@/stores/uiStore'
 import { prepareBackup, importBackup, type PreparedBackup } from '@/services/storage/backup'
+import { getCloudConfig, isCloudEnabled, saveCloudConfig } from '@/services/cloud/config'
+import { isOwner, oneYearFromNow } from '@/lib/membership'
 import { resetDemoData } from '@/data/seed'
 import { toast } from '@/components/ui/toast'
 import { FadeIn, PageHeader } from '@/components/shared'
@@ -20,6 +22,7 @@ export default function SettingsPage() {
   const qc = useQueryClient()
   const user = useAuthStore((s) => s.user)
   const updateProfile = useAuthStore((s) => s.updateProfile)
+  const showCloudPanel = isOwner(user)
 
   const [perfil, setPerfil] = useState({
     nombre: user?.nombre ?? '',
@@ -47,6 +50,90 @@ export default function SettingsPage() {
   const importRef = useRef<HTMLInputElement>(null)
   const [backupReady, setBackupReady] = useState<PreparedBackup | null>(null)
   const [backupPreparing, setBackupPreparing] = useState(false)
+
+  const [cloud, setCloud] = useState(getCloudConfig())
+  const cloudActive = isCloudEnabled()
+  const [cloudBusy, setCloudBusy] = useState('')
+  const [proAccount, setProAccount] = useState({ nombre: '', apellido: '', titulo: '', email: '', password: '' })
+
+  const testCloud = async () => {
+    setCloudBusy('Probando conexión…')
+    const { testCloudConnection } = await import('@/services/cloud/client')
+    const res = await testCloudConnection(cloud.url.trim(), cloud.anonKey.trim())
+    setCloudBusy('')
+    if (res.ok) toast.success('Conexión exitosa con Supabase')
+    else toast.error(res.error ?? 'No se pudo conectar')
+  }
+
+  const activateCloud = () => {
+    saveCloudConfig({ url: cloud.url.trim(), anonKey: cloud.anonKey.trim(), enabled: true })
+    toast.success('Modo nube activado · recargando…')
+    setTimeout(() => window.location.reload(), 900)
+  }
+
+  const deactivateCloud = () => {
+    saveCloudConfig({ ...cloud, enabled: false })
+    toast.info('Modo nube desactivado · recargando…')
+    setTimeout(() => window.location.reload(), 900)
+  }
+
+  const createProAccount = async () => {
+    setCloudBusy('Creando cuenta profesional…')
+    try {
+      const { getIsolatedClient, getSupabase } = await import('@/services/cloud/client')
+      const sb = await getIsolatedClient()
+      const { data, error } = await sb.auth.signUp({
+        email: proAccount.email.trim(),
+        password: proAccount.password,
+        options: {
+          data: {
+            role: 'profesional',
+            nombre: proAccount.nombre.trim(),
+            apellido: proAccount.apellido.trim(),
+            titulo: proAccount.titulo.trim() || undefined,
+          },
+        },
+      })
+      if (error) {
+        toast.error(error.message)
+        return
+      }
+      // La membresía nunca se acepta desde los metadatos del registro (ver
+      // handle_new_user en schema.sql) — se activa acá aparte, con la
+      // sesión real de la dueña, que es la única habilitada por RLS
+      // (profiles_admin_update) para escribir membershipExpiresAt.
+      if (data.user) {
+        const owner = await getSupabase()
+        const { data: row, error: readErr } = await owner
+          .from('profiles')
+          .select('data')
+          .eq('id', data.user.id)
+          .maybeSingle()
+        if (readErr || !row) {
+          toast.error('Cuenta creada, pero no se pudo activar la membresía: no se encontró el perfil.')
+          return
+        }
+        const merged = { ...(row.data as object), membershipExpiresAt: oneYearFromNow() }
+        const { error: memErr } = await owner.from('profiles').update({ data: merged }).eq('id', data.user.id)
+        if (memErr) {
+          toast.error(`Cuenta creada, pero no se pudo activar la membresía: ${memErr.message}`)
+          return
+        }
+      }
+      toast.success('Cuenta profesional creada. Ya podés ingresar con ella.')
+    } finally {
+      setCloudBusy('')
+    }
+  }
+
+  const migrate = async () => {
+    setCloudBusy('Migrando datos…')
+    const { migrateLocalToCloud } = await import('@/services/cloud/migrate')
+    const res = await migrateLocalToCloud((m) => setCloudBusy(m))
+    setCloudBusy('')
+    if (res.ok) toast.success(`Migración completa: ${res.subidos} registros subidos a la nube`)
+    else toast.error(`Migración interrumpida (${res.subidos} subidos): ${res.error}`)
+  }
 
   return (
     <FadeIn>
@@ -127,6 +214,116 @@ export default function SettingsPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* nube: solo la dueña de la plataforma administra la configuración de Supabase. */}
+        {showCloudPanel && (
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Cloud className="h-4 w-4 text-primary" /> Nube (Supabase)
+              <Badge variant={cloudActive ? 'primario' : 'default'}>{cloudActive ? 'Activa' : 'Modo local'}</Badge>
+            </CardTitle>
+            <CardDescription>
+              Con la nube activa, los datos viven en tu proyecto de Supabase: cuentas reales, acceso desde
+              cualquier dispositivo y sincronización automática con las cuentas de estudiante. La guía paso a paso
+              está en el archivo <code>SUPABASE.md</code> del proyecto (crear el proyecto lleva ~10 minutos y es
+              gratis).
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <Label>URL del proyecto</Label>
+                <Input
+                  value={cloud.url}
+                  onChange={(e) => setCloud({ ...cloud, url: e.target.value })}
+                  placeholder="https://xxxx.supabase.co"
+                />
+              </div>
+              <div>
+                <Label>Clave anónima (anon key)</Label>
+                <Input
+                  type="password"
+                  value={cloud.anonKey}
+                  onChange={(e) => setCloud({ ...cloud, anonKey: e.target.value })}
+                  placeholder="eyJ…"
+                />
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <Button variant="outline" size="sm" onClick={testCloud} disabled={!cloud.url || !cloud.anonKey || !!cloudBusy}>
+                Probar conexión
+              </Button>
+              {!cloudActive ? (
+                <Button size="sm" onClick={activateCloud} disabled={!cloud.url || !cloud.anonKey || !!cloudBusy}>
+                  <CloudUpload /> Activar modo nube
+                </Button>
+              ) : (
+                <Button variant="ghost" size="sm" onClick={deactivateCloud}>
+                  Volver al modo local
+                </Button>
+              )}
+              {cloudBusy && <span className="text-[12px] text-accent-strong">{cloudBusy}</span>}
+            </div>
+
+            {cloudActive && (
+              <div className="grid gap-4 rounded-lg border border-dashed p-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <p className="text-[12.5px] font-semibold">1 · Crear tu cuenta profesional</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Input
+                      placeholder="Nombre"
+                      value={proAccount.nombre}
+                      onChange={(e) => setProAccount({ ...proAccount, nombre: e.target.value })}
+                    />
+                    <Input
+                      placeholder="Apellido"
+                      value={proAccount.apellido}
+                      onChange={(e) => setProAccount({ ...proAccount, apellido: e.target.value })}
+                    />
+                  </div>
+                  <Input
+                    placeholder="Título profesional (opcional)"
+                    value={proAccount.titulo}
+                    onChange={(e) => setProAccount({ ...proAccount, titulo: e.target.value })}
+                  />
+                  <Input
+                    placeholder="tu@email.com"
+                    value={proAccount.email}
+                    onChange={(e) => setProAccount({ ...proAccount, email: e.target.value })}
+                  />
+                  <Input
+                    type="password"
+                    placeholder="Contraseña (mín. 6 caracteres)"
+                    value={proAccount.password}
+                    onChange={(e) => setProAccount({ ...proAccount, password: e.target.value })}
+                  />
+                  <Button
+                    size="sm"
+                    onClick={createProAccount}
+                    disabled={
+                      !proAccount.nombre || !proAccount.apellido || !proAccount.email ||
+                      proAccount.password.length < 6 || !!cloudBusy
+                    }
+                  >
+                    Crear cuenta profesional
+                  </Button>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-[12.5px] font-semibold">2 · Subir tus datos locales</p>
+                  <p className="text-[12px] text-muted-foreground">
+                    Copia todo lo que tenés guardado en este navegador (estudiantes, sesiones, actividades…) a la
+                    nube. Se puede repetir sin duplicar. Requiere haber ingresado con tu cuenta profesional.
+                  </p>
+                  <Button size="sm" variant="soft" onClick={migrate} disabled={!!cloudBusy}>
+                    <CloudUpload /> Migrar mis datos a la nube
+                  </Button>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+        )}
 
         <Card>
           <CardHeader>

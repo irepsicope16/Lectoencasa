@@ -1,4 +1,5 @@
 import { db } from '@/services/storage/db'
+import { isCloudEnabled } from '@/services/cloud/config'
 import type { Student } from '@/types'
 
 // Sin 0/O/1/l/I: se dicta por teléfono o WhatsApp y esos caracteres se confunden.
@@ -21,6 +22,31 @@ function generatePassword(length = 8): string {
 export async function ensureStudentAccount(student: Student): Promise<{ email: string; password: string } | null> {
   const email = student.contacto.trim().toLowerCase()
   if (!email.includes('@')) return null
+
+  // Modo nube: registro real en Supabase Auth con un cliente aislado (no
+  // pisa la sesión de la profesional). El trigger crea el perfil.
+  if (isCloudEnabled()) {
+    const { getIsolatedClient } = await import('@/services/cloud/client')
+    const sb = await getIsolatedClient()
+    const password = generatePassword()
+    const { error } = await sb.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          role: 'estudiante',
+          nombre: student.nombre,
+          apellido: student.apellido,
+          studentId: student.id,
+        },
+      },
+    })
+    if (error) {
+      // cuenta ya existente u otro error: no bloquea la creación de la ficha
+      return null
+    }
+    return { email, password }
+  }
 
   const users = await db.users.list()
   const existing = users.find((u) => u.email.toLowerCase() === email)
