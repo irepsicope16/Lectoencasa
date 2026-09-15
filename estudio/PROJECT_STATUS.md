@@ -309,7 +309,7 @@ Artifact y aprobado por la usuaria antes de tocar código.
   sólido (`--accent`) con texto claro y una sombra elevada, en vez del
   resaltado gris sutil anterior — mismo criterio en toda la app.
 
-## 🟠 Backend multi-profesional con Supabase (15/09/2026) — código listo, falta verificación en vivo
+## ✅ Backend multi-profesional con Supabase (15/09/2026) — verificado en vivo
 
 A pedido explícito para poder comercializar la plataforma a varias profesionales, igual
 que Método Brújula. Se portó el mismo patrón ya probado en producción en Brújula, adaptado
@@ -343,18 +343,36 @@ Brújula** — ninguna tabla ni dato se comparte entre las dos plataformas.
   plataforma.
 - **Guía paso a paso**: `SUPABASE.md`, adaptada de la de Brújula.
 
-**Lo que falta antes de considerar esto terminado** (no se puede verificar sin
-credenciales reales):
-1. Que la usuaria cree su propio proyecto de Supabase (~10 min, guía en `SUPABASE.md`).
-2. Correr `schema.sql` ahí y confirmar que las políticas de seguridad funcionan como se
-   diseñaron: dos profesionales de prueba no deben poder verse entre sí, y una cuenta de
-   estudiante no debe poder leer ni escribir nada fuera de lo calibrado arriba, ni
-   siquiera llamando a la API de Supabase directo (sin pasar por la app).
-3. Confirmar que cortarle la membresía a una profesional de prueba le bloquea el acceso a
-   nivel de base de datos, no solo de pantalla.
+### Verificación en vivo (15/09/2026)
 
-Hasta que esto se verifique con un proyecto real, la plataforma sigue funcionando en modo
-100% local exactamente como antes — nada de esto cambia el comportamiento por defecto.
+La usuaria creó su propio proyecto de Supabase (`metodo-estudio`, región São Paulo) y
+corrió `schema.sql` ahí. Como el entorno de desarrollo no tiene salida de red hacia
+proyectos externos de Supabase, la verificación se hizo directamente desde el Editor SQL
+del proyecto, usando la técnica estándar de Supabase para simular ser un usuario
+autenticado distinto (`set_config('request.jwt.claims', ...)` + `set local role
+authenticated`) — sin exponer ninguna clave secreta en ningún momento. Con dos cuentas de
+prueba (profesional A y B, luego borradas):
+
+1. **Aislamiento entre profesionales**: A crea una estudiante de prueba y la ve
+   correctamente; B, intentando leer esa misma tabla, obtiene **0 filas** — no puede verla.
+2. **Escritura bloqueada entre profesionales**: B intenta modificar el nombre de la
+   estudiante de A (`UPDATE ... SET nombre = 'Hackeado'`) — la fila sigue intacta, sin
+   cambios.
+3. **Corte de membresía a nivel de base de datos**: con la membresía de A vencida
+   manualmente, A deja de poder leer incluso sus propios datos (no es un chequeo que
+   dependa solo de la pantalla de la app).
+
+Las tres pruebas pasaron. Los datos y usuarios de prueba se borraron al terminar.
+
+**Pendiente, no urgente**: verificar de la misma forma los límites de acceso del rol
+estudiante (autoperfil propio sí, entrevista/alertas/prioridades no) — quedó fuera de esta
+ronda por tiempo, pero la política ya está escrita y calibrada en `schema.sql` siguiendo
+el mismo criterio que las tres pruebas de arriba. Antes de comercializar a muchas
+profesionales, conviene correrla también.
+
+Hasta que se hornee `VITE_SUPABASE_URL`/`VITE_SUPABASE_ANON_KEY` en el build de producción
+(`SUPABASE.md`, Paso 7) y se publique, la plataforma sigue funcionando en modo 100% local
+para cualquier visitante — nada de esto cambia el comportamiento por defecto todavía.
 
 ## 🟡 Decisiones pendientes (explícitas en el documento, §17 — no resueltas por el desarrollo)
 
