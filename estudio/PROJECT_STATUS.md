@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-09-13 · Rama: `claude/nueva-plataforma-profesional-wtaimt`
+> Fecha: 2026-09-15 · Rama: `claude/nueva-plataforma-profesional-wtaimt`
 > Fuente funcional: Documento Maestro V1 (Lic. Irene Morbidelli, set. 2026).
 
 ## Resumen ejecutivo
@@ -309,6 +309,53 @@ Artifact y aprobado por la usuaria antes de tocar código.
   sólido (`--accent`) con texto claro y una sombra elevada, en vez del
   resaltado gris sutil anterior — mismo criterio en toda la app.
 
+## 🟠 Backend multi-profesional con Supabase (15/09/2026) — código listo, falta verificación en vivo
+
+A pedido explícito para poder comercializar la plataforma a varias profesionales, igual
+que Método Brújula. Se portó el mismo patrón ya probado en producción en Brújula, adaptado
+al modelo de datos propio de Estudio. **Proyecto de Supabase propio y separado del de
+Brújula** — ninguna tabla ni dato se comparte entre las dos plataformas.
+
+- **Capa de nube** (`services/cloud/{client,config,migrate}.ts`,
+  `services/storage/supabaseRepository.ts`): igual contrato que el repositorio local — la
+  UI no distingue entre LocalStorage y Supabase. `db.ts` elige uno u otro por colección
+  según `isCloudEnabled()`.
+- **Esquema y seguridad** (`supabase/schema.sql`, nuevo): tabla `students` como raíz
+  (aislada por `professionalId`) y 11 tablas hijas con Row Level Security. El acceso del
+  **estudiante** se calibró tabla por tabla según lo que el portal (`MyDashboard.tsx`)
+  realmente lee o escribe — nunca en bloque: autoperfil (`questionnaire_responses`,
+  `open_answers`) con lectura y escritura; objetivos (`goals`) y actividades asignadas
+  (`asignaciones`) de solo lectura; entrevista con notas privadas, alertas, prioridades,
+  agenda y archivos de evaluación sin ningún acceso desde el rol estudiante, ni siquiera
+  lectura.
+- **Autenticación real** (`stores/authStore.ts`): Supabase Auth reemplaza la contraseña en
+  texto plano de LocalStorage cuando la nube está activa — incluye recuperación de
+  contraseña por email (`features/auth/ForgotPasswordPage.tsx`), que resuelve el problema
+  concreto de esta semana con una contraseña mal dictada por WhatsApp.
+- **Alta de profesionales**: `/registro` (autoregistro público, cuenta creada pero con
+  membresía "pendiente"), `lib/membership.ts` (misma dueña de plataforma que Brújula,
+  `irenemorbidelli@gmail.com`, sin cobro automático — se activa manualmente),
+  `/pro/profesionales` (panel de administración: renovar 1 año o cortar acceso, solo
+  visible para la dueña), `MembershipExpiredPage.tsx` (pantalla de acceso pausado sin
+  perder datos).
+- **Ajustes → tarjeta Nube**: conectar el proyecto de Supabase, activarlo, crear la cuenta
+  profesional real y migrar los datos locales — solo visible para la dueña de la
+  plataforma.
+- **Guía paso a paso**: `SUPABASE.md`, adaptada de la de Brújula.
+
+**Lo que falta antes de considerar esto terminado** (no se puede verificar sin
+credenciales reales):
+1. Que la usuaria cree su propio proyecto de Supabase (~10 min, guía en `SUPABASE.md`).
+2. Correr `schema.sql` ahí y confirmar que las políticas de seguridad funcionan como se
+   diseñaron: dos profesionales de prueba no deben poder verse entre sí, y una cuenta de
+   estudiante no debe poder leer ni escribir nada fuera de lo calibrado arriba, ni
+   siquiera llamando a la API de Supabase directo (sin pasar por la app).
+3. Confirmar que cortarle la membresía a una profesional de prueba le bloquea el acceso a
+   nivel de base de datos, no solo de pantalla.
+
+Hasta que esto se verifique con un proyecto real, la plataforma sigue funcionando en modo
+100% local exactamente como antes — nada de esto cambia el comportamiento por defecto.
+
 ## 🟡 Decisiones pendientes (explícitas en el documento, §17 — no resueltas por el desarrollo)
 
 - Nombre comercial definitivo y disponibilidad marcaria (se usó "Método
@@ -343,8 +390,10 @@ Artifact y aprobado por la usuaria antes de tocar código.
    administrativa después de una etapa piloto").
 6. Tests unitarios del motor (`estudioEngine` es puro y fácilmente testeable
    con vitest — inversión de ítems, completitud, discrepancias).
-7. Migración a backend real (hoy LocalStorage, mismo patrón repositorio que
-   Brújula) si se valida el prototipo con usuarios reales.
+7. La migración a backend real ya está construida (ver sección "Backend
+   multi-profesional" más abajo) — lo que falta es que la usuaria cree su
+   propio proyecto de Supabase y se verifique en vivo antes de
+   comercializar la plataforma.
 8. El alta de estudiante ahora pide un email de contacto (antes aceptaba
    teléfono) porque ese email es el que usa la cuenta del portal
    (`ensureStudentAccount`) — si en algún caso no hay email, no se genera

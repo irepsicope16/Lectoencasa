@@ -1,7 +1,9 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { BookOpen, Calendar, Home, MessageCircle, Settings, Users, Wallet } from 'lucide-react'
+import { BookOpen, Calendar, Home, MessageCircle, Settings, ShieldCheck, Users, Wallet } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Isotipo } from '@/branding/Logo'
+import { useAuthStore } from '@/stores/authStore'
+import { isOwner } from '@/lib/membership'
 import type { UserRole } from '@/types'
 
 const proNav = [
@@ -13,11 +15,15 @@ const proNav = [
   { to: '/pro/ajustes', icon: Settings, label: 'Ajustes' },
 ]
 
+/** Solo visible para la dueña de la plataforma (ver isOwner): activar/renovar membresías de otras profesionales. */
+const ownerNavItem: (typeof proNav)[number] = { to: '/pro/profesionales', icon: ShieldCheck, label: 'Profesionales' }
+
 const estudianteNav = [{ to: '/mi', icon: Home, label: 'Mi camino', end: true }]
 
 export function Sidebar({ role }: { role: UserRole }) {
   const navigate = useNavigate()
-  const nav = role === 'profesional' ? proNav : estudianteNav
+  const user = useAuthStore((s) => s.user)
+  const nav = role === 'profesional' ? (isOwner(user) ? [...proNav, ownerNavItem] : proNav) : estudianteNav
 
   return (
     <aside className="flex h-full w-[228px] shrink-0 flex-col border-r bg-surface">
