@@ -74,8 +74,14 @@ export default function PrintReciboPage() {
         )}
 
         <footer className="mt-16 border-t border-neutral-200 pt-4 text-center text-[11px] leading-relaxed text-neutral-500">
-          Método Brújula{user?.role === 'profesional' ? ` · ${nombreCompleto(user)}` : ''} · Encontrá tu norte.
-          Construí tu camino.
+          <p>
+            Método Brújula{user?.role === 'profesional' ? ` · ${nombreCompleto(user)}` : ''} · Encontrá tu norte.
+            Construí tu camino.
+          </p>
+          <p className="mt-1.5 text-[9.5px] text-neutral-400">
+            Material de Método Brújula — uso exclusivo de profesionales licenciatarios de la plataforma.
+            Prohibida su reproducción, distribución o reventa sin autorización expresa.
+          </p>
         </footer>
       </div>
     </div>

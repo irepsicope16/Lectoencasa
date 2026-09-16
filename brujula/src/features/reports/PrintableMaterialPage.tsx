@@ -321,8 +321,14 @@ export default function PrintableMaterialPage() {
         <Cuerpo />
 
         <footer className="mt-8 border-t border-neutral-200 pt-3 text-center text-[9.5px] text-neutral-400">
-          Método Brújula · Encontrá tu norte. Construí tu camino.
-          {user?.role === 'profesional' && ` · ${nombreCompleto(user)}`}
+          <p>
+            Método Brújula · Encontrá tu norte. Construí tu camino.
+            {user?.role === 'profesional' && ` · ${nombreCompleto(user)}`}
+          </p>
+          <p className="mt-1">
+            Material de Método Brújula — uso exclusivo de profesionales licenciatarios de la plataforma.
+            Prohibida su reproducción, distribución o reventa sin autorización expresa.
+          </p>
         </footer>
       </div>
     </div>

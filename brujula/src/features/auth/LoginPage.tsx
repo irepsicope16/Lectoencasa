@@ -165,8 +165,9 @@ export default function LoginPage() {
 
       <footer className="border-t px-6 py-3 text-center">
         <p className="text-[10.5px] leading-relaxed text-faint">
-          Material elaborado por Lic. Irene Morbidelli — MP: 260505. Prohibida su reproducción,
-          distribución o venta sin autorización expresa de la autora.
+          Material elaborado por Lic. Irene Morbidelli — MP: 260505. Uso exclusivo del profesional
+          titular de la cuenta: personal e intransferible. Prohibida su reproducción, distribución o
+          venta sin autorización expresa de la autora.
         </p>
       </footer>
     </div>
