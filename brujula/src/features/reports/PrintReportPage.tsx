@@ -484,6 +484,10 @@ export default function PrintReportPage() {
             Construí tu camino. — Documento generado el{' '}
             {fechaLarga(snap.generadoEl)}.
           </p>
+          <p className="mt-1.5 text-[9.5px] text-neutral-400">
+            Material de Método Brújula — uso exclusivo de profesionales licenciatarios de la plataforma.
+            Prohibida su reproducción, distribución o reventa sin autorización expresa.
+          </p>
         </footer>
       </div>
     </div>

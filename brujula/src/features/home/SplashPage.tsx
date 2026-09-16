@@ -61,8 +61,9 @@ export default function SplashPage() {
 
       <footer className="mt-16">
         <p className="mx-auto max-w-md text-[10.5px] leading-relaxed text-faint">
-          Material elaborado por Lic. Irene Morbidelli — MP: 260505. Prohibida su reproducción,
-          distribución o venta sin autorización expresa de la autora.
+          Material elaborado por Lic. Irene Morbidelli — MP: 260505. Uso exclusivo del profesional
+          titular de la cuenta: personal e intransferible. Prohibida su reproducción, distribución o
+          venta sin autorización expresa de la autora.
         </p>
         <p className="mt-1.5 text-[10.5px] text-faint">
           <a href="mailto:irenemorbidelli@gmail.com" className="hover:text-foreground hover:underline">
