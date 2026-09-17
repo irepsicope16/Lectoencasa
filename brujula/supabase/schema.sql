@@ -182,12 +182,18 @@ create policy profiles_admin_update on public.profiles
 -- así ningún profesional puede tocar su "role" ni "membershipExpiresAt"
 -- editando el JSON directo. Solo esta función, con esta lista fija de
 -- campos, puede escribir sobre la propia fila.
+-- Se agrega "moneda" (para Honorarios) después de la versión original de 5
+-- parámetros: como Postgres identifica las funciones por nombre + tipos de
+-- argumentos, un "create or replace" con un parámetro nuevo crearía una
+-- función sobrecargada en vez de reemplazarla — de ahí el drop explícito.
+drop function if exists public.mb_update_own_profile(text, text, text, text, text);
 create or replace function public.mb_update_own_profile(
   p_nombre text default null,
   p_apellido text default null,
   p_titulo text default null,
   p_matricula text default null,
-  p_telefono text default null
+  p_telefono text default null,
+  p_moneda text default null
 )
 returns void language plpgsql security definer set search_path = public
 as $$
@@ -198,7 +204,8 @@ begin
     'apellido', p_apellido,
     'titulo', p_titulo,
     'matricula', p_matricula,
-    'telefono', p_telefono
+    'telefono', p_telefono,
+    'moneda', p_moneda
   ))
   where id = auth.uid();
 end;

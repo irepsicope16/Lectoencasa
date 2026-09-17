@@ -6,6 +6,9 @@
 
 export type UserRole = 'profesional' | 'consultante'
 
+/** Monedas soportadas para mostrar montos de honorarios. */
+export type Moneda = 'ARS' | 'CLP' | 'PEN' | 'USD'
+
 export interface User {
   id: string
   role: UserRole
@@ -16,6 +19,7 @@ export interface User {
   titulo?: string // p. ej. "Lic. en Psicopedagogía"
   matricula?: string // p. ej. "MP 260505" — solo rol profesional
   telefono?: string // solo rol profesional, para materiales de contacto
+  moneda?: Moneda // solo rol profesional, para Honorarios. Sin valor = ARS (compatibilidad)
   avatarUrl?: string
   consultantId?: string // solo rol consultante
   /**

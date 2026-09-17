@@ -10,12 +10,14 @@ import { Button } from '@/components/ui/button'
 import { NativeSelect } from '@/components/ui/input'
 import { useConsultants, useSessions, useUpdate } from '@/hooks/queries'
 import { fechaCorta, formatMonto, nombreCompleto } from '@/lib/utils'
+import { useAuthStore } from '@/stores/authStore'
 import type { Session } from '@/types'
 
 export default function HonorariosPage() {
   const { data: consultants = [] } = useConsultants()
   const { data: sessions = [] } = useSessions()
   const updateSession = useUpdate<Session>('sessions')
+  const moneda = useAuthStore((s) => s.user?.moneda)
   const [filtro, setFiltro] = useState<'todos' | 'pendientes' | 'cobrados'>('pendientes')
 
   const consultantMap = useMemo(() => new Map(consultants.map((c) => [c.id, c])), [consultants])
@@ -47,8 +49,8 @@ export default function HonorariosPage() {
       />
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
-        <StatCard icon={Wallet} label="Cobrado este mes" value={formatMonto(cobradoEsteMes)} />
-        <StatCard icon={Clock3} label="Pendiente de cobro" value={formatMonto(totalPendiente)} tone="lavanda" />
+        <StatCard icon={Wallet} label="Cobrado este mes" value={formatMonto(cobradoEsteMes, moneda)} />
+        <StatCard icon={Clock3} label="Pendiente de cobro" value={formatMonto(totalPendiente, moneda)} tone="lavanda" />
         <StatCard icon={CircleDollarSign} label="Sesiones con honorario" value={conHonorario.length} tone="neutro" />
       </div>
 
@@ -89,7 +91,7 @@ export default function HonorariosPage() {
                           ` de ${format(parseISO(s.fecha), 'yyyy', { locale: es })}`}
                       </p>
                     </div>
-                    <span className="text-[14px] font-semibold">{formatMonto(s.monto ?? 0)}</span>
+                    <span className="text-[14px] font-semibold">{formatMonto(s.monto ?? 0, moneda)}</span>
                     <Badge variant={s.cobrado ? 'aqua' : 'amber'}>{s.cobrado ? 'Cobrado' : 'Pendiente'}</Badge>
                     <Button size="sm" variant="ghost" asChild>
                       <Link to={`/print/recibo/${s.id}`}>Recibo</Link>

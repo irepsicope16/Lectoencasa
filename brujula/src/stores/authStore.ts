@@ -4,7 +4,7 @@ import type { User } from '@/types'
 import { db } from '@/services/storage/db'
 import { isCloudEnabled } from '@/services/cloud/config'
 
-type ProfileEditable = Pick<User, 'nombre' | 'apellido' | 'titulo' | 'matricula' | 'telefono'>
+type ProfileEditable = Pick<User, 'nombre' | 'apellido' | 'titulo' | 'matricula' | 'telefono' | 'moneda'>
 
 interface AuthState {
   user: User | null
@@ -147,7 +147,7 @@ export const useAuthStore = create<AuthState>()(
         if (isCloudEnabled()) {
           const { getSupabase } = await import('@/services/cloud/client')
           const sb = await getSupabase()
-          // Función segura del lado del servidor: solo puede tocar estos 5
+          // Función segura del lado del servidor: solo puede tocar estos
           // campos de la propia fila, nunca "role" ni "membershipExpiresAt".
           const { error } = await sb.rpc('mb_update_own_profile', {
             p_nombre: patch.nombre ?? null,
@@ -155,6 +155,7 @@ export const useAuthStore = create<AuthState>()(
             p_titulo: patch.titulo ?? null,
             p_matricula: patch.matricula ?? null,
             p_telefono: patch.telefono ?? null,
+            p_moneda: patch.moneda ?? null,
           })
           if (error) throw new Error(error.message)
         } else {

@@ -436,24 +436,46 @@ function InfografiaPlanEstudios() {
 
 // ---------- 13 · Directorio de portales oficiales ----------
 function DirectorioPortales() {
-  const portales: [string, string, string][] = [
-    ['Guía de Carreras (SIU)', 'guiadecarreras.siu.edu.ar', 'Buscador oficial de TODAS las carreras universitarias de Argentina, por área, título e institución.'],
-    ['Ministerio de Educación', 'argentina.gob.ar/educacion', 'Información oficial de universidades, validez de títulos e instituciones reconocidas.'],
-    ['Becas Progresar', 'argentina.gob.ar/educacion/progresar', 'Programa nacional de becas para estudiar (requisitos y fechas de inscripción).'],
-    ['Sitio de cada universidad', '(uba.ar · unlp.edu.ar · utn.edu.ar · uncuyo.edu.ar …)', 'Siempre el plan de estudios y las fechas de inscripción se confirman en el sitio oficial de la institución.'],
+  const portales: [string, string, string, string][] = [
+    [
+      'Guía nacional de carreras universitarias',
+      'Ej. en Argentina: guiadecarreras.siu.edu.ar',
+      'Buscador oficial de carreras por área, título e institución.',
+      '¿Y en tu país? Buscá el organismo nacional que centraliza la oferta universitaria.',
+    ],
+    [
+      'Ministerio de Educación',
+      'Ej. en Argentina: argentina.gob.ar/educacion',
+      'Información oficial de universidades, validez de títulos e instituciones reconocidas.',
+      '¿Y en tu país? El sitio oficial del Ministerio o Secretaría de Educación.',
+    ],
+    [
+      'Programa nacional de becas',
+      'Ej. en Argentina: argentina.gob.ar/educacion/progresar',
+      'Requisitos y fechas de inscripción para becas de estudio.',
+      '¿Y en tu país? El programa de becas que ofrezca el estado.',
+    ],
+    [
+      'Sitio de cada universidad',
+      '(uba.ar · unlp.edu.ar · utn.edu.ar · uncuyo.edu.ar … en Argentina)',
+      'Siempre el plan de estudios y las fechas de inscripción se confirman en el sitio oficial de la institución, sea cual sea el país.',
+      '',
+    ],
   ]
   return (
     <>
       <Caja>
         Para investigar carreras usá SIEMPRE fuentes oficiales — los blogs y videos ayudan a inspirar, pero
-        las fechas, planes y títulos se verifican acá:
+        las fechas, planes y títulos se verifican acá. Los links de ejemplo son de Argentina: si estás en
+        otro país, buscá el equivalente local de cada categoría.
       </Caja>
       <div className="mt-4 space-y-3">
-        {portales.map(([nombre, url, desc]) => (
+        {portales.map(([nombre, url, desc, otroPais]) => (
           <div key={nombre} className="rounded-xl border-2 border-neutral-200 p-3">
             <p className="text-[13px] font-bold">{nombre}</p>
             <p className="text-[12px] font-semibold text-[#0e7f79]">{url}</p>
             <p className="mt-0.5 text-[11.5px] text-neutral-600">{desc}</p>
+            {otroPais && <p className="mt-1 text-[11px] italic text-neutral-500">{otroPais}</p>}
           </div>
         ))}
       </div>

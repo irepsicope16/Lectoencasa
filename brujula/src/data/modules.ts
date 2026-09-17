@@ -913,7 +913,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'lectura',
         printableId: 'infografia-despues-secundario',
       },
-      { id: 'm2', titulo: 'Directorio de portales oficiales', descripcion: 'Fuentes oficiales para investigar carreras (imprimible + acceso directo a la Guía de Carreras del SIU).', tipo: 'enlace', printableId: 'directorio-portales', url: 'https://guiadecarreras.siu.edu.ar/' },
+      { id: 'm2', titulo: 'Directorio de portales oficiales', descripcion: 'Fuentes oficiales para investigar carreras (imprimible con las categorías a buscar en cualquier país + acceso directo a la Guía de Carreras del SIU, el ejemplo de Argentina).', tipo: 'enlace', printableId: 'directorio-portales', url: 'https://guiadecarreras.siu.edu.ar/' },
     ],
     preguntasGuia: [
       '¿Investiga con criterios propios o con rankings ajenos?',
