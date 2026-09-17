@@ -20,9 +20,10 @@ import { useUIStore, type Theme } from '@/stores/uiStore'
 import { getAISettings, saveAISettings } from '@/services/ai'
 import { resetDemoData } from '@/data/seed'
 import { useQueryClient } from '@tanstack/react-query'
-import { cn } from '@/lib/utils'
+import { cn, MONEDA_LABEL } from '@/lib/utils'
 import { isOwner, oneYearFromNow } from '@/lib/membership'
 import { useAuthStore } from '@/stores/authStore'
+import type { Moneda } from '@/types'
 
 export default function SettingsPage() {
   const theme = useUIStore((s) => s.theme)
@@ -45,6 +46,7 @@ export default function SettingsPage() {
     titulo: user?.titulo ?? '',
     matricula: user?.matricula ?? '',
     telefono: user?.telefono ?? '',
+    moneda: user?.moneda ?? 'ARS',
   })
   const [perfilSaving, setPerfilSaving] = useState(false)
   const [perfilSaved, setPerfilSaved] = useState(false)
@@ -195,6 +197,19 @@ export default function SettingsPage() {
                   onChange={(e) => setPerfil({ ...perfil, telefono: e.target.value })}
                   placeholder="11 2345-6789"
                 />
+              </div>
+              <div>
+                <Label>Moneda de honorarios</Label>
+                <NativeSelect
+                  value={perfil.moneda}
+                  onChange={(e) => setPerfil({ ...perfil, moneda: e.target.value as Moneda })}
+                >
+                  {(Object.keys(MONEDA_LABEL) as Moneda[]).map((m) => (
+                    <option key={m} value={m}>
+                      {MONEDA_LABEL[m]}
+                    </option>
+                  ))}
+                </NativeSelect>
               </div>
             </div>
             <div className="flex items-center gap-3">

@@ -57,7 +57,8 @@ export default function PrintReciboPage() {
 
         <p className="text-neutral-800">
           Recibí de <strong>{nombreCompleto(consultant)}</strong> la suma de{' '}
-          <strong className="text-[16px] text-primary-strong">{formatMonto(session.monto)}</strong> en concepto de
+          <strong className="text-[16px] text-primary-strong">{formatMonto(session.monto, user?.moneda)}</strong> en
+          concepto de
           honorarios por sesión de <strong>Orientación Vocacional y Ocupacional</strong>, «{session.titulo}»,
           realizada el {fechaLarga(session.fecha)}.
         </p>

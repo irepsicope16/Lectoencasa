@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { differenceInYears, format, formatDistanceToNow, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
+import type { Moneda } from '@/types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -55,8 +56,26 @@ export function nombreCompleto(p: { nombre: string; apellido: string }): string 
   return `${p.nombre} ${p.apellido}`
 }
 
-export function formatMonto(n: number): string {
-  return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(n)
+const LOCALE_POR_MONEDA: Record<Moneda, string> = {
+  ARS: 'es-AR',
+  CLP: 'es-CL',
+  PEN: 'es-PE',
+  USD: 'en-US',
+}
+
+export const MONEDA_LABEL: Record<Moneda, string> = {
+  ARS: 'Pesos argentinos (ARS)',
+  CLP: 'Pesos chilenos (CLP)',
+  PEN: 'Soles peruanos (PEN)',
+  USD: 'Dólares (USD)',
+}
+
+export function formatMonto(n: number, moneda: Moneda = 'ARS'): string {
+  return new Intl.NumberFormat(LOCALE_POR_MONEDA[moneda], {
+    style: 'currency',
+    currency: moneda,
+    maximumFractionDigits: 0,
+  }).format(n)
 }
 
 export function formatBytes(bytes: number): string {

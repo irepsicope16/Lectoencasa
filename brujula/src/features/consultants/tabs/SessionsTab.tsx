@@ -17,6 +17,7 @@ import { EmptyState, StageStepper } from '@/components/shared'
 import { toast } from '@/components/ui/toast'
 import { useCreate, useModuleProgress, useSessions, useUpdate } from '@/hooks/queries'
 import { fechaHora, formatMonto, nombreCompleto } from '@/lib/utils'
+import { useAuthStore } from '@/stores/authStore'
 import { MODULES } from '@/data/modules'
 import { SESSION_STATUS } from '@/lib/constants'
 import { stageProgress } from '@/lib/progress'
@@ -41,6 +42,7 @@ const emptyForm = {
 export function SessionsTab({ consultant }: { consultant: Consultant }) {
   const { data: sessions = [] } = useSessions()
   const { data: progress = [] } = useModuleProgress()
+  const moneda = useAuthStore((s) => s.user?.moneda)
   const createSession = useCreate<Session>('sessions', (s) => ({
     actor: 'profesional',
     consultantId: s.consultantId,
@@ -146,7 +148,7 @@ export function SessionsTab({ consultant }: { consultant: Consultant }) {
                 </Badge>
                 {s.monto != null && (
                   <Badge variant={s.cobrado ? 'aqua' : 'amber'}>
-                    {formatMonto(s.monto)} · {s.cobrado ? 'Cobrado' : 'Pendiente'}
+                    {formatMonto(s.monto, moneda)} · {s.cobrado ? 'Cobrado' : 'Pendiente'}
                   </Badge>
                 )}
                 <span className="ml-auto flex items-center gap-3 text-[12px] text-faint">
