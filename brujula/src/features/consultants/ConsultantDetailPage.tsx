@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Archive, ArchiveRestore, ArrowLeft, CalendarDays, GraduationCap, Mail, Pencil, Phone, Trash2 } from 'lucide-react'
+import { Archive, ArchiveRestore, ArrowLeft, CalendarDays, GraduationCap, KeyRound, Mail, Pencil, Phone, Trash2 } from 'lucide-react'
 import { FadeIn, ProgressRing } from '@/components/shared'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -17,7 +17,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query'
 import { useConsultant, useModuleProgress, useUpdate } from '@/hooks/queries'
 import { deleteConsultantCascade } from '@/services/storage/db'
-import { ensureConsultantAccount } from '@/features/auth/accounts'
+import { ensureConsultantAccount, resetConsultantPassword } from '@/features/auth/accounts'
 import { toast } from '@/components/ui/toast'
 import { edad, fechaCorta, iniciales, nombreCompleto } from '@/lib/utils'
 import { effectiveEstado, overallProgress } from '@/lib/progress'
@@ -25,6 +25,7 @@ import { CONSULTANT_STATUS } from '@/lib/constants'
 import type { Consultant } from '@/types'
 import { useNavigate } from 'react-router-dom'
 import { ConsultantFormDialog } from './ConsultantForm'
+import { CredentialsDialog, type ConsultantCredentials } from './CredentialsDialog'
 import { OverviewTab } from './tabs/OverviewTab'
 import { ModulesTab } from './tabs/ModulesTab'
 import { SessionsTab } from './tabs/SessionsTab'
@@ -43,6 +44,8 @@ export default function ConsultantDetailPage() {
   const qc = useQueryClient()
   const [editOpen, setEditOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
+  const [credenciales, setCredenciales] = useState<ConsultantCredentials | null>(null)
+  const [resetteando, setResetteando] = useState(false)
 
   if (isLoading) return null
   if (!consultant) {
@@ -109,6 +112,30 @@ export default function ConsultantDetailPage() {
             <Button variant="outline" size="sm" onClick={() => setEditOpen(true)}>
               <Pencil /> Editar
             </Button>
+            {consultant.email && (
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={resetteando}
+                onClick={async () => {
+                  setResetteando(true)
+                  try {
+                    const cuenta = await resetConsultantPassword(consultant)
+                    if (cuenta) {
+                      setCredenciales(cuenta)
+                    } else {
+                      toast.error('Este consultante todavía no tiene una cuenta de acceso creada')
+                    }
+                  } catch (e) {
+                    toast.error(e instanceof Error ? e.message : 'No se pudo restablecer la contraseña')
+                  } finally {
+                    setResetteando(false)
+                  }
+                }}
+              >
+                <KeyRound /> Restablecer contraseña
+              </Button>
+            )}
             <Button
               variant="outline"
               size="sm"
@@ -178,7 +205,7 @@ export default function ConsultantDetailPage() {
           const updated = await updateConsultant.mutateAsync({ id: consultant.id, patch: data })
           const cuenta = await ensureConsultantAccount(updated)
           if (cuenta) {
-            toast.success(`Ficha actualizada · acceso: ${cuenta.email} / clave «${cuenta.password}»`)
+            setCredenciales(cuenta)
           } else {
             toast.success('Ficha actualizada')
           }
@@ -212,6 +239,7 @@ export default function ConsultantDetailPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <CredentialsDialog credentials={credenciales} onClose={() => setCredenciales(null)} />
     </FadeIn>
   )
 }
