@@ -26,6 +26,7 @@ import type { Consultant } from '@/types'
 import { useNavigate } from 'react-router-dom'
 import { ConsultantFormDialog } from './ConsultantForm'
 import { CredentialsDialog, type ConsultantCredentials } from './CredentialsDialog'
+import { SetPasswordDialog } from './SetPasswordDialog'
 import { OverviewTab } from './tabs/OverviewTab'
 import { ModulesTab } from './tabs/ModulesTab'
 import { SessionsTab } from './tabs/SessionsTab'
@@ -45,7 +46,7 @@ export default function ConsultantDetailPage() {
   const [editOpen, setEditOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [credenciales, setCredenciales] = useState<ConsultantCredentials | null>(null)
-  const [resetteando, setResetteando] = useState(false)
+  const [resetOpen, setResetOpen] = useState(false)
 
   if (isLoading) return null
   if (!consultant) {
@@ -113,26 +114,7 @@ export default function ConsultantDetailPage() {
               <Pencil /> Editar
             </Button>
             {consultant.email && (
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={resetteando}
-                onClick={async () => {
-                  setResetteando(true)
-                  try {
-                    const cuenta = await resetConsultantPassword(consultant)
-                    if (cuenta) {
-                      setCredenciales(cuenta)
-                    } else {
-                      toast.error('Este consultante todavía no tiene una cuenta de acceso creada')
-                    }
-                  } catch (e) {
-                    toast.error(e instanceof Error ? e.message : 'No se pudo restablecer la contraseña')
-                  } finally {
-                    setResetteando(false)
-                  }
-                }}
-              >
+              <Button variant="outline" size="sm" onClick={() => setResetOpen(true)}>
                 <KeyRound /> Restablecer contraseña
               </Button>
             )}
@@ -202,13 +184,30 @@ export default function ConsultantDetailPage() {
         onOpenChange={setEditOpen}
         initial={consultant}
         onSubmit={async (data) => {
-          const updated = await updateConsultant.mutateAsync({ id: consultant.id, patch: data })
-          const cuenta = await ensureConsultantAccount(updated)
+          const { password, ...patch } = data
+          const updated = await updateConsultant.mutateAsync({ id: consultant.id, patch })
+          const cuenta = await ensureConsultantAccount(updated, password || undefined)
           if (cuenta) {
-            setCredenciales(cuenta)
+            if (password) {
+              toast.success('Ficha actualizada — ya puede entrar con la contraseña que elegiste')
+            } else {
+              setCredenciales(cuenta)
+            }
           } else {
             toast.success('Ficha actualizada')
           }
+        }}
+      />
+
+      <SetPasswordDialog
+        open={resetOpen}
+        onOpenChange={setResetOpen}
+        onSubmit={async (password) => {
+          const cuenta = await resetConsultantPassword(consultant, password)
+          if (!cuenta) {
+            throw new Error('Este consultante todavía no tiene una cuenta de acceso creada')
+          }
+          toast.success('Contraseña actualizada')
         }}
       />
 

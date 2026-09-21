@@ -26,6 +26,7 @@ const schema = z.object({
   escuela: z.string().min(1, 'Ingresá la escuela'),
   curso: z.string().min(1, 'Ingresá el curso'),
   email: z.string().email('Email inválido').or(z.literal('')),
+  password: z.union([z.literal(''), z.string().min(6, 'Mínimo 6 caracteres')]),
   telefono: z.string(),
   motivoConsulta: z.string().min(5, 'Describí brevemente el motivo de consulta'),
   fechaInicio: z.string().min(1, 'Ingresá la fecha de inicio'),
@@ -65,6 +66,7 @@ export function ConsultantFormDialog({
           escuela: initial.escuela,
           curso: initial.curso,
           email: initial.email,
+          password: '',
           telefono: initial.telefono,
           motivoConsulta: initial.motivoConsulta,
           fechaInicio: initial.fechaInicio,
@@ -77,6 +79,7 @@ export function ConsultantFormDialog({
           escuela: '',
           curso: '',
           email: '',
+          password: '',
           telefono: '',
           motivoConsulta: '',
           fechaInicio: new Date().toISOString().slice(0, 10),
@@ -173,6 +176,15 @@ export function ConsultantFormDialog({
           <div>
             <Label>Teléfono</Label>
             <Input {...register('telefono')} placeholder="+54 9 …" />
+          </div>
+          <div className="sm:col-span-2">
+            <Label>Contraseña de acceso {initial && '(dejar vacío para no cambiarla)'}</Label>
+            <Input type="text" {...register('password')} placeholder="Elegila con el consultante — mínimo 6 caracteres" />
+            <FieldError>{errors.password?.message}</FieldError>
+            <p className="mt-1 text-[11px] text-faint">
+              Si la dejás vacía{!initial && ' se genera una automática'}, se puede definir después con
+              "Restablecer contraseña" en la ficha.
+            </p>
           </div>
           <div className="sm:col-span-2">
             <Label>Motivo de consulta</Label>
