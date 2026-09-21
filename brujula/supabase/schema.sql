@@ -166,6 +166,36 @@ as $$
   )
 $$;
 
+-- Contraseña de acceso del consultante: ni la app ni Supabase Auth la
+-- guardan nunca en texto plano (GoTrue solo guarda el hash), así que "verla
+-- de nuevo" es imposible por diseño — lo único que se puede hacer es
+-- fijarle una contraseña NUEVA. Esta función deja que la profesional dueña
+-- de la ficha (mb_owns_consultant) haga eso ella misma, sin depender de que
+-- el consultante revise su mail para el flujo normal de recuperación.
+-- pgcrypto (extensions.crypt/gen_salt) es la misma librería que usa GoTrue
+-- para hashear contraseñas, así que el resultado es 100% compatible.
+create extension if not exists pgcrypto with schema extensions;
+create or replace function public.mb_reset_consultant_password(p_consultant_id text, p_new_password text)
+returns void language plpgsql security definer set search_path = public
+as $$
+declare
+  target_user_id uuid;
+begin
+  if not public.mb_owns_consultant(p_consultant_id) then
+    raise exception 'No autorizada para modificar el acceso de este consultante';
+  end if;
+  select id into target_user_id from public.profiles where data->>'consultantId' = p_consultant_id;
+  if target_user_id is null then
+    raise exception 'Este consultante todavía no tiene una cuenta de acceso creada';
+  end if;
+  update auth.users
+  set encrypted_password = extensions.crypt(p_new_password, extensions.gen_salt('bf')),
+      updated_at = now()
+  where id = target_user_id;
+end;
+$$;
+grant execute on function public.mb_reset_consultant_password to authenticated;
+
 -- Políticas de profiles: cada cuenta lee su propio perfil; la dueña de la
 -- plataforma además puede ver y actualizar los de las demás profesionales
 -- (panel /pro/profesionales, para renovar membresías sin tocar Supabase).

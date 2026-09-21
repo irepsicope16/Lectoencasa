@@ -15,6 +15,7 @@ import { useAuthStore } from '@/stores/authStore'
 import type { Consultant } from '@/types'
 import { toast } from '@/components/ui/toast'
 import { ensureConsultantAccount } from '@/features/auth/accounts'
+import { CredentialsDialog, type ConsultantCredentials } from './CredentialsDialog'
 import { ConsultantFormDialog } from './ConsultantForm'
 
 export default function ConsultantsPage() {
@@ -24,6 +25,7 @@ export default function ConsultantsPage() {
   const [showArchived, setShowArchived] = useState(false)
   const open = params.get('nuevo') === '1'
   const user = useAuthStore((s) => s.user)
+  const [credenciales, setCredenciales] = useState<ConsultantCredentials | null>(null)
 
   const { data: consultants = [] } = useConsultants()
   const { data: progress = [] } = useModuleProgress()
@@ -162,12 +164,13 @@ export default function ConsultantsPage() {
           const created = await createConsultant.mutateAsync({ ...data, profesionalId: user?.id ?? '' })
           const cuenta = await ensureConsultantAccount(created)
           if (cuenta) {
-            toast.success(`Ficha creada · acceso: ${cuenta.email} / clave «${cuenta.password}»`)
+            setCredenciales(cuenta)
           } else {
             toast.success('Ficha creada correctamente')
           }
         }}
       />
+      <CredentialsDialog credentials={credenciales} onClose={() => setCredenciales(null)} />
     </FadeIn>
   )
 }

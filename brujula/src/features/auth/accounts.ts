@@ -68,3 +68,35 @@ export async function ensureConsultantAccount(
   })
   return { email, password }
 }
+
+/**
+ * Genera una contraseña nueva para el consultante y la aplica ya mismo a su
+ * cuenta de acceso — para cuando la profesional no llegó a anotar la que se
+ * mostró al crear la ficha (esa nunca se vuelve a poder ver: ni la app ni
+ * Supabase guardan contraseñas en texto plano). Requiere que el consultante
+ * ya tenga cuenta creada (con email cargado).
+ */
+export async function resetConsultantPassword(
+  consultant: Consultant,
+): Promise<{ email: string; password: string } | null> {
+  const email = consultant.email.trim().toLowerCase()
+  if (!email) return null
+  const password = generatePassword()
+
+  if (isCloudEnabled()) {
+    const { getSupabase } = await import('@/services/cloud/client')
+    const sb = await getSupabase()
+    const { error } = await sb.rpc('mb_reset_consultant_password', {
+      p_consultant_id: consultant.id,
+      p_new_password: password,
+    })
+    if (error) throw new Error(error.message)
+    return { email, password }
+  }
+
+  const users = await db.users.list()
+  const existing = users.find((u) => u.consultantId === consultant.id && u.role === 'consultante')
+  if (!existing) return null
+  await db.users.update(existing.id, { password })
+  return { email, password }
+}
