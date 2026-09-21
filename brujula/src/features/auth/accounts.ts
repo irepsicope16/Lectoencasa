@@ -19,6 +19,7 @@ function generatePassword(length = 10): string {
  */
 export async function ensureConsultantAccount(
   consultant: Consultant,
+  customPassword?: string,
 ): Promise<{ email: string; password: string } | null> {
   const email = consultant.email.trim().toLowerCase()
   if (!email) return null
@@ -28,7 +29,7 @@ export async function ensureConsultantAccount(
   if (isCloudEnabled()) {
     const { getIsolatedClient } = await import('@/services/cloud/client')
     const sb = await getIsolatedClient()
-    const password = generatePassword()
+    const password = customPassword || generatePassword()
     const { error } = await sb.auth.signUp({
       email,
       password,
@@ -42,7 +43,14 @@ export async function ensureConsultantAccount(
       },
     })
     if (error) {
-      // cuenta ya existente u otro error: no bloquea la creación de la ficha
+      // la cuenta ya existe: si se eligió una contraseña puntual, se aplica igual
+      if (customPassword) {
+        try {
+          return await resetConsultantPassword(consultant, customPassword)
+        } catch {
+          return null
+        }
+      }
       return null
     }
     return { email, password }
@@ -55,9 +63,13 @@ export async function ensureConsultantAccount(
     if (existing.role === 'consultante' && !existing.consultantId) {
       await db.users.update(existing.id, { consultantId: consultant.id })
     }
+    if (customPassword) {
+      await db.users.update(existing.id, { password: customPassword })
+      return { email, password: customPassword }
+    }
     return null
   }
-  const password = generatePassword()
+  const password = customPassword || generatePassword()
   await db.users.create({
     role: 'consultante',
     nombre: consultant.nombre,
@@ -78,10 +90,11 @@ export async function ensureConsultantAccount(
  */
 export async function resetConsultantPassword(
   consultant: Consultant,
+  customPassword?: string,
 ): Promise<{ email: string; password: string } | null> {
   const email = consultant.email.trim().toLowerCase()
   if (!email) return null
-  const password = generatePassword()
+  const password = customPassword || generatePassword()
 
   if (isCloudEnabled()) {
     const { getSupabase } = await import('@/services/cloud/client')

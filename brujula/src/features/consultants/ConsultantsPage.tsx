@@ -161,10 +161,15 @@ export default function ConsultantsPage() {
         open={open}
         onOpenChange={setOpen}
         onSubmit={async (data) => {
-          const created = await createConsultant.mutateAsync({ ...data, profesionalId: user?.id ?? '' })
-          const cuenta = await ensureConsultantAccount(created)
+          const { password, ...rest } = data
+          const created = await createConsultant.mutateAsync({ ...rest, profesionalId: user?.id ?? '' })
+          const cuenta = await ensureConsultantAccount(created, password || undefined)
           if (cuenta) {
-            setCredenciales(cuenta)
+            if (password) {
+              toast.success('Ficha creada — ya puede entrar con la contraseña que elegiste')
+            } else {
+              setCredenciales(cuenta)
+            }
           } else {
             toast.success('Ficha creada correctamente')
           }
