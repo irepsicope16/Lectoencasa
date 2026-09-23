@@ -24,6 +24,14 @@ create table if not exists public.profiles (
 
 alter table public.profiles enable row level security;
 
+-- Desde el 30/10/2026 Supabase deja de otorgar acceso automático a la API
+-- de datos (PostgREST) para tablas nuevas: hay que darlo explícito acá. No
+-- se otorga a "anon" a propósito — esta tabla tiene datos de cuenta, y
+-- ninguna pantalla la lee sin sesión iniciada (RLS ya lo bloquearía igual,
+-- pero mejor ni dejar la puerta entreabierta).
+grant select, insert, update, delete on public.profiles to authenticated;
+grant select, insert, update, delete on public.profiles to service_role;
+
 -- El perfil se crea automáticamente al registrarse una cuenta, tomando
 -- rol/nombre/consultantId de los metadatos del registro.
 --
@@ -140,6 +148,10 @@ alter table public.consultants
   add column if not exists "profesionalId" text generated always as (data->>'profesionalId') stored;
 create index if not exists consultants_profesional_idx on public.consultants ("profesionalId");
 alter table public.consultants enable row level security;
+-- ídem profiles: acceso explícito para la API de datos (cambio de Supabase
+-- del 30/10/2026), solo para cuentas logueadas.
+grant select, insert, update, delete on public.consultants to authenticated;
+grant select, insert, update, delete on public.consultants to service_role;
 drop policy if exists consultants_pro on public.consultants;
 create policy consultants_pro on public.consultants
   for all using (
@@ -279,6 +291,10 @@ begin
       )$f$, t);
     execute format('create index if not exists %I on public.%I ("consultantId")', t || '_cid_idx', t);
     execute format('alter table public.%I enable row level security', t);
+    -- ídem profiles/consultants: acceso explícito para la API de datos
+    -- (cambio de Supabase del 30/10/2026), solo para cuentas logueadas.
+    execute format('grant select, insert, update, delete on public.%I to authenticated', t);
+    execute format('grant select, insert, update, delete on public.%I to service_role', t);
     -- profesional: acceso total, pero solo a SUS consultantes
     execute format('drop policy if exists %I on public.%I', t || '_pro', t);
     execute format($f$
