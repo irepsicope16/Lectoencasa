@@ -12,6 +12,7 @@ import {
   Users,
   ShieldCheck,
   ClipboardCheck,
+  ChevronDown,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import dashboardShot from '@/assets/landing/dashboard.png'
@@ -42,6 +43,33 @@ const BENEFICIOS = [
   'Tus consultantes avanzan con sus actividades incluso fuera de la sesión',
 ]
 
+const FAQ = [
+  {
+    q: '¿Necesito instalar algo?',
+    a: 'No. Funciona desde el navegador, en celular, tablet o computadora. Se puede agregar como ícono en la pantalla de inicio, igual que una app, pero no requiere instalación desde ninguna tienda.',
+  },
+  {
+    q: '¿Mis consultantes tienen que registrarse por su cuenta?',
+    a: 'No. Vos cargás la ficha una sola vez y el acceso del consultante se genera solo, con su propia contraseña. Ellos entran para hacer sus actividades entre sesión y sesión, sin pasos extra de tu parte.',
+  },
+  {
+    q: '¿Mis datos y los de mis consultantes están seguros?',
+    a: 'Sí. Cada profesional tiene su propia cuenta, completamente aislada del resto: nadie más ve tus fichas, tus consultantes ni tus notas.',
+  },
+  {
+    q: '¿Necesito manejar mucho la tecnología para usarlo?',
+    a: 'No. Está pensado para usarse sin conocimientos técnicos — si usás el celular para lo cotidiano, ya sabés lo necesario para trabajar con Método Brújula.',
+  },
+  {
+    q: '¿Sirve para Psicología, Psicopedagogía y Orientación en general?',
+    a: 'Sí. Está pensado para cualquier profesional que acompañe procesos de orientación vocacional y ocupacional, sea cual sea su formación de base.',
+  },
+  {
+    q: '¿Cuánto cuesta y cómo empiezo?',
+    a: 'Escribime desde el registro y coordinamos el valor y los detalles antes de activar tu cuenta — así arrancás con todas tus dudas resueltas.',
+  },
+]
+
 function Section({
   children,
   className = '',
@@ -66,6 +94,10 @@ export default function LandingPage() {
         <Link to="/" className="flex items-center gap-2 text-[13px] font-semibold tracking-tight">
           <Compass className="h-4.5 w-4.5 text-primary" /> Método Brújula
         </Link>
+        <nav className="hidden items-center gap-5 text-[13px] text-muted-foreground sm:flex">
+          <a href="#como-funciona" className="hover:text-foreground">Cómo funciona</a>
+          <a href="#faq" className="hover:text-foreground">Preguntas frecuentes</a>
+        </nav>
         <Button variant="outline" size="sm" asChild>
           <Link to="/login">
             Ya tengo cuenta <ArrowRight />
@@ -77,15 +109,16 @@ export default function LandingPage() {
       <Section className="text-center">
         <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <p className="text-[12px] font-medium tracking-[0.16em] text-faint uppercase">
-            Lic. Irene Morbidelli · Plataforma profesional
+            Para psicólogos, psicopedagogos y orientadores vocacionales
           </p>
-          <h1 className="mx-auto mt-4 max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
-            Orientación Vocacional, ordenada de punta a punta
+          <h1 className="mx-auto mt-5 max-w-3xl text-[28px] font-semibold leading-[1.2] tracking-tight sm:text-[38px]">
+            Buscar el test. Armar la consigna. Ordenar la carpeta.{' '}
+            <span className="text-primary">Volver a empezar con cada consultante.</span>
           </h1>
-          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
-            Método Brújula es la plataforma para profesionales de la Psicología y la Psicopedagogía que
-            trabajan Orientación Vocacional: cargás a tu consultante una sola vez, la app acompaña todo el
-            recorrido, y el informe se arma solo.
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
+            Método Brújula ordena todo el proceso de Orientación Vocacional en un solo lugar, para que tu
+            tiempo se vaya en escuchar, analizar y decidir junto a cada consultante — no en armar
+            materiales sueltos ni rehacer el informe a mano.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Button size="lg" asChild>
@@ -97,6 +130,9 @@ export default function LandingPage() {
               <a href="#como-funciona">Ver cómo funciona</a>
             </Button>
           </div>
+          <p className="mt-6 text-[11.5px] text-faint">
+            Creado por la Lic. Irene Morbidelli — Psicopedagoga, M.P. 260505
+          </p>
         </motion.div>
       </Section>
 
@@ -168,7 +204,12 @@ export default function LandingPage() {
             <div key={s.titulo} className="text-center">
               <p className="text-[14.5px] font-semibold">{s.titulo}</p>
               <p className="mx-auto mt-1 max-w-md text-[13px] text-muted-foreground">{s.desc}</p>
-              <div className="mx-auto mt-4 max-w-3xl overflow-hidden rounded-xl border shadow-sm">
+              <div className="mx-auto mt-4 max-w-3xl overflow-hidden rounded-xl border bg-background shadow-[0_1px_2px_rgba(16,24,32,0.04),0_12px_32px_-12px_rgba(16,24,32,0.14)]">
+                <div className="flex items-center gap-1.5 border-b bg-surface-2 px-3.5 py-2.5">
+                  <span className="h-2.5 w-2.5 rounded-full bg-danger/40" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-warning/40" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-primary/40" />
+                </div>
                 <img src={s.src} alt={s.alt} loading="lazy" className="w-full" />
               </div>
             </div>
@@ -204,6 +245,22 @@ export default function LandingPage() {
               </li>
             ))}
           </ul>
+        </div>
+      </Section>
+
+      {/* preguntas frecuentes */}
+      <Section id="faq" className="border-t">
+        <h2 className="text-center text-xl font-semibold tracking-tight sm:text-2xl">Preguntas frecuentes</h2>
+        <div className="mx-auto mt-8 max-w-2xl space-y-2.5">
+          {FAQ.map((f) => (
+            <details key={f.q} className="group rounded-xl border bg-background px-5 py-4 open:pb-4.5">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[14px] font-medium">
+                {f.q}
+                <ChevronDown className="h-4 w-4 shrink-0 text-faint transition-transform group-open:rotate-180" />
+              </summary>
+              <p className="mt-2.5 text-[13.5px] leading-relaxed text-muted-foreground">{f.a}</p>
+            </details>
+          ))}
         </div>
       </Section>
 
