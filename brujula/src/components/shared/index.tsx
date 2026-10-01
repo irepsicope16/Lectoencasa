@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import { Check, type LucideIcon } from 'lucide-react'
+import { AlertTriangle, Check, type LucideIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { STAGES, STAGE_HEX } from '@/lib/constants'
 import type { StageId } from '@/types'
@@ -51,6 +52,37 @@ export function EmptyState({
       <p className="text-sm font-medium">{title}</p>
       {description && <p className="mt-1 max-w-sm text-[13px] text-muted-foreground">{description}</p>}
       {action && <div className="mt-4">{action}</div>}
+    </div>
+  )
+}
+
+// ---------- ErrorState ----------
+// Para distinguir "no hay datos" de "falló la carga": sin esto, un error de
+// red o una sesión vencida se ve igual que una lista genuinamente vacía, sin
+// ninguna pista de que algo salió mal.
+export function ErrorState({
+  title = 'No pudimos cargar esta información',
+  description = 'Puede ser un problema de conexión, o que tu sesión haya vencido. Probá recargar la página.',
+  onRetry,
+  className,
+}: {
+  title?: string
+  description?: string
+  onRetry?: () => void
+  className?: string
+}) {
+  return (
+    <div className={cn('flex flex-col items-center justify-center rounded-xl border border-dashed border-danger/40 bg-danger-soft/40 px-6 py-12 text-center', className)}>
+      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-danger-soft">
+        <AlertTriangle className="h-5 w-5 text-danger" />
+      </div>
+      <p className="text-sm font-medium text-danger">{title}</p>
+      {description && <p className="mt-1 max-w-sm text-[13px] text-muted-foreground">{description}</p>}
+      {onRetry && (
+        <Button variant="outline" size="sm" className="mt-4" onClick={onRetry}>
+          Reintentar
+        </Button>
+      )}
     </div>
   )
 }
