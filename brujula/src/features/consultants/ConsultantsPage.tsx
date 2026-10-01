@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Archive, Search, UserPlus, Users } from 'lucide-react'
-import { EmptyState, FadeIn, PageHeader } from '@/components/shared'
+import { EmptyState, ErrorState, FadeIn, PageHeader } from '@/components/shared'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input, NativeSelect } from '@/components/ui/input'
@@ -27,7 +27,7 @@ export default function ConsultantsPage() {
   const user = useAuthStore((s) => s.user)
   const [credenciales, setCredenciales] = useState<ConsultantCredentials | null>(null)
 
-  const { data: consultants = [] } = useConsultants()
+  const { data: consultants = [], isError: consultantsError, refetch: refetchConsultants } = useConsultants()
   const { data: progress = [] } = useModuleProgress()
   const createConsultant = useCreate<Consultant>('consultants', (c) => ({
     actor: 'profesional',
@@ -61,7 +61,11 @@ export default function ConsultantsPage() {
     <FadeIn>
       <PageHeader
         title="Consultantes"
-        subtitle={`${consultants.length - archivedCount} consultantes activos${archivedCount ? ` · ${archivedCount} archivados` : ''} · ${consultants.filter((c) => effectiveEstado(c, progress) === 'en_proceso').length} en proceso activo`}
+        subtitle={
+          consultantsError
+            ? undefined
+            : `${consultants.length - archivedCount} consultantes activos${archivedCount ? ` · ${archivedCount} archivados` : ''} · ${consultants.filter((c) => effectiveEstado(c, progress) === 'en_proceso').length} en proceso activo`
+        }
         actions={
           <Button size="sm" onClick={() => setOpen(true)}>
             <UserPlus /> Nuevo consultante
@@ -69,48 +73,56 @@ export default function ConsultantsPage() {
         }
       />
 
-      <div className="mb-4 flex flex-wrap gap-2">
-        <div className="relative w-full max-w-xs">
-          <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-faint" />
-          <Input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Buscar por nombre o escuela…"
-            className="pl-9"
-          />
-        </div>
-        <NativeSelect value={estado} onChange={(e) => setEstado(e.target.value)} className="w-48">
-          <option value="todos">Todos los estados</option>
-          {Object.entries(CONSULTANT_STATUS).map(([k, v]) => (
-            <option key={k} value={k}>
-              {v.label}
-            </option>
-          ))}
-        </NativeSelect>
-        {archivedCount > 0 && (
-          <Button
-            variant={showArchived ? 'soft' : 'outline'}
-            size="sm"
-            onClick={() => setShowArchived((v) => !v)}
-          >
-            <Archive /> {showArchived ? 'Ocultar archivados' : `Ver archivados (${archivedCount})`}
-          </Button>
-        )}
-      </div>
-
-      {filtered.length === 0 ? (
-        <EmptyState
-          icon={Users}
-          title="Sin consultantes"
-          description="Creá tu primer consultante para comenzar un proceso de orientación."
-          action={
-            <Button size="sm" onClick={() => setOpen(true)}>
-              <UserPlus /> Nuevo consultante
-            </Button>
-          }
+      {consultantsError ? (
+        <ErrorState
+          title="No pudimos cargar tus consultantes"
+          description="Puede ser un problema de conexión, o que tu sesión haya vencido. Probá recargar la página; si sigue igual, cerrá sesión y volvé a entrar."
+          onRetry={() => refetchConsultants()}
         />
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <>
+          <div className="mb-4 flex flex-wrap gap-2">
+            <div className="relative w-full max-w-xs">
+              <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-faint" />
+              <Input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="Buscar por nombre o escuela…"
+                className="pl-9"
+              />
+            </div>
+            <NativeSelect value={estado} onChange={(e) => setEstado(e.target.value)} className="w-48">
+              <option value="todos">Todos los estados</option>
+              {Object.entries(CONSULTANT_STATUS).map(([k, v]) => (
+                <option key={k} value={k}>
+                  {v.label}
+                </option>
+              ))}
+            </NativeSelect>
+            {archivedCount > 0 && (
+              <Button
+                variant={showArchived ? 'soft' : 'outline'}
+                size="sm"
+                onClick={() => setShowArchived((v) => !v)}
+              >
+                <Archive /> {showArchived ? 'Ocultar archivados' : `Ver archivados (${archivedCount})`}
+              </Button>
+            )}
+          </div>
+
+          {filtered.length === 0 ? (
+            <EmptyState
+              icon={Users}
+              title="Sin consultantes"
+              description="Creá tu primer consultante para comenzar un proceso de orientación."
+              action={
+                <Button size="sm" onClick={() => setOpen(true)}>
+                  <UserPlus /> Nuevo consultante
+                </Button>
+              }
+            />
+          ) : (
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {filtered.map((c) => {
             const pct = overallProgress(progress, c.id)
             const st = CONSULTANT_STATUS[effectiveEstado(c, progress)]
@@ -152,9 +164,11 @@ export default function ConsultantsPage() {
                   Inicio: {fechaCorta(c.fechaInicio)} · {c.escuela}
                 </p>
               </Link>
-            )
-          })}
-        </div>
+                )
+              })}
+            </div>
+          )}
+        </>
       )}
 
       <ConsultantFormDialog
