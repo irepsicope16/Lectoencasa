@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 import { Archive, Search, UserPlus, Users } from 'lucide-react'
 import { EmptyState, ErrorState, FadeIn, PageHeader } from '@/components/shared'
 import { Badge } from '@/components/ui/badge'
@@ -25,7 +26,16 @@ export default function ConsultantsPage() {
   const [showArchived, setShowArchived] = useState(false)
   const open = params.get('nuevo') === '1'
   const user = useAuthStore((s) => s.user)
+  const logout = useAuthStore((s) => s.logout)
+  const navigate = useNavigate()
+  const qc = useQueryClient()
   const [credenciales, setCredenciales] = useState<ConsultantCredentials | null>(null)
+
+  const reiniciarSesion = () => {
+    qc.clear()
+    logout()
+    navigate('/login')
+  }
 
   const { data: consultants = [], isError: consultantsError, error: consultantsErrorDetail, refetch: refetchConsultants } = useConsultants()
   const { data: progress = [] } = useModuleProgress()
@@ -76,8 +86,9 @@ export default function ConsultantsPage() {
       {consultantsError ? (
         <ErrorState
           title="No pudimos cargar tus consultantes"
-          description="Puede ser un problema de conexión, o que tu sesión haya vencido. Probá recargar la página; si sigue igual, cerrá sesión y volvé a entrar."
+          description="Puede ser un problema de conexión, o que tu sesión haya vencido. Probá recargar la página; si sigue igual, reiniciá la sesión."
           onRetry={() => refetchConsultants()}
+          onReset={reiniciarSesion}
         >
           {consultantsErrorDetail instanceof Error && (
             <p className="mt-3 max-w-md break-words rounded-md bg-surface-2 px-3 py-2 font-mono text-[11px] text-faint">
