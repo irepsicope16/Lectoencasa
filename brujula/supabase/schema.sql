@@ -208,6 +208,91 @@ end;
 $$;
 grant execute on function public.mb_reset_consultant_password to authenticated;
 
+-- Autorregistro de consultantes: la persona completa su propia ficha desde
+-- un link que la profesional comparte (con el id de la profesional
+-- adentro), en vez de que la profesional tenga que crear la ficha a mano.
+--
+-- mb_public_profesional: lectura pública mínima (solo nombre/apellido/
+-- título), para mostrar "te vas a registrar con [Fulana]" ANTES de
+-- completar el formulario — sin esto, alguien con un link roto o
+-- desactualizado recién se entera al fallar el registro.
+create or replace function public.mb_public_profesional(p_id uuid)
+returns table(nombre text, apellido text, titulo text)
+language sql stable security definer set search_path = public
+as $$
+  select data->>'nombre', data->>'apellido', data->>'titulo'
+  from public.profiles
+  where id = p_id and data->>'role' = 'profesional'
+$$;
+grant execute on function public.mb_public_profesional to anon, authenticated;
+
+-- mb_self_register_consultant: crea la ficha y la vincula a la cuenta recién
+-- creada (ya autenticada como "consultante" en este punto, vía
+-- sb.auth.signUp() desde el cliente). Security definer porque la cuenta
+-- nueva tiene rol "consultante" y la política consultants_pro exige rol
+-- "profesional" — acá se verifica a mano todo lo que esa política
+-- garantizaría, más que la cuenta no tenga ya una ficha vinculada y que el
+-- id de profesional del link sea real.
+create or replace function public.mb_self_register_consultant(
+  p_profesional_id uuid,
+  p_nombre text,
+  p_apellido text,
+  p_fecha_nacimiento text,
+  p_escuela text,
+  p_curso text,
+  p_telefono text,
+  p_motivo_consulta text
+)
+returns text
+language plpgsql security definer set search_path = public
+as $$
+declare
+  new_id text;
+  caller_email text;
+  now_iso text := to_char(now() at time zone 'utc', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"');
+begin
+  if public.mb_role() is distinct from 'consultante' then
+    raise exception 'Esta cuenta no puede autorregistrar una ficha.';
+  end if;
+  if public.mb_consultant_id() is not null then
+    raise exception 'Esta cuenta ya tiene una ficha asociada.';
+  end if;
+  if not exists (
+    select 1 from public.profiles where id = p_profesional_id and data->>'role' = 'profesional'
+  ) then
+    raise exception 'El link de registro no es válido.';
+  end if;
+
+  select data->>'email' into caller_email from public.profiles where id = auth.uid();
+  new_id := gen_random_uuid()::text;
+
+  insert into public.consultants (id, data)
+  values (new_id, jsonb_build_object(
+    'id', new_id,
+    'nombre', p_nombre,
+    'apellido', p_apellido,
+    'fechaNacimiento', p_fecha_nacimiento,
+    'escuela', p_escuela,
+    'curso', p_curso,
+    'email', coalesce(caller_email, ''),
+    'telefono', p_telefono,
+    'motivoConsulta', p_motivo_consulta,
+    'fechaInicio', to_char(now(), 'YYYY-MM-DD'),
+    'estado', 'entrevista_inicial',
+    'profesionalId', p_profesional_id::text,
+    'createdAt', now_iso,
+    'updatedAt', now_iso
+  ));
+
+  update public.profiles
+  set data = jsonb_set(data, '{consultantId}', to_jsonb(new_id))
+  where id = auth.uid();
+
+  return new_id;
+end;
+$$;
+grant execute on function public.mb_self_register_consultant to authenticated;
+
 -- Políticas de profiles: cada cuenta lee su propio perfil; la dueña de la
 -- plataforma además puede ver y actualizar los de las demás profesionales
 -- (panel /pro/profesionales, para renovar membresías sin tocar Supabase).

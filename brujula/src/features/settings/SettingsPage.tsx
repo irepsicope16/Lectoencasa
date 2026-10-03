@@ -1,5 +1,21 @@
 import { useRef, useState } from 'react'
-import { Cloud, CloudUpload, Database, Download, Eye, IdCard, Moon, Paintbrush, RefreshCcw, Sparkles, Sun, Upload } from 'lucide-react'
+import {
+  Check,
+  Cloud,
+  CloudUpload,
+  Copy,
+  Database,
+  Download,
+  Eye,
+  IdCard,
+  Moon,
+  Paintbrush,
+  RefreshCcw,
+  Sparkles,
+  Sun,
+  UserPlus,
+  Upload,
+} from 'lucide-react'
 import { prepareBackup, importBackup, type PreparedBackup } from '@/services/storage/backup'
 import { getCloudConfig, isCloudEnabled, saveCloudConfig } from '@/services/cloud/config'
 import { toast } from '@/components/ui/toast'
@@ -50,6 +66,20 @@ export default function SettingsPage() {
   })
   const [perfilSaving, setPerfilSaving] = useState(false)
   const [perfilSaved, setPerfilSaved] = useState(false)
+  const [linkCopiado, setLinkCopiado] = useState(false)
+  const registroConsultanteLink = user
+    ? `${window.location.origin}${window.location.pathname}#/registro-consultante/${user.id}`
+    : ''
+
+  const copiarLinkRegistro = async () => {
+    try {
+      await navigator.clipboard.writeText(registroConsultanteLink)
+      setLinkCopiado(true)
+      setTimeout(() => setLinkCopiado(false), 2000)
+    } catch {
+      /* clipboard no disponible: la persona igual puede seleccionar y copiar a mano */
+    }
+  }
 
   const guardarPerfil = async () => {
     setPerfilSaving(true)
@@ -220,6 +250,29 @@ export default function SettingsPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* autorregistro de consultantes */}
+        {cloudActive && (
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <UserPlus className="h-4 w-4 text-primary" /> Link de autorregistro para consultantes
+              </CardTitle>
+              <CardDescription>
+                Compartiselo a quien quiera empezar un proceso: va a completar su propia ficha (datos, escuela,
+                motivo de consulta) y va a quedar activa al instante, sin que tengas que crearla vos primero.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap items-center gap-2">
+                <Input readOnly value={registroConsultanteLink} className="min-w-0 flex-1 font-mono text-[12.5px]" />
+                <Button size="sm" onClick={copiarLinkRegistro}>
+                  {linkCopiado ? <Check /> : <Copy />} {linkCopiado ? 'Copiado' : 'Copiar'}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* apariencia */}
         <Card>
