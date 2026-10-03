@@ -27,7 +27,7 @@ export default function ConsultantsPage() {
   const user = useAuthStore((s) => s.user)
   const [credenciales, setCredenciales] = useState<ConsultantCredentials | null>(null)
 
-  const { data: consultants = [], isError: consultantsError, refetch: refetchConsultants } = useConsultants()
+  const { data: consultants = [], isError: consultantsError, error: consultantsErrorDetail, refetch: refetchConsultants } = useConsultants()
   const { data: progress = [] } = useModuleProgress()
   const createConsultant = useCreate<Consultant>('consultants', (c) => ({
     actor: 'profesional',
@@ -78,7 +78,13 @@ export default function ConsultantsPage() {
           title="No pudimos cargar tus consultantes"
           description="Puede ser un problema de conexión, o que tu sesión haya vencido. Probá recargar la página; si sigue igual, cerrá sesión y volvé a entrar."
           onRetry={() => refetchConsultants()}
-        />
+        >
+          {consultantsErrorDetail instanceof Error && (
+            <p className="mt-3 max-w-md break-words rounded-md bg-surface-2 px-3 py-2 font-mono text-[11px] text-faint">
+              {consultantsErrorDetail.message}
+            </p>
+          )}
+        </ErrorState>
       ) : (
         <>
           <div className="mb-4 flex flex-wrap gap-2">
