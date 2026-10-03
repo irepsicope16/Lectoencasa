@@ -64,12 +64,17 @@ export function ErrorState({
   title = 'No pudimos cargar esta información',
   description = 'Puede ser un problema de conexión, o que tu sesión haya vencido. Probá recargar la página.',
   onRetry,
+  onReset,
   className,
   children,
 }: {
   title?: string
   description?: string
   onRetry?: () => void
+  // Reinicio completo (cerrar sesión + volver al login) para cuando
+  // "Reintentar" no alcanza porque el problema es la sesión en sí, no
+  // la consulta puntual.
+  onReset?: () => void
   className?: string
   children?: React.ReactNode
 }) {
@@ -81,10 +86,19 @@ export function ErrorState({
       <p className="text-sm font-medium text-danger">{title}</p>
       {description && <p className="mt-1 max-w-sm text-[13px] text-muted-foreground">{description}</p>}
       {children}
-      {onRetry && (
-        <Button variant="outline" size="sm" className="mt-4" onClick={onRetry}>
-          Reintentar
-        </Button>
+      {(onRetry || onReset) && (
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+          {onRetry && (
+            <Button variant="outline" size="sm" onClick={onRetry}>
+              Reintentar
+            </Button>
+          )}
+          {onReset && (
+            <Button variant="ghost" size="sm" onClick={onReset}>
+              Reiniciar sesión
+            </Button>
+          )}
+        </div>
       )}
     </div>
   )

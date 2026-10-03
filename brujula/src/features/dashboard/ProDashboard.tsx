@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 import {
   Activity as ActivityIcon,
   ArrowRight,
@@ -38,8 +39,16 @@ import type { CalendarEvent } from '@/types'
 
 export default function ProDashboard() {
   const user = useAuthStore((s) => s.user)
+  const logout = useAuthStore((s) => s.logout)
   const navigate = useNavigate()
+  const qc = useQueryClient()
   const { data: consultants = [], isError: consultantsError, error: consultantsErrorDetail, refetch: refetchConsultants } = useConsultants()
+
+  const reiniciarSesion = () => {
+    qc.clear()
+    logout()
+    navigate('/login')
+  }
   const { data: sessions = [] } = useSessions()
   const { data: activities = [] } = useActivities()
   const { data: progress = [] } = useModuleProgress()
@@ -160,6 +169,7 @@ export default function ProDashboard() {
                   title="No pudimos cargar tus consultantes"
                   description="Puede ser un problema de conexión, o que tu sesión haya vencido."
                   onRetry={() => refetchConsultants()}
+                  onReset={reiniciarSesion}
                   className="py-6"
                 >
                   {consultantsErrorDetail instanceof Error && (
