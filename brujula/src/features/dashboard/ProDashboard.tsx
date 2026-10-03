@@ -15,7 +15,7 @@ import {
   UserPlus,
   Users,
 } from 'lucide-react'
-import { FadeIn, PageHeader, StatCard } from '@/components/shared'
+import { ErrorState, FadeIn, PageHeader, StatCard } from '@/components/shared'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -39,7 +39,7 @@ import type { CalendarEvent } from '@/types'
 export default function ProDashboard() {
   const user = useAuthStore((s) => s.user)
   const navigate = useNavigate()
-  const { data: consultants = [] } = useConsultants()
+  const { data: consultants = [], isError: consultantsError, error: consultantsErrorDetail, refetch: refetchConsultants } = useConsultants()
   const { data: sessions = [] } = useSessions()
   const { data: activities = [] } = useActivities()
   const { data: progress = [] } = useModuleProgress()
@@ -155,37 +155,52 @@ export default function ProDashboard() {
               </Button>
             </CardHeader>
             <CardContent className="space-y-1">
-              {consultants.slice(0, 5).map((c) => {
-                const pct = overallProgress(progress, c.id)
-                const st = CONSULTANT_STATUS[effectiveEstado(c, progress)]
-                return (
-                  <Link
-                    key={c.id}
-                    to={`/pro/consultantes/${c.id}`}
-                    className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-surface-2"
-                  >
-                    <Avatar>
-                      <AvatarFallback>{iniciales(c.nombre, c.apellido)}</AvatarFallback>
-                    </Avatar>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="truncate text-[13.5px] font-medium">{nombreCompleto(c)}</span>
-                        <Badge variant={st.tone as 'aqua'}>{st.label}</Badge>
+              {consultantsError ? (
+                <ErrorState
+                  title="No pudimos cargar tus consultantes"
+                  description="Puede ser un problema de conexión, o que tu sesión haya vencido."
+                  onRetry={() => refetchConsultants()}
+                  className="py-6"
+                >
+                  {consultantsErrorDetail instanceof Error && (
+                    <p className="mt-2 max-w-md break-words rounded-md bg-surface-2 px-3 py-2 font-mono text-[11px] text-faint">
+                      {consultantsErrorDetail.message}
+                    </p>
+                  )}
+                </ErrorState>
+              ) : (
+                consultants.slice(0, 5).map((c) => {
+                  const pct = overallProgress(progress, c.id)
+                  const st = CONSULTANT_STATUS[effectiveEstado(c, progress)]
+                  return (
+                    <Link
+                      key={c.id}
+                      to={`/pro/consultantes/${c.id}`}
+                      className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-surface-2"
+                    >
+                      <Avatar>
+                        <AvatarFallback>{iniciales(c.nombre, c.apellido)}</AvatarFallback>
+                      </Avatar>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="truncate text-[13.5px] font-medium">{nombreCompleto(c)}</span>
+                          <Badge variant={st.tone as 'aqua'}>{st.label}</Badge>
+                        </div>
+                        <p className="truncate text-[12px] text-faint">
+                          {c.escuela} · {c.curso}
+                        </p>
                       </div>
-                      <p className="truncate text-[12px] text-faint">
-                        {c.escuela} · {c.curso}
-                      </p>
-                    </div>
-                    <div className="w-28 shrink-0">
-                      <div className="mb-1 flex justify-between text-[10.5px] text-faint">
-                        <span>Recorrido</span>
-                        <span>{pct}%</span>
+                      <div className="w-28 shrink-0">
+                        <div className="mb-1 flex justify-between text-[10.5px] text-faint">
+                          <span>Recorrido</span>
+                          <span>{pct}%</span>
+                        </div>
+                        <Progress value={pct} />
                       </div>
-                      <Progress value={pct} />
-                    </div>
-                  </Link>
-                )
-              })}
+                    </Link>
+                  )
+                })
+              )}
             </CardContent>
           </Card>
 

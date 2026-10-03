@@ -65,11 +65,13 @@ export function ErrorState({
   description = 'Puede ser un problema de conexión, o que tu sesión haya vencido. Probá recargar la página.',
   onRetry,
   className,
+  children,
 }: {
   title?: string
   description?: string
   onRetry?: () => void
   className?: string
+  children?: React.ReactNode
 }) {
   return (
     <div className={cn('flex flex-col items-center justify-center rounded-xl border border-dashed border-danger/40 bg-danger-soft/40 px-6 py-12 text-center', className)}>
@@ -78,6 +80,7 @@ export function ErrorState({
       </div>
       <p className="text-sm font-medium text-danger">{title}</p>
       {description && <p className="mt-1 max-w-sm text-[13px] text-muted-foreground">{description}</p>}
+      {children}
       {onRetry && (
         <Button variant="outline" size="sm" className="mt-4" onClick={onRetry}>
           Reintentar
