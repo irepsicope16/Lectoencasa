@@ -10,6 +10,7 @@ const SplashPage = lazy(() => import('@/features/home/SplashPage'))
 const LandingPage = lazy(() => import('@/features/home/LandingPage'))
 const LoginPage = lazy(() => import('@/features/auth/LoginPage'))
 const RegisterProPage = lazy(() => import('@/features/auth/RegisterProPage'))
+const SelfRegisterConsultantPage = lazy(() => import('@/features/auth/SelfRegisterConsultantPage'))
 const ForgotPasswordPage = lazy(() => import('@/features/auth/ForgotPasswordPage'))
 
 const ProDashboard = lazy(() => import('@/features/dashboard/ProDashboard'))
@@ -54,6 +55,7 @@ export const router = createHashRouter([
   { path: '/plataforma', element: <Page><LandingPage /></Page> },
   { path: '/login', element: <Page><LoginPage /></Page> },
   { path: '/registro', element: <Page><RegisterProPage /></Page> },
+  { path: '/registro-consultante/:proId', element: <Page><SelfRegisterConsultantPage /></Page> },
   { path: '/olvide-contrasena', element: <Page><ForgotPasswordPage /></Page> },
   {
     element: <RequireRole role="profesional" />,
