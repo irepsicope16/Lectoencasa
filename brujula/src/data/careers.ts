@@ -27,7 +27,7 @@ export const CAREER_AREAS: CareerArea[] = [
     carreras: ['Medicina', 'Enfermería', 'Psicología', 'Kinesiología', 'Nutrición', 'Fonoaudiología', 'Terapia Ocupacional', 'Odontología'],
     tags: {
       valores: ['ayudar a otros', 'solidaridad', 'salud', 'familia'],
-      intereses: ['salud y cuidado de personas', 'salud', 'cuidado', 'psicologia', 'cuerpo', 'biologia', 'personas'],
+      intereses: ['salud y cuidado de personas', 'salud', 'cuidado', 'psicologia', 'cuerpo', 'biologia', 'personas', 'social', 'investigador'],
       fortalezas: ['empatia', 'escucha', 'paciencia', 'perseverancia'],
       aptitudes: ['entender a las personas', 'observar detalles', 'interpersonal'],
     },
@@ -39,7 +39,7 @@ export const CAREER_AREAS: CareerArea[] = [
     carreras: ['Profesorados', 'Ciencias de la Educación', 'Psicopedagogía', 'Educación Inicial', 'Educación Especial'],
     tags: {
       valores: ['ayudar a otros', 'conocimiento', 'solidaridad', 'justicia'],
-      intereses: ['educacion', 'enseñar', 'niños', 'aprendizaje', 'acompañar'],
+      intereses: ['educacion', 'enseñar', 'niños', 'aprendizaje', 'acompañar', 'social'],
       fortalezas: ['comunicacion', 'paciencia', 'empatia', 'escucha', 'creatividad'],
       aptitudes: ['explicar con palabras', 'entender a las personas', 'interpersonal', 'linguistica'],
     },
@@ -63,7 +63,7 @@ export const CAREER_AREAS: CareerArea[] = [
     carreras: ['Ingeniería en Sistemas', 'Licenciatura en Informática', 'Ciencia de Datos', 'Desarrollo de Software', 'Ciberseguridad', 'Diseño de Videojuegos'],
     tags: {
       valores: ['conocimiento', 'independencia', 'creatividad', 'seguridad economica'],
-      intereses: ['tecnologia y programacion', 'tecnologia', 'programacion', 'computadoras', 'videojuegos', 'internet'],
+      intereses: ['tecnologia y programacion', 'tecnologia', 'programacion', 'computadoras', 'videojuegos', 'internet', 'investigador'],
       fortalezas: ['pensamiento critico', 'curiosidad', 'perseverancia', 'organizacion'],
       aptitudes: ['resolver problemas de logica', 'trabajar con numeros', 'crear cosas nuevas', 'logico-matematica', 'espacial'],
     },
@@ -75,7 +75,7 @@ export const CAREER_AREAS: CareerArea[] = [
     carreras: ['Ingeniería Civil', 'Ingeniería Industrial', 'Ingeniería Mecánica', 'Ingeniería Electrónica', 'Arquitectura', 'Ingeniería Química'],
     tags: {
       valores: ['orden', 'conocimiento', 'seguridad economica'],
-      intereses: ['ingenieria y construccion', 'ingenieria', 'construccion', 'maquinas', 'fisica', 'matematica'],
+      intereses: ['ingenieria y construccion', 'ingenieria', 'construccion', 'maquinas', 'fisica', 'matematica', 'realista'],
       fortalezas: ['organizacion', 'pensamiento critico', 'perseverancia', 'detallismo'],
       aptitudes: ['resolver problemas de logica', 'trabajar con numeros', 'imaginar en 3d / dibujar', 'trabajar con las manos', 'logico-matematica', 'espacial'],
     },
@@ -87,7 +87,7 @@ export const CAREER_AREAS: CareerArea[] = [
     carreras: ['Biología', 'Química', 'Física', 'Matemática', 'Bioquímica', 'Geología', 'Biotecnología', 'Astronomía'],
     tags: {
       valores: ['conocimiento', 'naturaleza', 'curiosidad'],
-      intereses: ['ciencias naturales', 'ciencia', 'biologia', 'quimica', 'fisica', 'experimentos', 'investigar'],
+      intereses: ['ciencias naturales', 'ciencia', 'biologia', 'quimica', 'fisica', 'experimentos', 'investigar', 'investigador'],
       fortalezas: ['curiosidad', 'pensamiento critico', 'perseverancia', 'detallismo'],
       aptitudes: ['resolver problemas de logica', 'trabajar con numeros', 'observar detalles', 'logico-matematica', 'naturalista'],
     },
@@ -99,7 +99,7 @@ export const CAREER_AREAS: CareerArea[] = [
     carreras: ['Sociología', 'Antropología', 'Historia', 'Filosofía', 'Ciencia Política', 'Trabajo Social', 'Relaciones Internacionales', 'Letras'],
     tags: {
       valores: ['justicia', 'conocimiento', 'solidaridad', 'libertad'],
-      intereses: ['ciencias sociales', 'sociedad', 'historia', 'politica', 'cultura', 'leer'],
+      intereses: ['ciencias sociales', 'sociedad', 'historia', 'politica', 'cultura', 'leer', 'investigador', 'social'],
       fortalezas: ['pensamiento critico', 'curiosidad', 'escucha', 'comunicacion'],
       aptitudes: ['explicar con palabras', 'entender a las personas', 'linguistica', 'intrapersonal'],
     },
@@ -111,7 +111,7 @@ export const CAREER_AREAS: CareerArea[] = [
     carreras: ['Comunicación Social', 'Periodismo', 'Publicidad', 'Relaciones Públicas', 'Producción Audiovisual', 'Community Management'],
     tags: {
       valores: ['creatividad', 'libertad', 'reconocimiento'],
-      intereses: ['comunicacion y medios', 'comunicacion', 'medios', 'redes', 'escribir', 'contar historias', 'periodismo'],
+      intereses: ['comunicacion y medios', 'comunicacion', 'medios', 'redes', 'escribir', 'contar historias', 'periodismo', 'artistico'],
       fortalezas: ['comunicacion', 'creatividad', 'iniciativa', 'humor', 'adaptabilidad'],
       aptitudes: ['explicar con palabras', 'convencer y negociar', 'crear cosas nuevas', 'linguistica', 'interpersonal'],
     },
@@ -123,7 +123,7 @@ export const CAREER_AREAS: CareerArea[] = [
     carreras: ['Administración de Empresas', 'Contador Público', 'Economía', 'Marketing', 'Comercio Internacional', 'Recursos Humanos', 'Emprendedorismo'],
     tags: {
       valores: ['seguridad economica', 'liderazgo', 'reconocimiento', 'independencia'],
-      intereses: ['negocios y economia', 'negocios', 'economia', 'emprender', 'dinero', 'empresas', 'marketing'],
+      intereses: ['negocios y economia', 'negocios', 'economia', 'emprender', 'dinero', 'empresas', 'marketing', 'emprendedor', 'convencional'],
       fortalezas: ['liderazgo', 'organizacion', 'iniciativa', 'trabajo en equipo', 'adaptabilidad'],
       aptitudes: ['convencer y negociar', 'organizar y planificar', 'trabajar con numeros', 'interpersonal', 'logico-matematica'],
     },
@@ -135,7 +135,7 @@ export const CAREER_AREAS: CareerArea[] = [
     carreras: ['Abogacía', 'Escribanía', 'Criminalística', 'Mediación', 'Martillero Público'],
     tags: {
       valores: ['justicia', 'orden', 'reconocimiento', 'seguridad economica'],
-      intereses: ['derecho y justicia', 'derecho', 'justicia', 'leyes', 'debatir', 'argumentar'],
+      intereses: ['derecho y justicia', 'derecho', 'justicia', 'leyes', 'debatir', 'argumentar', 'emprendedor'],
       fortalezas: ['pensamiento critico', 'comunicacion', 'perseverancia', 'honestidad'],
       aptitudes: ['explicar con palabras', 'convencer y negociar', 'observar detalles', 'linguistica'],
     },
@@ -147,7 +147,7 @@ export const CAREER_AREAS: CareerArea[] = [
     carreras: ['Ciencias Ambientales', 'Agronomía', 'Veterinaria', 'Gestión Ambiental', 'Recursos Naturales', 'Paisajismo'],
     tags: {
       valores: ['naturaleza', 'salud', 'solidaridad', 'aventura'],
-      intereses: ['ambiente y naturaleza', 'naturaleza', 'animales', 'plantas', 'campo', 'ecologia', 'aire libre'],
+      intereses: ['ambiente y naturaleza', 'naturaleza', 'animales', 'plantas', 'campo', 'ecologia', 'aire libre', 'realista'],
       fortalezas: ['curiosidad', 'paciencia', 'perseverancia', 'iniciativa'],
       aptitudes: ['trabajar con las manos', 'observar detalles', 'naturalista'],
     },
@@ -159,7 +159,7 @@ export const CAREER_AREAS: CareerArea[] = [
     carreras: ['Educación Física', 'Ciencias del Deporte', 'Entrenamiento Deportivo', 'Gestión Deportiva'],
     tags: {
       valores: ['salud', 'aventura', 'amistad', 'liderazgo'],
-      intereses: ['deporte y movimiento', 'deporte', 'entrenar', 'cuerpo', 'equipo', 'competir'],
+      intereses: ['deporte y movimiento', 'deporte', 'entrenar', 'cuerpo', 'equipo', 'competir', 'realista'],
       fortalezas: ['perseverancia', 'trabajo en equipo', 'liderazgo', 'iniciativa'],
       aptitudes: ['trabajar con las manos', 'entender a las personas', 'corporal', 'interpersonal'],
     },
