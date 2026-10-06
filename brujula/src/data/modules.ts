@@ -5,6 +5,7 @@ import {
   TEST_ESTILO_PERSONAL,
   TEST_INTELIGENCIAS,
   TEST_INTERESES,
+  TEST_RIASEC,
 } from './tests'
 import { EVALUACION_PROCESO } from './evaluacionProceso'
 
@@ -539,6 +540,7 @@ export const MODULES: ModuleDefinition[] = [
         ],
       },
       TEST_INTERESES,
+      TEST_RIASEC,
       {
         id: 'intereses-areas',
         titulo: 'Áreas que me llaman',
@@ -569,7 +571,7 @@ export const MODULES: ModuleDefinition[] = [
         id: 'm3',
         titulo: 'Otro test de intereses (opcional, sitio externo)',
         descripcion:
-          'Un complemento por fuera de la plataforma para quien quiera una segunda mirada. El test oficial e integrado de Brújula es el "Test de Intereses Profesionales" de este módulo. El resultado de este otro test se conversa en sesión, nunca decide por vos.',
+          'Un complemento por fuera de la plataforma para quien quiera una segunda mirada. Los tests oficiales e integrados de Brújula son el "Test de Intereses Profesionales" y el "Test RIASEC" de este módulo. El resultado de este otro test se conversa en sesión, nunca decide por vos.',
         tipo: 'enlace',
         url: 'https://testgratis.net/',
       },

@@ -174,6 +174,44 @@ export const TEST_ESTILO_PERSONAL: ModuleActivityTemplate = {
   ],
 }
 
+// ---------- Test RIASEC ----------
+// Inspirado en la teoría de tipos vocacionales de John Holland (Realista,
+// Investigador, Artístico, Social, Emprendedor, Convencional) — de
+// elaboración propia, no reproduce el instrumento publicado (Self-Directed
+// Search) ni sus ítems. Mismo criterio que el resto de los tests internos:
+// categorías = tipos de Holland, matching directo contra el catálogo del
+// motor (se suman tags 'realista'/'investigador'/etc. en careers.ts).
+n = 500
+export const TEST_RIASEC: ModuleActivityTemplate = {
+  id: 'test-riasec',
+  titulo: 'Test RIASEC',
+  descripcion:
+    'Basado en los 6 tipos de personalidad vocacional de Holland. Puntuá cada frase del 1 (nada que ver conmigo) al 5 (totalmente yo) — no hay respuestas correctas.',
+  tipo: 'ejercicio',
+  duracionMin: 15,
+  dimensiones: ['intereses'],
+  preguntas: [
+    item('Realista', 'Prefiero resolver las cosas haciendo y probando, más que leyendo teoría sobre el tema.'),
+    item('Realista', 'Disfruto trabajar con herramientas, máquinas o con las manos.'),
+    item('Realista', 'Me gusta más estar en movimiento o al aire libre que sentado/a en un escritorio.'),
+    item('Investigador', 'Me entusiasma investigar un problema hasta entenderlo a fondo.'),
+    item('Investigador', 'Prefiero analizar datos y hechos con calma antes de sacar una conclusión.'),
+    item('Investigador', 'Me atrae la lógica del método científico: observar, probar, comprobar.'),
+    item('Artístico', 'Necesito espacio para expresarme de forma original, sin seguir un molde fijo.'),
+    item('Artístico', 'Disfruto crear algo nuevo: una imagen, un texto, una idea, una composición.'),
+    item('Artístico', 'Me aburre repetir siempre el mismo procedimiento paso a paso.'),
+    item('Social', 'Me resulta gratificante ayudar o enseñarle algo a otra persona.'),
+    item('Social', 'Disfruto trabajar en equipo más que en soledad.'),
+    item('Social', 'Se me hace fácil darme cuenta de lo que necesita o siente otra persona.'),
+    item('Emprendedor', 'Me gusta liderar un grupo y tomar la iniciativa.'),
+    item('Emprendedor', 'Disfruto convencer a otros de una idea o un proyecto.'),
+    item('Emprendedor', 'Me atrae la idea de armar y manejar un proyecto o negocio propio.'),
+    item('Convencional', 'Me siento cómodo/a siguiendo reglas, procedimientos y normas claras.'),
+    item('Convencional', 'Disfruto organizar información, archivos o datos con precisión.'),
+    item('Convencional', 'Prefiero las tareas con instrucciones claras antes que la improvisación total.'),
+  ],
+}
+
 // ---------- Cuestionario de Dificultades para Decidir ----------
 // Inspirado en el modelo de dificultades en la toma de decisiones de carrera
 // de Itamar Gati (CDDQ) y en los estilos de decisión de Harren (CDM-R): no
