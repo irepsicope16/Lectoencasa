@@ -9,6 +9,7 @@ import { useActivities, useCreate, useModuleProgress, useUpdate, useVideos } fro
 import { useAuthStore } from '@/stores/authStore'
 import { MODULE_MAP, MODULES } from '@/data/modules'
 import { ACTIVITY_STATUS, STAGES } from '@/lib/constants'
+import { isTest } from '@/lib/scoring'
 import type { AssignedVideo, ModuleId, ModuleProgress } from '@/types'
 import { useState } from 'react'
 
@@ -102,7 +103,10 @@ export default function MyModulePage() {
                   className="flex items-center gap-3 rounded-lg border p-3.5 transition-colors hover:bg-surface-2"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-[13.5px] font-medium">{a.titulo}</p>
+                    <p className="flex items-center gap-1.5 text-[13.5px] font-medium">
+                      <span className="truncate">{a.titulo}</span>
+                      {isTest(a) && <Badge variant="amber">Test</Badge>}
+                    </p>
                     <p className="mt-0.5 line-clamp-1 text-[12px] text-muted-foreground">{a.descripcion}</p>
                   </div>
                   <Badge

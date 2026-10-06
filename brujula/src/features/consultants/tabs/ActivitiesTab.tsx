@@ -139,6 +139,7 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
             <div key={a.id} className="rounded-xl border bg-surface p-4">
               <div className="flex flex-wrap items-center gap-2">
                 <p className="text-[14px] font-semibold">{a.titulo}</p>
+                {isTest(a) && <Badge variant="amber">Test</Badge>}
                 <Badge variant="outline">{MODULE_MAP[a.moduleId].nombre}</Badge>
                 <Badge variant={statusTone[a.estado]}>{ACTIVITY_STATUS[a.estado]}</Badge>
                 <span className="ml-auto text-[11.5px] text-faint">
@@ -247,7 +248,10 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
                       templateId === t.id ? 'border-primary bg-primary-soft' : 'hover:bg-surface-2'
                     }`}
                   >
-                    <p className="text-[13px] font-medium">{t.titulo}</p>
+                    <p className="flex items-center gap-1.5 text-[13px] font-medium">
+                      {t.titulo}
+                      {isTest(t) && <Badge variant="amber">Test</Badge>}
+                    </p>
                     <p className="text-[12px] text-muted-foreground">{t.descripcion}</p>
                     <p className="mt-0.5 text-[11px] text-faint">
                       {t.preguntas.length} consignas · ~{t.duracionMin} min
@@ -363,7 +367,10 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
           {viewing && (
             <>
               <DialogHeader>
-                <DialogTitle>{viewing.titulo}</DialogTitle>
+                <DialogTitle className="flex items-center gap-2">
+                  {viewing.titulo}
+                  {isTest(viewing) && <Badge variant="amber">Test</Badge>}
+                </DialogTitle>
                 <DialogDescription>{viewing.descripcion}</DialogDescription>
               </DialogHeader>
               <div className="space-y-4">

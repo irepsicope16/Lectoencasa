@@ -13,6 +13,7 @@ import type { ModuleProgress } from '@/types'
 import { useAuthStore } from '@/stores/authStore'
 import { MODULE_MAP } from '@/data/modules'
 import { cn } from '@/lib/utils'
+import { isTest } from '@/lib/scoring'
 import type { Activity, ActivityAnswer } from '@/types'
 
 export default function ActivityRunnerPage() {
@@ -134,7 +135,10 @@ export default function ActivityRunnerPage() {
       )}
 
       <div className="mb-6">
-        <Badge variant="outline">{MODULE_MAP[activity.moduleId].nombre}</Badge>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="outline">{MODULE_MAP[activity.moduleId].nombre}</Badge>
+          {isTest(activity) && <Badge variant="amber">Test</Badge>}
+        </div>
         <h1 className="mt-2 text-xl font-semibold tracking-tight">{activity.titulo}</h1>
         <p className="mt-1.5 text-[13.5px] leading-relaxed text-muted-foreground">{activity.descripcion}</p>
         <div className="mt-3 h-1 overflow-hidden rounded-full bg-surface-2">

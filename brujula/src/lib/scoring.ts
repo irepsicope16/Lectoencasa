@@ -1,4 +1,4 @@
-import type { Activity } from '@/types'
+import type { Activity, ModuleQuestion } from '@/types'
 
 // Puntuación de tests internos (ítems 'escala' con categoría).
 // USO EXCLUSIVAMENTE PROFESIONAL: el consultante responde el test pero
@@ -30,6 +30,10 @@ export function scoreActivity(activity: Activity): CategoryScore[] {
     .sort((a, b) => b.promedio - a.promedio)
 }
 
-export function isTest(activity: Activity): boolean {
-  return activity.preguntas.some((q) => q.tipo === 'escala' && q.categoria)
+// Acepta tanto una Activity ya asignada como una plantilla del método
+// (ModuleActivityTemplate): a ambas les alcanza con tener `preguntas`, y así
+// esta misma función sirve para resaltar los tests tanto en el selector de
+// plantillas (antes de asignar) como en las actividades ya asignadas.
+export function isTest({ preguntas }: { preguntas: ModuleQuestion[] }): boolean {
+  return preguntas.some((q) => q.tipo === 'escala' && q.categoria)
 }
