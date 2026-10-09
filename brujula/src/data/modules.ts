@@ -196,6 +196,13 @@ export const MODULES: ModuleDefinition[] = [
     materiales: [
       { id: 'm1', titulo: 'Para enviar · Ficha: Entrevista a 10 personas', descripcion: 'Lámina imprimible para registrar las respuestas de las 10 personas entrevistadas.', tipo: 'plantilla', printableId: 'entrevista-10-personas' },
       {
+        id: 'm6',
+        titulo: 'Para enviar · Yo y los demás: el cuadro de las 4 preguntas',
+        descripcion: 'Lámina imprimible con el cuadro de la actividad «Yo y los demás»: una fila para completar uno/a mismo/a y 5 filas para las personas entrevistadas.',
+        tipo: 'plantilla',
+        printableId: 'yo-y-los-demas',
+      },
+      {
         id: 'm3',
         titulo: 'Infografía: El Sujeto y la personalidad',
         descripcion: 'Cómo se configura el psiquismo (ello, yo, superyó) y por qué la meta del proceso es la autonomía al decidir.',

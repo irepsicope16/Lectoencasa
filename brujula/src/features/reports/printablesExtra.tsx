@@ -155,6 +155,29 @@ function EntrevistaDiez() {
   )
 }
 
+// ---------- 3b · Yo y los demás: el cuadro de las 4 preguntas ----------
+function YoYLosDemas() {
+  return (
+    <>
+      <Caja>
+        Completá primero vos mismo/a este cuadro, en la fila «Yo». Después hacele la misma consigna a 5
+        personas de tu entorno (familia, amigos, escuela) y anotá lo que te respondan, una persona por fila.
+      </Caja>
+      <Tabla
+        cols={['Persona (vínculo)', '¿Qué le gusta de vos?', '¿Qué no le gusta / le cuesta aceptar?', '¿Qué hace bien?', '¿Qué cambiaría o mejoraría?']}
+        rows={6}
+        anchoCol0="w-[16%]"
+      />
+      <Titulo>Para pensar después</Titulo>
+      <p className="text-[12px] text-neutral-600">
+        Comparando tu propia mirada con la de esas 5 personas: ¿qué coincide? ¿qué te sorprendió? ¿qué ven
+        ellos que vos no habías notado?
+      </p>
+      <Lineas n={3} />
+    </>
+  )
+}
+
 // ---------- 4 · Listado de 40 valores ----------
 function Valores40() {
   const valores = [
@@ -976,6 +999,7 @@ export const PRINTABLES_EXTRA: Record<string, { titulo: string; componente: () =
   'guia-familias': { titulo: 'Guía para familias: cómo acompañar', componente: GuiaFamilias },
   'infografia-metodo': { titulo: 'El proceso de orientación, en un vistazo', componente: InfografiaMetodo },
   'entrevista-10-personas': { titulo: 'Ficha: Entrevista a 10 personas', componente: EntrevistaDiez },
+  'yo-y-los-demas': { titulo: 'Yo y los demás: el cuadro de las 4 preguntas', componente: YoYLosDemas },
   '40-valores': { titulo: 'Listado de 40 valores', componente: Valores40 },
   'bitacora-deseo': { titulo: 'Bitácora del deseo (una semana)', componente: BitacoraDeseo },
   'inventario-fortalezas': { titulo: 'Inventario de fortalezas', componente: InventarioFortalezas },
