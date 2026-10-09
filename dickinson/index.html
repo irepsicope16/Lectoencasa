@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dickinson — Cotizá tu evento</title>
+<meta name="description" content="Armá tu presupuesto de coffee break y cóctel con Dickinson. Elegí las opciones, indicá la cantidad de personas y mirá el total con IVA al instante.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="logo.png">
+<style>
+  :root {
+    --azul: #1F2F3C;
+    --naranja: #F2481C;
+    --naranja-hover: #D93C12;
+    --crema: #F7F2EA;
+    --crema-2: #EFE8DB;
+    --arena: #F0DFC8;
+    --gris: #8A8378;
+    --blanco: #FFFFFF;
+    --borde: #E2D8C6;
+    --radio: 14px;
+    --serif: Georgia, "Times New Roman", serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    color: var(--azul);
+    background: var(--crema);
+    line-height: 1.5;
+  }
+  .contenedor { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+
+  /* Encabezado */
+  header.marca {
+    background: var(--azul);
+    color: var(--crema);
+    padding: 28px 0 32px;
+  }
+  .marca .contenedor { display: flex; align-items: center; gap: 18px; }
+  .marca img {
+    width: 64px; height: auto; flex-shrink: 0;
+    background: var(--crema); border-radius: 50%; padding: 10px;
+  }
+  .marca h1 { font-family: var(--serif); font-weight: normal; font-size: 2rem; margin: 0; letter-spacing: .5px; }
+  .marca p { margin: 2px 0 0; color: var(--arena); font-size: .95rem; }
+  .bajada { padding: 28px 0 8px; }
+  .bajada h2 { font-family: var(--serif); font-weight: normal; font-size: 1.6rem; margin: 0 0 6px; }
+  .bajada p { margin: 0; color: #4a5560; max-width: 640px; }
+  .lema { color: var(--naranja); font-style: italic; font-family: var(--serif); }
+
+  /* Layout */
+  .grilla { display: grid; gap: 24px; padding: 16px 0 120px; }
+  @media (min-width: 900px) {
+    .grilla { grid-template-columns: minmax(0, 1fr) 360px; align-items: start; padding-bottom: 48px; }
+    .resumen { position: sticky; top: 16px; }
+  }
+
+  /* Bloques */
+  .bloque {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    padding: 22px 18px;
+    margin-bottom: 20px;
+  }
+  @media (min-width: 600px) { .bloque { padding: 26px 26px; } }
+  .bloque h3 {
+    font-family: var(--serif); font-weight: normal; font-size: 1.3rem;
+    margin: 0 0 4px; display: flex; align-items: center; gap: 10px;
+  }
+  .paso {
+    display: inline-grid; place-items: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--naranja); color: var(--blanco);
+    font-family: var(--sans); font-size: .85rem; font-weight: 700;
+  }
+  .ayuda { color: var(--gris); font-size: .9rem; margin: 0 0 16px; }
+
+  /* Campos */
+  .campos { display: grid; gap: 14px; }
+  @media (min-width: 600px) { .campos { grid-template-columns: 1fr 1fr; } }
+  .campo { display: flex; flex-direction: column; gap: 5px; }
+  .campo.ancho { grid-column: 1 / -1; }
+  label.etiqueta { font-size: .88rem; font-weight: 600; }
+  .req { color: var(--naranja); }
+  input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea {
+    font: inherit; color: inherit;
+    width: 100%;
+    padding: 11px 12px;
+    border: 1.5px solid var(--borde);
+    border-radius: 10px;
+    background: var(--crema);
+    transition: border-color .15s, background .15s;
+  }
+  input:focus, textarea:focus { outline: none; border-color: var(--azul); background: var(--blanco); }
+  textarea { min-height: 70px; resize: vertical; }
+
+  /* Tarjetas de opciones */
+  .opciones { display: grid; gap: 10px; }
+  @media (min-width: 600px) { .opciones { grid-template-columns: 1fr 1fr; } }
+  .opcion { position: relative; }
+  .opcion input { position: absolute; opacity: 0; pointer-events: none; }
+  .opcion label {
+    display: flex; flex-direction: column; gap: 4px; height: 100%;
+    padding: 14px 14px 14px 44px;
+    border: 1.5px solid var(--borde); border-radius: 12px;
+    background: var(--crema);
+    cursor: pointer;
+    transition: border-color .15s, background .15s, box-shadow .15s;
+  }
+  .opcion label::before {
+    content: ""; position: absolute; left: 14px; top: 16px;
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid var(--gris); background: var(--blanco);
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .opcion label:hover { border-color: var(--gris); }
+  .opcion input:checked + label { border-color: var(--naranja); background: var(--blanco); box-shadow: 0 0 0 3px rgba(242,72,28,.12); }
+  .opcion input:checked + label::before { border-color: var(--naranja); box-shadow: inset 0 0 0 4px var(--blanco); background: var(--naranja); }
+  .opcion input:focus-visible + label { outline: 2px solid var(--azul); outline-offset: 2px; }
+  .opcion .titulo { display: flex; justify-content: space-between; gap: 10px; font-weight: 700; }
+  .opcion .precio { color: var(--naranja); white-space: nowrap; }
+  .opcion .incluye { font-size: .86rem; color: #4a5560; }
+  .opcion.ninguna label { justify-content: center; color: var(--gris); }
+  .opcion.ninguna .titulo { font-weight: 600; }
+
+  .cantidades {
+    display: grid; gap: 14px; margin-top: 18px;
+    padding: 16px; border-radius: 12px; background: var(--crema-2);
+  }
+  @media (min-width: 600px) { .cantidades { grid-template-columns: 1fr 1fr; } }
+  .cantidades[hidden] { display: none; }
+  .cantidades .nota { grid-column: 1 / -1; margin: 0; font-size: .85rem; color: #4a5560; }
+
+  .check { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; font-weight: 600; }
+  .check input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--naranja); }
+  #restricciones-detalle { margin-top: 14px; }
+  #restricciones-detalle[hidden] { display: none; }
+
+  /* Resumen */
+  .resumen {
+    background: var(--azul); color: var(--crema);
+    border-radius: var(--radio); padding: 24px 20px;
+  }
+  .resumen h3 { font-family: var(--serif); font-weight: normal; font-size: 1.3rem; margin: 0 0 14px; color: var(--blanco); }
+  .linea { padding: 12px 0; border-bottom: 1px solid rgba(247,242,234,.15); }
+  .linea .nombre { display: flex; justify-content: space-between; gap: 10px; font-weight: 600; color: var(--blanco); }
+  .linea .calculo { font-size: .84rem; color: var(--arena); margin-top: 2px; }
+  .vacio { color: var(--arena); font-size: .92rem; padding: 6px 0 14px; margin: 0; }
+  .totales { margin-top: 12px; }
+  .fila { display: flex; justify-content: space-between; gap: 10px; padding: 4px 0; }
+  .fila.total {
+    margin-top: 8px; padding-top: 12px; border-top: 1px solid rgba(247,242,234,.3);
+    font-size: 1.35rem; font-weight: 700; color: var(--blanco);
+  }
+  .fila.total span:last-child { color: #FF7A55; }
+  .fila.sena { font-size: .88rem; color: var(--arena); }
+  .aviso-tacc {
+    margin: 14px 0 0; padding: 10px 12px; border-radius: 10px;
+    background: rgba(242,72,28,.18); font-size: .85rem; color: var(--crema);
+  }
+  .aviso-tacc[hidden] { display: none; }
+
+  .acciones { display: grid; gap: 10px; margin-top: 20px; }
+  .boton {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    font: inherit; font-weight: 700; text-decoration: none;
+    padding: 13px 16px; border-radius: 999px; border: 0; cursor: pointer;
+    transition: background .15s, transform .1s, opacity .15s;
+  }
+  .boton:active { transform: scale(.98); }
+  .boton.primario { background: var(--naranja); color: var(--blanco); }
+  .boton.primario:hover { background: var(--naranja-hover); }
+  .boton.secundario { background: transparent; color: var(--crema); border: 1.5px solid rgba(247,242,234,.4); }
+  .boton.secundario:hover { border-color: var(--crema); }
+  .boton[aria-disabled="true"] { opacity: .45; cursor: not-allowed; }
+  .falta { font-size: .84rem; color: var(--arena); margin: 10px 0 0; text-align: center; }
+  .falta:empty { display: none; }
+
+  /* Barra fija en celular */
+  .barra-movil {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: var(--azul); color: var(--crema);
+    box-shadow: 0 -6px 20px rgba(31,47,60,.25);
+  }
+  .barra-movil small { display: block; color: var(--arena); font-size: .78rem; }
+  .barra-movil strong { font-size: 1.2rem; color: var(--blanco); }
+  .barra-movil a { background: var(--naranja); color: var(--blanco); text-decoration: none; font-weight: 700; padding: 10px 16px; border-radius: 999px; white-space: nowrap; }
+  @media (min-width: 900px) { .barra-movil { display: none; } }
+
+  /* Condiciones y pie */
+  .condiciones ul { margin: 0; padding-left: 20px; color: #4a5560; font-size: .92rem; }
+  .condiciones li { margin-bottom: 6px; }
+  footer.pie { background: var(--azul); color: var(--arena); padding: 24px 0 110px; font-size: .9rem; }
+  @media (min-width: 900px) { footer.pie { padding-bottom: 24px; } }
+  footer.pie a { color: var(--crema); }
+  footer.pie .contenedor { display: flex; flex-wrap: wrap; gap: 6px 22px; }
+
+  .solo-impresion { display: none; }
+
+  @media print {
+    body { background: #fff; }
+    .barra-movil, .acciones, .falta, .no-imprimir, .opcion input:not(:checked) + label, .opcion.ninguna { display: none !important; }
+    .grilla { display: block; padding: 0; }
+    .bloque, .resumen { border: 1px solid #ccc; break-inside: avoid; }
+    .resumen { background: #fff; color: #000; }
+    .resumen h3, .linea .nombre, .fila.total, .fila.total span:last-child { color: #000; }
+    .linea .calculo, .fila.sena { color: #444; }
+    header.marca { background: #fff; color: var(--azul); padding: 0 0 12px; border-bottom: 2px solid var(--azul); }
+    .marca p { color: var(--gris); }
+    .solo-impresion { display: block; }
+    footer.pie { background: #fff; color: #333; padding: 12px 0; }
+    footer.pie a { color: #333; }
+  }
+</style>
+</head>
+<body>
+
+<header class="marca">
+  <div class="contenedor">
+    <img src="logo.png" alt="Logo de Dickinson">
+    <div>
+      <h1>Dickinson</h1>
+      <p>Servicios gastronómicos para eventos y congresos</p>
+    </div>
+  </div>
+</header>
+
+<main class="contenedor">
+  <section class="bajada">
+    <h2>Armá tu presupuesto</h2>
+    <p>Elegí el coffee break y el cóctel que querés para tu evento, indicá cuántas personas van a participar y vas a ver el total con IVA al instante. <span class="lema">Momentos que conectan, sabores que inspiran.</span></p>
+  </section>
+
+  <form id="cotizador" class="grilla" novalidate>
+    <div>
+      <!-- 1. Datos -->
+      <section class="bloque">
+        <h3><span class="paso">1</span> Tus datos</h3>
+        <p class="ayuda">Así sabemos a quién enviarle el presupuesto formal.</p>
+        <div class="campos">
+          <div class="campo">
+            <label class="etiqueta" for="nombre">Nombre y apellido <span class="req">*</span></label>
+            <input type="text" id="nombre" name="nombre" autocomplete="name" required>
+          </div>
+          <div class="campo">
+            <label class="etiqueta" for="organizacion">Organización</label>
+            <input type="text" id="organizacion" name="organizacion" autocomplete="organization">
+          </div>
+          <div class="campo">
+            <label class="etiqueta" for="email">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email">
+          </div>
+          <div class="campo">
+            <label class="etiqueta" for="telefono">Teléfono / WhatsApp</label>
+            <input type="tel" id="telefono" name="telefono" autocomplete="tel">
+          </div>
+          <div class="campo">
+            <label class="etiqueta" for="evento">Nombre del evento</label>
+            <input type="text" id="evento" name="evento" placeholder="Ej: Congreso de Psicopedagogía">
+          </div>
+          <div class="campo">
+            <label class="etiqueta" for="fechas">Fecha(s) del evento</label>
+            <input type="text" id="fechas" name="fechas" placeholder="Ej: 14 y 15 de noviembre">
+          </div>
+          <div class="campo ancho">
+            <label class="etiqueta" for="lugar">Lugar</label>
+            <input type="text" id="lugar" name="lugar" value="Edificio Sergio Karakachoff">
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Coffee break -->
+      <section class="bloque">
+        <h3><span class="paso">2</span> Coffee break</h3>
+        <p class="ayuda">Precio por persona y por tanda. No incluye IVA.</p>
+        <div class="opciones" id="opciones-coffee"></div>
+        <div class="cantidades" id="cantidades-coffee" hidden>
+          <div class="campo">
+            <label class="etiqueta" for="coffee-personas">¿Cuántas personas? <span class="req">*</span></label>
+            <input type="number" id="coffee-personas" min="1" step="1" inputmode="numeric" placeholder="Ej: 80">
+          </div>
+          <div class="campo">
+            <label class="etiqueta" for="coffee-tandas">¿Cuántas tandas en total? <span class="req">*</span></label>
+            <input type="number" id="coffee-tandas" min="1" step="1" inputmode="numeric" value="1">
+          </div>
+          <p class="nota">Una tanda es cada vez que se sirve el coffee break. Por ejemplo, 2 días con uno a la mañana y otro a la tarde son 4 tandas.</p>
+        </div>
+      </section>
+
+      <!-- 3. Cóctel -->
+      <section class="bloque">
+        <h3><span class="paso">3</span> Cóctel</h3>
+        <p class="ayuda">Precio por persona. No incluye IVA.</p>
+        <div class="opciones" id="opciones-coctel"></div>
+        <div class="cantidades" id="cantidades-coctel" hidden>
+          <div class="campo">
+            <label class="etiqueta" for="coctel-personas">¿Cuántas personas? <span class="req">*</span></label>
+            <input type="number" id="coctel-personas" min="1" step="1" inputmode="numeric" placeholder="Ej: 120">
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Restricciones -->
+      <section class="bloque">
+        <h3><span class="paso">4</span> Necesidades alimentarias</h3>
+        <p class="ayuda">Las opciones sin TACC o con alguna restricción se cotizan por separado.</p>
+        <label class="check">
+          <input type="checkbox" id="restricciones">
+          Algunas personas necesitan opciones sin TACC, vegetarianas u otra adaptación
+        </label>
+        <div id="restricciones-detalle" class="campos" hidden>
+          <div class="campo ancho">
+            <label class="etiqueta" for="restricciones-texto">Contanos cuáles y para cuántas personas</label>
+            <textarea id="restricciones-texto" placeholder="Ej: 6 personas sin TACC, 4 vegetarianas"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="bloque">
+        <label class="etiqueta" for="comentarios">Comentarios o consultas (opcional)</label>
+        <textarea id="comentarios" style="margin-top:6px" placeholder="Horarios, cantidad de días, lo que necesites aclarar"></textarea>
+      </section>
+
+      <section class="bloque condiciones">
+        <h3>Condiciones</h3>
+        <ul>
+          <li>Los precios no incluyen IVA (21%) y están expresados en pesos argentinos. El total de este simulador ya lo suma.</li>
+          <li>Las opciones sin TACC o con alguna restricción se cotizan por separado.</li>
+          <li>Este cálculo es orientativo. El presupuesto formal es válido por 15 días corridos desde su emisión.</li>
+          <li>La reserva se confirma con una seña del 50% del total; el saldo se abona 30 días antes del inicio del evento.</li>
+          <li>La cantidad definitiva de asistentes debe confirmarse con un mínimo de 72 hs de anticipación a cada jornada.</li>
+          <li>Forma de pago: transferencia bancaria o efectivo.</li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- Resumen -->
+    <aside class="resumen" id="resumen" aria-live="polite">
+      <h3>Tu cotización estimada</h3>
+      <div id="lineas"></div>
+      <div class="totales">
+        <div class="fila"><span>Subtotal</span><span id="subtotal">$0</span></div>
+        <div class="fila"><span>IVA (21%)</span><span id="iva">$0</span></div>
+        <div class="fila total"><span>Total</span><span id="total">$0</span></div>
+        <div class="fila sena"><span>Seña para reservar (50%)</span><span id="sena">$0</span></div>
+      </div>
+      <p class="aviso-tacc" id="aviso-tacc" hidden>Las opciones sin TACC o con restricciones no están incluidas en este total: te las cotizamos aparte.</p>
+      <p class="solo-impresion" style="font-size:.85rem;margin-top:14px">Cálculo orientativo generado el <span id="fecha-impresion"></span>. Sujeto a confirmación por parte de Dickinson.</p>
+
+      <div class="acciones">
+        <a class="boton primario" id="btn-whatsapp" href="#" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+        <a class="boton secundario" id="btn-email" href="#">Enviar por email</a>
+        <button type="button" class="boton secundario" id="btn-imprimir">Guardar como PDF</button>
+      </div>
+      <p class="falta" id="falta"></p>
+    </aside>
+  </form>
+</main>
+
+<div class="barra-movil">
+  <div><small>Total con IVA</small><strong id="total-movil">$0</strong></div>
+  <a href="#resumen">Ver detalle</a>
+</div>
+
+<footer class="pie">
+  <div class="contenedor">
+    <span>Tel: <a href="tel:+542214192026">+54 221 419-2026</a></span>
+    <span>Instagram: <a href="https://instagram.com/espacio.dickinson" target="_blank" rel="noopener">@espacio.dickinson</a></span>
+    <span>Email: <a href="mailto:espacio.dickinson@gmail.com">espacio.dickinson@gmail.com</a></span>
+    <span>Edificio Karakachoff, Calle 48 N° 575, La Plata</span>
+  </div>
+</footer>
+
+<script>
+  /* ============================================================
+     PRECIOS — para actualizarlos, cambiá solo los números de acá.
+     Son por persona (coffee: por persona y por tanda), sin IVA.
+     ============================================================ */
+  const IVA = 0.21;
+  const CONTACTO = {
+    whatsapp: '5492214192026',
+    email: 'espacio.dickinson@gmail.com'
+  };
+
+  const COFFEE = [
+    { id: 'clasica',     nombre: 'Clásica',     precio: 5300, incluye: 'Café o té; 2 medialunas; agua' },
+    { id: 'basica',      nombre: 'Básica',      precio: 5800, incluye: 'Café, té, agua; medialuna dulce, budín; frutas de estación' },
+    { id: 'esencial',    nombre: 'Esencial',    precio: 6700, incluye: 'Café, té, agua y jugo; medialuna dulce; cookie, chips; fruta' },
+    { id: 'corporativa', nombre: 'Corporativa', precio: 7500, incluye: 'Café, té, agua y jugo; medialuna, brownie, cookie; vasito de frutas / brochette' },
+    { id: 'ejecutiva',   nombre: 'Ejecutiva',   precio: 8200, incluye: 'Café, té, agua y jugo; mini tostado de jamón y queso; brownie, alfajor de maicena; ensaladita de frutas' },
+    { id: 'gourmet',     nombre: 'Gourmet',     precio: 8900, incluye: 'Café, té, agua, jugo saborizado; tostado de jamón y queso, chips; cheesecake o marquise; cookie, yogur con granola' },
+    { id: 'signature',   nombre: 'Signature',   precio: 9300, incluye: 'Café, té, agua, jugo saborizado; tostado de jamón y queso, scon, chips; pastelería premium; yogur con granola o ensalada de frutas' }
+  ];
+
+  const COCTEL = [
+    { id: 'c-basico',      nombre: 'Cóctel Básico',      precio: 25000, incluye: 'Bruschetta caprese/serrana; empanaditas; agua con/sin gas; gaseosa; tragos clásicos; copa de vino; espumante' },
+    { id: 'c-corporativo', nombre: 'Cóctel Corporativo', precio: 35000, incluye: 'Bruschetta caprese/serrana; empanaditas; variedad de pizzas; agua con/sin gas; gaseosa; tragos clásicos; copa de vino; espumante' },
+    { id: 'c-ejecutivo',   nombre: 'Cóctel Ejecutivo',   precio: 45000, incluye: 'Bruschetta caprese/serrana; empanaditas; variedad de pizzas; sándwich de bondiola braseada; agua con/sin gas; gaseosa; tragos clásicos; copa de vino; espumante' },
+    { id: 'c-dickinson',   nombre: 'Cóctel Dickinson',   precio: 55000, incluye: 'Bruschetta caprese/serrana; empanaditas; variedad de pizzas; sándwich de bondiola braseada; degustación de postres; agua con/sin gas; gaseosa; tragos clásicos; copa de vino; espumante' }
+  ];
+
+  const pesos = n => '$' + Math.round(n).toLocaleString('es-AR');
+  const $ = id => document.getElementById(id);
+
+  function pintarOpciones(contenedor, lista, grupo, textoNinguna) {
+    const html = lista.map(o => `
+      <div class="opcion">
+        <input type="radio" name="${grupo}" id="${o.id}" value="${o.id}">
+        <label for="${o.id}">
+          <span class="titulo"><span>${o.nombre}</span><span class="precio">${pesos(o.precio)}</span></span>
+          <span class="incluye">${o.incluye}</span>
+        </label>
+      </div>`).join('') + `
+      <div class="opcion ninguna">
+        <input type="radio" name="${grupo}" id="${grupo}-ninguna" value="" checked>
+        <label for="${grupo}-ninguna"><span class="titulo">${textoNinguna}</span></label>
+      </div>`;
+    contenedor.innerHTML = html;
+  }
+
+  pintarOpciones($('opciones-coffee'), COFFEE, 'coffee', 'No necesito coffee break');
+  pintarOpciones($('opciones-coctel'), COCTEL, 'coctel', 'No necesito cóctel');
+
+  const entero = el => Math.max(0, Math.floor(Number(el.value) || 0));
+  const elegido = (grupo, lista) => {
+    const v = document.querySelector(`input[name="${grupo}"]:checked`)?.value;
+    return lista.find(o => o.id === v) || null;
+  };
+
+  function calcular() {
+    const coffee = elegido('coffee', COFFEE);
+    const coctel = elegido('coctel', COCTEL);
+    $('cantidades-coffee').hidden = !coffee;
+    $('cantidades-coctel').hidden = !coctel;
+    $('restricciones-detalle').hidden = !$('restricciones').checked;
+
+    const lineas = [];
+    const faltan = [];
+
+    if (coffee) {
+      const p = entero($('coffee-personas'));
+      const t = entero($('coffee-tandas'));
+      if (!p) faltan.push('la cantidad de personas del coffee break');
+      if (!t) faltan.push('la cantidad de tandas');
+      lineas.push({
+        nombre: 'Coffee break ' + coffee.nombre,
+        calculo: `${p} personas × ${t} ${t === 1 ? 'tanda' : 'tandas'} × ${pesos(coffee.precio)}`,
+        importe: p * t * coffee.precio
+      });
+    }
+    if (coctel) {
+      const p = entero($('coctel-personas'));
+      if (!p) faltan.push('la cantidad de personas del cóctel');
+      lineas.push({
+        nombre: coctel.nombre,
+        calculo: `${p} personas × ${pesos(coctel.precio)}`,
+        importe: p * coctel.precio
+      });
+    }
+
+    const subtotal = lineas.reduce((s, l) => s + l.importe, 0);
+    const iva = subtotal * IVA;
+    const total = subtotal + iva;
+
+    $('lineas').innerHTML = lineas.length
+      ? lineas.map(l => `
+          <div class="linea">
+            <div class="nombre"><span>${l.nombre}</span><span>${pesos(l.importe)}</span></div>
+            <div class="calculo">${l.calculo}</div>
+          </div>`).join('')
+      : '<p class="vacio">Elegí un coffee break o un cóctel para ver el cálculo.</p>';
+
+    $('subtotal').textContent = pesos(subtotal);
+    $('iva').textContent = pesos(iva);
+    $('total').textContent = pesos(total);
+    $('total-movil').textContent = pesos(total);
+    $('sena').textContent = pesos(total / 2);
+    $('aviso-tacc').hidden = !$('restricciones').checked;
+
+    if (!$('nombre').value.trim()) faltan.unshift('tu nombre');
+    if (!lineas.length) faltan.push('al menos un servicio');
+
+    const listo = faltan.length === 0;
+    $('falta').textContent = listo ? '' : 'Para enviar, completá ' + unir(faltan) + '.';
+    ['btn-whatsapp', 'btn-email'].forEach(id => $(id).setAttribute('aria-disabled', String(!listo)));
+
+    if (listo) {
+      const texto = armarMensaje(lineas, subtotal, iva, total);
+      $('btn-whatsapp').href = `https://wa.me/${CONTACTO.whatsapp}?text=${encodeURIComponent(texto)}`;
+      const asunto = 'Pedido de presupuesto' + ($('evento').value.trim() ? ' — ' + $('evento').value.trim() : '');
+      $('btn-email').href = `mailto:${CONTACTO.email}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(texto)}`;
+    } else {
+      $('btn-whatsapp').href = '#';
+      $('btn-email').href = '#';
+    }
+  }
+
+  function unir(items) {
+    return items.length < 2 ? items.join('') : items.slice(0, -1).join(', ') + ' y ' + items[items.length - 1];
+  }
+
+  function armarMensaje(lineas, subtotal, iva, total) {
+    const v = id => $(id).value.trim();
+    const datos = [
+      ['Nombre', v('nombre')], ['Organización', v('organizacion')], ['Email', v('email')],
+      ['Teléfono', v('telefono')], ['Evento', v('evento')], ['Fecha(s)', v('fechas')], ['Lugar', v('lugar')]
+    ].filter(([, x]) => x).map(([k, x]) => `${k}: ${x}`);
+
+    const partes = [
+      '¡Hola, Dickinson! Quiero pedir un presupuesto:',
+      '',
+      ...datos,
+      '',
+      ...lineas.map(l => `• ${l.nombre}: ${l.calculo} = ${pesos(l.importe)}`),
+      '',
+      `Subtotal: ${pesos(subtotal)}`,
+      `IVA (21%): ${pesos(iva)}`,
+      `TOTAL ESTIMADO: ${pesos(total)}`
+    ];
+    if ($('restricciones').checked) {
+      partes.push('', 'Necesidades alimentarias (a cotizar aparte): ' + (v('restricciones-texto') || 'a conversar'));
+    }
+    if (v('comentarios')) partes.push('', 'Comentarios: ' + v('comentarios'));
+    return partes.join('\n');
+  }
+
+  // Bloquea el envío si falta algo y lleva al primer dato pendiente
+  ['btn-whatsapp', 'btn-email'].forEach(id => {
+    $(id).addEventListener('click', e => {
+      if ($(id).getAttribute('aria-disabled') === 'true') {
+        e.preventDefault();
+        const pendiente = !$('nombre').value.trim() ? $('nombre')
+          : [...document.querySelectorAll('.cantidades:not([hidden]) input')].find(i => !entero(i))
+          || $('opciones-coffee');
+        pendiente.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (pendiente.focus) pendiente.focus({ preventScroll: true });
+      }
+    });
+  });
+
+  $('btn-imprimir').addEventListener('click', () => {
+    $('fecha-impresion').textContent = new Date().toLocaleDateString('es-AR');
+    window.print();
+  });
+
+  $('cotizador').addEventListener('input', calcular);
+  $('cotizador').addEventListener('change', calcular);
+  $('cotizador').addEventListener('submit', e => e.preventDefault());
+  calcular();
+</script>
+</body>
+</html>
