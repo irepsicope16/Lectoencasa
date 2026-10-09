@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ClipboardPlus, Eye, ListChecks, MonitorPlay, PenLine, Plus, Sparkles } from 'lucide-react'
+import { ClipboardPlus, Compass, Eye, ListChecks, MonitorPlay, PenLine, Plus, Scale, Sparkles } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input, Label, NativeSelect, Textarea } from '@/components/ui/input'
@@ -21,6 +21,8 @@ import { EVALUACION_PROCESO_ID, resumenEvaluacionProceso } from '@/data/evaluaci
 import { MODULES, MODULE_MAP } from '@/data/modules'
 import { ACTIVITY_STATUS } from '@/lib/constants'
 import type { Activity, AssignedVideo, CalendarEvent, Consultant, ModuleId } from '@/types'
+import { CareerMapTab } from './CareerMapTab'
+import { ComparadorTab } from './ComparadorTab'
 
 const statusTone: Record<Activity['estado'], 'gris' | 'lavanda' | 'aqua' | 'amber'> = {
   pendiente: 'amber',
@@ -46,6 +48,7 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
   const [videoOpen, setVideoOpen] = useState(false)
   const [viewing, setViewing] = useState<Activity | null>(null)
   const [feedback, setFeedback] = useState('')
+  const [toolOpen, setToolOpen] = useState<'mapa' | 'comparador' | null>(null)
 
   const [modId, setModId] = useState<ModuleId>('historia')
   const [templateId, setTemplateId] = useState('')
@@ -125,6 +128,36 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
         <Button size="sm" onClick={() => setAssignOpen(true)}>
           <ClipboardPlus /> Asignar actividad
         </Button>
+      </div>
+
+      {/* herramientas del proceso: a diferencia del resto, no hace falta
+          "asignarlas" — se trabajan en sesión, directo desde acá, sin ir a
+          buscarlas a la pestaña Módulos. */}
+      <div className="mb-5 grid gap-3 sm:grid-cols-2">
+        <button
+          type="button"
+          onClick={() => setToolOpen('mapa')}
+          className="cursor-pointer rounded-xl border p-3.5 text-left transition-colors hover:border-border-strong hover:bg-surface-2"
+        >
+          <p className="flex items-center gap-2 text-[13.5px] font-semibold">
+            <Compass className="h-4 w-4 text-primary" /> Mapa de Carreras
+          </p>
+          <p className="mt-1 text-[12px] text-muted-foreground">
+            Recorrido por 26 campos de estudio/trabajo, marcando la primera reacción a cada uno.
+          </p>
+        </button>
+        <button
+          type="button"
+          onClick={() => setToolOpen('comparador')}
+          className="cursor-pointer rounded-xl border p-3.5 text-left transition-colors hover:border-border-strong hover:bg-surface-2"
+        >
+          <p className="flex items-center gap-2 text-[13.5px] font-semibold">
+            <Scale className="h-4 w-4 text-primary" /> Comparador de Carreras
+          </p>
+          <p className="mt-1 text-[12px] text-muted-foreground">
+            Carga hasta 3 carreras finalistas y valoralas con el consultante según 5 criterios propios.
+          </p>
+        </button>
       </div>
 
       {own.length === 0 && ownVideos.length === 0 ? (
@@ -358,6 +391,18 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
               Asignar video
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* herramientas del proceso */}
+      <Dialog open={!!toolOpen} onOpenChange={(o) => !o && setToolOpen(null)}>
+        <DialogContent wide>
+          <DialogHeader>
+            <DialogTitle>{toolOpen === 'mapa' ? 'Mapa de Carreras' : 'Comparador de Carreras'}</DialogTitle>
+            <DialogDescription>{nombreCompleto(consultant)}</DialogDescription>
+          </DialogHeader>
+          {toolOpen === 'mapa' && <CareerMapTab consultant={consultant} />}
+          {toolOpen === 'comparador' && <ComparadorTab consultant={consultant} />}
         </DialogContent>
       </Dialog>
 
