@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/input'
 import { useActivities, useCreate, useModuleProgress, useUpdate, useVideos } from '@/hooks/queries'
 import { useAuthStore } from '@/stores/authStore'
-import { MODULE_MAP, MODULES } from '@/data/modules'
+import { MODULE_MAP, MODULES, printableIdFor } from '@/data/modules'
 import { ACTIVITY_STATUS, STAGES } from '@/lib/constants'
 import { isTest } from '@/lib/scoring'
 import type { AssignedVideo, ModuleId, ModuleProgress } from '@/types'
@@ -106,6 +106,11 @@ export default function MyModulePage() {
                     <p className="flex items-center gap-1.5 text-[13.5px] font-medium">
                       <span className="truncate">{a.titulo}</span>
                       {isTest(a) && <Badge variant="amber">Test</Badge>}
+                      {printableIdFor(a.moduleId, a.templateId) && (
+                        <Badge variant="lavanda">
+                          <Printer className="h-3 w-3" /> Imprimible
+                        </Badge>
+                      )}
                     </p>
                     <p className="mt-0.5 line-clamp-1 text-[12px] text-muted-foreground">{a.descripcion}</p>
                   </div>

@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, ListChecks } from 'lucide-react'
+import { ArrowRight, ListChecks, Printer } from 'lucide-react'
 import { EmptyState, FadeIn, PageHeader } from '@/components/shared'
 import { Badge } from '@/components/ui/badge'
 import { useActivities } from '@/hooks/queries'
 import { useAuthStore } from '@/stores/authStore'
-import { MODULE_MAP } from '@/data/modules'
+import { MODULE_MAP, printableIdFor } from '@/data/modules'
 import { ACTIVITY_STATUS } from '@/lib/constants'
 import { fechaCorta } from '@/lib/utils'
 import { isTest } from '@/lib/scoring'
@@ -44,6 +44,11 @@ export default function MyActivitiesPage() {
                 <div className="flex flex-wrap items-center gap-2">
                   <p className="text-[14px] font-medium">{a.titulo}</p>
                   {isTest(a) && <Badge variant="amber">Test</Badge>}
+                  {printableIdFor(a.moduleId, a.templateId) && (
+                    <Badge variant="lavanda">
+                      <Printer className="h-3 w-3" /> Imprimible
+                    </Badge>
+                  )}
                   <Badge variant="outline">{MODULE_MAP[a.moduleId].nombre}</Badge>
                 </div>
                 <p className="mt-0.5 line-clamp-1 text-[12.5px] text-muted-foreground">{a.descripcion}</p>

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ClipboardPlus, Compass, Eye, ListChecks, MonitorPlay, PenLine, Plus, Scale, Sparkles } from 'lucide-react'
+import { ClipboardPlus, Compass, Eye, ListChecks, MonitorPlay, PenLine, Plus, Printer, Scale, Sparkles } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input, Label, NativeSelect, Textarea } from '@/components/ui/input'
@@ -18,7 +18,7 @@ import { useActivities, useCreate, useUpdate, useVideos } from '@/hooks/queries'
 import { fechaCorta, nombreCompleto } from '@/lib/utils'
 import { isTest, scoreActivity } from '@/lib/scoring'
 import { EVALUACION_PROCESO_ID, resumenEvaluacionProceso } from '@/data/evaluacionProceso'
-import { MODULES, MODULE_MAP } from '@/data/modules'
+import { MODULES, MODULE_MAP, printableIdFor } from '@/data/modules'
 import { ACTIVITY_STATUS } from '@/lib/constants'
 import type { Activity, AssignedVideo, CalendarEvent, Consultant, ModuleId } from '@/types'
 import { CareerMapTab } from './CareerMapTab'
@@ -173,6 +173,11 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
               <div className="flex flex-wrap items-center gap-2">
                 <p className="text-[14px] font-semibold">{a.titulo}</p>
                 {isTest(a) && <Badge variant="amber">Test</Badge>}
+                {printableIdFor(a.moduleId, a.templateId) && (
+                  <Badge variant="lavanda">
+                    <Printer className="h-3 w-3" /> Imprimible
+                  </Badge>
+                )}
                 <Badge variant="outline">{MODULE_MAP[a.moduleId].nombre}</Badge>
                 <Badge variant={statusTone[a.estado]}>{ACTIVITY_STATUS[a.estado]}</Badge>
                 <span className="ml-auto text-[11.5px] text-faint">
@@ -284,6 +289,11 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
                     <p className="flex items-center gap-1.5 text-[13px] font-medium">
                       {t.titulo}
                       {isTest(t) && <Badge variant="amber">Test</Badge>}
+                      {t.printableId && (
+                        <Badge variant="lavanda">
+                          <Printer className="h-3 w-3" /> Imprimible
+                        </Badge>
+                      )}
                     </p>
                     <p className="text-[12px] text-muted-foreground">{t.descripcion}</p>
                     <p className="mt-0.5 text-[11px] text-faint">
@@ -415,6 +425,11 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
                 <DialogTitle className="flex items-center gap-2">
                   {viewing.titulo}
                   {isTest(viewing) && <Badge variant="amber">Test</Badge>}
+                  {printableIdFor(viewing.moduleId, viewing.templateId) && (
+                    <Badge variant="lavanda">
+                      <Printer className="h-3 w-3" /> Imprimible
+                    </Badge>
+                  )}
                 </DialogTitle>
                 <DialogDescription>{viewing.descripcion}</DialogDescription>
               </DialogHeader>
