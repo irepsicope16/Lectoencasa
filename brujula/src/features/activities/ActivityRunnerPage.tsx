@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, CheckCircle2, MessageCircleHeart, Save } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, MessageCircleHeart, Printer, Save } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { FadeIn } from '@/components/shared'
 import { Badge } from '@/components/ui/badge'
@@ -11,7 +11,7 @@ import { toast } from '@/components/ui/toast'
 import { useActivities, useCreate, useModuleProgress, useUpdate } from '@/hooks/queries'
 import type { ModuleProgress } from '@/types'
 import { useAuthStore } from '@/stores/authStore'
-import { MODULE_MAP } from '@/data/modules'
+import { MODULE_MAP, printableIdFor } from '@/data/modules'
 import { cn } from '@/lib/utils'
 import { isTest } from '@/lib/scoring'
 import type { Activity, ActivityAnswer } from '@/types'
@@ -138,6 +138,11 @@ export default function ActivityRunnerPage() {
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="outline">{MODULE_MAP[activity.moduleId].nombre}</Badge>
           {isTest(activity) && <Badge variant="amber">Test</Badge>}
+          {printableIdFor(activity.moduleId, activity.templateId) && (
+            <Badge variant="lavanda">
+              <Printer className="h-3 w-3" /> Imprimible
+            </Badge>
+          )}
         </div>
         <h1 className="mt-2 text-xl font-semibold tracking-tight">{activity.titulo}</h1>
         <p className="mt-1.5 text-[13.5px] leading-relaxed text-muted-foreground">{activity.descripcion}</p>

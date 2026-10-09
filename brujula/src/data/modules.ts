@@ -42,6 +42,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'ejercicio',
         duracionMin: 40,
         dimensiones: ['historia'],
+        printableId: 'linea-vida',
         preguntas: [
           { id: 'q1', texto: '¿Cuáles fueron los 5 momentos más importantes de tu vida hasta hoy?', tipo: 'lista' },
           { id: 'q2', texto: '¿Qué momento recordás como el más feliz? ¿Qué estabas haciendo?', tipo: 'abierta' },
@@ -149,6 +150,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'entrevista',
         duracionMin: 45,
         dimensiones: ['identidad', 'fortalezas'],
+        printableId: 'yo-y-los-demas',
         preguntas: [
           { id: 'q1', texto: 'Empezá vos: ¿qué cosas te gustan de vos?', tipo: 'lista' },
           { id: 'q2', texto: '¿Qué cosas no te gustan (o te cuesta aceptar) de vos?', tipo: 'lista' },
@@ -175,6 +177,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'entrevista',
         duracionMin: 45,
         dimensiones: ['identidad', 'fortalezas'],
+        printableId: 'entrevista-10-personas',
         preguntas: [
           { id: 'q1', texto: 'Anotá a cada persona (vínculo) y lo que respondió', tipo: 'lista' },
           { id: 'q2', texto: '¿Qué palabras o ideas se repitieron entre varias personas?', tipo: 'abierta' },
@@ -262,6 +265,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'ejercicio',
         duracionMin: 35,
         dimensiones: ['valores'],
+        printableId: '40-valores',
         preguntas: [
           {
             id: 'q1',
@@ -285,6 +289,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'ejercicio',
         duracionMin: 35,
         dimensiones: ['valores', 'deseos'],
+        printableId: 'rueda-vida',
         preguntas: [
           { id: 'q1', texto: 'Puntuá cada área (1-10): Estudio · Trabajo · Familia · Amistades · Salud · Tiempo libre · Dinero · Crecimiento personal', tipo: 'lista' },
           { id: 'q2', texto: '¿Qué áreas puntuaste más alto? ¿Por qué creés que valorás tanto esas áreas?', tipo: 'abierta' },
@@ -342,6 +347,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'ejercicio',
         duracionMin: 30,
         dimensiones: ['deseos', 'valores'],
+        printableId: 'no-si-quiero',
         preguntas: [
           { id: 'q1', texto: 'Mi lista de lo que NO quiero (trabajos, estilos de vida, situaciones…)', tipo: 'lista' },
           { id: 'q2', texto: 'Mi lista de lo que SÍ quiero', tipo: 'lista' },
@@ -430,6 +436,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'ejercicio',
         duracionMin: 40,
         dimensiones: ['mandatos', 'historia'],
+        printableId: 'arbol-profesiones',
         preguntas: [
           { id: 'q1', texto: '¿A qué se dedican (o dedicaron) tus padres, abuelos y tíos?', tipo: 'abierta' },
           { id: 'q2', texto: '¿Hay alguna “tradición” profesional? ¿Alguien la rompió? ¿Qué pasó?', tipo: 'abierta' },
@@ -479,6 +486,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'ejercicio',
         duracionMin: 30,
         dimensiones: ['fortalezas'],
+        printableId: 'inventario-fortalezas',
         preguntas: [
           {
             id: 'q1',
@@ -540,6 +548,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'investigacion',
         duracionMin: 45,
         dimensiones: ['intereses'],
+        printableId: 'registro-intereses',
         preguntas: [
           { id: 'q1', texto: '¿Qué temas aparecen una y otra vez en lo que mirás/leés/escuchás?', tipo: 'lista' },
           { id: 'q2', texto: '¿Sobre qué tema podrías hablar una hora sin aburrirte?', tipo: 'abierta' },
@@ -612,6 +621,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'ejercicio',
         duracionMin: 30,
         dimensiones: ['aptitudes'],
+        printableId: 'guia-aptitudes',
         preguntas: [
           { id: 'q1', texto: '¿Qué tareas escolares resolvés más rápido que tus compañeros?', tipo: 'abierta' },
           { id: 'q2', texto: '¿Qué te piden los demás que hagas porque “a vos te sale”?', tipo: 'abierta' },
@@ -684,6 +694,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'entrevista',
         duracionMin: 60,
         dimensiones: ['exploracion', 'intereses'],
+        printableId: 'guia-entrevista',
         preguntas: [
           { id: 'q1', texto: '¿A quién entrevistaste y a qué se dedica?', tipo: 'abierta' },
           { id: 'q2', texto: '¿Cómo es un día normal de su trabajo? ¿Qué te sorprendió?', tipo: 'abierta' },
@@ -698,6 +709,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'investigacion',
         duracionMin: 90,
         dimensiones: ['exploracion'],
+        printableId: 'checklist-visita',
         preguntas: [
           { id: 'q1', texto: '¿Qué institución visitaste (o qué charla virtual viste)?', tipo: 'abierta' },
           { id: 'q2', texto: '¿Te imaginaste estudiando ahí? ¿Qué sentiste en el lugar?', tipo: 'abierta' },
@@ -762,6 +774,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'collage',
         duracionMin: 35,
         dimensiones: ['deseos', 'valores', 'identidad'],
+        printableId: 'triangulo-vida',
         preguntas: [
           { id: 'q1', texto: '¿Cuáles son los tres pilares que elegiste para tus vértices? ¿Por qué esos?', tipo: 'abierta' },
           { id: 'q2', texto: '¿Qué escribiste en el centro?', tipo: 'abierta' },
@@ -775,6 +788,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'collage',
         duracionMin: 40,
         dimensiones: ['valores', 'deseos'],
+        printableId: 'mapa-proyecto',
         preguntas: [
           { id: 'q1', texto: 'Formación: ¿qué querés aprender en los próximos años?', tipo: 'abierta' },
           { id: 'q2', texto: 'Trabajo: ¿cómo imaginás tu trabajo ideal (con gente, solo, creativo, estable…)?', tipo: 'abierta' },
@@ -860,6 +874,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'investigacion',
         duracionMin: 90,
         dimensiones: ['exploracion', 'intereses'],
+        printableId: 'ficha-carreras',
         preguntas: [
           { id: 'q1', texto: '¿Cuáles son tus carreras/formaciones finalistas?', tipo: 'lista' },
           { id: 'q2', texto: 'Para cada una: ¿qué materias tiene el plan de estudios? ¿Cuáles te entusiasman y cuáles te asustan?', tipo: 'abierta' },
@@ -953,6 +968,7 @@ export const MODULES: ModuleDefinition[] = [
         tipo: 'ejercicio',
         duracionMin: 45,
         dimensiones: ['exploracion'],
+        printableId: 'cronograma-pasos',
         preguntas: [
           { id: 'q1', texto: 'Listá los pasos concretos de acá a la inscripción (con fechas).', tipo: 'lista' },
           { id: 'q2', texto: '¿Qué obstáculos podrían aparecer y cómo los vas a manejar?', tipo: 'abierta' },
@@ -1008,4 +1024,12 @@ export const MODULE_MAP: Record<ModuleId, ModuleDefinition> = Object.fromEntries
 
 export function getModule(id: ModuleId): ModuleDefinition {
   return MODULE_MAP[id]
+}
+
+/** El printableId se declara una sola vez, en la plantilla del método — acá
+ * se busca para una Activity ya asignada (que solo guarda su templateId),
+ * en vez de copiarlo a cada fila asignada. */
+export function printableIdFor(moduleId: ModuleId, templateId?: string): string | undefined {
+  if (!templateId) return undefined
+  return MODULE_MAP[moduleId]?.actividades.find((a) => a.id === templateId)?.printableId
 }

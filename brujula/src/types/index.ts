@@ -176,6 +176,10 @@ export interface ModuleActivityTemplate {
   preguntas: ModuleQuestion[]
   /** dimensiones del Motor Brújula que alimenta esta actividad */
   dimensiones: EngineDimension[]
+  /** si esta actividad tiene una lámina imprimible propia (ver materiales del
+   * módulo), el id de esa lámina — para poder avisar "tiene imprimible" sin
+   * mantener la relación a mano en la UI */
+  printableId?: string
 }
 
 export interface ModuleVideo {

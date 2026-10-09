@@ -68,6 +68,11 @@ export default function ModuleDetailProPage() {
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="text-[13.5px] font-medium">{a.titulo}</p>
                     {isTest(a) && <Badge variant="amber">Test</Badge>}
+                    {a.printableId && (
+                      <Badge variant="lavanda">
+                        <Printer className="h-3 w-3" /> Imprimible
+                      </Badge>
+                    )}
                     <Badge variant="aqua">{ACTIVITY_KIND[a.tipo]}</Badge>
                     <span className="ml-auto text-[11.5px] text-faint">~{a.duracionMin} min</span>
                   </div>
