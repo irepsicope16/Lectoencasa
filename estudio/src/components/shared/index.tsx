@@ -17,8 +17,8 @@ export function PageHeader({
   return (
     <div className={cn('mb-6 flex flex-wrap items-end justify-between gap-3', className)}>
       <div>
-        <h1 className="font-display text-[26px] font-semibold tracking-tight">{title}</h1>
-        {subtitle && <p className="mt-0.5 text-[13.5px] text-muted-foreground">{subtitle}</p>}
+        <h1 className="font-display text-[32px] font-bold leading-tight tracking-tight">{title}</h1>
+        {subtitle && <p className="mt-1 text-[14.5px] leading-relaxed text-muted-foreground">{subtitle}</p>}
       </div>
       {actions && <div className="flex items-center gap-2">{actions}</div>}
     </div>

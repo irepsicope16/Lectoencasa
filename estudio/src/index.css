@@ -2,10 +2,9 @@
 @import '@fontsource/ibm-plex-sans/400.css';
 @import '@fontsource/ibm-plex-sans/500.css';
 @import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-sans/700.css';
 @import '@fontsource/ibm-plex-mono/400.css';
 @import '@fontsource/ibm-plex-mono/500.css';
-@import '@fontsource-variable/source-serif-4/standard.css';
-@import '@fontsource-variable/source-serif-4/standard-italic.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -18,12 +17,12 @@
    ============================================================ */
 
 :root {
-  --background: #faf6ee;
-  --surface: #fffdf8;
-  --surface-2: #f1ebda;
-  --foreground: #223346;
-  --muted-foreground: #5c6b78;
-  --faint-foreground: #838f99;
+  --background: #f6f3ec;
+  --surface: #fffdf9;
+  --surface-2: #eef0e9;
+  --foreground: #1f2e3d;
+  --muted-foreground: #54636f;
+  --faint-foreground: #7c8a93;
 
   --primary: #223346;
   --primary-strong: #16222f;
@@ -66,12 +65,12 @@
 }
 
 .dark {
-  --background: #1b1d22;
-  --surface: #242731;
-  --surface-2: #2b2e38;
-  --foreground: #ede7d9;
-  --muted-foreground: #b0a998;
-  --faint-foreground: #8c8677;
+  --background: #191b20;
+  --surface: #23262f;
+  --surface-2: #2a2d37;
+  --foreground: #efe9db;
+  --muted-foreground: #b3ac9b;
+  --faint-foreground: #90897a;
 
   --primary: #8ba0b2;
   --primary-strong: #a6b8c6;
@@ -111,7 +110,9 @@
 
 @theme inline {
   --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Source Serif 4 Variable', 'Source Serif 4', Georgia, serif;
+  /* Títulos en la misma sans-serif que el cuerpo (no serif): más fácil de leer
+     para personas con dislexia — menos ornamento, formas de letra más simples. */
+  --font-display: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
   --color-background: var(--background);
@@ -170,10 +171,19 @@
     text-rendering: optimizeLegibility;
   }
   body {
-    background: var(--background);
+    /* Fondo moderno: un lavado de color muy sutil en las esquinas (los
+       tonos de marca, terracota y acero, a baja opacidad) sobre la base
+       cálida — no un color plano, pero sigue siendo un fondo de bajo
+       contraste y sin textura que no interfiere con la lectura. */
+    background:
+      radial-gradient(1100px 620px at 100% -8%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 60%),
+      radial-gradient(950px 520px at -8% 108%, color-mix(in srgb, var(--secondary) 10%, transparent), transparent 60%),
+      var(--background);
+    background-attachment: fixed;
     color: var(--foreground);
-    font-size: 14.5px;
-    line-height: 1.55;
+    font-size: 15.5px;
+    line-height: 1.6;
+    letter-spacing: 0.1px;
   }
   ::selection {
     background: var(--primary-soft);
