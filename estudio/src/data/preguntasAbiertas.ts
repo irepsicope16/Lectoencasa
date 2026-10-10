@@ -10,6 +10,6 @@ export const PREGUNTAS_ABIERTAS: PreguntaAbierta[] = [
   { id: 'q2', texto: '¿En qué materia o tipo de tarea aparece con mayor intensidad?' },
   { id: 'q3', texto: '¿Qué estrategia ya probaste y qué ocurrió?' },
   { id: 'q4', texto: '¿Cuándo sentís que aprendés mejor?' },
-  { id: 'q5', texto: '¿Qué apoyo esperás del profesional?' },
+  { id: 'q5', texto: '¿Qué tipo de ayuda te gustaría encontrar en esta app?' },
   { id: 'q6', texto: 'Si este proceso funcionara, ¿qué notarías diferente dentro de un mes?' },
 ]

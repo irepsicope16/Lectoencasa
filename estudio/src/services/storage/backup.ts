@@ -6,19 +6,14 @@ import { db } from './db'
 const BACKUP_VERSION = 1
 
 const COLLECTIONS = [
-  'users',
-  'students',
-  'intakes',
   'responses',
   'openAnswers',
   'snapshots',
-  'alerts',
-  'priorities',
-  'goals',
-  'sessions',
-  'events',
-  'files',
-  'asignaciones',
+  'actividades',
+  'sesionesEstudio',
+  'mapas',
+  'fichas',
+  'diario',
 ] as const
 
 type CollectionName = (typeof COLLECTIONS)[number]

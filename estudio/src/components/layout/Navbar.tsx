@@ -1,16 +1,27 @@
-import { useNavigate } from 'react-router-dom'
-import { LogOut, Menu, Moon, Sun } from 'lucide-react'
-import { useAuthStore } from '@/stores/authStore'
+import { Flame, Menu, Moon, Sun } from 'lucide-react'
 import { useUIStore } from '@/stores/uiStore'
-import { nombreCompleto } from '@/lib/utils'
+import { usePerfilStore } from '@/stores/perfilStore'
+import { useActividadesProbadas, useDiario, useFichas, useSesionesEstudio } from '@/hooks/queries'
+import { calcularRacha } from '@/lib/progreso'
 
 export function Navbar() {
-  const user = useAuthStore((s) => s.user)
-  const logout = useAuthStore((s) => s.logout)
   const theme = useUIStore((s) => s.theme)
   const setTheme = useUIStore((s) => s.setTheme)
   const setMobileNavOpen = useUIStore((s) => s.setMobileNavOpen)
-  const navigate = useNavigate()
+  const nombre = usePerfilStore((s) => s.nombre)
+
+  const { data: actividades = [] } = useActividadesProbadas()
+  const { data: sesiones = [] } = useSesionesEstudio()
+  const { data: diario = [] } = useDiario()
+  const { data: fichas = [] } = useFichas()
+
+  const fechasActividad = [
+    ...actividades.filter((a) => a.fechaCompletada).map((a) => a.fechaCompletada!),
+    ...sesiones.map((s) => s.fecha),
+    ...diario.map((d) => d.fecha),
+    ...fichas.filter((f) => f.ultimoRepaso).map((f) => f.ultimoRepaso!),
+  ]
+  const racha = calcularRacha(fechasActividad)
 
   const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
@@ -27,6 +38,12 @@ export function Navbar() {
       <div className="flex-1" />
 
       <div className="flex items-center gap-1.5">
+        {racha > 0 && (
+          <span className="flex items-center gap-1 rounded-full bg-accent-soft px-2.5 py-1 text-[12px] font-semibold text-accent-strong">
+            <Flame className="h-3.5 w-3.5" />
+            {racha} {racha === 1 ? 'día' : 'días'}
+          </span>
+        )}
         <button
           onClick={() => setTheme(isDark ? 'light' : 'dark')}
           className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
@@ -34,17 +51,7 @@ export function Navbar() {
         >
           {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
         </button>
-        <span className="hidden text-[13px] font-medium sm:block">{user ? nombreCompleto(user) : ''}</span>
-        <button
-          onClick={() => {
-            logout()
-            navigate('/login')
-          }}
-          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-surface-2 hover:text-danger"
-          aria-label="Cerrar sesión"
-        >
-          <LogOut className="h-4 w-4" />
-        </button>
+        {nombre && <span className="hidden text-[13px] font-medium sm:block">{nombre}</span>}
       </div>
     </header>
   )

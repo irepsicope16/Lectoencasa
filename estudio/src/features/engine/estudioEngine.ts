@@ -1,18 +1,13 @@
 // ============================================================
 // Motor de cálculo de Método Estudio — funciones puras, sin React.
-// Implementa §7 (sistema de puntuación e interpretación) y §8 (motor de
-// recomendaciones) del Documento Maestro V1. No decide por sí solo: cada
-// salida es orientativa y requiere confirmación profesional (§14).
+// Calcula el autoperfil por dimensión (§7 del Documento Maestro). La
+// versión de autoayuda tiene una sola fuente (autoinforme de la propia
+// persona), así que no hay nivel de confianza por convergencia: el
+// resultado es siempre orientativo, nunca un diagnóstico.
 // ============================================================
 
 import { itemsDeDimension } from '@/data/items'
-import type {
-  BandaNecesidad,
-  DimensionId,
-  FuenteResultado,
-  NivelConfianza,
-  QuestionnaireResponse,
-} from '@/types'
+import type { BandaNecesidad, DimensionId, QuestionnaireResponse } from '@/types'
 
 const COMPLETITUD_MINIMA = 0.7
 
@@ -52,7 +47,7 @@ export function calcularNecesidadDimension(
   return { promedio, completitud, banda: bandaDeNecesidad(promedio) }
 }
 
-/** Tabla 15: rangos funcionales iniciales (no baremos), editables tras piloto. */
+/** Tabla 15: rangos funcionales iniciales (no baremos). */
 export function bandaDeNecesidad(promedio: number): BandaNecesidad {
   if (promedio <= 0.74) return 'baja'
   if (promedio <= 1.49) return 'leve'
@@ -61,55 +56,8 @@ export function bandaDeNecesidad(promedio: number): BandaNecesidad {
 }
 
 export const ETIQUETA_BANDA: Record<BandaNecesidad, string> = {
-  baja: 'Necesidad baja — recurso disponible o sin dificultad frecuente declarada',
-  leve: 'Necesidad leve — conviene observar y ofrecer una herramienta puntual',
-  moderada: 'Necesidad moderada — área a fortalecer y posible objetivo de intervención',
-  alta: 'Necesidad alta — prioridad potencial; requiere corroboración contextual',
-}
-
-/**
- * Tabla 16 — nivel de confianza de la conclusión, por convergencia de
- * fuentes. Sin tareas breves de desempeño en esta versión: las fuentes
- * disponibles son autoinforme, cuestionario de referente (12-15 años) y la
- * observación profesional (marcada explícitamente en la vista de integración).
- */
-export function calcularConfianza(
-  fuentesConvergentes: FuenteResultado[],
-  bandaNecesidad: BandaNecesidad | null,
-  estudianteReconoceInteres: boolean,
-): NivelConfianza {
-  const coinciden = fuentesConvergentes.length >= 2
-  if (!coinciden) return 'exploratorio'
-  const impactoActual = bandaNecesidad === 'moderada' || bandaNecesidad === 'alta'
-  if (impactoActual && estudianteReconoceInteres) return 'prioritario'
-  return 'convergente'
-}
-
-/**
- * Tabla 17 — puntaje de prioridad orientativo. Solo ordena opciones: el
- * profesional siempre confirma, reordena o descarta (§8, regla general de
- * prioridad). "Evidencia en tarea breve" queda en 0 en esta versión (no hay
- * batería de tareas todavía — ver backlog).
- */
-export function calcularPuntajePrioridad(input: {
-  necesidadDeclarada: number // 0-3
-  impactoActual: number // 0-3
-  frecuenciaMultiContexto: number // 0-2
-  interesEstudiante: number // 0-2
-  urgenciaEvaluacion: number // 0-1
-}): number {
-  return (
-    input.necesidadDeclarada +
-    input.impactoActual +
-    input.frecuenciaMultiContexto +
-    input.interesEstudiante +
-    input.urgenciaEvaluacion
-  )
-}
-
-export function necesidadDeclaradaDeBanda(banda: BandaNecesidad | null): number {
-  if (banda === 'alta') return 3
-  if (banda === 'moderada') return 2
-  if (banda === 'leve') return 1
-  return 0
+  baja: 'Ya tenés recursos acá, no es tu prioridad ahora',
+  leve: 'Área para observar, puede sumar una herramienta puntual',
+  moderada: 'Área para fortalecer, buen punto de partida',
+  alta: 'La que más te conviene trabajar primero',
 }

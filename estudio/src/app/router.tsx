@@ -1,20 +1,21 @@
 import { lazy, Suspense } from 'react'
 import { createHashRouter, Navigate } from 'react-router-dom'
-import { RequireRole } from '@/features/auth/guards'
 import { AppShell } from '@/components/layout/AppShell'
 
 // Hash router: funciona en hosting estático (GitHub Pages) sin config de servidor.
+// Sin login ni roles: la app es de un solo usuario local, se entra directo.
 
-const LandingPage = lazy(() => import('@/features/home/LandingPage'))
-const LoginPage = lazy(() => import('@/features/auth/LoginPage'))
-const ProDashboard = lazy(() => import('@/features/dashboard/ProDashboard'))
+const InicioPage = lazy(() => import('@/features/home/InicioPage'))
+const AutoperfilPage = lazy(() => import('@/features/autoperfil/AutoperfilPage'))
 const BibliotecaPage = lazy(() => import('@/features/biblioteca/BibliotecaPage'))
-const StudentsPage = lazy(() => import('@/features/students/StudentsPage'))
-const StudentDetailPage = lazy(() => import('@/features/students/StudentDetailPage'))
-const AgendaPage = lazy(() => import('@/features/agenda/AgendaPage'))
-const HonorariosPage = lazy(() => import('@/features/agenda/HonorariosPage'))
+const ActividadesPage = lazy(() => import('@/features/actividades/ActividadesPage'))
+const HerramientasPage = lazy(() => import('@/features/herramientas/HerramientasPage'))
+const CronometroPage = lazy(() => import('@/features/herramientas/CronometroPage'))
+const MapasPage = lazy(() => import('@/features/herramientas/MapasPage'))
+const FichasPage = lazy(() => import('@/features/herramientas/FichasPage'))
+const DiarioPage = lazy(() => import('@/features/herramientas/DiarioPage'))
+const ProgresoPage = lazy(() => import('@/features/progreso/ProgresoPage'))
 const SettingsPage = lazy(() => import('@/features/settings/SettingsPage'))
-const MyDashboard = lazy(() => import('@/features/dashboard/MyDashboard'))
 const PrintAcentuacionPage = lazy(() => import('@/features/print/PrintAcentuacionPage'))
 const PrintPasosEstudioPage = lazy(() => import('@/features/print/PrintPasosEstudioPage'))
 
@@ -27,36 +28,22 @@ function Page({ children }: { children: React.ReactNode }) {
 }
 
 export const router = createHashRouter([
-  { path: '/', element: <Page><LandingPage /></Page> },
-  { path: '/login', element: <Page><LoginPage /></Page> },
   { path: '/print/acentuacion', element: <Page><PrintAcentuacionPage /></Page> },
   { path: '/print/pasos-estudio', element: <Page><PrintPasosEstudioPage /></Page> },
   {
-    element: <RequireRole role="profesional" />,
+    element: <AppShell />,
     children: [
-      {
-        path: '/pro',
-        element: <AppShell role="profesional" />,
-        children: [
-          { index: true, element: <Page><ProDashboard /></Page> },
-          { path: 'biblioteca', element: <Page><BibliotecaPage /></Page> },
-          { path: 'estudiantes', element: <Page><StudentsPage /></Page> },
-          { path: 'estudiantes/:id', element: <Page><StudentDetailPage /></Page> },
-          { path: 'agenda', element: <Page><AgendaPage /></Page> },
-          { path: 'honorarios', element: <Page><HonorariosPage /></Page> },
-          { path: 'ajustes', element: <Page><SettingsPage /></Page> },
-        ],
-      },
-    ],
-  },
-  {
-    element: <RequireRole role="estudiante" />,
-    children: [
-      {
-        path: '/mi',
-        element: <AppShell role="estudiante" />,
-        children: [{ index: true, element: <Page><MyDashboard /></Page> }],
-      },
+      { path: '/', element: <Page><InicioPage /></Page> },
+      { path: '/autoperfil', element: <Page><AutoperfilPage /></Page> },
+      { path: '/biblioteca', element: <Page><BibliotecaPage /></Page> },
+      { path: '/actividades', element: <Page><ActividadesPage /></Page> },
+      { path: '/herramientas', element: <Page><HerramientasPage /></Page> },
+      { path: '/herramientas/cronometro', element: <Page><CronometroPage /></Page> },
+      { path: '/herramientas/mapas', element: <Page><MapasPage /></Page> },
+      { path: '/herramientas/fichas', element: <Page><FichasPage /></Page> },
+      { path: '/herramientas/diario', element: <Page><DiarioPage /></Page> },
+      { path: '/progreso', element: <Page><ProgresoPage /></Page> },
+      { path: '/ajustes', element: <Page><SettingsPage /></Page> },
     ],
   },
   { path: '*', element: <Navigate to="/" replace /> },
