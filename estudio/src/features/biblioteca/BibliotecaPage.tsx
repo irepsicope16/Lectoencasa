@@ -12,9 +12,9 @@ import { cn } from '@/lib/utils'
 import { moduleCardStyle, RUTA_COLOR } from '@/lib/moduleColors'
 
 const NIVEL_LABEL: Record<NivelHerramienta, string> = {
-  1: 'Nivel 1 · inicial',
-  2: 'Nivel 2 · medio',
-  3: 'Nivel 3 · avanzado',
+  1: 'Principiante',
+  2: 'Medio',
+  3: 'Superior',
 }
 
 const NIVEL_BADGE_VARIANT: Record<NivelHerramienta, 'default' | 'primario' | 'acento'> = {
@@ -38,7 +38,7 @@ export default function BibliotecaPage() {
       <div className="mb-6 rounded-xl border bg-surface p-4">
         <p className="mb-2.5 text-[12.5px] text-muted-foreground">
           El nivel es una complejidad orientativa, no una edad — depende de dónde estás vos ahora, no de cuántos años
-          tenés. Si estás en nivel superior igual podés necesitar arrancar por el Nivel 1.
+          tenés. Si estás en el nivel Superior igual podés necesitar arrancar por Principiante.
         </p>
         <div className="flex flex-wrap gap-1.5">
           {(['todos', 1, 2, 3] as FiltroNivel[]).map((n) => (

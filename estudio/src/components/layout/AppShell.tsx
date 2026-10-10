@@ -38,8 +38,8 @@ export function AppShell() {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <Navbar />
-        <main className="min-w-0 flex-1 overflow-y-auto">
-          <div className="mx-auto w-full max-w-[1200px] px-6 py-6 lg:px-10">
+        <main className="min-w-0 flex-1 overflow-y-auto bg-background p-3 lg:p-5">
+          <div className="mx-auto min-h-full w-full max-w-[1200px] rounded-2xl bg-surface px-6 py-6 shadow-[0_2px_4px_rgba(16,24,32,0.05),0_12px_28px_-10px_rgba(16,24,32,0.12)] lg:px-10">
             <Outlet />
           </div>
         </main>

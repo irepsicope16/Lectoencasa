@@ -17,7 +17,7 @@
    ============================================================ */
 
 :root {
-  --background: #f6f3ec;
+  --background: #b5452e;
   --surface: #fffdf9;
   --surface-2: #eef0e9;
   --foreground: #1f2e3d;
@@ -171,14 +171,12 @@
     text-rendering: optimizeLegibility;
   }
   body {
-    /* Fondo moderno: un lavado de color muy sutil en las esquinas (los
-       tonos de marca, terracota y acero, a baja opacidad) sobre la base
-       cálida — no un color plano, pero sigue siendo un fondo de bajo
-       contraste y sin textura que no interfiere con la lectura. */
-    background:
-      radial-gradient(1100px 620px at 100% -8%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 60%),
-      radial-gradient(950px 520px at -8% 108%, color-mix(in srgb, var(--secondary) 10%, transparent), transparent 60%),
-      var(--background);
+    /* Fondo "ladrillo": un lienzo de color intenso detrás de la app — el
+       contenido (títulos, texto) siempre vive dentro de la "hoja" clara
+       (AppShell / tarjetas), nunca directo sobre este color, así que la
+       intensidad no compromete la lectura. Un resplandor sutil arriba le
+       da profundidad sin volverse un degradé de otro color. */
+    background: radial-gradient(1200px 700px at 50% -12%, rgba(255, 255, 255, 0.1), transparent 60%), var(--background);
     background-attachment: fixed;
     color: var(--foreground);
     font-size: 15.5px;

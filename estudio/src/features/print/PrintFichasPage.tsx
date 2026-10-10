@@ -13,7 +13,7 @@ export default function PrintFichasPage() {
   const visibles = tema ? fichas.filter((f) => f.tema === tema) : fichas
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-8">
+    <div className="mx-auto min-h-screen max-w-2xl bg-surface px-6 py-8">
       <div className="no-print mb-6 flex items-center justify-between">
         <Link to="/herramientas/fichas" className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-3.5 w-3.5" /> Volver

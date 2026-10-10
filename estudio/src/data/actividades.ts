@@ -41,6 +41,14 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     descripcion: 'Ordenar lo que hay que estudiar en urgente, importante-no urgente, y para reforzar a largo plazo.',
     fuente: 'método de estudio',
   },
+  {
+    id: 'organizar-auditoria-tiempos',
+    rutaId: 'organizar',
+    nivel: 3,
+    titulo: 'Auditoría semanal de tiempos',
+    descripcion: 'Comparar cuánto tiempo pensaste que te iba a llevar cada tarea contra lo que realmente tardaste, y ajustar la próxima estimación.',
+    fuente: 'técnicas de estudio',
+  },
 
   // ---------- Sostener la atención ----------
   {
@@ -58,6 +66,14 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     titulo: 'Bloque de 25 con apagón total',
     descripcion: 'Un bloque Pomodoro con notificaciones apagadas y el celular en otro ambiente, cronometrado de punta a punta.',
     fuente: 'método de estudio, reformulado',
+  },
+  {
+    id: 'atencion-registro-distractores',
+    rutaId: 'sostener_atencion',
+    nivel: 3,
+    titulo: 'Registro y ajuste gradual de distractores',
+    descripcion: 'Anotar cada corte de atención durante una semana, identificar el distractor más frecuente y extender el bloque sin interrupciones de a poco.',
+    fuente: 'técnicas de estudio',
   },
 
   // ---------- Comprender consignas y textos ----------
@@ -205,8 +221,24 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     descripcion: 'Escribir el pensamiento, buscar evidencia en contra, y redactar una versión más realista.',
     fuente: 'técnicas de estudio',
   },
+  {
+    id: 'regular-exposicion-gradual',
+    rutaId: 'regular_persistir',
+    nivel: 3,
+    titulo: 'Exposición gradual a la tarea temida',
+    descripcion: 'Partir la materia o el tema que más se evita en pasos cada vez más largos, empezando por el más chico y tolerable.',
+    fuente: 'técnicas de estudio',
+  },
 
   // ---------- Construir autonomía ----------
+  {
+    id: 'autonomia-eleccion-consciente',
+    rutaId: 'construir_autonomia',
+    nivel: 1,
+    titulo: 'Elegir con intención, no por costumbre',
+    descripcion: 'Antes de empezar a estudiar, parar un momento y elegir a propósito qué herramienta usar y por qué, en vez de repetir siempre la misma por hábito.',
+    fuente: 'criterio propio de la plataforma',
+  },
   {
     id: 'autonomia-registro-eficacia',
     rutaId: 'construir_autonomia',
