@@ -22,7 +22,16 @@ const ENV_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefine
 export function getCloudConfig(): CloudConfig {
   try {
     const raw = localStorage.getItem(KEY)
-    if (raw) return JSON.parse(raw)
+    if (raw) {
+      const stored = JSON.parse(raw) as CloudConfig
+      // Una config guardada con todo vacío es el valor "nunca configurado":
+      // puede haber quedado de una versión anterior a que la nube fuera el
+      // default. No cuenta como una desactivación deliberada (esa siempre
+      // conserva una url/anonKey reales — ver "Volver al modo local" en
+      // Ajustes), así que en ese caso se ignora y se sigue al default de abajo.
+      const esDefaultViejo = !stored.enabled && !stored.url && !stored.anonKey
+      if (!esDefaultViejo) return stored
+    }
   } catch {
     /* noop */
   }
