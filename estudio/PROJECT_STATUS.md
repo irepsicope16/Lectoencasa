@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-10 (actualizado, ronda 2) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-10 (actualizado, ronda 3) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -145,12 +145,45 @@ aviso de racha estaba después de un `return` condicional en `InicioPage`,
 violando las reglas de hooks (error #310 de React) — se movió antes del
 `return`.
 
+## ✅ Ronda 3 (10/10/2026): actividades interactivas, puntos e insignias
+
+1. **Ejemplo + ejercicio por actividad** (piloto en 2 rutas: Organizar para
+   empezar y Aprender y recordar, 9 actividades): cada tarjeta del catálogo
+   ahora abre un detalle con un caso resuelto ("Ejemplo") y una consigna fija
+   de práctica ("Ejercicio"). El resto de las rutas queda para una próxima
+   ronda una vez validado el estilo de contenido.
+2. **Aplicá tu propio tema**: mientras una actividad está en curso, un
+   cuadro de texto pregunta "¿Cómo la vas a aplicar a lo que estás
+   estudiando ahora?" — se guarda en su propio registro (`aplicacionPropia`)
+   y queda visible en "Mis actividades".
+3. **Atajo a Pomodoro**: el detalle de cada actividad tiene un botón directo
+   al Cronómetro (que ya existía, pero no estaba conectado a las técnicas).
+4. **Actividades ↔ Fichas de repaso conectadas**: al marcar una actividad
+   como completada, se ofrece crear una ficha de repaso ya prellenada con
+   el tema (la ruta) y una pregunta sugerida — un clic y queda lista para
+   terminar de escribir la respuesta.
+5. **Puntos e insignias** (`lib/gamificacion.ts`): puntos derivados de lo que
+   ya se guarda (actividades, sesiones, fichas, mapas, diario, racha — nada
+   nuevo que persistir) y 9 insignias simples por hitos ("Primer paso",
+   "Explorador", "En llamas"...). Sin ranking ni comparación con nadie.
+   Visible en Inicio (resumen) y Mi progreso (grilla completa, incluye las
+   bloqueadas en gris para mostrar qué falta).
+6. **Más intensidad visual**: tipografía base y de botones más grande,
+   acento (rojo de los botones) más saturado, sombras con un poco de glow
+   de color en los botones principales — pensado para que se sienta más
+   vivo para adolescentes, sin tocar el fondo "ladrillo" + hoja clara de la
+   ronda anterior (ese esquema sigue siendo lo que protege la lectura).
+
 ## 🔜 Backlog
 
-1. Modelo de monetización: hoy no hay pago ni backend. Si se decide cobrar,
+1. Escribir ejemplo + ejercicio para las 6 rutas restantes del catálogo
+   (Sostener la atención, Comprender, Escribir, Prepararse para evaluar,
+   Regular emociones, Construir autonomía) — 21 actividades, una vez
+   validado el estilo con el piloto de esta ronda.
+2. Modelo de monetización: hoy no hay pago ni backend. Si se decide cobrar,
    evaluar aparte (no reusar el backend multi-profesional abandonado, que
    asumía un modelo de negocio distinto).
-2. Generación de fichas/preguntas con IA a partir de un archivo propio —
+3. Generación de fichas/preguntas con IA a partir de un archivo propio —
    evaluado y descartado por ahora: requeriría backend o que cada persona
    traiga su propia API key (como hace Método Brújula). Queda para cuando
    haya definición de monetización.

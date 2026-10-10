@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BookOpen, Clock, Flame, ListChecks, Sparkles, Timer } from 'lucide-react'
+import { BookOpen, Clock, Flame, ListChecks, Sparkles, Timer, Trophy } from 'lucide-react'
 import { usePerfilStore } from '@/stores/perfilStore'
 import { useUIStore } from '@/stores/uiStore'
-import { useActividadesProbadas, useDiario, useFichas, useResponses, useSesionesEstudio, useSnapshots } from '@/hooks/queries'
+import { useActividadesProbadas, useDiario, useFichas, useMapas, useResponses, useSesionesEstudio, useSnapshots } from '@/hooks/queries'
 import { ITEMS } from '@/data/items'
 import { RUTAS } from '@/data/rutas'
 import { MENSAJES } from '@/data/mensajes'
 import { calcularRacha } from '@/lib/progreso'
 import { notificarRachaEnRiesgo } from '@/lib/recordatorios'
+import { calcularGamificacion } from '@/lib/gamificacion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input, Label } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
-import { AvisoOrientativo, EmptyState, FadeIn, PageHeader, StatCard } from '@/components/shared'
+import { AvisoOrientativo, EmptyState, FadeIn, InsigniasRow, PageHeader, StatCard } from '@/components/shared'
 import { BrandCover } from '@/branding/Logo'
 
 export default function InicioPage() {
@@ -25,6 +26,7 @@ export default function InicioPage() {
   const { data: sesiones = [] } = useSesionesEstudio()
   const { data: diario = [] } = useDiario()
   const { data: fichas = [] } = useFichas()
+  const { data: mapas = [] } = useMapas()
 
   const respondidos = new Set(responses.map((r) => r.itemId)).size
   const autoperfilCompleto = respondidos >= ITEMS.length && snapshots.length > 0
@@ -50,6 +52,18 @@ export default function InicioPage() {
 
   const completadas = actividades.filter((a) => a.estado === 'completada')
   const minutosEstudiados = sesiones.reduce((acc, s) => acc + s.duracionMin, 0)
+
+  const { puntos, insignias } = calcularGamificacion({
+    actividadesCompletadas: completadas.length,
+    rutasDistintasProbadas: new Set(actividades.map((a) => a.rutaId)).size,
+    racha,
+    sesionesCronometro: sesiones.length,
+    fichasCreadas: fichas.length,
+    repasosFichas: fichas.reduce((acc, f) => acc + f.vecesRepasada, 0),
+    mapasCreados: mapas.length,
+    entradasDiario: diario.length,
+  })
+  const insigniasConseguidas = insignias.filter((i) => i.conseguida)
 
   const rutaPrioritaria = [...snapshots].sort((a, b) => {
     const orden: Record<string, number> = { alta: 0, moderada: 1, leve: 2, baja: 3 }
@@ -99,11 +113,25 @@ export default function InicioPage() {
         </Card>
       )}
 
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-4">
         <StatCard icon={Flame} label="Racha" value={racha} hint={racha > 0 ? 'días seguidos' : 'empezá hoy'} tone="acento" />
         <StatCard icon={ListChecks} label="Actividades completadas" value={completadas.length} tone="primario" />
         <StatCard icon={Clock} label="Minutos de estudio" value={minutosEstudiados} tone="secundario" />
+        <StatCard icon={Trophy} label="Puntos" value={puntos} hint={`${insigniasConseguidas.length}/${insignias.length} insignias`} tone="neutro" />
       </div>
+
+      {insigniasConseguidas.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-[14px]">
+              <Trophy className="h-4 w-4 text-primary" /> Tus insignias
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <InsigniasRow insignias={insignias} />
+          </CardContent>
+        </Card>
+      )}
 
       {autoperfilCompleto && ruta && (
         <Card>

@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import type { LucideIcon } from 'lucide-react'
+import { Award, Lock, type LucideIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import type { Insignia } from '@/lib/gamificacion'
 
 export function PageHeader({
   title,
@@ -17,8 +18,8 @@ export function PageHeader({
   return (
     <div className={cn('mb-6 flex flex-wrap items-end justify-between gap-3', className)}>
       <div>
-        <h1 className="font-display text-[32px] font-bold leading-tight tracking-tight">{title}</h1>
-        {subtitle && <p className="mt-1 text-[14.5px] leading-relaxed text-muted-foreground">{subtitle}</p>}
+        <h1 className="font-display text-[35px] font-bold leading-tight tracking-tight">{title}</h1>
+        {subtitle && <p className="mt-1.5 text-[15.5px] leading-relaxed text-muted-foreground">{subtitle}</p>}
       </div>
       {actions && <div className="flex items-center gap-2">{actions}</div>}
     </div>
@@ -79,7 +80,7 @@ export function StatCard({
         </div>
         <span className="text-[12.5px] font-medium">{label}</span>
       </div>
-      <div className="mt-2 text-[28px] font-semibold tracking-tight">{value}</div>
+      <div className="mt-2 text-[30px] font-semibold tracking-tight">{value}</div>
       {hint && <p className="mt-0.5 text-[12px] text-faint">{hint}</p>}
     </div>
   )
@@ -95,6 +96,26 @@ export function FadeIn({ children, className }: { children: React.ReactNode; cla
     >
       {children}
     </motion.div>
+  )
+}
+
+export function InsigniasRow({ insignias, className }: { insignias: Insignia[]; className?: string }) {
+  return (
+    <div className={cn('flex flex-wrap gap-2', className)}>
+      {insignias.map((i) => (
+        <div
+          key={i.id}
+          title={i.descripcion}
+          className={cn(
+            'flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[12px] font-medium transition-colors',
+            i.conseguida ? 'border-accent/40 bg-accent-soft text-accent-strong' : 'border-dashed text-faint',
+          )}
+        >
+          {i.conseguida ? <Award className="h-3.5 w-3.5" /> : <Lock className="h-3 w-3" />}
+          {i.titulo}
+        </div>
+      ))}
+    </div>
   )
 }
 

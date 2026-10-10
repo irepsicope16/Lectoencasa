@@ -1,9 +1,10 @@
-import { BarChart3, Clock, Flame, ListChecks, Star } from 'lucide-react'
-import { useActividadesProbadas, useDiario, useFichas, useSesionesEstudio, useSnapshots } from '@/hooks/queries'
+import { BarChart3, Clock, Flame, ListChecks, Star, Trophy } from 'lucide-react'
+import { useActividadesProbadas, useDiario, useFichas, useMapas, useSesionesEstudio, useSnapshots } from '@/hooks/queries'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { EmptyState, FadeIn, PageHeader, StatCard } from '@/components/shared'
+import { EmptyState, FadeIn, InsigniasRow, PageHeader, StatCard } from '@/components/shared'
 import { calcularRacha, diasActivosRecientes } from '@/lib/progreso'
+import { calcularGamificacion } from '@/lib/gamificacion'
 import { RUTAS } from '@/data/rutas'
 import { DIMENSIONES } from '@/data/items'
 import { ETIQUETA_BANDA } from '@/features/engine/estudioEngine'
@@ -23,6 +24,7 @@ export default function ProgresoPage() {
   const { data: diario = [] } = useDiario()
   const { data: fichas = [] } = useFichas()
   const { data: snapshots = [] } = useSnapshots()
+  const { data: mapas = [] } = useMapas()
 
   const completadas = actividades.filter((a) => a.estado === 'completada')
   const fechasActividad = [
@@ -40,6 +42,17 @@ export default function ProgresoPage() {
 
   const mejorCalificadas = [...completadas].filter((a) => a.calificacion).sort((a, b) => (b.calificacion ?? 0) - (a.calificacion ?? 0)).slice(0, 5)
 
+  const { puntos, insignias } = calcularGamificacion({
+    actividadesCompletadas: completadas.length,
+    rutasDistintasProbadas: new Set(actividades.map((a) => a.rutaId)).size,
+    racha,
+    sesionesCronometro: sesiones.length,
+    fichasCreadas: fichas.length,
+    repasosFichas: fichas.reduce((acc, f) => acc + f.vecesRepasada, 0),
+    mapasCreados: mapas.length,
+    entradasDiario: diario.length,
+  })
+
   return (
     <FadeIn className="space-y-5">
       <PageHeader title="Mi progreso" subtitle="Todo lo que fuiste construyendo, en un solo lugar." />
@@ -48,8 +61,17 @@ export default function ProgresoPage() {
         <StatCard icon={Flame} label="Racha actual" value={racha} hint={racha > 0 ? 'días seguidos' : 'empezá hoy'} tone="acento" />
         <StatCard icon={ListChecks} label="Completadas" value={completadas.length} tone="primario" />
         <StatCard icon={Clock} label="Minutos de estudio" value={minutosTotales} tone="secundario" />
-        <StatCard icon={BarChart3} label="Fichas creadas" value={fichas.length} tone="neutro" />
+        <StatCard icon={Trophy} label="Puntos" value={puntos} tone="neutro" />
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-[14px]">Insignias</CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <InsigniasRow insignias={insignias} />
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>

@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { BookOpenCheck, Check, Plus, Printer, Trash2, X } from 'lucide-react'
 import { useCrearFicha, useEliminarFicha, useFichas, useResponderFicha } from '@/hooks/queries'
 import { estaParaHoy, etiquetaCaja } from '@/lib/leitner'
@@ -21,6 +21,17 @@ export default function FichasPage() {
   const [temaFiltro, setTemaFiltro] = useState('todos')
   const [soloHoy, setSoloHoy] = useState(true)
   const [vueltas, setVueltas] = useState<Record<string, boolean>>({})
+  const [params, setParams] = useSearchParams()
+  const prefillTema = params.get('tema') ?? undefined
+  const prefillPregunta = params.get('pregunta') ?? undefined
+
+  useEffect(() => {
+    if (prefillPregunta) {
+      setNuevaAbierta(true)
+      setParams({}, { replace: true })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const temas = useMemo(() => Array.from(new Set(fichas.map((f) => f.tema))).sort(), [fichas])
   const paraHoy = fichas.filter(estaParaHoy)
@@ -145,6 +156,8 @@ export default function FichasPage() {
         open={nuevaAbierta}
         onClose={() => setNuevaAbierta(false)}
         temasExistentes={temas}
+        initialTema={prefillTema}
+        initialPregunta={prefillPregunta}
         onCrear={async (data) => {
           await crear.mutateAsync(data)
           toast.success('Ficha creada')
@@ -159,17 +172,35 @@ function DialogoNuevaFicha({
   open,
   onClose,
   temasExistentes,
+  initialTema,
+  initialPregunta,
   onCrear,
 }: {
   open: boolean
   onClose: () => void
   temasExistentes: string[]
+  initialTema?: string
+  initialPregunta?: string
   onCrear: (data: { tema: string; pregunta: string; respuesta: string }) => Promise<void>
 }) {
   const [tema, setTema] = useState('')
   const [temaNuevo, setTemaNuevo] = useState('')
   const [pregunta, setPregunta] = useState('')
   const [respuesta, setRespuesta] = useState('')
+
+  useEffect(() => {
+    if (!open) return
+    if (initialTema) {
+      if (temasExistentes.includes(initialTema)) {
+        setTema(initialTema)
+      } else {
+        setTema('__nuevo__')
+        setTemaNuevo(initialTema)
+      }
+    }
+    if (initialPregunta) setPregunta(initialPregunta)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open])
 
   const temaFinal = tema === '__nuevo__' ? temaNuevo.trim() : tema
 

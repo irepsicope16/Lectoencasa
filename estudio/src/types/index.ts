@@ -74,6 +74,8 @@ export interface ActividadCatalogo {
   nivel: NivelActividad
   titulo: string
   descripcion: string
+  ejemplo?: string // caso concreto resuelto, para entender la técnica antes de probarla
+  ejercicio?: string // consigna de práctica fija, igual para todos
   fuente?: string // referencia interna de dónde se tomó la idea (no se muestra en la UI)
 }
 
@@ -94,6 +96,7 @@ export interface ActividadProbada {
   fechaCompletada?: string
   calificacion?: 1 | 2 | 3 | 4 | 5
   nota?: string
+  aplicacionPropia?: string // cómo la persona la usó con su propio tema de estudio
   createdAt: string
   updatedAt: string
 }

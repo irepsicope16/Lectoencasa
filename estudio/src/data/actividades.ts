@@ -15,6 +15,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Armar la carpeta por materia',
     descripcion: 'Una sesión de orden: separadores, etiquetas y un lugar fijo para cada materia.',
+    ejemplo: 'Juli tiene Historia, Biología y Matemática todas mezcladas en una sola carpeta. Separa con 3 divisores de colores, le pone una etiqueta a cada uno y deja un sector fijo en la mochila para cada materia.',
+    ejercicio: 'Mirá cómo tenés guardados tus apuntes hoy. Elegí 3 materias y asignales un color o un lugar fijo a cada una. Hacelo ahora, no lo dejes para "después".',
     fuente: 'hábitos de estudio',
   },
   {
@@ -23,6 +25,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'De objetivo grande a microtareas',
     descripcion: 'Convertir "estudiar el capítulo 5" en 4 pasos chicos y concretos, uno por vez.',
+    ejemplo: '"Estudiar el capítulo 5" se convierte en: 1) leer las primeras páginas, 2) subrayar las ideas clave, 3) hacer un resumen de media página, 4) repasarlo en voz alta.',
+    ejercicio: 'Agarrá algo que tengas pendiente ahora mismo y escribilo en 4 pasos chicos, cada uno con un verbo de acción (leer, subrayar, resumir, repasar...).',
     fuente: 'técnicas de estudio',
   },
   {
@@ -31,6 +35,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 2,
     titulo: 'Un objetivo con las 5 preguntas',
     descripcion: 'Qué quiero lograr, cómo sé que lo cumplí, si tengo los recursos, por qué importa y para cuándo.',
+    ejemplo: 'Objetivo: "Terminar el resumen de Biología". Qué quiero lograr: tener el resumen listo. Cómo sé que lo cumplí: puedo explicarlo sin mirar el libro. Recursos: el libro y una hora libre. Por qué importa: hay prueba el jueves. Para cuándo: mañana a la tarde.',
+    ejercicio: 'Elegí un objetivo de estudio que tengas esta semana y respondé las 5 preguntas por escrito.',
     fuente: 'técnicas de estudio',
   },
   {
@@ -39,6 +45,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 2,
     titulo: 'Pirámide de prioridades',
     descripcion: 'Ordenar lo que hay que estudiar en urgente, importante-no urgente, y para reforzar a largo plazo.',
+    ejemplo: 'Urgente: entregar el trabajo de mañana. Importante no urgente: repasar para el parcial del viernes. Para reforzar a largo plazo: practicar inglés 10 minutos por día.',
+    ejercicio: 'Hacé tu propia pirámide con lo que tenés pendiente esta semana: una cosa urgente, una importante-no urgente y una para reforzar.',
     fuente: 'método de estudio',
   },
   {
@@ -47,6 +55,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 3,
     titulo: 'Auditoría semanal de tiempos',
     descripcion: 'Comparar cuánto tiempo pensaste que te iba a llevar cada tarea contra lo que realmente tardaste, y ajustar la próxima estimación.',
+    ejemplo: 'Pensé que el resumen de Historia me iba a llevar 20 minutos. Cronometré y tardé 45. La próxima vez calculo mejor: para un resumen de ese tamaño, dejo 40 minutos.',
+    ejercicio: 'Durante 3 días, anotá cuánto pensás que te va a llevar cada tarea de estudio y cuánto tardaste en realidad. Al final, compará y ajustá tu próxima estimación.',
     fuente: 'técnicas de estudio',
   },
 
@@ -143,6 +153,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: '4 preguntas sin mirar',
     descripcion: 'Escribir 4 preguntas sobre el tema y responderlas de memoria, sin el material a la vista.',
+    ejemplo: 'Después de leer sobre la Revolución de Mayo: ¿Qué causas tuvo? ¿Quiénes participaron? ¿Qué cambió después? ¿Por qué fue importante? Las respondo de memoria, sin mirar el apunte.',
+    ejercicio: 'Elegí un tema que estés estudiando, escribí 4 preguntas sobre él y respondelas sin mirar el material.',
     fuente: 'técnicas de estudio',
   },
   {
@@ -151,6 +163,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Explicárselo a alguien',
     descripcion: 'Contar el tema a otra persona (o en voz alta, solo) como si nunca lo hubiera escuchado.',
+    ejemplo: 'Le explico a mi hermano cómo funciona la fotosíntesis como si él no supiera nada del tema, usando mis propias palabras, sin leer del apunte.',
+    ejercicio: 'Elegí un tema y explicáselo en voz alta a alguien (o solo, grabándote) como si fuera la primera vez que lo escucha.',
     fuente: 'método de estudio, reformulado',
   },
   {
@@ -159,6 +173,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 2,
     titulo: 'Plan de repaso espaciado en 4 días',
     descripcion: 'Día 1 lectura, día 3 repaso en voz alta, día 5 repaso con otra persona, día 7 autoevaluación.',
+    ejemplo: 'Día 1: leo el tema. Día 3: lo repaso en voz alta. Día 5: se lo explico a alguien. Día 7: me autoevalúo con preguntas.',
+    ejercicio: 'Elegí un tema que tengas que rendir pronto y armá tu propio calendario de 4 días de repaso espaciado.',
     fuente: 'técnicas de estudio',
   },
   {
@@ -167,6 +183,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 3,
     titulo: 'Grabarte explicando y revisar',
     descripcion: 'Grabar la propia explicación del tema, escucharla después y marcar qué partes quedaron poco claras.',
+    ejemplo: 'Me grabo explicando el sistema circulatorio. Después la escucho y marco las partes donde dudé o me trabé — esas son las que tengo que repasar más.',
+    ejercicio: 'Grabate explicando un tema de 2 a 3 minutos. Escuchalo y anotá qué partes te costó explicar con claridad.',
     fuente: 'método de estudio, reformulado',
   },
 

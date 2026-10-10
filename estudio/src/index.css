@@ -29,9 +29,9 @@
   --primary-soft: #e3e8ec;
   --primary-foreground: #ffffff;
 
-  --accent: #ab5246;
-  --accent-strong: #8a4038;
-  --accent-soft: #f5e4e1;
+  --accent: #c14f3a;
+  --accent-strong: #9c3a28;
+  --accent-soft: #f7ded7;
   --accent-foreground: #ffffff;
 
   --secondary: #5e7686;
@@ -179,7 +179,7 @@
     background: radial-gradient(1200px 700px at 50% -12%, rgba(255, 255, 255, 0.1), transparent 60%), var(--background);
     background-attachment: fixed;
     color: var(--foreground);
-    font-size: 15.5px;
+    font-size: 16.5px;
     line-height: 1.6;
     letter-spacing: 0.1px;
   }

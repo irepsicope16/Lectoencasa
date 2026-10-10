@@ -1,5 +1,6 @@
-import { useState } from 'react'
-import { CheckCircle2, Circle, ListChecks, Star, Trash2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { CheckCircle2, Circle, Lightbulb, ListChecks, PenLine, Star, Timer, Trash2 } from 'lucide-react'
 import {
   useActividadesProbadas,
   useActualizarActividad,
@@ -10,7 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Textarea } from '@/components/ui/input'
+import { Label, Textarea } from '@/components/ui/input'
 import { AvisoOrientativo, EmptyState, FadeIn, PageHeader } from '@/components/shared'
 import { toast } from '@/components/ui/toast'
 import { fechaCorta } from '@/lib/utils'
@@ -29,8 +30,12 @@ export default function ActividadesPage() {
   const probar = useProbarActividad()
   const [filtro, setFiltro] = useState<FiltroNivel>('todos')
   const [calificando, setCalificando] = useState<ActividadProbada | null>(null)
+  const [detalle, setDetalle] = useState<ActividadCatalogo | null>(null)
 
-  const idsEnCurso = new Set(probadas.filter((a) => a.estado !== 'completada').map((a) => a.actividadId))
+  function probadaDe(actividadId: string): ActividadProbada | undefined {
+    const deEsta = probadas.filter((p) => p.actividadId === actividadId)
+    return deEsta.find((p) => p.estado !== 'completada') ?? [...deEsta].sort((a, b) => b.fechaInicio.localeCompare(a.fechaInicio))[0]
+  }
 
   async function probarActividad(actividad: ActividadCatalogo) {
     await probar.mutateAsync(actividad)
@@ -44,7 +49,7 @@ export default function ActividadesPage() {
         No hay una técnica mejor que otra en abstracto — probá, calificá cómo te fue y quedate con lo que te sirve.
       </AvisoOrientativo>
 
-      <MisActividades probadas={probadas} onCalificar={setCalificando} />
+      <MisActividades probadas={probadas} onCalificar={setCalificando} onAbrir={setDetalle} />
 
       <Card>
         <CardHeader>
@@ -67,30 +72,37 @@ export default function ActividadesPage() {
               <section key={ruta.id}>
                 <h3 className="mb-2.5 text-[13.5px] font-semibold tracking-tight">{ruta.nombre}</h3>
                 <div className="grid gap-2.5 lg:grid-cols-2">
-                  {fichas.map((actividad) => (
-                    <div
-                      key={actividad.id}
-                      className="rounded-xl border border-t-[3px] p-3.5"
-                      style={moduleCardStyle(ruta.id)}
-                    >
-                      <div className="flex flex-wrap items-start justify-between gap-2">
-                        <div>
-                          <p className="text-[13.5px] font-medium">{actividad.titulo}</p>
-                          <p className="mt-1 text-[12.5px] text-muted-foreground">{actividad.descripcion}</p>
-                        </div>
-                        <Badge variant={NIVEL_BADGE_VARIANT[actividad.nivel]}>{NIVEL_LABEL[actividad.nivel]}</Badge>
-                      </div>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="mt-3"
-                        disabled={idsEnCurso.has(actividad.id)}
-                        onClick={() => probarActividad(actividad)}
+                  {fichas.map((actividad) => {
+                    const probadaActual = probadaDe(actividad.id)
+                    return (
+                      <button
+                        key={actividad.id}
+                        onClick={() => setDetalle(actividad)}
+                        className="rounded-xl border border-t-[3px] p-3.5 text-left transition-transform hover:-translate-y-0.5 hover:shadow-md"
+                        style={moduleCardStyle(ruta.id)}
                       >
-                        {idsEnCurso.has(actividad.id) ? 'Ya la estás probando' : 'Probar'}
-                      </Button>
-                    </div>
-                  ))}
+                        <div className="flex flex-wrap items-start justify-between gap-2">
+                          <div>
+                            <p className="text-[13.5px] font-medium">{actividad.titulo}</p>
+                            <p className="mt-1 text-[12.5px] text-muted-foreground">{actividad.descripcion}</p>
+                          </div>
+                          <Badge variant={NIVEL_BADGE_VARIANT[actividad.nivel]}>{NIVEL_LABEL[actividad.nivel]}</Badge>
+                        </div>
+                        <div className="mt-3 flex flex-wrap items-center gap-2">
+                          {actividad.ejemplo && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-surface px-2 py-0.5 text-[10.5px] text-muted-foreground">
+                              <Lightbulb className="h-3 w-3" /> Con ejemplo
+                            </span>
+                          )}
+                          {probadaActual && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-surface px-2 py-0.5 text-[10.5px] font-medium text-primary">
+                              {probadaActual.estado === 'completada' ? 'Completada ✓' : 'En curso'}
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                    )
+                  })}
                 </div>
               </section>
             )
@@ -98,17 +110,121 @@ export default function ActividadesPage() {
         </CardContent>
       </Card>
 
+      <DetalleActividad
+        actividad={detalle}
+        probada={detalle ? probadaDe(detalle.id) : undefined}
+        onClose={() => setDetalle(null)}
+        onProbar={probarActividad}
+        onCalificar={(p) => {
+          setDetalle(null)
+          setCalificando(p)
+        }}
+      />
+
       <DialogoCalificar actividad={calificando} onClose={() => setCalificando(null)} />
     </FadeIn>
+  )
+}
+
+function DetalleActividad({
+  actividad,
+  probada,
+  onClose,
+  onProbar,
+  onCalificar,
+}: {
+  actividad: ActividadCatalogo | null
+  probada?: ActividadProbada
+  onClose: () => void
+  onProbar: (a: ActividadCatalogo) => void
+  onCalificar: (p: ActividadProbada) => void
+}) {
+  const actualizar = useActualizarActividad()
+  const [aplicacion, setAplicacion] = useState(probada?.aplicacionPropia ?? '')
+
+  useEffect(() => {
+    setAplicacion(probada?.aplicacionPropia ?? '')
+  }, [probada?.id, probada?.aplicacionPropia])
+
+  if (!actividad) return null
+
+  const enCurso = probada && probada.estado !== 'completada'
+
+  return (
+    <Dialog open={!!actividad} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-lg">
+        <DialogHeader>
+          <DialogTitle>{actividad.titulo}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant={NIVEL_BADGE_VARIANT[actividad.nivel]}>{NIVEL_LABEL[actividad.nivel]}</Badge>
+            {probada?.estado === 'completada' && <Badge variant="primario">Completada ✓</Badge>}
+          </div>
+          <p className="text-[13.5px] leading-relaxed text-muted-foreground">{actividad.descripcion}</p>
+
+          {actividad.ejemplo && (
+            <div className="rounded-lg border bg-surface-2 p-3.5">
+              <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-primary">
+                <Lightbulb className="h-3.5 w-3.5" /> Ejemplo
+              </p>
+              <p className="mt-1.5 text-[13px] leading-relaxed">{actividad.ejemplo}</p>
+            </div>
+          )}
+
+          {actividad.ejercicio && (
+            <div className="rounded-lg border border-accent/30 bg-accent-soft/40 p-3.5">
+              <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-accent-strong">
+                <PenLine className="h-3.5 w-3.5" /> Ejercicio para practicar
+              </p>
+              <p className="mt-1.5 text-[13px] leading-relaxed">{actividad.ejercicio}</p>
+            </div>
+          )}
+
+          {enCurso && (
+            <div>
+              <Label>¿Cómo la vas a aplicar a lo que estás estudiando ahora?</Label>
+              <Textarea
+                value={aplicacion}
+                onChange={(e) => setAplicacion(e.target.value)}
+                onBlur={() => {
+                  if (probada) actualizar.mutate({ id: probada.id, aplicacionPropia: aplicacion })
+                }}
+                placeholder="Escribí tu propio tema y cómo pensás usar esta técnica con él..."
+              />
+            </div>
+          )}
+
+          <div className="flex flex-wrap items-center justify-between gap-2 border-t pt-3.5">
+            <Button variant="outline" size="sm" asChild>
+              <a href="#/herramientas/cronometro">
+                <Timer className="h-3.5 w-3.5" /> Empezar con Pomodoro
+              </a>
+            </Button>
+            {!probada || probada.estado === 'completada' ? (
+              <Button size="sm" onClick={() => onProbar(actividad)}>
+                {probada ? 'Probarla de nuevo' : 'Empezar a probarla'}
+              </Button>
+            ) : (
+              <Button size="sm" onClick={() => onCalificar(probada)}>
+                Marcar como completada
+              </Button>
+            )}
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 
 function MisActividades({
   probadas,
   onCalificar,
+  onAbrir,
 }: {
   probadas: ActividadProbada[]
   onCalificar: (a: ActividadProbada) => void
+  onAbrir: (a: ActividadCatalogo) => void
 }) {
   const actualizar = useActualizarActividad()
   const eliminar = useEliminarActividadProbada()
@@ -139,7 +255,7 @@ function MisActividades({
                     <Circle className="h-5 w-5 shrink-0 text-faint" />
                   )}
                 </button>
-                <div className="min-w-0 flex-1">
+                <button className="min-w-0 flex-1 text-left" onClick={() => { const cat = ACTIVIDADES.find((c) => c.id === a.actividadId); if (cat) onAbrir(cat) }}>
                   <p className={`text-[13.5px] font-medium ${a.estado === 'completada' ? 'text-faint line-through' : ''}`}>{a.titulo}</p>
                   <p className="text-[11.5px] text-faint">
                     Empezada {fechaCorta(a.fechaInicio)}
@@ -151,8 +267,9 @@ function MisActividades({
                       </span>
                     )}
                   </p>
+                  {a.aplicacionPropia && <p className="mt-0.5 text-[11.5px] text-primary">Tu aplicación: {a.aplicacionPropia}</p>}
                   {a.nota && <p className="mt-0.5 text-[11.5px] text-muted-foreground">{a.nota}</p>}
-                </div>
+                </button>
                 <Button variant="ghost" size="iconSm" onClick={() => eliminar.mutate(a.id)} aria-label="Quitar">
                   <Trash2 className="text-danger" />
                 </Button>
@@ -167,8 +284,18 @@ function MisActividades({
 
 function DialogoCalificar({ actividad, onClose }: { actividad: ActividadProbada | null; onClose: () => void }) {
   const actualizar = useActualizarActividad()
+  const navigate = useNavigate()
   const [calificacion, setCalificacion] = useState<1 | 2 | 3 | 4 | 5>(3)
   const [nota, setNota] = useState('')
+  const [guardada, setGuardada] = useState<ActividadProbada | null>(null)
+
+  useEffect(() => {
+    if (actividad) {
+      setCalificacion(3)
+      setNota('')
+      setGuardada(null)
+    }
+  }, [actividad])
 
   async function guardar() {
     if (!actividad) return
@@ -180,9 +307,45 @@ function DialogoCalificar({ actividad, onClose }: { actividad: ActividadProbada 
       nota: nota.trim() || undefined,
     })
     toast.success('¡Completada! Quedó guardada en tu progreso.')
-    setCalificacion(3)
-    setNota('')
+    setGuardada(actividad)
+  }
+
+  function cerrarTodo() {
+    setGuardada(null)
     onClose()
+  }
+
+  if (guardada) {
+    const ruta = RUTAS.find((r) => r.id === guardada.rutaId)
+    return (
+      <Dialog open onOpenChange={(o) => !o && cerrarTodo()}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>¿Creamos una ficha de repaso sobre esto?</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <p className="text-[13px] text-muted-foreground">
+              Así la tenés lista para repasar más adelante con «{guardada.titulo}».
+            </p>
+            <div className="flex justify-end gap-2">
+              <Button variant="ghost" onClick={cerrarTodo}>
+                No, gracias
+              </Button>
+              <Button
+                onClick={() => {
+                  cerrarTodo()
+                  navigate(
+                    `/herramientas/fichas?tema=${encodeURIComponent(ruta?.nombre ?? 'General')}&pregunta=${encodeURIComponent(`¿Qué aprendí con "${guardada.titulo}"?`)}`,
+                  )
+                }}
+              >
+                Sí, crear ficha
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    )
   }
 
   return (
