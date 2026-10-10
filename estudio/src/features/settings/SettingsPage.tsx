@@ -1,22 +1,26 @@
 import { useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { Database, Download, Moon, Paintbrush, RefreshCcw, Sun, Upload, User } from 'lucide-react'
+import { Bell, Database, Download, Moon, Paintbrush, RefreshCcw, Sun, Upload, User } from 'lucide-react'
 import { usePerfilStore } from '@/stores/perfilStore'
 import { useUIStore, type Theme } from '@/stores/uiStore'
 import { prepareBackup, importBackup, type PreparedBackup } from '@/services/storage/backup'
 import { resetAllData } from '@/services/storage/db'
+import { pedirPermisoNotificaciones, permisoActual, soportaNotificaciones, type PermisoNotificacion } from '@/lib/recordatorios'
 import { toast } from '@/components/ui/toast'
 import { FadeIn, PageHeader } from '@/components/shared'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input, Label } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import { Switch } from '@/components/ui/misc'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
 
 export default function SettingsPage() {
   const theme = useUIStore((s) => s.theme)
   const setTheme = useUIStore((s) => s.setTheme)
+  const avisosNavegadorActivos = useUIStore((s) => s.avisosNavegadorActivos)
+  const setAvisosNavegadorActivos = useUIStore((s) => s.setAvisosNavegadorActivos)
   const qc = useQueryClient()
   const nombre = usePerfilStore((s) => s.nombre)
   const setNombre = usePerfilStore((s) => s.setNombre)
@@ -28,6 +32,22 @@ export default function SettingsPage() {
   const importRef = useRef<HTMLInputElement>(null)
   const [backupReady, setBackupReady] = useState<PreparedBackup | null>(null)
   const [backupPreparing, setBackupPreparing] = useState(false)
+  const [permiso, setPermiso] = useState<PermisoNotificacion>(permisoActual())
+
+  async function alternarAvisos(activar: boolean) {
+    if (!activar) {
+      setAvisosNavegadorActivos(false)
+      return
+    }
+    const res = await pedirPermisoNotificaciones()
+    setPermiso(res)
+    if (res === 'granted') {
+      setAvisosNavegadorActivos(true)
+    } else {
+      setAvisosNavegadorActivos(false)
+      toast.error(res === 'denied' ? 'Bloqueaste los avisos del navegador — podés habilitarlos desde el ícono del candado.' : 'Tu navegador no admite avisos.')
+    }
+  }
 
   return (
     <FadeIn>
@@ -88,6 +108,38 @@ export default function SettingsPage() {
                   <span className="text-[12.5px] font-medium">{opt.label}</span>
                 </button>
               ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Bell className="h-4 w-4 text-primary" /> Recordatorios
+            </CardTitle>
+            <CardDescription>
+              Cuando tu racha está en riesgo te avisamos con un cartel dentro de la app apenas la abrís. Como no hay
+              servidor ni cuentas, no podemos mandarte avisos con la app cerrada — el aviso del navegador de acá abajo
+              solo suena si dejás una pestaña (o la app instalada) abierta.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between gap-3 rounded-lg border bg-surface-2 p-3">
+              <div>
+                <p className="text-[13px] font-medium">Aviso del navegador</p>
+                <p className="text-[11.5px] text-muted-foreground">
+                  {!soportaNotificaciones()
+                    ? 'Tu navegador no admite este tipo de aviso.'
+                    : permiso === 'denied'
+                      ? 'Bloqueado — habilitalo desde el ícono del candado en la barra de direcciones.'
+                      : 'Pide permiso una vez; después avisa cuando la app está abierta.'}
+                </p>
+              </div>
+              <Switch
+                checked={avisosNavegadorActivos}
+                onCheckedChange={alternarAvisos}
+                disabled={!soportaNotificaciones() || permiso === 'denied'}
+              />
             </div>
           </CardContent>
         </Card>

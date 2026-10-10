@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
-import { Link2, Plus, Trash2, Workflow } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Link2, Plus, Printer, Trash2, Workflow } from 'lucide-react'
 import { useCrearMapa, useEliminarMapa, useGuardarMapa, useMapas } from '@/hooks/queries'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -188,6 +189,13 @@ function EditorMapa({ mapa, onVolver }: { mapa: MapaConceptual; onVolver: () => 
           <Button size="sm" onClick={agregarNodo}>
             <Plus className="h-3.5 w-3.5" /> Nodo
           </Button>
+          {nodos.length > 0 && (
+            <Button size="sm" variant="outline" asChild>
+              <Link to={`/print/mapa/${mapa.id}`} target="_blank" rel="noopener">
+                <Printer className="h-3.5 w-3.5" /> Imprimir
+              </Link>
+            </Button>
+          )}
         </div>
       </div>
 

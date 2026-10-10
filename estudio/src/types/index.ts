@@ -147,7 +147,10 @@ export interface MapaConceptual {
   updatedAt: string
 }
 
-// ---------- Fichas de repaso (flashcards) ----------
+// ---------- Fichas de repaso (flashcards, repetición espaciada tipo Leitner) ----------
+
+/** Caja 1 (recién creada o fallada) a 5 (bien afianzada) — a más caja, más espacio entre repasos. */
+export type CajaLeitner = 1 | 2 | 3 | 4 | 5
 
 export interface Ficha {
   id: string
@@ -156,6 +159,8 @@ export interface Ficha {
   respuesta: string
   vecesRepasada: number
   ultimoRepaso?: string
+  caja: CajaLeitner
+  proximoRepaso: string // ISO — hoy o antes = "para repasar hoy"
   createdAt: string
   updatedAt: string
 }

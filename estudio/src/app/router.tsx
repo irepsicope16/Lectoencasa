@@ -18,6 +18,8 @@ const ProgresoPage = lazy(() => import('@/features/progreso/ProgresoPage'))
 const SettingsPage = lazy(() => import('@/features/settings/SettingsPage'))
 const PrintAcentuacionPage = lazy(() => import('@/features/print/PrintAcentuacionPage'))
 const PrintPasosEstudioPage = lazy(() => import('@/features/print/PrintPasosEstudioPage'))
+const PrintFichasPage = lazy(() => import('@/features/print/PrintFichasPage'))
+const PrintMapaPage = lazy(() => import('@/features/print/PrintMapaPage'))
 
 function Page({ children }: { children: React.ReactNode }) {
   return (
@@ -30,6 +32,8 @@ function Page({ children }: { children: React.ReactNode }) {
 export const router = createHashRouter([
   { path: '/print/acentuacion', element: <Page><PrintAcentuacionPage /></Page> },
   { path: '/print/pasos-estudio', element: <Page><PrintPasosEstudioPage /></Page> },
+  { path: '/print/fichas', element: <Page><PrintFichasPage /></Page> },
+  { path: '/print/mapa/:id', element: <Page><PrintMapaPage /></Page> },
   {
     element: <AppShell />,
     children: [

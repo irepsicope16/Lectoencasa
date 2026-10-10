@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { db } from '@/services/storage/db'
+import { proximaCajaYFecha } from '@/lib/leitner'
 import type {
   ActividadCatalogo,
   ActividadProbada,
@@ -197,16 +198,24 @@ export function useCrearFicha() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: (data: { tema: string; pregunta: string; respuesta: string }) =>
-      db.fichas.create({ ...data, vecesRepasada: 0 }),
+      db.fichas.create({ ...data, vecesRepasada: 0, caja: 1, proximoRepaso: new Date().toISOString() }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['fichas'] }),
   })
 }
 
-export function useRepasarFicha() {
+/** Registra la respuesta de un repaso y reprograma la ficha (caja de Leitner). */
+export function useResponderFicha() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, vecesRepasada }: { id: string; vecesRepasada: number }) =>
-      db.fichas.update(id, { vecesRepasada: vecesRepasada + 1, ultimoRepaso: new Date().toISOString() }),
+    mutationFn: ({ id, caja, vecesRepasada, laSupo }: { id: string; caja: Ficha['caja']; vecesRepasada: number; laSupo: boolean }) => {
+      const { caja: siguienteCaja, proximoRepaso } = proximaCajaYFecha(caja, laSupo)
+      return db.fichas.update(id, {
+        caja: siguienteCaja,
+        proximoRepaso,
+        vecesRepasada: vecesRepasada + 1,
+        ultimoRepaso: new Date().toISOString(),
+      })
+    },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['fichas'] }),
   })
 }

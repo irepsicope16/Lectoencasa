@@ -1,12 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BookOpen, Clock, Flame, ListChecks, Sparkles, Timer } from 'lucide-react'
 import { usePerfilStore } from '@/stores/perfilStore'
+import { useUIStore } from '@/stores/uiStore'
 import { useActividadesProbadas, useDiario, useFichas, useResponses, useSesionesEstudio, useSnapshots } from '@/hooks/queries'
 import { ITEMS } from '@/data/items'
 import { RUTAS } from '@/data/rutas'
 import { MENSAJES } from '@/data/mensajes'
 import { calcularRacha } from '@/lib/progreso'
+import { notificarRachaEnRiesgo } from '@/lib/recordatorios'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input, Label } from '@/components/ui/input'
@@ -16,6 +18,7 @@ import { BrandCover } from '@/branding/Logo'
 
 export default function InicioPage() {
   const nombre = usePerfilStore((s) => s.nombre)
+  const avisosNavegadorActivos = useUIStore((s) => s.avisosNavegadorActivos)
   const { data: responses = [] } = useResponses()
   const { data: snapshots = [] } = useSnapshots()
   const { data: actividades = [] } = useActividadesProbadas()
@@ -26,16 +29,25 @@ export default function InicioPage() {
   const respondidos = new Set(responses.map((r) => r.itemId)).size
   const autoperfilCompleto = respondidos >= ITEMS.length && snapshots.length > 0
 
-  if (!nombre) {
-    return <Bienvenida />
-  }
-
   const fechasActividad = [
     ...actividades.filter((a) => a.fechaCompletada).map((a) => a.fechaCompletada!),
     ...sesiones.map((s) => s.fecha),
     ...diario.map((d) => d.fecha),
   ]
   const racha = calcularRacha(fechasActividad)
+  const hoyISO = new Date().toISOString().slice(0, 10)
+  const hizoAlgoHoy = fechasActividad.some((f) => f.slice(0, 10) === hoyISO)
+  const rachaEnRiesgo = racha > 0 && !hizoAlgoHoy
+
+  useEffect(() => {
+    if (rachaEnRiesgo && avisosNavegadorActivos) notificarRachaEnRiesgo(racha)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rachaEnRiesgo, avisosNavegadorActivos])
+
+  if (!nombre) {
+    return <Bienvenida />
+  }
+
   const completadas = actividades.filter((a) => a.estado === 'completada')
   const minutosEstudiados = sesiones.reduce((acc, s) => acc + s.duracionMin, 0)
 
@@ -48,6 +60,25 @@ export default function InicioPage() {
   return (
     <FadeIn className="space-y-5">
       <PageHeader title={`Hola, ${nombre}`} subtitle="Tu espacio para mejorar cómo estudiás." />
+
+      {rachaEnRiesgo && (
+        <Card className="border-danger/30 bg-danger-soft/40">
+          <CardContent className="flex flex-wrap items-center justify-between gap-3 py-4">
+            <div className="flex items-center gap-3">
+              <Flame className="h-5 w-5 shrink-0 text-danger" />
+              <div>
+                <p className="text-[13.5px] font-medium">
+                  Tu racha de {racha} {racha === 1 ? 'día' : 'días'} está en riesgo
+                </p>
+                <p className="text-[12px] text-muted-foreground">Todavía no hiciste nada hoy — repasá una ficha o abrí el cronómetro para mantenerla.</p>
+              </div>
+            </div>
+            <Button asChild size="sm" variant="outline">
+              <Link to="/herramientas">Ver herramientas</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       {!autoperfilCompleto && (
         <Card className="border-accent/30 bg-accent-soft/40">

@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-10 · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-10 (actualizado, ronda 2) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -107,17 +107,53 @@ conexión en vez de completarla). Se separó el estado en `modoConectar`
 (booleano) + `conectando` (nodo armado), de forma que activar el modo no
 arma ningún nodo — el primer toque arma, el segundo conecta.
 
+## ✅ Ronda 2 (10/10/2026): PWA, recordatorios, exportar/imprimir, repaso espaciado
+
+1. **Instalable como PWA** (`vite-plugin-pwa`, `vite.config.ts`): manifest
+   (`name`, colores de marca, `display: standalone`) + íconos 192/512 y un
+   512 maskable generados con Pillow desde `public/favicon.png` (ver
+   `public/pwa-*.png`). Service worker autogenerado (`generateSW`) precachea
+   el shell de la app — abre sin conexión después de la primera visita. Como
+   los datos viven en LocalStorage, no hay llamadas de red que cachear aparte.
+2. **Recordatorios de racha, honestos** (`lib/recordatorios.ts`,
+   `stores/uiStore.ts`): como no hay backend, no existen avisos push reales
+   con la app cerrada — eso es una limitación real del navegador, no algo
+   que se pueda resolver sin servidor. Lo que sí hay: (a) un cartel dentro de
+   la app en Inicio cuando la racha está en riesgo (no hiciste nada hoy
+   todavía), siempre visible, sin pedir permiso; (b) opcionalmente, un aviso
+   del navegador (Notification API) que **solo suena mientras hay una
+   pestaña o la app instalada abierta** — toggle en Ajustes → Recordatorios,
+   con el límite explicado en el propio texto de la UI, no escondido.
+3. **Exportar/imprimir mapas y fichas** (`features/print/PrintFichasPage.tsx`,
+   `features/print/PrintMapaPage.tsx`): mismo patrón que los imprimibles
+   existentes (`print-page` + `window.print()`, sin dependencias nuevas).
+   Fichas: lista pregunta/respuesta del tema filtrado o todas, pensada para
+   repasar en papel. Mapa: recalcula el bounding box de los nodos y escala
+   para que entre en una hoja, conserva las conexiones.
+4. **Repetición espaciada real (Leitner)** (`lib/leitner.ts`, `types/index.ts`):
+   `Ficha` ahora tiene `caja` (1 a 5) y `proximoRepaso`. Al repasar, "La
+   sabía" sube de caja y reprograma más lejos (1/2/4/7/14 días); "No la
+   sabía" vuelve a caja 1. FichasPage tiene un filtro "Para hoy" (las que
+   tocan) además de "Todas", y muestra la caja de cada ficha.
+
+Verificado con Playwright: manifest y `sw.js` accesibles (200), alta de
+ficha → "La sabía" saca la ficha de "Para hoy" y sube la racha → "No la
+sabía" la deja para mañana → impresión de fichas y de un mapa con 2 nodos
+conectados renderizan con los datos reales, sin errores de consola ni
+requests fallidos. Se encontró y corrigió un bug real: el `useEffect` del
+aviso de racha estaba después de un `return` condicional en `InicioPage`,
+violando las reglas de hooks (error #310 de React) — se movió antes del
+`return`.
+
 ## 🔜 Backlog
 
-1. Instalación como PWA (ícono en el celular, funciona offline) — hoy es
-   una SPA que necesita conexión para la primera carga.
-2. Notificaciones/recordatorios locales para sostener la racha.
-3. Exportar o imprimir un mapa conceptual o un mazo de fichas.
-4. Modelo de monetización: hoy no hay pago ni backend. Si se decide cobrar,
+1. Modelo de monetización: hoy no hay pago ni backend. Si se decide cobrar,
    evaluar aparte (no reusar el backend multi-profesional abandonado, que
    asumía un modelo de negocio distinto).
-5. Fichas de repaso con repetición espaciada real (hoy solo cuenta veces
-   repasada, no calcula cuándo conviene repasar de nuevo).
+2. Generación de fichas/preguntas con IA a partir de un archivo propio —
+   evaluado y descartado por ahora: requeriría backend o que cada persona
+   traiga su propia API key (como hace Método Brújula). Queda para cuando
+   haya definición de monetización.
 
 ## Decisiones técnicas clave (no revertir sin razón)
 
