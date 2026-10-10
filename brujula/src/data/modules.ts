@@ -35,6 +35,24 @@ export const MODULES: ModuleDefinition[] = [
     ],
     actividades: [
       {
+        id: 'historia-entrevista-inicial',
+        titulo: 'Entrevista inicial: ¡Contame de vos!',
+        descripcion:
+          'La conversación del primer encuentro, guiada pero sin guion: el objetivo es el vínculo, no completar un cuestionario. Se hace en sesión — vos tomás nota de lo que surge en cada eje.',
+        tipo: 'entrevista',
+        duracionMin: 50,
+        dimensiones: ['historia'],
+        printableId: 'entrevista-inicial',
+        preguntas: [
+          { id: 'q1', texto: 'Para romper el hielo: ¿cómo llega al proceso? ¿Qué espera que pase (y qué espera que NO pase)?', tipo: 'abierta' },
+          { id: 'q2', texto: 'Familia y contexto: ¿con quiénes vive? ¿Qué se dice en su casa sobre estudiar y trabajar?', tipo: 'abierta' },
+          { id: 'q3', texto: 'Escuela: ¿cómo se lleva con la escuela? ¿Qué materias disfruta y cuáles padece?', tipo: 'abierta' },
+          { id: 'q4', texto: 'Su tiempo, sus gustos: ¿qué hace cuando nadie le pide nada? ¿En qué se le pasa el tiempo volando?', tipo: 'abierta' },
+          { id: 'q5', texto: 'El futuro, hoy: ¿qué ideas ya se le cruzaron sobre qué estudiar? ¿Qué le ilusiona y qué le asusta?', tipo: 'abierta' },
+          { id: 'q6', texto: 'Primeras impresiones de la profesional sobre el vínculo y el punto de partida.', tipo: 'abierta' },
+        ],
+      },
+      {
         id: 'historia-linea-vida',
         titulo: 'Mi línea de vida',
         descripcion:
