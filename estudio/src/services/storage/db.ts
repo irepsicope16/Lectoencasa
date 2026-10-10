@@ -1,69 +1,36 @@
 import { LocalStorageDriver } from './driver'
 import { Repository } from './repository'
 import type {
-  ActividadAsignada,
-  Alert,
-  CalendarEvent,
+  ActividadProbada,
   DimensionSnapshot,
-  Goal,
-  Intake,
+  EntradaMetacognicion,
+  Ficha,
+  MapaConceptual,
   OpenAnswer,
-  PriorityDecision,
   QuestionnaireResponse,
-  Session,
-  StoredFile,
-  Student,
-  User,
+  SesionEstudio,
 } from '@/types'
 
 // ------------------------------------------------------------
-// Punto único de acceso a datos (LocalStorage hoy; misma API que
-// tendría un repositorio remoto — ver services/storage/repository.ts).
+// Punto único de acceso a datos (LocalStorage; app de un solo usuario
+// local, sin cuentas — todo lo que haya acá es "lo de esta persona").
 // ------------------------------------------------------------
 
 const driver = new LocalStorageDriver()
 
 export const db = {
-  users: new Repository<User>(driver, 'users'),
-  students: new Repository<Student>(driver, 'students'),
-  intakes: new Repository<Intake>(driver, 'intakes'),
   responses: new Repository<QuestionnaireResponse>(driver, 'questionnaire_responses'),
   openAnswers: new Repository<OpenAnswer>(driver, 'open_answers'),
   snapshots: new Repository<DimensionSnapshot>(driver, 'dimension_snapshots'),
-  alerts: new Repository<Alert>(driver, 'alerts'),
-  priorities: new Repository<PriorityDecision>(driver, 'priority_decisions'),
-  goals: new Repository<Goal>(driver, 'goals'),
-  sessions: new Repository<Session>(driver, 'sessions'),
-  events: new Repository<CalendarEvent>(driver, 'calendar_events'),
-  files: new Repository<StoredFile>(driver, 'files'),
-  asignaciones: new Repository<ActividadAsignada>(driver, 'asignaciones'),
+  actividades: new Repository<ActividadProbada>(driver, 'actividades_probadas'),
+  sesionesEstudio: new Repository<SesionEstudio>(driver, 'sesiones_estudio'),
+  mapas: new Repository<MapaConceptual>(driver, 'mapas_conceptuales'),
+  fichas: new Repository<Ficha>(driver, 'fichas'),
+  diario: new Repository<EntradaMetacognicion>(driver, 'diario_metacognicion'),
   clearAll: () => driver.clearAll(),
 }
 
-/** Borrado en cascada: elimina al estudiante y todo su rastro (incluida su cuenta de acceso). */
-export async function deleteStudentCascade(studentId: string): Promise<void> {
-  const collections = [
-    db.intakes,
-    db.responses,
-    db.openAnswers,
-    db.snapshots,
-    db.alerts,
-    db.priorities,
-    db.goals,
-    db.sessions,
-    db.events,
-    db.files,
-    db.asignaciones,
-  ] as const
-  for (const repo of collections) {
-    const rows = (await repo.list()) as { id: string; studentId?: string }[]
-    for (const row of rows) {
-      if (row.studentId === studentId) await repo.remove(row.id)
-    }
-  }
-  const users = await db.users.list()
-  for (const u of users) {
-    if (u.studentId === studentId) await db.users.remove(u.id)
-  }
-  await db.students.remove(studentId)
+/** Borra todos los datos cargados (no hay "demo" a la que volver: es un dispositivo de una sola persona). */
+export async function resetAllData(): Promise<void> {
+  await db.clearAll()
 }

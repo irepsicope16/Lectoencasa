@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { Database, Download, IdCard, Moon, Paintbrush, RefreshCcw, Sun, Upload } from 'lucide-react'
-import { useAuthStore } from '@/stores/authStore'
+import { Database, Download, Moon, Paintbrush, RefreshCcw, Sun, Upload, User } from 'lucide-react'
+import { usePerfilStore } from '@/stores/perfilStore'
 import { useUIStore, type Theme } from '@/stores/uiStore'
 import { prepareBackup, importBackup, type PreparedBackup } from '@/services/storage/backup'
-import { resetDemoData } from '@/data/seed'
+import { resetAllData } from '@/services/storage/db'
 import { toast } from '@/components/ui/toast'
 import { FadeIn, PageHeader } from '@/components/shared'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -18,30 +18,11 @@ export default function SettingsPage() {
   const theme = useUIStore((s) => s.theme)
   const setTheme = useUIStore((s) => s.setTheme)
   const qc = useQueryClient()
-  const user = useAuthStore((s) => s.user)
-  const updateProfile = useAuthStore((s) => s.updateProfile)
+  const nombre = usePerfilStore((s) => s.nombre)
+  const setNombre = usePerfilStore((s) => s.setNombre)
 
-  const [perfil, setPerfil] = useState({
-    nombre: user?.nombre ?? '',
-    apellido: user?.apellido ?? '',
-    titulo: user?.titulo ?? '',
-    matricula: user?.matricula ?? '',
-  })
-  const [perfilSaving, setPerfilSaving] = useState(false)
-  const [perfilSaved, setPerfilSaved] = useState(false)
-
-  const guardarPerfil = async () => {
-    setPerfilSaving(true)
-    try {
-      await updateProfile(perfil)
-      setPerfilSaved(true)
-      setTimeout(() => setPerfilSaved(false), 1500)
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : 'No se pudo guardar el perfil')
-    } finally {
-      setPerfilSaving(false)
-    }
-  }
+  const [nombreEditado, setNombreEditado] = useState(nombre)
+  const [nombreGuardado, setNombreGuardado] = useState(false)
 
   const [resetOpen, setResetOpen] = useState(false)
   const importRef = useRef<HTMLInputElement>(null)
@@ -50,48 +31,31 @@ export default function SettingsPage() {
 
   return (
     <FadeIn>
-      <PageHeader title="Ajustes" subtitle="Perfil, apariencia y datos de la plataforma." />
+      <PageHeader title="Ajustes" subtitle="Tu nombre, apariencia y datos de la app." />
 
       <div className="grid gap-5 lg:grid-cols-2">
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <IdCard className="h-4 w-4 text-primary" /> Mi perfil profesional
+              <User className="h-4 w-4 text-primary" /> Tu nombre
             </CardTitle>
-            <CardDescription>Estos datos son propios de tu cuenta.</CardDescription>
+            <CardDescription>Se usa solo para saludarte, no sale de este dispositivo.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div>
-                <Label>Nombre</Label>
-                <Input value={perfil.nombre} onChange={(e) => setPerfil({ ...perfil, nombre: e.target.value })} />
-              </div>
-              <div>
-                <Label>Apellido</Label>
-                <Input value={perfil.apellido} onChange={(e) => setPerfil({ ...perfil, apellido: e.target.value })} />
-              </div>
-              <div>
-                <Label>Título profesional</Label>
-                <Input
-                  value={perfil.titulo}
-                  onChange={(e) => setPerfil({ ...perfil, titulo: e.target.value })}
-                  placeholder="Lic. en Psicopedagogía"
-                />
-              </div>
-              <div>
-                <Label>Matrícula</Label>
-                <Input
-                  value={perfil.matricula}
-                  onChange={(e) => setPerfil({ ...perfil, matricula: e.target.value })}
-                  placeholder="MP 260505"
-                />
-              </div>
-            </div>
+            <Input value={nombreEditado} onChange={(e) => setNombreEditado(e.target.value)} className="max-w-xs" />
             <div className="flex items-center gap-3">
-              <Button size="sm" onClick={guardarPerfil} disabled={perfilSaving}>
-                Guardar perfil
+              <Button
+                size="sm"
+                onClick={() => {
+                  setNombre(nombreEditado.trim())
+                  setNombreGuardado(true)
+                  setTimeout(() => setNombreGuardado(false), 1500)
+                }}
+                disabled={!nombreEditado.trim()}
+              >
+                Guardar
               </Button>
-              {perfilSaved && <Badge variant="primario">Guardado ✓</Badge>}
+              {nombreGuardado && <Badge variant="primario">Guardado ✓</Badge>}
             </div>
           </CardContent>
         </Card>
@@ -133,7 +97,7 @@ export default function SettingsPage() {
             <CardTitle className="flex items-center gap-2">
               <Database className="h-4 w-4 text-primary" /> Datos
             </CardTitle>
-            <CardDescription>Esta versión guarda todo localmente en el navegador.</CardDescription>
+            <CardDescription>Todo lo que cargás se guarda localmente en este dispositivo, nada se envía a ningún servidor.</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-wrap items-center gap-2">
             {backupReady ? (
@@ -192,7 +156,7 @@ export default function SettingsPage() {
               }}
             />
             <Button variant="ghost" size="sm" onClick={() => setResetOpen(true)}>
-              <RefreshCcw /> Restablecer datos demo
+              <RefreshCcw /> Borrar todos mis datos
             </Button>
           </CardContent>
         </Card>
@@ -201,10 +165,10 @@ export default function SettingsPage() {
       <Dialog open={resetOpen} onOpenChange={setResetOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Restablecer datos</DialogTitle>
+            <DialogTitle>Borrar todos mis datos</DialogTitle>
             <DialogDescription>
-              Se borrará todo lo cargado y se volverá a los datos de demostración originales. Esta acción no puede
-              deshacerse.
+              Se borrará todo lo cargado en este dispositivo (autoperfil, actividades, fichas, mapas, diario). Esta
+              acción no puede deshacerse — si querés conservarlos, exportá antes una copia de seguridad.
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end gap-2">
@@ -214,13 +178,13 @@ export default function SettingsPage() {
             <Button
               variant="danger"
               onClick={async () => {
-                await resetDemoData()
+                await resetAllData()
                 await qc.invalidateQueries()
                 setResetOpen(false)
-                toast.success('Datos restablecidos')
+                toast.success('Datos borrados')
               }}
             >
-              Restablecer todo
+              Borrar todo
             </Button>
           </div>
         </DialogContent>

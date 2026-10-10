@@ -32,13 +32,13 @@ export default function BibliotecaPage() {
     <FadeIn>
       <PageHeader
         title="Biblioteca de herramientas"
-        subtitle="Una ficha por cada herramienta de las 8 rutas: qué es, para qué sirve y cómo aplicarla en sesión."
+        subtitle="Una ficha por cada herramienta de las 8 rutas: qué es, para qué sirve y cómo aplicarla."
       />
 
       <div className="mb-6 rounded-xl border bg-surface p-4">
         <p className="mb-2.5 text-[12.5px] text-muted-foreground">
-          El nivel es una complejidad orientativa, no una edad — depende de dónde está cada estudiante, no de cuántos
-          años tiene. Un estudiante de nivel superior puede necesitar arrancar por el Nivel 1.
+          El nivel es una complejidad orientativa, no una edad — depende de dónde estás vos ahora, no de cuántos años
+          tenés. Si estás en nivel superior igual podés necesitar arrancar por el Nivel 1.
         </p>
         <div className="flex flex-wrap gap-1.5">
           {(['todos', 1, 2, 3] as FiltroNivel[]).map((n) => (
@@ -134,7 +134,7 @@ export default function BibliotecaPage() {
           <h2 className="text-[14px] font-semibold tracking-tight">Imprimibles</h2>
         </div>
         <p className="mb-3 text-[12.5px] text-muted-foreground">
-          Materiales en blanco para imprimir y llevarse a sesión o a casa.
+          Materiales en blanco para imprimir y usar donde estudiás.
         </p>
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" asChild>
@@ -151,8 +151,8 @@ export default function BibliotecaPage() {
       </div>
 
       <p className="mt-8 text-[11.5px] text-faint">
-        Estas fichas son una guía de consulta rápida durante la sesión — la elección de qué herramienta usar con cada
-        estudiante, y de qué nivel partir, sigue siendo un criterio profesional, no una indicación automática.
+        Estas fichas son una guía rápida — probá, quedate con lo que te sirve y descartá lo que no. No hay una
+        combinación "correcta" de herramientas, cada quien arma la propia.
       </p>
     </FadeIn>
   )

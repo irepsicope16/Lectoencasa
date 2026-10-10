@@ -1,145 +1,62 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { db, deleteStudentCascade } from '@/services/storage/db'
+import { db } from '@/services/storage/db'
 import type {
-  ActividadAsignada,
-  Alert,
-  CalendarEvent,
+  ActividadCatalogo,
+  ActividadProbada,
   DimensionSnapshot,
-  Goal,
-  Intake,
-  OpenAnswer,
-  PriorityDecision,
-  QuestionnaireResponse,
-  Session,
-  StoredFile,
-  Student,
+  EntradaMetacognicion,
+  Ficha,
+  MapaConceptual,
+  SesionEstudio,
 } from '@/types'
-
-// ---------- Estudiantes ----------
-
-export function useStudents(professionalId?: string) {
-  return useQuery({
-    queryKey: ['students', professionalId],
-    queryFn: async () => {
-      const all = await db.students.list()
-      return all
-        .filter((s) => !professionalId || s.professionalId === professionalId)
-        .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
-    },
-  })
-}
-
-export function useStudent(id?: string) {
-  return useQuery({
-    queryKey: ['student', id],
-    queryFn: () => db.students.get(id!),
-    enabled: !!id,
-  })
-}
-
-export function useCreateStudent() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: (data: Omit<Student, 'id' | 'createdAt' | 'updatedAt'>) => db.students.create(data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['students'] }),
-  })
-}
-
-export function useUpdateStudent() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: ({ id, patch }: { id: string; patch: Partial<Student> }) => db.students.update(id, patch),
-    onSuccess: (_data, vars) => {
-      qc.invalidateQueries({ queryKey: ['students'] })
-      qc.invalidateQueries({ queryKey: ['student', vars.id] })
-    },
-  })
-}
-
-export function useDeleteStudent() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: (id: string) => deleteStudentCascade(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['students'] }),
-  })
-}
-
-// ---------- Entrevista ----------
-
-export function useIntake(studentId?: string) {
-  return useQuery({
-    queryKey: ['intake', studentId],
-    queryFn: async () => {
-      const rows = await db.intakes.query((i) => i.studentId === studentId)
-      return rows[0] as Intake | undefined
-    },
-    enabled: !!studentId,
-  })
-}
-
-export function useSaveIntake() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: async ({ studentId, existingId, data }: { studentId: string; existingId?: string; data: Omit<Intake, 'id' | 'studentId' | 'createdAt' | 'updatedAt'> }) => {
-      if (existingId) return db.intakes.update(existingId, data)
-      return db.intakes.create({ studentId, ...data })
-    },
-    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['intake', vars.studentId] }),
-  })
-}
 
 // ---------- Autoperfil ----------
 
-export function useResponses(studentId?: string) {
+export function useResponses() {
   return useQuery({
-    queryKey: ['responses', studentId],
-    queryFn: () => db.responses.query((r) => r.studentId === studentId),
-    enabled: !!studentId,
+    queryKey: ['responses'],
+    queryFn: () => db.responses.list(),
   })
 }
 
 export function useSaveResponse() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: async (input: { studentId: string; versionId: string; itemId: string; valor: 0 | 1 | 2 | 3 | null; comentario?: string; existingId?: string }) => {
+    mutationFn: async (input: { versionId: string; itemId: string; valor: 0 | 1 | 2 | 3 | null; existingId?: string }) => {
       const { existingId, ...data } = input
       if (existingId) return db.responses.update(existingId, { ...data, fecha: new Date().toISOString() })
       return db.responses.create({ ...data, fecha: new Date().toISOString() })
     },
-    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['responses', vars.studentId] }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['responses'] }),
   })
 }
 
-export function useOpenAnswers(studentId?: string) {
+export function useOpenAnswers() {
   return useQuery({
-    queryKey: ['openAnswers', studentId],
-    queryFn: () => db.openAnswers.query((a) => a.studentId === studentId),
-    enabled: !!studentId,
+    queryKey: ['openAnswers'],
+    queryFn: () => db.openAnswers.list(),
   })
 }
 
 export function useSaveOpenAnswer() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: async (input: { studentId: string; preguntaId: string; texto: string; existingId?: string }) => {
+    mutationFn: async (input: { preguntaId: string; texto: string; existingId?: string }) => {
       const { existingId, ...data } = input
       if (existingId) return db.openAnswers.update(existingId, data)
       return db.openAnswers.create(data)
     },
-    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['openAnswers', vars.studentId] }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['openAnswers'] }),
   })
 }
 
-// ---------- Integración ----------
-
-export function useSnapshots(studentId?: string) {
+export function useSnapshots() {
   return useQuery({
-    queryKey: ['snapshots', studentId],
+    queryKey: ['snapshots'],
     queryFn: async () => {
-      const rows = await db.snapshots.query((s) => s.studentId === studentId)
+      const rows = await db.snapshots.list()
       return rows.sort((a, b) => a.dimension.localeCompare(b.dimension))
     },
-    enabled: !!studentId,
   })
 }
 
@@ -151,231 +68,182 @@ export function useSaveSnapshot() {
       if (existingId) return db.snapshots.update(existingId, data)
       return db.snapshots.create(data)
     },
-    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['snapshots', vars.studentId] }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['snapshots'] }),
   })
 }
 
-export function useAlerts(studentId?: string) {
+// ---------- Actividades probadas ----------
+
+export function useActividadesProbadas() {
   return useQuery({
-    queryKey: ['alerts', studentId],
-    queryFn: () => db.alerts.query((a) => a.studentId === studentId),
-    enabled: !!studentId,
-  })
-}
-
-export function useCreateAlert() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: (data: Omit<Alert, 'id' | 'createdAt' | 'updatedAt'>) => db.alerts.create(data),
-    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['alerts', vars.studentId] }),
-  })
-}
-
-export function useResolveAlert() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: ({ id, decisionProfesional }: { id: string; decisionProfesional: string; studentId: string }) =>
-      db.alerts.update(id, { estado: 'resuelta', decisionProfesional }),
-    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['alerts', vars.studentId] }),
-  })
-}
-
-// ---------- Prioridades ----------
-
-export function usePriorities(studentId?: string) {
-  return useQuery({
-    queryKey: ['priorities', studentId],
+    queryKey: ['actividades'],
     queryFn: async () => {
-      const rows = await db.priorities.query((p) => p.studentId === studentId)
-      return rows.sort((a, b) => b.puntaje - a.puntaje)
+      const rows = await db.actividades.list()
+      return rows.sort((a, b) => b.fechaInicio.localeCompare(a.fechaInicio))
     },
-    enabled: !!studentId,
   })
 }
 
-export function useSavePriority() {
+export function useProbarActividad() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: async (input: Omit<PriorityDecision, 'id' | 'createdAt' | 'updatedAt'> & { existingId?: string }) => {
-      const { existingId, ...data } = input
-      if (existingId) return db.priorities.update(existingId, data)
-      return db.priorities.create(data)
-    },
-    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['priorities', vars.studentId] }),
+    mutationFn: (actividad: ActividadCatalogo) =>
+      db.actividades.create({
+        actividadId: actividad.id,
+        rutaId: actividad.rutaId,
+        nivel: actividad.nivel,
+        titulo: actividad.titulo,
+        descripcion: actividad.descripcion,
+        estado: 'en_curso',
+        fechaInicio: new Date().toISOString(),
+      }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['actividades'] }),
   })
 }
 
-// ---------- Plan ----------
+export function useActualizarActividad() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, ...patch }: { id: string } & Partial<ActividadProbada>) => db.actividades.update(id, patch),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['actividades'] }),
+  })
+}
 
-export function useGoals(studentId?: string) {
+export function useEliminarActividadProbada() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => db.actividades.remove(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['actividades'] }),
+  })
+}
+
+// ---------- Cronómetro ----------
+
+export function useSesionesEstudio() {
   return useQuery({
-    queryKey: ['goals', studentId],
-    queryFn: () => db.goals.query((g) => g.studentId === studentId),
-    enabled: !!studentId,
-  })
-}
-
-export function useCreateGoal() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: (data: Omit<Goal, 'id' | 'createdAt' | 'updatedAt'>) => db.goals.create(data),
-    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['goals', vars.studentId] }),
-  })
-}
-
-export function useUpdateGoal() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: ({ id, patch }: { id: string; patch: Partial<Goal> }) => db.goals.update(id, patch),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['goals'] }),
-  })
-}
-
-// ---------- Sesiones ----------
-
-export function useSessions(studentId?: string) {
-  return useQuery({
-    queryKey: ['sessions', studentId],
+    queryKey: ['sesionesEstudio'],
     queryFn: async () => {
-      const rows = await db.sessions.query((s) => s.studentId === studentId)
+      const rows = await db.sesionesEstudio.list()
       return rows.sort((a, b) => b.fecha.localeCompare(a.fecha))
     },
-    enabled: !!studentId,
   })
 }
 
-/** Todas las sesiones de los estudiantes de esta profesional (para la Agenda). */
-export function useAllSessions(professionalId?: string) {
-  return useQuery({
-    queryKey: ['all-sessions', professionalId],
-    queryFn: async () => {
-      const students = await db.students.query((s) => s.professionalId === professionalId)
-      const ids = new Set(students.map((s) => s.id))
-      const rows = await db.sessions.list()
-      return rows.filter((s) => ids.has(s.studentId))
-    },
-    enabled: !!professionalId,
-  })
-}
-
-export function useCreateSession() {
+export function useRegistrarSesionEstudio() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (data: Omit<Session, 'id' | 'createdAt' | 'updatedAt'>) => db.sessions.create(data),
+    mutationFn: (data: Omit<SesionEstudio, 'id' | 'createdAt' | 'updatedAt'>) => db.sesionesEstudio.create(data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['sesionesEstudio'] }),
+  })
+}
+
+// ---------- Mapas conceptuales ----------
+
+export function useMapas() {
+  return useQuery({
+    queryKey: ['mapas'],
+    queryFn: async () => {
+      const rows = await db.mapas.list()
+      return rows.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+    },
+  })
+}
+
+export function useMapa(id?: string) {
+  return useQuery({
+    queryKey: ['mapa', id],
+    queryFn: () => db.mapas.get(id!),
+    enabled: !!id,
+  })
+}
+
+export function useCrearMapa() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (titulo: string) => db.mapas.create({ titulo, nodos: [], conexiones: [] }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['mapas'] }),
+  })
+}
+
+export function useGuardarMapa() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, patch }: { id: string; patch: Partial<MapaConceptual> }) => db.mapas.update(id, patch),
     onSuccess: (_d, vars) => {
-      qc.invalidateQueries({ queryKey: ['sessions', vars.studentId] })
-      qc.invalidateQueries({ queryKey: ['all-sessions'] })
+      qc.invalidateQueries({ queryKey: ['mapas'] })
+      qc.invalidateQueries({ queryKey: ['mapa', vars.id] })
     },
   })
 }
 
-export function useUpdateSession() {
+export function useEliminarMapa() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, patch }: { id: string; patch: Partial<Session> }) => db.sessions.update(id, patch),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['sessions'] })
-      qc.invalidateQueries({ queryKey: ['all-sessions'] })
-    },
+    mutationFn: (id: string) => db.mapas.remove(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['mapas'] }),
   })
 }
 
-// ---------- Agenda (eventos: sesión, tarea, recordatorio) ----------
+// ---------- Fichas de repaso ----------
 
-export function useEvents(professionalId?: string) {
+export function useFichas() {
   return useQuery({
-    queryKey: ['events', professionalId],
-    queryFn: () => db.events.list(),
-    enabled: !!professionalId,
+    queryKey: ['fichas'],
+    queryFn: () => db.fichas.list(),
   })
 }
 
-export function useCreateEvent() {
+export function useCrearFicha() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (data: Omit<CalendarEvent, 'id' | 'createdAt' | 'updatedAt'>) => db.events.create(data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['events'] }),
+    mutationFn: (data: { tema: string; pregunta: string; respuesta: string }) =>
+      db.fichas.create({ ...data, vecesRepasada: 0 }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fichas'] }),
   })
 }
 
-export function useUpdateEvent() {
+export function useRepasarFicha() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, patch }: { id: string; patch: Partial<CalendarEvent> }) => db.events.update(id, patch),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['events'] }),
+    mutationFn: ({ id, vecesRepasada }: { id: string; vecesRepasada: number }) =>
+      db.fichas.update(id, { vecesRepasada: vecesRepasada + 1, ultimoRepaso: new Date().toISOString() }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fichas'] }),
   })
 }
 
-export function useDeleteEvent() {
+export function useEliminarFicha() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (id: string) => db.events.remove(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['events'] }),
+    mutationFn: (id: string) => db.fichas.remove(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fichas'] }),
   })
 }
 
-// ---------- Evaluación (archivos: screenings, tests) ----------
+// ---------- Diario de metacognición ----------
 
-export function useFiles(studentId?: string) {
+export function useDiario() {
   return useQuery({
-    queryKey: ['files', studentId],
+    queryKey: ['diario'],
     queryFn: async () => {
-      const rows = await db.files.query((f) => f.studentId === studentId)
-      return rows.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      const rows = await db.diario.list()
+      return rows.sort((a, b) => b.fecha.localeCompare(a.fecha))
     },
-    enabled: !!studentId,
   })
 }
 
-export function useCreateFile() {
+export function useCrearEntradaDiario() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (data: Omit<StoredFile, 'id' | 'createdAt' | 'updatedAt'>) => db.files.create(data),
-    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['files', vars.studentId] }),
+    mutationFn: (data: Omit<EntradaMetacognicion, 'id' | 'fecha' | 'createdAt' | 'updatedAt'>) =>
+      db.diario.create({ ...data, fecha: new Date().toISOString() }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['diario'] }),
   })
 }
 
-export function useDeleteFile() {
+export function useEliminarEntradaDiario() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (id: string) => db.files.remove(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['files'] }),
-  })
-}
-
-// ---------- Actividades asignadas ----------
-
-export function useAsignaciones(studentId?: string) {
-  return useQuery({
-    queryKey: ['asignaciones', studentId],
-    queryFn: async () => {
-      const rows = await db.asignaciones.query((a) => a.studentId === studentId)
-      return rows.sort((a, b) => b.fechaAsignada.localeCompare(a.fechaAsignada))
-    },
-    enabled: !!studentId,
-  })
-}
-
-export function useCreateAsignacion() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: (data: Omit<ActividadAsignada, 'id' | 'createdAt' | 'updatedAt'>) => db.asignaciones.create(data),
-    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['asignaciones', vars.studentId] }),
-  })
-}
-
-export function useUpdateAsignacion() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: ({ id, ...patch }: { id: string } & Partial<ActividadAsignada>) => db.asignaciones.update(id, patch),
-    onSuccess: (row) => qc.invalidateQueries({ queryKey: ['asignaciones', row.studentId] }),
-  })
-}
-
-export function useDeleteAsignacion() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: (id: string) => db.asignaciones.remove(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['asignaciones'] }),
+    mutationFn: (id: string) => db.diario.remove(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['diario'] }),
   })
 }
