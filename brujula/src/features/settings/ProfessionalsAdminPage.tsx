@@ -1,9 +1,17 @@
 import { useEffect, useState } from 'react'
-import { CalendarClock, RefreshCcw, ShieldCheck, ShieldOff } from 'lucide-react'
+import { CalendarClock, RefreshCcw, ShieldCheck, ShieldOff, Trash2 } from 'lucide-react'
 import { FadeIn, PageHeader } from '@/components/shared'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { toast } from '@/components/ui/toast'
 import { isCloudEnabled } from '@/services/cloud/config'
 
@@ -33,6 +41,7 @@ function formatDate(iso?: string): string {
 export default function ProfessionalsAdminPage() {
   const [rows, setRows] = useState<ProfesionalRow[] | null>(null)
   const [busyId, setBusyId] = useState('')
+  const [toDelete, setToDelete] = useState<ProfesionalRow | null>(null)
 
   const load = async () => {
     setRows(null)
@@ -103,6 +112,23 @@ export default function ProfessionalsAdminPage() {
   const revocar = (row: ProfesionalRow) => {
     const nuevaFecha = new Date().toISOString()
     void actualizarFecha(row, nuevaFecha, `Acceso cortado para ${row.nombre} ${row.apellido}`)
+  }
+
+  const eliminar = async (row: ProfesionalRow) => {
+    setBusyId(row.id)
+    try {
+      const { getSupabase } = await import('@/services/cloud/client')
+      const sb = await getSupabase()
+      const { error } = await sb.rpc('mb_delete_professional', { p_id: row.id })
+      if (error) throw new Error(error.message)
+      setRows((prev) => prev?.filter((r) => r.id !== row.id) ?? prev)
+      toast.info(`Se eliminó la cuenta de ${row.nombre} ${row.apellido}`)
+      setToDelete(null)
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'No se pudo eliminar la cuenta')
+    } finally {
+      setBusyId('')
+    }
   }
 
   return (
@@ -177,6 +203,15 @@ export default function ProfessionalsAdminPage() {
                             <ShieldOff className="h-3.5 w-3.5" /> Cortar acceso
                           </Button>
                         )}
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="text-danger hover:bg-danger-soft hover:text-danger"
+                          onClick={() => setToDelete(row)}
+                          disabled={busyId === row.id}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" /> Eliminar
+                        </Button>
                       </div>
                     </div>
                   )
@@ -186,6 +221,36 @@ export default function ProfessionalsAdminPage() {
           </CardContent>
         </Card>
       )}
+
+      <Dialog open={!!toDelete} onOpenChange={(o) => !o && setToDelete(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Eliminar profesional</DialogTitle>
+            <DialogDescription>
+              {toDelete && (
+                <>
+                  Se eliminará la cuenta de {toDelete.nombre} {toDelete.apellido} ({toDelete.email}): ya no va a
+                  poder iniciar sesión ni va a aparecer en este panel. Esta acción no puede deshacerse. Los
+                  consultantes que haya creado (si los tiene) no se borran — quedan en la base, pero inaccesibles
+                  al no existir ya su cuenta.
+                </>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setToDelete(null)}>
+              Cancelar
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => toDelete && eliminar(toDelete)}
+              disabled={!!toDelete && busyId === toDelete.id}
+            >
+              Eliminar definitivamente
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </FadeIn>
   )
 }

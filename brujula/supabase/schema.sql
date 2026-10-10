@@ -304,6 +304,32 @@ drop policy if exists profiles_admin_update on public.profiles;
 create policy profiles_admin_update on public.profiles
   for update using (public.mb_is_owner()) with check (public.mb_is_owner());
 
+-- Elimina definitivamente la cuenta de una profesional (panel
+-- /pro/profesionales): borra el usuario de auth.users, lo que en cascada
+-- (FK "on delete cascade" de profiles.id) borra también su perfil. Ya no va
+-- a poder loguearse ni aparecer en este panel. A propósito NO borra en
+-- cascada los consultantes que haya creado (quedan en la base, pero
+-- inaccesibles para cualquiera vía RLS al no existir ya su profesionalId
+-- como cuenta activa) — es una decisión deliberada para no destruir datos
+-- de consultantes reales sin que se pida explícitamente.
+create or replace function public.mb_delete_professional(p_id uuid)
+returns void language plpgsql security definer set search_path = public
+as $$
+begin
+  if not public.mb_is_owner() then
+    raise exception 'No autorizada para eliminar profesionales.';
+  end if;
+  if p_id = auth.uid() then
+    raise exception 'No podés eliminar tu propia cuenta desde acá.';
+  end if;
+  if not exists (select 1 from public.profiles where id = p_id and data->>'role' = 'profesional') then
+    raise exception 'Esa cuenta no es una profesional.';
+  end if;
+  delete from auth.users where id = p_id;
+end;
+$$;
+grant execute on function public.mb_delete_professional to authenticated;
+
 -- Autoedición segura del propio perfil (nombre, título, matrícula, teléfono):
 -- sin política RLS de "update" para el dueño de la fila, a propósito —
 -- así ningún profesional puede tocar su "role" ni "membershipExpiresAt"
