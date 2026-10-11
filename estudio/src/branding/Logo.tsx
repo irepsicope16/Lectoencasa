@@ -47,9 +47,9 @@ export function LogoHorizontal({ className, size = 30 }: LogoProps) {
 }
 
 const BRAND_COVER_ITEMS = [
-  { icon: User, label: 'Perfil', color: 'var(--color-accent)' },
-  { icon: Lightbulb, label: 'Estrategias', color: 'var(--color-mod-atencion)' },
-  { icon: BarChart3, label: 'Seguimiento', color: 'var(--color-mod-aprender)' },
+  { icon: User, label: 'Perfil' },
+  { icon: Lightbulb, label: 'Estrategias' },
+  { icon: BarChart3, label: 'Seguimiento' },
 ] as const
 
 /** Lockup completo (isotipo + wordmark + lema) para portada y usos grandes. */
@@ -61,7 +61,7 @@ export function BrandCover({ className }: { className?: string }) {
           className="w-7 shrink-0 rounded-full"
           style={{
             background: 'linear-gradient(180deg, var(--color-accent), var(--color-accent-strong))',
-            boxShadow: '0 10px 22px -10px var(--color-accent)',
+            boxShadow: '0 12px 26px -8px var(--color-accent)',
           }}
         />
         <div className="flex flex-col gap-2.5">
@@ -70,13 +70,13 @@ export function BrandCover({ className }: { className?: string }) {
               <span
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white"
                 style={{
-                  background: `linear-gradient(145deg, ${it.color}, color-mix(in srgb, ${it.color} 65%, black))`,
-                  boxShadow: `0 8px 16px -6px ${it.color}`,
+                  background: 'linear-gradient(145deg, var(--color-accent), var(--color-accent-strong))',
+                  boxShadow: '0 10px 20px -6px var(--color-accent)',
                 }}
               >
                 <it.icon className="h-[18px] w-[18px]" />
               </span>
-              <span className="text-[11.5px] font-bold uppercase tracking-[0.12em]" style={{ color: it.color }}>
+              <span className="text-[11.5px] font-bold uppercase tracking-[0.12em] text-accent-strong">
                 {it.label}
               </span>
             </div>

@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-11 (actualizado, ronda 15) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-11 (actualizado, ronda 16) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -549,6 +549,29 @@ rápido, visible para el estudiante y su familia.
 - Verificado con Playwright (escritorio y mobile): un toque crea y
   completa la actividad, actualiza la racha, no choca con el botón de
   abrir detalle, sin errores de consola.
+
+## ✅ Ronda 16 (11/10/2026): isotipo "E" a un solo color + autoría en la portada
+
+La usuaria señaló que el isotipo grande de la portada (la "E" armada con
+la barra vertical + 3 círculos, representando Perfil/Estrategias/
+Seguimiento) usaba un color distinto por círculo, y que por eso no se
+leía como una letra E — pidió un solo color con sombra para que se vea
+mejor. También pidió agregar que la app fue creada por la Lic. Irene
+Morbidelli (psicopedagoga) y que está prohibida su venta o copia.
+
+- `BrandCover` (en `branding/Logo.tsx`): los 3 círculos pasaron de 3
+  colores distintos (terracota/verde/violeta) a un solo degradé
+  terracota (el mismo que ya usaba la barra vertical), con sombra más
+  pronunciada en cada uno y en el conjunto — ahora se lee como una E
+  monocromática con volumen, no como un racimo de íconos de colores.
+  Las etiquetas (Perfil/Estrategias/Seguimiento) también pasaron a un
+  solo color de texto, para que acompañen al isotipo.
+- Se agregó una línea de autoría en la pantalla de bienvenida (debajo
+  del aviso de emergencia): "Método Estudio es una herramienta creada
+  por la Lic. Irene Morbidelli (Psicopedagoga). Prohibida su venta o
+  copia sin autorización."
+- Verificado con Playwright en claro, oscuro y mobile — el isotipo se ve
+  consistente en los 3 casos, sin errores de consola.
 
 ## 🔜 Backlog
 

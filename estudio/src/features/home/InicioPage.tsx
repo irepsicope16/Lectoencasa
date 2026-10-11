@@ -275,6 +275,11 @@ export function Bienvenida() {
           </Button>
         </div>
         <p className="mt-5 text-[12px] text-faint">{MENSAJES.emergencia}</p>
+        <p className="mt-3 text-[11px] leading-relaxed text-faint">
+          Método Estudio es una herramienta creada por la Lic. Irene Morbidelli (Psicopedagoga).
+          <br />
+          Prohibida su venta o copia sin autorización.
+        </p>
       </div>
     </FadeIn>
   )
