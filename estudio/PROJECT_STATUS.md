@@ -488,6 +488,13 @@ rediseñada en la ronda 12).
 - Verificado con Playwright: el botón aparece en Ajustes, al cliquearlo
   muestra la portada completa, y el nombre guardado sigue intacto en
   localStorage después de visitarla y volver. Sin errores de consola.
+- De paso se encontró y corrigió un problema de build no relacionado: el
+  `@import` de `@fontsource` traía las variantes cirílico/griego/vietnamita
+  de IBM Plex (68 archivos de fuente, ~830 KB), aunque la app es 100% en
+  español. Se cambió a los imports `latin-*.css`/`latin-ext-*.css` de cada
+  peso, que son los únicos que se usan — bajó el precache de la PWA de 147
+  a 103 entradas (2100 KiB → 1681 KiB). Verificado visualmente que las
+  tipografías se siguen viendo igual.
 
 ## 🔜 Backlog
 
