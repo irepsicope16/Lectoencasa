@@ -77,6 +77,8 @@ export interface ActividadCatalogo {
   ejemplo?: string // caso concreto resuelto, para entender la técnica antes de probarla
   ejercicio?: string // consigna de práctica fija, igual para todos
   fuente?: string // referencia interna de dónde se tomó la idea (no se muestra en la UI)
+  /** Para nivel 1: ícono propio, mostrado en la tarjeta del catálogo. */
+  icon?: import('lucide-react').LucideIcon
 }
 
 /**

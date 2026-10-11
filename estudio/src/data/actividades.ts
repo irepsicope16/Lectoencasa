@@ -5,6 +5,7 @@
 // de inspiración, no de autoría. El nivel (1 a 3) es una complejidad
 // orientativa, igual que en `data/biblioteca.ts`: no representa una edad.
 
+import { Anchor, CalendarDays, Compass, Eye, FolderKanban, HelpCircle, ListOrdered, ListTree, MessageCircle, Wind, Zap } from 'lucide-react'
 import type { ActividadCatalogo } from '@/types'
 
 export const ACTIVIDADES: ActividadCatalogo[] = [
@@ -15,6 +16,7 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Armar la carpeta por materia',
     descripcion: 'Una sesión de orden: separadores, etiquetas y un lugar fijo para cada materia.',
+    icon: FolderKanban,
     ejemplo: 'Juli tiene Historia, Biología y Matemática todas mezcladas en una sola carpeta. Separa con 3 divisores de colores, le pone una etiqueta a cada uno y deja un sector fijo en la mochila para cada materia.',
     ejercicio: 'Mirá cómo tenés guardados tus apuntes hoy. Elegí 3 materias y asignales un color o un lugar fijo a cada una. Hacelo ahora, no lo dejes para "después".',
     fuente: 'hábitos de estudio',
@@ -25,6 +27,7 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'De objetivo grande a microtareas',
     descripcion: 'Convertir "estudiar el capítulo 5" en 4 pasos chicos y concretos, uno por vez.',
+    icon: ListTree,
     ejemplo: '"Estudiar el capítulo 5" se convierte en: 1) leer las primeras páginas, 2) subrayar las ideas clave, 3) hacer un resumen de media página, 4) repasarlo en voz alta.',
     ejercicio: 'Agarrá algo que tengas pendiente ahora mismo y escribilo en 4 pasos chicos, cada uno con un verbo de acción (leer, subrayar, resumir, repasar...).',
     fuente: 'técnicas de estudio',
@@ -67,6 +70,7 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Regla de los 2 minutos + ambiente despejado',
     descripcion: 'Si algo lleva menos de 2 minutos, hacerlo ya; el celular se deja en otro ambiente, no solo en silencio.',
+    icon: Zap,
     ejemplo: 'Antes de sentarse a estudiar, Nico guarda la ropa que estaba tirada en la silla (le lleva 1 minuto) y deja el celular cargando en la cocina, no en modo silencio sobre el escritorio.',
     ejercicio: 'Antes de tu próxima sesión de estudio, hacé ya las 2 o 3 cosas sueltas que te lleven menos de 2 minutos, y dejá el celular en otro ambiente.',
     fuente: 'técnicas de estudio',
@@ -99,6 +103,7 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Antes de leer: observar y predecir',
     descripcion: 'Mirar el título, las imágenes y los subtítulos, y anotar dos preguntas que esperás que el texto responda.',
+    icon: Eye,
     ejemplo: 'Antes de leer el capítulo sobre el Imperio Romano, miro el título, las imágenes y los subtítulos. Anoto: "¿Por qué cayó el Imperio?" y "¿Qué tuvieron que ver los bárbaros?".',
     ejercicio: 'Antes de leer tu próximo texto de estudio, mirá título, imágenes y subtítulos, y escribí 2 preguntas que esperás que el texto responda.',
     fuente: 'método de estudio, reformulado',
@@ -131,6 +136,7 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Plan en 3 viñetas antes de escribir',
     descripcion: 'Anotar 3 ideas clave en el orden en que van a aparecer, antes de escribir la primera oración.',
+    icon: ListOrdered,
     ejemplo: 'Antes de escribir sobre la Revolución Francesa, anoto: 1) causas, 2) hechos principales, 3) consecuencias. Recién ahí empiezo a escribir, siguiendo ese orden.',
     ejercicio: 'Antes de tu próximo texto o respuesta larga, escribí 3 viñetas con las ideas clave y el orden en que van a aparecer.',
     fuente: 'técnicas de estudio',
@@ -173,6 +179,7 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: '4 preguntas sin mirar',
     descripcion: 'Escribir 4 preguntas sobre el tema y responderlas de memoria, sin el material a la vista.',
+    icon: HelpCircle,
     ejemplo: 'Después de leer sobre la Revolución de Mayo: ¿Qué causas tuvo? ¿Quiénes participaron? ¿Qué cambió después? ¿Por qué fue importante? Las respondo de memoria, sin mirar el apunte.',
     ejercicio: 'Elegí un tema que estés estudiando, escribí 4 preguntas sobre él y respondelas sin mirar el material.',
     fuente: 'técnicas de estudio',
@@ -183,6 +190,7 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Explicárselo a alguien',
     descripcion: 'Contar el tema a otra persona (o en voz alta, solo) como si nunca lo hubiera escuchado.',
+    icon: MessageCircle,
     ejemplo: 'Le explico a mi hermano cómo funciona la fotosíntesis como si él no supiera nada del tema, usando mis propias palabras, sin leer del apunte.',
     ejercicio: 'Elegí un tema y explicáselo en voz alta a alguien (o solo, grabándote) como si fuera la primera vez que lo escucha.',
     fuente: 'método de estudio, reformulado',
@@ -215,6 +223,7 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Calendario regresivo simple',
     descripcion: 'Contar cuántos días faltan y repartir los temas hacia atrás desde la fecha de la evaluación.',
+    icon: CalendarDays,
     ejemplo: 'Faltan 6 días para la prueba y hay 3 temas. Reparto: días 1 y 2 el tema 1, días 3 y 4 el tema 2, día 5 el tema 3, día 6 repaso general.',
     ejercicio: 'Cuando tengas tu próxima evaluación, contá los días que faltan y repartí los temas hacia atrás desde esa fecha.',
     fuente: 'cuestionario de planificación',
@@ -247,6 +256,7 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Respiración 4-6 antes de rendir',
     descripcion: 'Inhalar contando 4, exhalar contando 6, repetir de 6 a 10 veces.',
+    icon: Wind,
     ejemplo: 'Antes de entrar al examen, inhalo contando hasta 4, exhalo contando hasta 6, y lo repito 8 veces. Noto que el corazón se calma.',
     ejercicio: 'La próxima vez que sientas nervios antes de estudiar o rendir, hacé de 6 a 10 respiraciones 4-6 (inhalar 4, exhalar 6) antes de empezar.',
     fuente: 'técnicas de estudio',
@@ -257,6 +267,7 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Grounding 5-4-3-2-1',
     descripcion: 'Nombrar 5 cosas que ves, 4 que tocás, 3 sonidos — para bajar la ansiedad antes de un examen.',
+    icon: Anchor,
     ejemplo: 'Antes del examen nombro: 5 cosas que veo (el pizarrón, una ventana...), 4 que toco (el banco, mi lápiz...), 3 sonidos, 2 olores, 1 cosa que puedo saborear.',
     ejercicio: 'Cuando sientas ansiedad antes de una evaluación, hacé el ejercicio 5-4-3-2-1 completo, despacio, antes de entrar.',
     fuente: 'técnicas de estudio',
@@ -289,6 +300,7 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Elegir con intención, no por costumbre',
     descripcion: 'Antes de empezar a estudiar, parar un momento y elegir a propósito qué herramienta usar y por qué, en vez de repetir siempre la misma por hábito.',
+    icon: Compass,
     ejemplo: 'Siempre resumo todo, por costumbre. Hoy me detengo y pienso: para este tema con muchas fechas, un mapa conceptual me va a servir más que un resumen.',
     ejercicio: 'Antes de tu próxima sesión de estudio, parate un minuto y elegí a propósito qué herramienta usar — no la de siempre, la que mejor le quede a ese tema.',
     fuente: 'criterio propio de la plataforma',

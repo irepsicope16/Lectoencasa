@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-11 (actualizado, ronda 7) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-11 (actualizado, ronda 8) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -315,6 +315,31 @@ apuntaba a `/pro/biblioteca`, una ruta que quedó del esquema anterior
 error visible. Se corrigió a `/biblioteca` en ambos archivos y se
 verificó con Playwright que el click ahora aterriza en la página
 correcta.
+
+## ✅ Ronda 8 (11/10/2026): nivel Principiante simple y visual en Biblioteca y Actividades
+
+La usuaria pidió verificar si el nivel Principiante (inicial) ya se veía tan
+simple y visual como la nueva "Etapas del estudio" — la respuesta honesta
+fue que no: las fichas de Biblioteca y las actividades de nivel 1 usaban el
+mismo formato denso de texto que Medio y Superior, sin diferenciación
+visual. Se confirmó el alcance con ella (acortar el texto real, no solo el
+envoltorio) antes de tocar contenido pedagógico.
+
+- **Biblioteca** (31 fichas de nivel 1, en las 7 rutas que tienen
+  Principiante): cada una pasó de 3 bloques de texto ("Qué es / Para qué
+  sirve / Cómo aplicarla") a una sola frase corta y directa, con ícono
+  propio en un círculo del color de su ruta. Los 3 bloques originales se
+  mantienen en el dato (`queEs`/`paraQue`/`comoAplicarla`) por si hacen
+  falta más adelante, pero ya no se muestran para nivel 1 — Medio y
+  Superior siguen con el formato completo, sin cambios.
+- **Actividades** (11 actividades de nivel 1): se agregó el mismo ícono de
+  color en la tarjeta del catálogo. El texto de `descripcion` ya era
+  bastante corto, así que el cambio principal acá fue visual; `ejemplo` y
+  `ejercicio` (el contenido práctico que ella pidió en una ronda anterior)
+  no se tocaron, porque ahí sí hace falta el detalle.
+- Se sumó un campo opcional `fraseSimple`/`icon` en `biblioteca.ts` y
+  `icon` en `actividades.ts` (vía el tipo `ActividadCatalogo`), sin romper
+  Medio/Superior ni el modal de detalle de Actividades.
 
 ## 🔜 Backlog
 

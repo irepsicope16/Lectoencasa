@@ -12,6 +12,41 @@
 // borrador a revisar y ajustar con criterio profesional — no una escala
 // validada.
 
+import {
+  Backpack,
+  Bell,
+  Book,
+  Brain,
+  Calendar,
+  CalendarClock,
+  CalendarDays,
+  CheckCheck,
+  CheckCircle2,
+  ClipboardCheck,
+  Coffee,
+  Flag,
+  HelpCircle,
+  Home,
+  Layers,
+  Lightbulb,
+  ListChecks,
+  ListOrdered,
+  ListPlus,
+  ListTree,
+  MessageCircle,
+  Moon,
+  NotebookPen,
+  PenLine,
+  PlayCircle,
+  Quote,
+  Rows3,
+  Smartphone,
+  Smile,
+  Timer,
+  Wind,
+  type LucideIcon,
+} from 'lucide-react'
+
 export type NivelHerramienta = 1 | 2 | 3
 
 export interface FichaHerramienta {
@@ -20,6 +55,9 @@ export interface FichaHerramienta {
   queEs: string
   paraQue: string
   comoAplicarla: string
+  /** Para nivel 1: una sola frase directa, con ícono propio, en vez de los 3 bloques de texto. */
+  fraseSimple?: string
+  icon?: LucideIcon
 }
 
 export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
@@ -30,6 +68,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Un solo lugar (papel o digital) donde se anotan todas las fechas de entregas y evaluaciones, sin repartirlas entre agendas distintas.',
       paraQue: 'Evita que se pierdan u olviden compromisos por estar dispersos en varios lugares.',
       comoAplicarla: 'Elegir un soporte único con el estudiante y pasar ahí, al inicio de la semana, todo lo que ya se sabe que hay que entregar o rendir.',
+      fraseSimple: 'Un solo lugar para todas las fechas de entrega — nada se pierde entre agendas distintas.',
+      icon: Calendar,
     },
     {
       herramienta: 'Vaciado de pendientes',
@@ -37,6 +77,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Anotar en un momento fijo todo lo que "da vueltas en la cabeza" para estudiar o hacer, sin organizarlo todavía.',
       paraQue: 'Baja la carga mental de sostener todo en la memoria y deja el terreno libre para priorizar después.',
       comoAplicarla: 'Al final del día o antes de empezar a estudiar, escribir en dos minutos una lista libre de todo lo pendiente, sin editarla.',
+      fraseSimple: 'Escribí todo lo que tenés en la cabeza, sin ordenarlo todavía — eso viene después.',
+      icon: ListPlus,
     },
     {
       herramienta: 'Dividir tareas',
@@ -44,6 +86,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Partir una tarea grande en pasos más chicos y concretos, cada uno con un verbo de acción.',
       paraQue: 'Una tarea que se ve enorme deja de paralizar cuando aparece como una serie de pasos alcanzables.',
       comoAplicarla: 'Antes de empezar, escribir junto al estudiante 3 a 5 pasos concretos ("buscar información", "armar el esquema", "escribir la introducción"…) en vez de anotar solo el nombre de la tarea.',
+      fraseSimple: 'Una tarea gigante se vuelve chica cuando la partís en pasos concretos.',
+      icon: ListTree,
     },
     {
       herramienta: 'Estimación real de tiempos',
@@ -58,6 +102,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Una secuencia breve y siempre igual de pasos para arrancar a estudiar (por ejemplo: guardar el celular, poner los materiales, mirar la lista de tareas).',
       paraQue: 'Reduce la energía que cuesta "arrancar" porque el inicio deja de ser una decisión nueva cada vez.',
       comoAplicarla: 'Acordar 3 pasos fijos que se repitan siempre en el mismo orden y en el mismo lugar, antes de empezar a estudiar.',
+      fraseSimple: 'Los mismos 3 pasos, siempre en el mismo orden, para arrancar sin pensarlo.',
+      icon: PlayCircle,
     },
     {
       herramienta: 'Preparación de materiales',
@@ -65,6 +111,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Dejar listos, antes de empezar, todos los elementos que hacen falta para estudiar (libros, hojas, dispositivo, agua).',
       paraQue: 'Evita las interrupciones para "ir a buscar algo" que cortan la concentración recién ganada.',
       comoAplicarla: 'Sumar este paso a la rutina de inicio: un minuto de repaso de qué se necesita antes de sentarse a trabajar.',
+      fraseSimple: 'Todo lo que necesitás, listo antes de sentarte — así no te interrumpís a buscarlo.',
+      icon: Backpack,
     },
     {
       herramienta: 'Cierre diario',
@@ -72,6 +120,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Un momento breve al final del estudio para anotar qué quedó pendiente y qué sigue mañana.',
       paraQue: 'Da una sensación de cierre real y evita el "no sé por dónde seguir" del día siguiente.',
       comoAplicarla: 'Terminar cada sesión de estudio con dos minutos para anotar en la agenda única qué se hizo y cuál es el próximo paso.',
+      fraseSimple: 'Dos minutos al final para anotar qué hiciste y qué sigue mañana.',
+      icon: CheckCircle2,
     },
   ],
   sostener_atencion: [
@@ -81,6 +131,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Organizar el espacio físico de estudio para que tenga la menor cantidad posible de distractores a la vista.',
       paraQue: 'Reduce el esfuerzo de autocontrol necesario para no distraerse, porque la tentación ya no está tan cerca.',
       comoAplicarla: 'Revisar junto al estudiante qué hay en su lugar de estudio y acordar qué sacar o guardar antes de empezar (celular, pantallas de más, ruido).',
+      fraseSimple: 'Sacá de tu vista todo lo que te distrae antes de empezar a estudiar.',
+      icon: Home,
     },
     {
       herramienta: 'Acuerdos con el celular',
@@ -88,6 +140,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Reglas explícitas y acordadas (no impuestas) sobre cuándo y dónde usar el celular mientras se estudia.',
       paraQue: 'Vuelve visible y negociado algo que suele ser motivo de conflicto, y pone el control en manos del propio estudiante.',
       comoAplicarla: 'Definir juntos un lugar donde "estaciona" el celular durante los bloques de estudio y en qué pausas puede revisarlo.',
+      fraseSimple: 'Decidí de antemano dónde "estaciona" el celular mientras estudiás.',
+      icon: Smartphone,
     },
     {
       herramienta: 'Bloques flexibles',
@@ -95,6 +149,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Períodos de estudio de duración breve y ajustable (por ejemplo 15 a 25 minutos), seguidos de una pausa corta.',
       paraQue: 'Sostener la atención en tramos cortos es más realista que exigir concentración continua por mucho tiempo.',
       comoAplicarla: 'Elegir junto al estudiante una duración de bloque que le resulte alcanzable hoy, y ajustarla según cómo le vaya.',
+      fraseSimple: 'Estudiá en tramos cortos (15 a 25 minutos) con una pausa después — es más realista.',
+      icon: Timer,
     },
     {
       herramienta: 'Registro de distractores',
@@ -109,6 +165,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Cortes breves y programados entre bloques de estudio, distintos de las interrupciones no planeadas.',
       paraQue: 'Sostienen la energía atencional en sesiones largas y funcionan como un descanso real, no como una fuga.',
       comoAplicarla: 'Acordar de antemano cuánto dura la pausa y qué se hace en ella (estirar, tomar agua, no pantallas), para que no se extienda sola.',
+      fraseSimple: 'Un corte breve y planeado entre bloques, no una fuga sin fin.',
+      icon: Coffee,
     },
     {
       herramienta: 'Señal de retorno',
@@ -116,6 +174,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Un aviso simple (alarma, temporizador, palabra clave del adulto) que marca el fin de la pausa y el regreso al estudio.',
       paraQue: 'Evita que "cinco minutos" de pausa se conviertan en mucho más tiempo sin que nadie lo decida.',
       comoAplicarla: 'Poner un temporizador visible apenas empieza la pausa, para que el propio estudiante sepa cuándo volver.',
+      fraseSimple: 'Poné una alarma al empezar la pausa, para saber exactamente cuándo volver.',
+      icon: Bell,
     },
     {
       herramienta: 'Ajuste gradual',
@@ -132,6 +192,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Identificar la palabra clave de acción de una consigna (explicar, comparar, justificar, describir) antes de responder.',
       paraQue: 'Muchos errores no son de conocimiento sino de no entender qué acción se pide realmente.',
       comoAplicarla: 'Antes de empezar a resolver, subrayar el o los verbos de la consigna y decir con las propias palabras qué acción piden.',
+      fraseSimple: 'Subrayá la palabra que indica qué acción piden, antes de responder.',
+      icon: PenLine,
     },
     {
       herramienta: 'Identificar condiciones',
@@ -139,6 +201,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Reconocer los requisitos y límites que pone la consigna (extensión, formato, qué incluir o evitar).',
       paraQue: 'Evita perder puntos por no cumplir condiciones explícitas aunque el contenido esté bien resuelto.',
       comoAplicarla: 'Junto al verbo, marcar en la consigna cualquier condición ("con tus palabras", "máximo una carilla", "citando el texto").',
+      fraseSimple: 'Marcá también los requisitos de la consigna: extensión, formato, qué incluir.',
+      icon: ListChecks,
     },
     {
       herramienta: 'Lectura por capas',
@@ -160,6 +224,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Identificar en cada párrafo o sección la idea central, distinta de los detalles que la acompañan.',
       paraQue: 'Es la base para resumir, para responder consignas y para no perderse en información secundaria.',
       comoAplicarla: 'Después de leer un párrafo, pedirle al estudiante que lo diga en una sola oración, sin mirar el texto.',
+      fraseSimple: 'Después de leer un párrafo, decilo en una sola oración, sin mirar el texto.',
+      icon: Lightbulb,
     },
     {
       herramienta: 'Inferencias',
@@ -174,6 +240,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Un registro propio de palabras que no se entienden, con su significado en un lenguaje accesible.',
       paraQue: 'El vocabulario desconocido es una de las causas más comunes de que un texto "no entre", aunque el estudiante sepa leer bien.',
       comoAplicarla: 'Cada palabra nueva que aparece en una lectura se anota en una lista propia, con una definición corta y un ejemplo.',
+      fraseSimple: 'Anotá cada palabra nueva con su significado y un ejemplo, en una lista propia.',
+      icon: Book,
     },
     {
       herramienta: 'Verificación',
@@ -181,6 +249,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Volver al texto para confirmar si lo que se entendió coincide con lo que realmente dice.',
       paraQue: 'Corrige interpretaciones equivocadas antes de que se conviertan en una respuesta escrita.',
       comoAplicarla: 'Después de responder una consigna, volver a la parte del texto que la justifica y chequear que coincide.',
+      fraseSimple: 'Volvé al texto y confirmá que lo que entendiste coincide con lo que dice.',
+      icon: CheckCheck,
     },
   ],
   escribir: [
@@ -190,6 +260,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Organizar por escrito, antes de redactar, qué ideas van a aparecer y en qué orden.',
       paraQue: 'Evita el bloqueo de "no sé por dónde empezar" y ordena el pensamiento antes de gastar esfuerzo en la redacción.',
       comoAplicarla: 'Anotar en una lista o esquema simple 3 o 4 ideas clave, en el orden en que van a aparecer en el texto, antes de escribir una sola oración.',
+      fraseSimple: 'Antes de escribir una sola oración, anotá en una lista las ideas y el orden.',
+      icon: ListOrdered,
     },
     {
       herramienta: 'Respuesta en tres momentos',
@@ -197,6 +269,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Estructurar cualquier respuesta escrita en introducción breve, desarrollo y cierre.',
       paraQue: 'Da una estructura mínima previsible que sirve para la mayoría de las consignas escolares.',
       comoAplicarla: 'Practicar con consignas cortas dividiendo siempre la respuesta en esas tres partes, aunque sean pocas líneas cada una.',
+      fraseSimple: 'Toda respuesta: una introducción breve, el desarrollo y un cierre.',
+      icon: Rows3,
     },
     {
       herramienta: 'Cohesión',
@@ -218,6 +292,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Registrar por escrito, de forma abreviada, lo más importante de una explicación oral o una clase.',
       paraQue: 'Sin un método, los apuntes suelen quedar incompletos justo en lo que después hace falta para estudiar.',
       comoAplicarla: 'Acordar 3 o 4 abreviaturas propias y practicar tomar apuntes de un audio corto, comparando después con lo que decía.',
+      fraseSimple: 'Abreviaturas propias para anotar lo importante mientras escuchás.',
+      icon: NotebookPen,
     },
     {
       herramienta: 'Lista de revisión',
@@ -225,6 +301,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Un checklist propio de los errores más frecuentes del estudiante, para repasar antes de entregar un escrito.',
       paraQue: 'Traslada a un papel lo que de otro modo depende de "acordarse" de revisar, bajo presión y con poco tiempo.',
       comoAplicarla: 'Armar junto al estudiante una lista corta (3 a 5 puntos) con sus errores típicos, y usarla como último paso antes de entregar.',
+      fraseSimple: 'Una lista corta de tus errores típicos, para repasar justo antes de entregar.',
+      icon: ClipboardCheck,
     },
     {
       herramienta: 'Edición por etapas',
@@ -241,6 +319,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Intentar recordar la información sin mirar el material, en lugar de releerla.',
       paraQue: 'Es la técnica de estudio con más evidencia para el aprendizaje duradero, más que subrayar o releer.',
       comoAplicarla: 'Después de leer un tema, cerrar el material y escribir o decir en voz alta todo lo que se recuerda, y recién después revisar qué faltó.',
+      fraseSimple: 'Cerrá el material e intentá recordar sin mirar — es la técnica que más funciona.',
+      icon: Brain,
     },
     {
       herramienta: 'Práctica espaciada',
@@ -248,6 +328,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Distribuir el estudio de un tema en varias sesiones separadas en el tiempo, en vez de concentrarlo todo junto.',
       paraQue: 'Repasar con distancia en el tiempo fortalece la memoria mucho más que estudiar todo de una sola vez la noche anterior.',
       comoAplicarla: 'Planificar en la agenda única al menos dos repasos cortos de un mismo tema, separados por varios días.',
+      fraseSimple: 'Repasá el mismo tema en varios días distintos, no todo la noche anterior.',
+      icon: CalendarClock,
     },
     {
       herramienta: 'Intercalado',
@@ -262,6 +344,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Contar un tema como si se lo estuviera enseñando a otra persona que no lo conoce.',
       paraQue: 'Explicar algo obliga a entenderlo de verdad; las lagunas se notan enseguida al intentar ponerlo en palabras propias.',
       comoAplicarla: 'Pedirle al estudiante que explique el tema en voz alta a un familiar, un compañero o incluso a un peluche, sin mirar los apuntes.',
+      fraseSimple: 'Explicá el tema en voz alta como si se lo enseñaras a alguien que no sabe nada.',
+      icon: MessageCircle,
     },
     {
       herramienta: 'Preguntas',
@@ -283,6 +367,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Tarjetas de estudio con una pregunta o dato de un lado y la respuesta del otro, hechas por el propio estudiante.',
       paraQue: 'El valor está en el esfuerzo de intentar recordar antes de dar vuelta la tarjeta, no en simplemente leerlas.',
       comoAplicarla: 'Armar tarjetas propias (no descargadas) con una pregunta corta de un lado y responder de memoria antes de mirar el reverso.',
+      fraseSimple: 'Pregunta de un lado, respuesta del otro — hechas por vos, no descargadas.',
+      icon: Layers,
     },
     {
       herramienta: 'Autoevaluación',
@@ -306,6 +392,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Un cronograma que parte de la fecha de la evaluación hacia atrás, marcando qué estudiar cada día.',
       paraQue: 'Vuelve manejable un tiempo que de otro modo se percibe como "falta mucho" hasta que de golpe falta poco.',
       comoAplicarla: 'Con la fecha de evaluación como punto de partida, repartir los temas hacia atrás en la agenda única, dejando el último día para repaso general.',
+      fraseSimple: 'Desde la fecha del examen hacia atrás: qué estudiar cada día.',
+      icon: CalendarDays,
     },
     {
       herramienta: 'Simulación',
@@ -341,6 +429,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Un acuerdo explícito de qué se hace y qué no se hace el día antes de una evaluación.',
       paraQue: 'El día previo genera mucha ansiedad si no está anticipado; tener un plan reduce la improvisación de último momento.',
       comoAplicarla: 'Acordar de antemano un repaso breve, la hora de dormir y qué materiales preparar la noche anterior, para no decidir todo bajo presión.',
+      fraseSimple: 'Decidí de antemano qué hacés y qué no el día antes de rendir.',
+      icon: Moon,
     },
   ],
   regular_persistir: [
@@ -350,6 +440,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Definir el primer paso más chico y alcanzable posible para empezar una tarea que abruma.',
       paraQue: 'Frente a una tarea que se percibe enorme, empezar por algo mínimo baja la barrera inicial de arranque.',
       comoAplicarla: 'Acordar con el estudiante cuál sería "la versión más chica posible" de empezar (por ejemplo, "escribir solo el título") y proponer hacer solamente eso.',
+      fraseSimple: 'Si la tarea abruma, elegí el paso más chico posible para arrancar.',
+      icon: Flag,
     },
     {
       herramienta: 'Anticipación de obstáculos',
@@ -364,6 +456,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Frases breves que el propio estudiante se dice a sí mismo para guiar su conducta ("primero leo la consigna, después empiezo").',
       paraQue: 'Ponen en palabras propias los pasos a seguir, lo que ayuda a sostener el control cuando la tarea se vuelve difícil.',
       comoAplicarla: 'Elegir junto al estudiante 2 o 3 frases cortas que pueda decirse a sí mismo en los momentos de mayor dificultad.',
+      fraseSimple: 'Una frase corta que te decís a vos mismo para guiarte en el momento difícil.',
+      icon: Quote,
     },
     {
       herramienta: 'Tolerancia al error',
@@ -371,6 +465,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Trabajar la idea de que equivocarse es parte esperable de aprender, no una señal de fracaso.',
       paraQue: 'El miedo a equivocarse puede paralizar tanto como la dificultad real de la tarea.',
       comoAplicarla: 'Frente a un error, nombrarlo en voz alta sin dramatizarlo ("me equivoqué, ahora reviso qué pasó") y ver qué se puede aprender de él.',
+      fraseSimple: 'Equivocarte es parte de aprender, no una señal de que algo está mal.',
+      icon: Smile,
     },
     {
       herramienta: 'Pausa reguladora',
@@ -378,6 +474,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Un corte breve dedicado específicamente a bajar la activación emocional (respirar, moverse), distinto de la pausa de atención.',
       paraQue: 'Cuando la frustración o la ansiedad suben, seguir intentando resolver sin regular primero la emoción suele empeorar las cosas.',
       comoAplicarla: 'Acordar de antemano una señal para pedir esta pausa, y qué hacer en ella (respirar, tomar agua, salir un momento).',
+      fraseSimple: 'Si la frustración sube, primero respirá — después seguís resolviendo.',
+      icon: Wind,
     },
     {
       herramienta: 'Exposición gradual',
@@ -392,6 +490,8 @@ export const FICHAS_POR_RUTA: Record<string, FichaHerramienta[]> = {
       queEs: 'Reconocer cuándo hace falta ayuda y saber cómo pedirla, en lugar de trabarse en silencio.',
       paraQue: 'Muchos estudiantes se frenan más tiempo del necesario por no saber cómo o a quién pedir ayuda.',
       comoAplicarla: 'Practicar con el estudiante una frase concreta para pedir ayuda (a un docente, a un adulto) y en qué momento conviene usarla.',
+      fraseSimple: 'Reconocer que necesitás ayuda y saber cómo pedirla, en vez de trabarte en silencio.',
+      icon: HelpCircle,
     },
   ],
   construir_autonomia: [

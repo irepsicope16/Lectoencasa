@@ -8,7 +8,6 @@ import { RUTAS } from '@/data/rutas'
 import { FICHAS_POR_RUTA, type NivelHerramienta } from '@/data/biblioteca'
 import { DIMENSIONES } from '@/data/items'
 import { VIDEOS } from '@/data/videos'
-import { cn } from '@/lib/utils'
 import { moduleCardStyle, RUTA_COLOR } from '@/lib/moduleColors'
 
 const NIVEL_LABEL: Record<NivelHerramienta, string> = {
@@ -75,32 +74,58 @@ export default function BibliotecaPage() {
 
               {fichas.length > 0 && (
               <div className="grid gap-3 lg:grid-cols-2">
-                {fichas.map((ficha) => (
-                  <Card key={ficha.herramienta} className="border-t-[3px]" style={moduleCardStyle(ruta.id)}>
-                    <CardHeader>
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <CardTitle className="text-[14px]">{ficha.herramienta}</CardTitle>
-                        <Badge variant={NIVEL_BADGE_VARIANT[ficha.nivel]} className={cn(ficha.nivel === 1 && 'text-muted-foreground')}>
-                          {NIVEL_LABEL[ficha.nivel]}
-                        </Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-2 pt-0 text-[12.5px] leading-relaxed">
-                      <p>
-                        <span className="font-semibold text-foreground">Qué es: </span>
-                        <span className="text-muted-foreground">{ficha.queEs}</span>
-                      </p>
-                      <p>
-                        <span className="font-semibold text-foreground">Para qué sirve: </span>
-                        <span className="text-muted-foreground">{ficha.paraQue}</span>
-                      </p>
-                      <p>
-                        <span className="font-semibold text-foreground">Cómo aplicarla: </span>
-                        <span className="text-muted-foreground">{ficha.comoAplicarla}</span>
-                      </p>
-                    </CardContent>
-                  </Card>
-                ))}
+                {fichas.map((ficha) => {
+                  if (ficha.nivel === 1 && ficha.fraseSimple) {
+                    const Icon = ficha.icon
+                    return (
+                      <Card key={ficha.herramienta} className="border-t-[3px]" style={moduleCardStyle(ruta.id)}>
+                        <CardContent className="flex items-start gap-3 pt-4">
+                          {Icon && (
+                            <span
+                              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white shadow-sm"
+                              style={{ background: RUTA_COLOR[ruta.id]?.color }}
+                            >
+                              <Icon className="h-4.5 w-4.5" />
+                            </span>
+                          )}
+                          <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <p className="text-[14px] font-semibold">{ficha.herramienta}</p>
+                              <Badge variant={NIVEL_BADGE_VARIANT[ficha.nivel]} className="text-muted-foreground">
+                                {NIVEL_LABEL[ficha.nivel]}
+                              </Badge>
+                            </div>
+                            <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">{ficha.fraseSimple}</p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )
+                  }
+                  return (
+                    <Card key={ficha.herramienta} className="border-t-[3px]" style={moduleCardStyle(ruta.id)}>
+                      <CardHeader>
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <CardTitle className="text-[14px]">{ficha.herramienta}</CardTitle>
+                          <Badge variant={NIVEL_BADGE_VARIANT[ficha.nivel]}>{NIVEL_LABEL[ficha.nivel]}</Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-2 pt-0 text-[12.5px] leading-relaxed">
+                        <p>
+                          <span className="font-semibold text-foreground">Qué es: </span>
+                          <span className="text-muted-foreground">{ficha.queEs}</span>
+                        </p>
+                        <p>
+                          <span className="font-semibold text-foreground">Para qué sirve: </span>
+                          <span className="text-muted-foreground">{ficha.paraQue}</span>
+                        </p>
+                        <p>
+                          <span className="font-semibold text-foreground">Cómo aplicarla: </span>
+                          <span className="text-muted-foreground">{ficha.comoAplicarla}</span>
+                        </p>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
               </div>
               )}
 

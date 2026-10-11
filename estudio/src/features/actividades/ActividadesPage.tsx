@@ -74,6 +74,7 @@ export default function ActividadesPage() {
                 <div className="grid gap-2.5 lg:grid-cols-2">
                   {fichas.map((actividad) => {
                     const probadaActual = probadaDe(actividad.id)
+                    const Icon = actividad.nivel === 1 ? actividad.icon : undefined
                     return (
                       <button
                         key={actividad.id}
@@ -82,9 +83,19 @@ export default function ActividadesPage() {
                         style={moduleCardStyle(ruta.id)}
                       >
                         <div className="flex flex-wrap items-start justify-between gap-2">
-                          <div>
-                            <p className="text-[13.5px] font-medium">{actividad.titulo}</p>
-                            <p className="mt-1 text-[12.5px] text-muted-foreground">{actividad.descripcion}</p>
+                          <div className="flex items-start gap-2.5">
+                            {Icon && (
+                              <span
+                                className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-white shadow-sm"
+                                style={{ background: RUTA_COLOR[ruta.id]?.color }}
+                              >
+                                <Icon className="h-3.5 w-3.5" />
+                              </span>
+                            )}
+                            <div>
+                              <p className="text-[13.5px] font-medium">{actividad.titulo}</p>
+                              <p className="mt-1 text-[12.5px] text-muted-foreground">{actividad.descripcion}</p>
+                            </div>
                           </div>
                           <Badge variant={NIVEL_BADGE_VARIANT[actividad.nivel]}>{NIVEL_LABEL[actividad.nivel]}</Badge>
                         </div>
