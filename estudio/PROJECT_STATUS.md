@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-11 (actualizado, ronda 6) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-11 (actualizado, ronda 7) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -284,6 +284,37 @@ estaban pensados para fondos claros y no se adaptaban al fondo oscuro del
 propio día. Se agregó una marca `oscuro` a cada color de día y el texto
 cambia a blanco cuando corresponde. Se verificó visualmente con capturas
 de escritorio y mobile antes de confirmar que quedó legible en los 7 días.
+
+## ✅ Ronda 7 (11/10/2026): contenido de "Etapas del estudio" + bug de navegación
+
+La usuaria mandó una infografía de referencia de otra cuenta ("Psico
+acompaña"), con 6 pasos concretos para pasar de leer un texto a tener un
+resumen propio. Se le preguntó qué hacer con la imagen (no se pueden
+replicar las ilustraciones de personajes dibujados a mano) y pidió
+cambiar el contenido, no solo el estilo visual.
+
+- El imprimible `/print/pasos-estudio` pasó de un recorrido genérico de
+  6 pasos de estudio a los 6 pasos concretos de la referencia: **el tema,
+  lectura global, dividir, subrayar, releer, el resumen** — mismo
+  contenido pedagógico, reescrito con la voz de Método Estudio y
+  conectado a las técnicas que ya existen en la Biblioteca (Lectura por
+  capas, Idea principal, Resumen) en vez de inventar nombres nuevos.
+- Visualmente, cada paso ahora tiene su propio color (de los 8 tokens de
+  color por módulo ya existentes en el sistema de diseño, no colores
+  nuevos) y un ícono propio junto al título, en vez de solo alternar
+  entre dos colores.
+- Se renombró a "Etapas del estudio" también en el botón de la sección
+  Imprimibles de Biblioteca, para que coincida con el título de la
+  página.
+
+**Bug real encontrado al tocar este archivo (no buscado a propósito)**:
+el botón "Volver" de este imprimible y del de "Guía de acentuación"
+apuntaba a `/pro/biblioteca`, una ruta que quedó del esquema anterior
+(profesional/estudiante) y que ya no existe desde el pivot del
+10/10 — al tocarlo, caía al catch-all y mandaba a Inicio en silencio, sin
+error visible. Se corrigió a `/biblioteca` en ambos archivos y se
+verificó con Playwright que el click ahora aterriza en la página
+correcta.
 
 ## 🔜 Backlog
 

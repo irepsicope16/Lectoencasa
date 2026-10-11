@@ -144,7 +144,7 @@ export default function BibliotecaPage() {
           </Button>
           <Button variant="outline" size="sm" asChild>
             <a href="#/print/pasos-estudio" target="_blank" rel="noopener noreferrer">
-              Pasos para estudiar <ExternalLink className="h-3.5 w-3.5" />
+              Etapas del estudio <ExternalLink className="h-3.5 w-3.5" />
             </a>
           </Button>
         </div>
