@@ -28,6 +28,7 @@ type FiltroNivel = 'todos' | NivelActividad
 export default function ActividadesPage() {
   const { data: probadas = [] } = useActividadesProbadas()
   const probar = useProbarActividad()
+  const actualizar = useActualizarActividad()
   const [filtro, setFiltro] = useState<FiltroNivel>('todos')
   const [calificando, setCalificando] = useState<ActividadProbada | null>(null)
   const [detalle, setDetalle] = useState<ActividadCatalogo | null>(null)
@@ -42,6 +43,21 @@ export default function ActividadesPage() {
     toast.success(`Empezaste «${actividad.titulo}»`)
   }
 
+  async function marcarTilde(actividad: ActividadCatalogo, probadaActual?: ActividadProbada) {
+    if (!probadaActual) {
+      const nueva = await probar.mutateAsync(actividad)
+      await actualizar.mutateAsync({ id: nueva.id, estado: 'completada', fechaCompletada: new Date().toISOString() })
+      toast.success(`«${actividad.titulo}» completada ✓`)
+      return
+    }
+    if (probadaActual.estado === 'completada') {
+      await actualizar.mutateAsync({ id: probadaActual.id, estado: 'en_curso', fechaCompletada: undefined })
+    } else {
+      await actualizar.mutateAsync({ id: probadaActual.id, estado: 'completada', fechaCompletada: new Date().toISOString() })
+      toast.success(`«${actividad.titulo}» completada ✓`)
+    }
+  }
+
   return (
     <FadeIn className="space-y-5">
       <PageHeader title="Actividades" subtitle="Elegí qué probar y marcá tu progreso — así armás tu propio ranking de qué te funciona." />
@@ -49,7 +65,7 @@ export default function ActividadesPage() {
         No hay una técnica mejor que otra en abstracto — probá, calificá cómo te fue y quedate con lo que te sirve.
       </AvisoOrientativo>
 
-      <MisActividades probadas={probadas} onCalificar={setCalificando} onAbrir={setDetalle} />
+      <MisActividades probadas={probadas} onAbrir={setDetalle} />
 
       <Card>
         <CardHeader>
@@ -74,16 +90,16 @@ export default function ActividadesPage() {
                 <div className="grid gap-2.5 lg:grid-cols-2">
                   {fichas.map((actividad) => {
                     const probadaActual = probadaDe(actividad.id)
+                    const completada = probadaActual?.estado === 'completada'
                     const Icon = actividad.nivel === 1 ? actividad.icon : undefined
                     return (
-                      <button
+                      <div
                         key={actividad.id}
-                        onClick={() => setDetalle(actividad)}
-                        className="rounded-xl border border-t-[3px] p-3.5 text-left transition-transform hover:-translate-y-0.5 hover:shadow-md"
+                        className="rounded-xl border border-t-[3px] p-3.5 transition-transform hover:-translate-y-0.5 hover:shadow-md"
                         style={moduleCardStyle(ruta.id)}
                       >
                         <div className="flex flex-wrap items-start justify-between gap-2">
-                          <div className="flex items-start gap-2.5">
+                          <button onClick={() => setDetalle(actividad)} className="flex min-w-0 flex-1 items-start gap-2.5 text-left">
                             {Icon && (
                               <span
                                 className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-white shadow-sm"
@@ -92,21 +108,34 @@ export default function ActividadesPage() {
                                 <Icon className="h-3.5 w-3.5" />
                               </span>
                             )}
-                            <div>
+                            <div className="min-w-0">
                               <p className="text-[13.5px] font-medium">{actividad.titulo}</p>
                               <p className="mt-1 text-[12.5px] text-muted-foreground">{actividad.descripcion}</p>
                             </div>
+                          </button>
+                          <div className="flex shrink-0 items-center gap-1.5">
+                            <button
+                              onClick={() => marcarTilde(actividad, probadaActual)}
+                              aria-label={completada ? 'Marcar como no completada' : 'Marcar como completada'}
+                              title={completada ? 'Marcar como no completada' : 'Marcar como completada'}
+                            >
+                              {completada ? (
+                                <CheckCircle2 className="h-5 w-5 text-primary" />
+                              ) : (
+                                <Circle className="h-5 w-5 text-faint hover:text-primary" />
+                              )}
+                            </button>
+                            <Badge variant={NIVEL_BADGE_VARIANT[actividad.nivel]}>{NIVEL_LABEL[actividad.nivel]}</Badge>
                           </div>
-                          <Badge variant={NIVEL_BADGE_VARIANT[actividad.nivel]}>{NIVEL_LABEL[actividad.nivel]}</Badge>
                         </div>
-                        {probadaActual && (
+                        {probadaActual && !completada && (
                           <div className="mt-3">
                             <span className="inline-flex items-center gap-1 rounded-full bg-surface px-2 py-0.5 text-[10.5px] font-medium text-primary">
-                              {probadaActual.estado === 'completada' ? 'Completada ✓' : 'En curso'}
+                              En curso
                             </span>
                           </div>
                         )}
-                      </button>
+                      </div>
                     )
                   })}
                 </div>
@@ -225,11 +254,9 @@ function DetalleActividad({
 
 function MisActividades({
   probadas,
-  onCalificar,
   onAbrir,
 }: {
   probadas: ActividadProbada[]
-  onCalificar: (a: ActividadProbada) => void
   onAbrir: (a: ActividadCatalogo) => void
 }) {
   const actualizar = useActualizarActividad()
@@ -252,7 +279,13 @@ function MisActividades({
                 style={{ borderLeftColor: RUTA_COLOR[a.rutaId]?.color }}
               >
                 <button
-                  onClick={() => (a.estado === 'completada' ? actualizar.mutate({ id: a.id, estado: 'en_curso', fechaCompletada: undefined }) : onCalificar(a))}
+                  onClick={() =>
+                    actualizar.mutate(
+                      a.estado === 'completada'
+                        ? { id: a.id, estado: 'en_curso', fechaCompletada: undefined }
+                        : { id: a.id, estado: 'completada', fechaCompletada: new Date().toISOString() },
+                    )
+                  }
                   aria-label={a.estado === 'completada' ? 'Marcar en curso' : 'Marcar completada'}
                 >
                   {a.estado === 'completada' ? (

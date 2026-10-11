@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-11 (actualizado, ronda 14) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-11 (actualizado, ronda 15) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -522,6 +522,33 @@ seguimiento de su hijo respecto al estudio y las técnicas que usó.
   haciéndose desde Actividades, esta vista es para repasar juntos.
 - Verificado con Playwright (datos de prueba sembrados en localStorage,
   escritorio y mobile): ordena bien por fecha, sin errores de consola.
+
+## ✅ Ronda 15 (11/10/2026): tilde de un toque en el catálogo de Actividades
+
+La usuaria aclaró la ronda anterior: no pedía vincular el cronómetro,
+sino un botón tipo tilde en cada actividad para marcar el desempeño
+rápido, visible para el estudiante y su familia.
+
+- Se encontró que el único checkmark tocable ya existente vivía en "Mis
+  actividades" (la lista de las ya empezadas) — el Catálogo (donde se
+  explora y elige qué probar) solo mostraba una etiqueta de texto
+  ("Completada ✓" / "En curso"), sin ningún control: había que abrir el
+  diálogo de detalle, tocar "Empezar a probarla", volver a entrar y
+  calificarla para que quedara marcada. Eso es justo lo contrario de
+  "rápido".
+- Se agregó un ícono de tilde/círculo tocable en cada tarjeta del
+  Catálogo, aparte del área que abre el detalle. Un toque alcanza:
+  si la actividad no se había probado, la crea y la marca completada en
+  el mismo gesto; si ya estaba completada, un segundo toque la vuelve a
+  "en curso" (deshacer). La calificación con estrellas sigue existiendo
+  pero ahora es opcional — se agrega abriendo el detalle, no se fuerza
+  en cada marca.
+- Se alineó el mismo comportamiento en "Mis actividades": antes, tocar el
+  círculo abría el diálogo de calificar; ahora alterna directo, igual que
+  en el Catálogo, para que el gesto sea consistente en toda la página.
+- Verificado con Playwright (escritorio y mobile): un toque crea y
+  completa la actividad, actualiza la racha, no choca con el botón de
+  abrir detalle, sin errores de consola.
 
 ## 🔜 Backlog
 
