@@ -5,7 +5,21 @@
 // de inspiración, no de autoría. El nivel (1 a 3) es una complejidad
 // orientativa, igual que en `data/biblioteca.ts`: no representa una edad.
 
-import { Anchor, CalendarDays, Compass, Eye, FolderKanban, HelpCircle, ListOrdered, ListTree, MessageCircle, Wind, Zap } from 'lucide-react'
+import {
+  Anchor,
+  CalendarDays,
+  Compass,
+  Eye,
+  FolderKanban,
+  HelpCircle,
+  Highlighter,
+  ListOrdered,
+  ListTree,
+  MessageCircle,
+  Presentation,
+  Wind,
+  Zap,
+} from 'lucide-react'
 import type { ActividadCatalogo } from '@/types'
 
 export const ACTIVIDADES: ActividadCatalogo[] = [
@@ -128,6 +142,17 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     ejercicio: 'Tomá 3 respuestas que diste sobre un tema y, para cada una, buscá y citá la frase exacta del texto que la respalda.',
     fuente: 'técnicas de estudio',
   },
+  {
+    id: 'comprender-marcar-consigna',
+    rutaId: 'comprender',
+    nivel: 1,
+    titulo: 'Marcar la consigna antes de responder',
+    descripcion: 'Subrayar el verbo, los requisitos y cada parte que la consigna pide por separado, antes de empezar a responder.',
+    icon: Highlighter,
+    ejemplo: 'La consigna dice "Explicá las causas de la Revolución de Mayo y compará con un proceso actual, en no más de una carilla". Subrayo "explicá" y "compará" (2 acciones distintas) y "una carilla" (el límite). Al final reviso que respondí ambas partes.',
+    ejercicio: 'Agarrá una consigna de alguna materia. Subrayá cada verbo de acción, cada condición (extensión, formato) y marcá cuántas partes distintas pide responder. Recién después, respondé.',
+    fuente: 'técnicas de estudio',
+  },
 
   // ---------- Escribir para comunicar ----------
   {
@@ -170,6 +195,27 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     ejemplo: '"La fotosíntesis produce oxígeno. Sin embargo, la respiración celular lo consume. Por lo tanto, ambos procesos se equilibran. Además, dependen de la luz solar."',
     ejercicio: 'Elegí dos ideas para comparar y escribí un párrafo usando 4 conectores distintos (por ejemplo: sin embargo, por lo tanto, además, en cambio).',
     fuente: 'técnicas de estudio',
+  },
+  {
+    id: 'escribir-guion-exposicion',
+    rutaId: 'escribir',
+    nivel: 1,
+    titulo: 'Armar el guión de tu exposición',
+    descripcion: 'Planificar en 3 partes (inicio, desarrollo, cierre) lo que vas a decir al exponer un tema en voz alta.',
+    icon: Presentation,
+    ejemplo: 'Para exponer sobre el Imperio Romano: inicio ("hoy voy a hablar de cómo cayó el Imperio Romano"), desarrollo (2 causas principales) y cierre ("por eso fue un proceso gradual, no de un día para el otro").',
+    ejercicio: 'Elegí un tema que tengas que exponer (o uno cualquiera de lo que estudiaste) y escribí tu guión en 3 partes: cómo arrancás, qué 2 o 3 ideas van en el medio, y cómo cerrás.',
+    fuente: 'técnicas de oratoria, reformulado',
+  },
+  {
+    id: 'escribir-ensayo-cronometrado',
+    rutaId: 'escribir',
+    nivel: 2,
+    titulo: 'Ensayo cronometrado frente al espejo',
+    descripcion: 'Decir la exposición completa en voz alta y con tiempo, antes del día real, en vez de solo repasarla en silencio.',
+    ejemplo: 'Antes de la exposición, me paro frente al espejo, pongo el cronómetro y digo todo el guión en voz alta de punta a punta, sin parar a corregirme en el medio.',
+    ejercicio: 'Tomá tu guión de exposición y decilo completo en voz alta, cronometrado, frente a un espejo o grabándote. Anotá cuánto tardaste y en qué parte te trabaste.',
+    fuente: 'técnicas de oratoria, reformulado',
   },
 
   // ---------- Aprender y recordar ----------

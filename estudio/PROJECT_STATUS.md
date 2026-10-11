@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-11 (actualizado, ronda 9) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-11 (actualizado, ronda 10) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -373,6 +373,41 @@ es un tipo nuevo o lo mismo que TP) antes de tocar el modelo de datos.
   ambos tokens ya existían, no se inventaron colores nuevos.
 - Se sacó la sección "Planificadores y agenda" de Herramientas para no
   duplicar el acceso.
+
+## ✅ Ronda 10 (11/10/2026): auditoría de cobertura + exposición oral y precisión en consignas
+
+La usuaria preguntó, en términos generales, si la app cubre memorizar,
+aprender, exponer oralmente, concentrarse en consignas y "responder
+asertivamente". Antes de escribir nada se hizo una auditoría real del
+contenido existente (no una opinión al aire) comparando los 60 técnicas de
+Biblioteca y 30 actividades contra esos 4 ejes. Resultado:
+
+- **Memorizar/aprender**: bien cubierto (repetición espaciada, recuperación
+  activa, flashcards, mapas conceptuales, intercalado) — no se tocó.
+- **Concentrarse en consignas**: las técnicas ya eran buenas ("Verbo de la
+  consigna", "Identificar condiciones") pero no había ninguna actividad
+  práctica que las ejercitara.
+- **Exponer oralmente**: gap real — lo único que existía era sobre el
+  miedo a hablar en público, nada sobre cómo armar y dar una exposición.
+- **"Responder asertivamente"**: se le preguntó qué quiso decir exactamente
+  (el término es ambiguo) — aclaró que se refería a identificar con
+  precisión qué pide la consigna y responder exactamente eso, no a
+  asertividad interpersonal. Se trató como una extensión del punto
+  anterior, no como un eje aparte.
+
+**Contenido nuevo agregado** (4 técnicas + 3 actividades, todas con ícono
+y color siguiendo el patrón de nivel 1 de la ronda 8):
+
+- *Comprender consignas y textos*: técnica "Responder exactamente lo que
+  piden" + actividad "Marcar la consigna antes de responder".
+- *Escribir para comunicar*: técnicas "Guión de una exposición" y
+  "Tarjetas de apoyo para exponer" (nivel 1), "Practicar en voz alta y
+  cronometrado" (nivel 2) + actividades "Armar el guión de tu exposición"
+  (nivel 1) y "Ensayo cronometrado frente al espejo" (nivel 2).
+
+No se creó ninguna ruta ni dimensión nueva — todo el contenido entra en
+las 8 rutas ya existentes, para no romper el vínculo con las 8 dimensiones
+del autoperfil del Documento Maestro.
 
 ## 🔜 Backlog
 
