@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-11 (actualizado, ronda 13) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-11 (actualizado, ronda 14) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -495,6 +495,33 @@ rediseñada en la ronda 12).
   peso, que son los únicos que se usan — bajó el precache de la PWA de 147
   a 103 entradas (2100 KiB → 1681 KiB). Verificado visualmente que las
   tipografías se siguen viendo igual.
+
+## ✅ Ronda 14 (11/10/2026): seguimiento familiar de actividades
+
+La usuaria preguntó si existe la posibilidad de "ir marcando las
+actividades que fueron realizando", para que una familia lleve el
+seguimiento de su hijo respecto al estudio y las técnicas que usó.
+
+- Antes de tocar código se auditó lo que ya existía: `ActividadProbada` ya
+  tenía `estado` (pendiente/en_curso/completada), `fechaInicio`,
+  `fechaCompletada`, `calificacion` y `nota`; "Mi progreso" ya mostraba
+  racha, minutos de estudio, insignias, calendario de hábito y actividades
+  completadas por ruta. Es decir, la base ya estaba — el pedido no era
+  "agregar tracking" sino hacerlo legible para una familia.
+- Se confirmó con la usuaria el escenario real antes de construir nada
+  (AskUserQuestion): la familia mira el mismo dispositivo que el
+  estudiante (no hay pedido de ver desde otro dispositivo — eso hubiera
+  requerido backend/cuentas, un cambio de arquitectura grande que no se
+  justificaba acá), y quiere ver un checklist simple de actividades, más
+  la racha/insignias y el tiempo de estudio que ya existían.
+- Se agregó una tarjeta nueva **"Qué fue haciendo"** en "Mi progreso",
+  arriba de Insignias: lista cronológica (más reciente primero) de todas
+  las actividades probadas, con ícono de check/círculo según estado,
+  título, ruta, fecha de completada (o "en curso desde...") y calificación
+  en estrellas si la tiene. Es de solo lectura — administrar/marcar sigue
+  haciéndose desde Actividades, esta vista es para repasar juntos.
+- Verificado con Playwright (datos de prueba sembrados en localStorage,
+  escritorio y mobile): ordena bien por fecha, sin errores de consola.
 
 ## 🔜 Backlog
 
