@@ -170,6 +170,18 @@ export interface Ficha {
   updatedAt: string
 }
 
+// ---------- Guía de textos (seguimiento de lecturas: leído/subrayado/resumido) ----------
+
+export interface TextoGuia {
+  id: string
+  titulo: string
+  leido: boolean
+  subrayado: boolean
+  resumido: boolean
+  createdAt: string
+  updatedAt: string
+}
+
 // ---------- Agenda (eventos semanales) ----------
 
 export type TipoEvento =

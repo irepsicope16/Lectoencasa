@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-11 (actualizado, ronda 10) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-11 (actualizado, ronda 11) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -408,6 +408,34 @@ y color siguiendo el patrón de nivel 1 de la ronda 8):
 No se creó ninguna ruta ni dimensión nueva — todo el contenido entra en
 las 8 rutas ya existentes, para no romper el vínculo con las 8 dimensiones
 del autoperfil del Documento Maestro.
+
+## ✅ Ronda 11 (11/10/2026): 3 herramientas nuevas a partir de referencias visuales
+
+La usuaria mandó capturas de otro producto ("MIO Planners") con 3 ideas:
+un gráfico circular de distribución del día, una guía de seguimiento de
+textos y un horario de cursada. Se evaluó dónde encajaba cada una y se
+confirmó alcance antes de construir — las 3 se agregaron como tarjetas
+nuevas en Herramientas (ya son 7):
+
+- **Guía de textos** (`GuiaTextosPage.tsx`): lista de lecturas con 3
+  casilleros por texto (Leído / Subrayado / Resumido) que se togglean con
+  un clic. Conecta directo con "Etapas del estudio" de una ronda
+  anterior: ahora esos pasos se pueden trackear, no solo leer. Usa el
+  mismo patrón Repository que Fichas/Actividades (`db.textosGuia`).
+- **Horario de cursada** (`HorarioCursadaPage.tsx`): grilla fija Lunes a
+  Viernes, 7:00 a 19:00, con celdas editables y un campo de notas —
+  deliberadamente separado de la Agenda, que es para eventos puntuales,
+  no para el horario fijo de clases. Es un documento único persistido
+  con Zustand (`me:horario_cursada`), no una lista de eventos.
+- **Distribución de actividades** (`DistribucionActividadesPage.tsx`):
+  4 sliders (Estudio/Descanso/Pendientes/Recreación) con un gráfico de
+  dona en vivo hecho con `conic-gradient` de CSS puro (sin librería de
+  gráficos nueva) — mejora la versión en papel del original porque
+  actualiza en tiempo real y avisa cuánto falta o sobra para llegar al
+  100%.
+
+Las 3 quedan en `db`/stores nuevos, sin tocar ningún modelo existente.
+Verificado con capturas en desktop y mobile, sin errores de consola.
 
 ## 🔜 Backlog
 

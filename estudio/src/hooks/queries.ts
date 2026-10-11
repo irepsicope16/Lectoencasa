@@ -11,6 +11,7 @@ import type {
   Ficha,
   MapaConceptual,
   SesionEstudio,
+  TextoGuia,
 } from '@/types'
 
 // ---------- Autoperfil ----------
@@ -336,5 +337,39 @@ export function useEliminarEntradaDiario() {
   return useMutation({
     mutationFn: (id: string) => db.diario.remove(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['diario'] }),
+  })
+}
+
+// ---------- Guía de textos ----------
+
+export function useTextosGuia() {
+  return useQuery({
+    queryKey: ['textosGuia'],
+    queryFn: () => db.textosGuia.list(),
+  })
+}
+
+export function useCrearTextoGuia() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (titulo: string) => db.textosGuia.create({ titulo, leido: false, subrayado: false, resumido: false }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['textosGuia'] }),
+  })
+}
+
+export function useActualizarTextoGuia() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, ...patch }: { id: string } & Partial<Pick<TextoGuia, 'leido' | 'subrayado' | 'resumido'>>) =>
+      db.textosGuia.update(id, patch),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['textosGuia'] }),
+  })
+}
+
+export function useEliminarTextoGuia() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => db.textosGuia.remove(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['textosGuia'] }),
   })
 }

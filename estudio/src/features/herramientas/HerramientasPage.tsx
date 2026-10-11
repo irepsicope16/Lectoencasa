@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { BookOpenCheck, NotebookPen, Timer, Workflow } from 'lucide-react'
+import { BookOpenCheck, ListChecks, NotebookPen, PieChart, Table2, Timer, Workflow } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { FadeIn, IconBadge, PageHeader } from '@/components/shared'
 
@@ -31,6 +31,27 @@ const HERRAMIENTAS = [
     tono: 'primario',
     titulo: 'Diario de metacognición',
     descripcion: 'Después de cada sesión: qué método usaste, qué tan bien te funcionó y qué cambiarías.',
+  },
+  {
+    to: '/herramientas/guia-textos',
+    icon: ListChecks,
+    tono: 'secundario',
+    titulo: 'Guía de textos',
+    descripcion: 'Anotá qué estás leyendo y marcá tu avance: leído, subrayado, resumido.',
+  },
+  {
+    to: '/herramientas/horario-cursada',
+    icon: Table2,
+    tono: 'dorado',
+    titulo: 'Horario de cursada',
+    descripcion: 'Tu horario fijo de materias, siempre a mano — distinto de la Agenda.',
+  },
+  {
+    to: '/herramientas/distribucion-actividades',
+    icon: PieChart,
+    tono: 'primario',
+    titulo: 'Distribución de actividades',
+    descripcion: 'Un gráfico visual de cómo repartís tu día: estudio, descanso, pendientes y recreación.',
   },
 ] as const
 

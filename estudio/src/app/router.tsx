@@ -20,6 +20,9 @@ const CronometroPage = lazy(() => import('@/features/herramientas/CronometroPage
 const MapasPage = lazy(() => import('@/features/herramientas/MapasPage'))
 const FichasPage = lazy(() => import('@/features/herramientas/FichasPage'))
 const DiarioPage = lazy(() => import('@/features/herramientas/DiarioPage'))
+const GuiaTextosPage = lazy(() => import('@/features/herramientas/GuiaTextosPage'))
+const HorarioCursadaPage = lazy(() => import('@/features/herramientas/HorarioCursadaPage'))
+const DistribucionActividadesPage = lazy(() => import('@/features/herramientas/DistribucionActividadesPage'))
 const ProgresoPage = lazy(() => import('@/features/progreso/ProgresoPage'))
 const SettingsPage = lazy(() => import('@/features/settings/SettingsPage'))
 const PrintAcentuacionPage = lazy(() => import('@/features/print/PrintAcentuacionPage'))
@@ -54,6 +57,9 @@ export const router = createHashRouter([
       { path: '/herramientas/mapas', element: <Page><MapasPage /></Page> },
       { path: '/herramientas/fichas', element: <Page><FichasPage /></Page> },
       { path: '/herramientas/diario', element: <Page><DiarioPage /></Page> },
+      { path: '/herramientas/guia-textos', element: <Page><GuiaTextosPage /></Page> },
+      { path: '/herramientas/horario-cursada', element: <Page><HorarioCursadaPage /></Page> },
+      { path: '/herramientas/distribucion-actividades', element: <Page><DistribucionActividadesPage /></Page> },
       { path: '/herramientas/agenda-anual', element: <Page><AgendaAnualPage /></Page> },
       { path: '/herramientas/planificador-principiante', element: <Page><PlanificadorPrincipiantePage /></Page> },
       { path: '/herramientas/planificador-secundaria', element: <Page><PlanificadorSecundariaPage /></Page> },

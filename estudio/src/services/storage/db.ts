@@ -10,6 +10,7 @@ import type {
   OpenAnswer,
   QuestionnaireResponse,
   SesionEstudio,
+  TextoGuia,
 } from '@/types'
 
 // ------------------------------------------------------------
@@ -32,6 +33,7 @@ export const db = {
   planificadorPrincipiante: new Repository<EventoAgenda>(driver, 'planificador_principiante'),
   planificadorSecundaria: new Repository<EventoAgenda>(driver, 'planificador_secundaria'),
   planificadorSuperior: new Repository<EventoAgenda>(driver, 'planificador_superior'),
+  textosGuia: new Repository<TextoGuia>(driver, 'textos_guia'),
   clearAll: () => driver.clearAll(),
 }
 
