@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-11 (actualizado, ronda 11) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-11 (actualizado, ronda 12) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -436,6 +436,31 @@ nuevas en Herramientas (ya son 7):
 
 Las 3 quedan en `db`/stores nuevos, sin tocar ningún modelo existente.
 Verificado con capturas en desktop y mobile, sin errores de consola.
+
+## ✅ Ronda 12 (11/10/2026): portada reconstruida en código (ya no imagen)
+
+La usuaria mandó una captura de la pantalla de bienvenida (la "portada")
+mostrando que el lema todavía decía "Evaluar · Comprender · Intervenir" —
+lenguaje clínico del enfoque profesional previo al pivot, y pidió
+reformularlo para estudiantes, además de más color y profundidad.
+
+- Se descubrió que esa portada no era texto editable: era una imagen
+  (`logo-completo.webp`) que la propia usuaria había subido al principio
+  del proyecto, con el lema "quemado" en los píxeles — no se podía tocar
+  con código.
+- Se reconstruyó `BrandCover` (en `branding/Logo.tsx`) completamente en
+  HTML/CSS, usando el sistema de diseño ya existente, en vez de la
+  imagen. El isotipo chico de la sidebar/pestaña no se tocó (ese no
+  tenía texto desactualizado).
+- Lema nuevo: **"Conocé · Practicá · Mejorá"**, en segunda persona
+  (vos), acorde al resto de la app. Las etiquetas Perfil/Estrategias/
+  Seguimiento se mantuvieron — ya mapean bien a Autoperfil/Biblioteca/
+  Mi progreso, no hacía falta cambiarlas.
+- Los 3 círculos pasaron de gris-navy plano a colores vivos con
+  gradiente y sombra propia (terracota, verde agua, violeta — todos
+  tokens ya existentes), y el lema reemplazó el gris por el acento
+  terracota en negrita. Verificado en claro, oscuro, con input vacío y
+  con nombre cargado — el flujo de "Empezar" sigue funcionando igual.
 
 ## 🔜 Backlog
 
