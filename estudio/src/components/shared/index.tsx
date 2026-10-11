@@ -89,6 +89,31 @@ export function StatCard({
   )
 }
 
+const ICON_BADGE_TONE = {
+  primario: 'bg-primary text-primary-foreground',
+  acento: 'bg-accent text-accent-foreground',
+  secundario: 'bg-secondary text-secondary-foreground',
+  dorado: 'bg-warning text-white',
+} as const
+
+/** Ícono dentro de un círculo de color — para que los encabezados de tarjeta
+ *  se sientan como "stickers" en vez de un ícono gris plano junto al texto. */
+export function IconBadge({
+  icon: Icon,
+  tone = 'primario',
+  className,
+}: {
+  icon: LucideIcon
+  tone?: keyof typeof ICON_BADGE_TONE
+  className?: string
+}) {
+  return (
+    <span className={cn('flex h-7 w-7 shrink-0 items-center justify-center rounded-full shadow-sm', ICON_BADGE_TONE[tone], className)}>
+      <Icon className="h-3.5 w-3.5" />
+    </span>
+  )
+}
+
 export function FadeIn({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
     <motion.div

@@ -212,6 +212,30 @@ evaluaciones, actividades extraescolares, materiales, cumpleaños y notas.
   angostas de 7 días — se cambió a texto que hace salto de línea en vez de
   cortarse.
 
+## ✅ Ronda 5 (11/10/2026): rediseño pastel tipo "planner"
+
+La usuaria mandó capturas de planificadores semanales reales (Pinterest/
+Instagram) como referencia directa: cada día con su propio color pastel,
+bordes bien redondeados, íconos en circulitos de color — y marcó que,
+pese a los ajustes de las rondas anteriores, la app seguía sintiéndose
+"aburrida" y "antigua". Esta ronda adopta ese lenguaje visual en serio,
+no como otro ajuste incremental de gradientes:
+
+- **Paleta por día de semana** (`index.css`, tokens `--dia-*`): 7 pasteles
+  distintos (rosa, celeste, menta, verde, manteca, durazno, lavanda), con
+  su versión oscura para dark mode. La Agenda ahora usa el color propio de
+  cada día en vez de tarjetas blancas uniformes — igual que las
+  referencias. El día de hoy se distingue con un anillo de color y una
+  píldora "HOY", sin perder su propio pastel.
+- **Bordes más redondeados en toda la app**: se subió el token `--radius`
+  de 0.65rem a 1rem — como `Card`, `Button` y `Dialog` ya usaban
+  `rounded-lg`/`rounded-xl` mapeados a ese token, el cambio se propaga
+  solo, sin tocar cada componente.
+- **Íconos en círculo de color** (`IconBadge`, en `components/shared`):
+  reemplaza los íconos grises sueltos junto a los títulos de tarjeta por
+  un círculo de color sólido con sombra — Inicio, Herramientas y Ajustes.
+  Da el efecto "sticker" de las referencias en vez de un ícono plano.
+
 ## 🔜 Backlog
 
 1. Modelo de monetización: hoy no hay pago ni backend. Si se decide cobrar,

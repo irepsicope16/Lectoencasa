@@ -26,7 +26,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input, Label } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
-import { AvisoOrientativo, EmptyState, FadeIn, InsigniasRow, PageHeader, StatCard } from '@/components/shared'
+import { AvisoOrientativo, EmptyState, FadeIn, IconBadge, InsigniasRow, PageHeader, StatCard } from '@/components/shared'
 import { BrandCover } from '@/branding/Logo'
 
 export default function InicioPage() {
@@ -143,7 +143,7 @@ export default function InicioPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-[14px]">
-              <Trophy className="h-4 w-4 text-primary" /> Tus insignias
+              <IconBadge icon={Trophy} tone="dorado" /> Tus insignias
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-0">
@@ -156,7 +156,7 @@ export default function InicioPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-primary" /> Te conviene empezar por: {ruta.nombre}
+              <IconBadge icon={Sparkles} tone="acento" /> Te conviene empezar por: {ruta.nombre}
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-2 pt-0">
@@ -174,7 +174,7 @@ export default function InicioPage() {
         <CardHeader>
           <div className="flex items-center justify-between gap-2">
             <CardTitle className="flex items-center gap-2 text-[14px]">
-              <CalendarDays className="h-4 w-4 text-primary" /> Agenda — próximos 7 días
+              <IconBadge icon={CalendarDays} tone="secundario" /> Agenda — próximos 7 días
             </CardTitle>
             <Button asChild size="sm" variant="outline">
               <Link to="/agenda">Ver semana</Link>
@@ -201,7 +201,7 @@ export default function InicioPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-[14px]">
-              <Timer className="h-4 w-4 text-primary" /> Herramientas
+              <IconBadge icon={Timer} tone="primario" /> Herramientas
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-2 pt-0">
@@ -222,7 +222,7 @@ export default function InicioPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-[14px]">
-              <BookOpen className="h-4 w-4 text-primary" /> Biblioteca
+              <IconBadge icon={BookOpen} tone="dorado" /> Biblioteca
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-0">

@@ -19,6 +19,17 @@ const TIPO_EVENTO: Record<TipoEvento, { label: string; icon: typeof FileCheck2; 
   nota: { label: 'Nota', icon: StickyNote, color: 'var(--color-primary)', soft: 'var(--color-primary-soft)' },
 }
 
+/** Un pastel propio por día (lunes a domingo), como en los planificadores de referencia. */
+const DIA_COLOR = [
+  { bg: 'var(--color-dia-lun)', strong: 'var(--color-dia-lun-strong)' },
+  { bg: 'var(--color-dia-mar)', strong: 'var(--color-dia-mar-strong)' },
+  { bg: 'var(--color-dia-mie)', strong: 'var(--color-dia-mie-strong)' },
+  { bg: 'var(--color-dia-jue)', strong: 'var(--color-dia-jue-strong)' },
+  { bg: 'var(--color-dia-vie)', strong: 'var(--color-dia-vie-strong)' },
+  { bg: 'var(--color-dia-sab)', strong: 'var(--color-dia-sab-strong)' },
+  { bg: 'var(--color-dia-dom)', strong: 'var(--color-dia-dom-strong)' },
+]
+
 function diaISO(d: Date) {
   return format(d, 'yyyy-MM-dd')
 }
@@ -81,29 +92,37 @@ export default function AgendaPage() {
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-7">
-        {dias.map((dia) => {
+        {dias.map((dia, i) => {
           const eventosDia = eventos
             .filter((e) => isSameDay(fechaLocal(e.fecha), dia))
             .sort((a, b) => Number(a.completado) - Number(b.completado))
           const hoy = isToday(dia)
+          const diaColor = DIA_COLOR[i]
           return (
             <div
               key={dia.toISOString()}
-              className={cn(
-                'flex min-h-[160px] flex-col gap-2 rounded-xl border p-3',
-                hoy ? 'border-accent/40 bg-accent-soft/40' : 'bg-gradient-to-b from-surface to-surface-2',
-              )}
+              className={cn('flex min-h-[160px] flex-col gap-2 rounded-xl border-2 p-3 shadow-sm', hoy && 'ring-2 ring-offset-2 ring-offset-background')}
+              style={{
+                background: diaColor.bg,
+                borderColor: `color-mix(in srgb, ${diaColor.strong} 25%, transparent)`,
+                ...(hoy ? ({ '--tw-ring-color': diaColor.strong } as React.CSSProperties) : {}),
+              }}
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className={cn('text-[11px] font-semibold uppercase tracking-wide', hoy ? 'text-accent-strong' : 'text-faint')}>
+                  <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide" style={{ color: diaColor.strong }}>
                     {format(dia, 'EEEE', { locale: es })}
+                    {hoy && (
+                      <span className="rounded-full px-1.5 py-0.5 text-[9px] text-white" style={{ background: diaColor.strong }}>
+                        HOY
+                      </span>
+                    )}
                   </p>
                   <p className="text-[15px] font-bold">{format(dia, 'd MMM', { locale: es })}</p>
                 </div>
                 <button
                   onClick={() => abrirNuevo(dia)}
-                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-faint hover:bg-surface-2 hover:text-foreground"
+                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/50 text-foreground/70 hover:bg-white hover:text-foreground"
                   aria-label="Agregar evento este día"
                 >
                   <Plus className="h-3.5 w-3.5" />
@@ -120,8 +139,8 @@ export default function AgendaPage() {
                     return (
                       <div
                         key={e.id}
-                        className="group flex items-start gap-1.5 rounded-lg border p-1.5"
-                        style={{ background: tipo.soft, borderColor: `color-mix(in srgb, ${tipo.color} 30%, transparent)` }}
+                        className="group flex items-start gap-1.5 rounded-lg border bg-surface/80 p-1.5 shadow-sm"
+                        style={{ borderColor: `color-mix(in srgb, ${tipo.color} 35%, transparent)` }}
                       >
                         <button
                           onClick={() => actualizar.mutate({ id: e.id, completado: !e.completado })}

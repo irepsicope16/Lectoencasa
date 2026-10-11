@@ -7,7 +7,7 @@ import { prepareBackup, importBackup, type PreparedBackup } from '@/services/sto
 import { resetAllData } from '@/services/storage/db'
 import { pedirPermisoNotificaciones, permisoActual, soportaNotificaciones, type PermisoNotificacion } from '@/lib/recordatorios'
 import { toast } from '@/components/ui/toast'
-import { FadeIn, PageHeader } from '@/components/shared'
+import { FadeIn, IconBadge, PageHeader } from '@/components/shared'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input, Label } from '@/components/ui/input'
@@ -57,7 +57,7 @@ export default function SettingsPage() {
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <User className="h-4 w-4 text-primary" /> Tu nombre
+              <IconBadge icon={User} tone="primario" /> Tu nombre
             </CardTitle>
             <CardDescription>Se usa solo para saludarte, no sale de este dispositivo.</CardDescription>
           </CardHeader>
@@ -83,7 +83,7 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Paintbrush className="h-4 w-4 text-primary" /> Apariencia
+              <IconBadge icon={Paintbrush} tone="secundario" /> Apariencia
             </CardTitle>
             <CardDescription>El tema se aplica al instante y queda guardado en este dispositivo.</CardDescription>
           </CardHeader>
@@ -115,7 +115,7 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Bell className="h-4 w-4 text-primary" /> Recordatorios
+              <IconBadge icon={Bell} tone="acento" /> Recordatorios
             </CardTitle>
             <CardDescription>
               Cuando tu racha está en riesgo te avisamos con un cartel dentro de la app apenas la abrís. Como no hay
@@ -147,7 +147,7 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Database className="h-4 w-4 text-primary" /> Datos
+              <IconBadge icon={Database} tone="dorado" /> Datos
             </CardTitle>
             <CardDescription>Todo lo que cargás se guarda localmente en este dispositivo, nada se envía a ningún servidor.</CardDescription>
           </CardHeader>
