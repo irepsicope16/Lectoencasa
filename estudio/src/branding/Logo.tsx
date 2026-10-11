@@ -47,34 +47,34 @@ export function LogoHorizontal({ className, size = 30 }: LogoProps) {
 }
 
 const BRAND_COVER_ITEMS = [
-  { icon: User, label: 'Perfil' },
-  { icon: Lightbulb, label: 'Estrategias' },
-  { icon: BarChart3, label: 'Seguimiento' },
+  { icon: User, label: 'Perfil', ancho: 66 },
+  { icon: Lightbulb, label: 'Estrategias', ancho: 50 },
+  { icon: BarChart3, label: 'Seguimiento', ancho: 66 },
 ] as const
+
+const TRAZO = 'linear-gradient(180deg, var(--color-accent), var(--color-accent-strong))'
 
 /** Lockup completo (isotipo + wordmark + lema) para portada y usos grandes. */
 export function BrandCover({ className }: { className?: string }) {
   return (
     <div className={cn('select-none', className)}>
-      <div className="flex items-stretch justify-center gap-3">
-        <div
-          className="w-7 shrink-0 rounded-full"
-          style={{
-            background: 'linear-gradient(180deg, var(--color-accent), var(--color-accent-strong))',
-            boxShadow: '0 12px 26px -8px var(--color-accent)',
-          }}
-        />
-        <div className="flex flex-col gap-2.5">
+      {/* Isotipo "E": barra vertical + 3 trazos horizontales, todos del mismo
+          color y con esquinas ovaladas (estilo "stadium"), para que se lea
+          como una letra y no como íconos sueltos. El drop-shadow envuelve
+          la silueta completa en vez de cada trazo por separado. */}
+      <div
+        className="flex items-stretch justify-center"
+        style={{ filter: 'drop-shadow(0 14px 20px color-mix(in srgb, var(--color-accent) 45%, transparent))' }}
+      >
+        <div className="w-8 shrink-0 rounded-full" style={{ background: TRAZO }} />
+        <div className="-ml-3 flex flex-col gap-2.5">
           {BRAND_COVER_ITEMS.map((it) => (
             <div key={it.label} className="flex items-center gap-2.5">
               <span
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white"
-                style={{
-                  background: 'linear-gradient(145deg, var(--color-accent), var(--color-accent-strong))',
-                  boxShadow: '0 10px 20px -6px var(--color-accent)',
-                }}
+                className="flex h-8 shrink-0 items-center justify-center rounded-full text-white"
+                style={{ width: it.ancho, background: TRAZO }}
               >
-                <it.icon className="h-[18px] w-[18px]" />
+                <it.icon className="h-[15px] w-[15px]" />
               </span>
               <span className="text-[11.5px] font-bold uppercase tracking-[0.12em] text-accent-strong">
                 {it.label}

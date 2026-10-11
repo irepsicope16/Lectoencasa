@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-11 (actualizado, ronda 16) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-11 (actualizado, ronda 17) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -572,6 +572,28 @@ Morbidelli (psicopedagoga) y que está prohibida su venta o copia.
   copia sin autorización."
 - Verificado con Playwright en claro, oscuro y mobile — el isotipo se ve
   consistente en los 3 casos, sin errores de consola.
+
+## ✅ Ronda 17 (11/10/2026): la "E" como forma real, no círculos
+
+La ronda anterior unificó el color de los 3 círculos del isotipo, pero
+la usuaria notó que seguía sin leerse como una letra E — pidió
+"rectangulitos con las esquinas ovaladas" en vez de círculos, para que
+realmente parezca una E.
+
+- Se reconstruyó `BrandCover` (en `branding/Logo.tsx`): los 3 círculos
+  pasaron a ser píldoras horizontales (rectángulos angostos con las
+  puntas totalmente redondeadas — "stadium shape") que se superponen
+  levemente con la barra vertical (`-ml-3` de solapamiento), en vez de
+  flotar separadas con un espacio entre ellas. El trazo del medio
+  (Estrategias) es más corto que el de arriba y abajo, como en una E
+  tipográfica real.
+- La sombra pasó de estar en cada trazo por separado a un único
+  `drop-shadow` sobre el grupo completo — así no se duplica la sombra
+  donde los trazos se superponen, y el conjunto se ve como una sola
+  pieza con volumen, no como 4 piezas sueltas apiladas.
+- Verificado con Playwright en claro, oscuro y mobile: ahora sí se lee
+  claramente como una "E" con los 3 íconos (Perfil/Estrategias/
+  Seguimiento) integrados en sus trazos, sin errores de consola.
 
 ## 🔜 Backlog
 
