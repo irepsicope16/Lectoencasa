@@ -243,7 +243,7 @@ export default function InicioPage() {
   )
 }
 
-function Bienvenida() {
+export function Bienvenida() {
   const setNombre = usePerfilStore((s) => s.setNombre)
   const [valor, setValor] = useState('')
 

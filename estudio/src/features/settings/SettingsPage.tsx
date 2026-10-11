@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
-import { Bell, Database, Download, Moon, Paintbrush, RefreshCcw, Sun, Upload, User } from 'lucide-react'
+import { Bell, Database, Download, Eye, Moon, Paintbrush, RefreshCcw, Sun, Upload, User } from 'lucide-react'
 import { usePerfilStore } from '@/stores/perfilStore'
 import { useUIStore, type Theme } from '@/stores/uiStore'
 import { prepareBackup, importBackup, type PreparedBackup } from '@/services/storage/backup'
@@ -77,6 +78,11 @@ export default function SettingsPage() {
               </Button>
               {nombreGuardado && <Badge variant="primario">Guardado ✓</Badge>}
             </div>
+            <Button asChild variant="outline" size="sm">
+              <Link to="/bienvenida">
+                <Eye /> Ver pantalla de bienvenida
+              </Link>
+            </Button>
           </CardContent>
         </Card>
 

@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-11 (actualizado, ronda 12) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-11 (actualizado, ronda 13) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -461,6 +461,33 @@ reformularlo para estudiantes, además de más color y profundidad.
   tokens ya existentes), y el lema reemplazó el gris por el acento
   terracota en negrita. Verificado en claro, oscuro, con input vacío y
   con nombre cargado — el flujo de "Empezar" sigue funcionando igual.
+
+## ✅ Ronda 13 (11/10/2026): bug reportado — "no puedo visualizar la portada"
+
+La usuaria reportó que no podía ver la pantalla de bienvenida (la portada
+rediseñada en la ronda 12).
+
+- Diagnóstico: la portada (`Bienvenida`, dentro de `InicioPage.tsx`) solo se
+  muestra cuando `usePerfilStore().nombre` está vacío. Como ella ya había
+  guardado un nombre probando la app en rondas anteriores, el navegador
+  nunca volvía a mostrársela — queda guardada en `localStorage` (clave
+  `me:perfil`) y persiste entre visitas a la misma URL.
+- Se verificó con capturas (escritorio y mobile, localStorage limpio) que la
+  portada en sí renderiza bien, sin bugs visuales ni errores de consola —
+  el problema no era de diseño, era de que no se podía *llegar* a verla.
+- Se confirmó que `driver.ts` → `clearAll()` (usado por "Ajustes → Borrar
+  todos mis datos") sí borra la clave `me:perfil` (borra toda clave que
+  empiece con `me:`), así que ese botón técnicamente la hacía reaparecer —
+  pero de forma destructiva, borrando también autoperfil, actividades,
+  fichas, mapas y diario solo para ver una pantalla.
+- Se agregó una forma no destructiva: un botón **"Ver pantalla de
+  bienvenida"** en Ajustes → Tu nombre, que lleva a una ruta nueva
+  (`/#/bienvenida`) con la misma portada y un link para volver. No toca el
+  nombre guardado ni ningún otro dato — se puede visitar las veces que
+  haga falta.
+- Verificado con Playwright: el botón aparece en Ajustes, al cliquearlo
+  muestra la portada completa, y el nombre guardado sigue intacto en
+  localStorage después de visitarla y volver. Sin errores de consola.
 
 ## 🔜 Backlog
 

@@ -6,6 +6,7 @@ import { AppShell } from '@/components/layout/AppShell'
 // Sin login ni roles: la app es de un solo usuario local, se entra directo.
 
 const InicioPage = lazy(() => import('@/features/home/InicioPage'))
+const BienvenidaPreviewPage = lazy(() => import('@/features/home/BienvenidaPreviewPage'))
 const AutoperfilPage = lazy(() => import('@/features/autoperfil/AutoperfilPage'))
 const BibliotecaPage = lazy(() => import('@/features/biblioteca/BibliotecaPage'))
 const ActividadesPage = lazy(() => import('@/features/actividades/ActividadesPage'))
@@ -47,6 +48,7 @@ export const router = createHashRouter([
     element: <AppShell />,
     children: [
       { path: '/', element: <Page><InicioPage /></Page> },
+      { path: '/bienvenida', element: <Page><BienvenidaPreviewPage /></Page> },
       { path: '/autoperfil', element: <Page><AutoperfilPage /></Page> },
       { path: '/biblioteca', element: <Page><BibliotecaPage /></Page> },
       { path: '/actividades', element: <Page><ActividadesPage /></Page> },
