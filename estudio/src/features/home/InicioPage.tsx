@@ -1,15 +1,27 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BookOpen, Clock, Flame, ListChecks, Sparkles, Timer, Trophy } from 'lucide-react'
+import { addDays, format, isWithinInterval, startOfDay } from 'date-fns'
+import { es } from 'date-fns/locale'
+import { BookOpen, CalendarDays, Clock, Flame, ListChecks, Sparkles, Timer, Trophy } from 'lucide-react'
 import { usePerfilStore } from '@/stores/perfilStore'
 import { useUIStore } from '@/stores/uiStore'
-import { useActividadesProbadas, useDiario, useFichas, useMapas, useResponses, useSesionesEstudio, useSnapshots } from '@/hooks/queries'
+import {
+  useActividadesProbadas,
+  useDiario,
+  useEventosAgenda,
+  useFichas,
+  useMapas,
+  useResponses,
+  useSesionesEstudio,
+  useSnapshots,
+} from '@/hooks/queries'
 import { ITEMS } from '@/data/items'
 import { RUTAS } from '@/data/rutas'
 import { MENSAJES } from '@/data/mensajes'
 import { calcularRacha } from '@/lib/progreso'
 import { notificarRachaEnRiesgo } from '@/lib/recordatorios'
 import { calcularGamificacion } from '@/lib/gamificacion'
+import { fechaLocal } from '@/lib/utils'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input, Label } from '@/components/ui/input'
@@ -27,6 +39,7 @@ export default function InicioPage() {
   const { data: diario = [] } = useDiario()
   const { data: fichas = [] } = useFichas()
   const { data: mapas = [] } = useMapas()
+  const { data: eventosAgenda = [] } = useEventosAgenda()
 
   const respondidos = new Set(responses.map((r) => r.itemId)).size
   const autoperfilCompleto = respondidos >= ITEMS.length && snapshots.length > 0
@@ -64,6 +77,12 @@ export default function InicioPage() {
     entradasDiario: diario.length,
   })
   const insigniasConseguidas = insignias.filter((i) => i.conseguida)
+
+  const hoyInicio = startOfDay(new Date())
+  const proximosEventos = eventosAgenda
+    .filter((e) => !e.completado && isWithinInterval(fechaLocal(e.fecha), { start: hoyInicio, end: addDays(hoyInicio, 6) }))
+    .sort((a, b) => a.fecha.localeCompare(b.fecha))
+    .slice(0, 4)
 
   const rutaPrioritaria = [...snapshots].sort((a, b) => {
     const orden: Record<string, number> = { alta: 0, moderada: 1, leve: 2, baja: 3 }
@@ -150,6 +169,33 @@ export default function InicioPage() {
           </CardContent>
         </Card>
       )}
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between gap-2">
+            <CardTitle className="flex items-center gap-2 text-[14px]">
+              <CalendarDays className="h-4 w-4 text-primary" /> Agenda — próximos 7 días
+            </CardTitle>
+            <Button asChild size="sm" variant="outline">
+              <Link to="/agenda">Ver semana</Link>
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-0">
+          {proximosEventos.length === 0 ? (
+            <EmptyState icon={CalendarDays} title="Nada pendiente por ahora" description="Agregá evaluaciones, materiales o cumpleaños desde la Agenda." />
+          ) : (
+            <div className="space-y-1.5">
+              {proximosEventos.map((e) => (
+                <div key={e.id} className="flex items-center justify-between gap-2 rounded-lg border px-3 py-2 text-[12.5px]">
+                  <span className="font-medium">{e.titulo}</span>
+                  <span className="shrink-0 text-faint">{format(fechaLocal(e.fecha), "d 'de' MMM", { locale: es })}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Card>

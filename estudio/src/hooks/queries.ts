@@ -6,6 +6,7 @@ import type {
   ActividadProbada,
   DimensionSnapshot,
   EntradaMetacognicion,
+  EventoAgenda,
   Ficha,
   MapaConceptual,
   SesionEstudio,
@@ -246,6 +247,43 @@ export function useCrearEntradaDiario() {
     mutationFn: (data: Omit<EntradaMetacognicion, 'id' | 'fecha' | 'createdAt' | 'updatedAt'>) =>
       db.diario.create({ ...data, fecha: new Date().toISOString() }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['diario'] }),
+  })
+}
+
+// ---------- Agenda ----------
+
+export function useEventosAgenda() {
+  return useQuery({
+    queryKey: ['agenda'],
+    queryFn: async () => {
+      const rows = await db.agenda.list()
+      return rows.sort((a, b) => a.fecha.localeCompare(b.fecha))
+    },
+  })
+}
+
+export function useCrearEvento() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (data: Omit<EventoAgenda, 'id' | 'completado' | 'createdAt' | 'updatedAt'>) =>
+      db.agenda.create({ ...data, completado: false }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['agenda'] }),
+  })
+}
+
+export function useActualizarEvento() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, ...patch }: { id: string } & Partial<EventoAgenda>) => db.agenda.update(id, patch),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['agenda'] }),
+  })
+}
+
+export function useEliminarEvento() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => db.agenda.remove(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['agenda'] }),
   })
 }
 

@@ -168,6 +168,21 @@ export interface Ficha {
   updatedAt: string
 }
 
+// ---------- Agenda (eventos semanales) ----------
+
+export type TipoEvento = 'evaluacion' | 'extraescolar' | 'material' | 'cumpleanos' | 'nota'
+
+export interface EventoAgenda {
+  id: string
+  tipo: TipoEvento
+  titulo: string
+  fecha: string // ISO, solo la parte de fecha importa (yyyy-mm-dd)
+  nota?: string
+  completado: boolean
+  createdAt: string
+  updatedAt: string
+}
+
 // ---------- Diario de metacognición ----------
 
 export interface EntradaMetacognicion {

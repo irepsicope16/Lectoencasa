@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-10 (actualizado, ronda 3) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-11 (actualizado, ronda 5) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -183,6 +183,34 @@ violando las reglas de hooks (error #310 de React) — se movió antes del
    fuerte de lo buscado. Se corrigió usando colores de degradé opacos
    (`from-surface to-accent-soft`, sin modificador de opacidad) tanto en
    `AppShell` como en `Card`.
+
+## ✅ Ronda 4 (11/10/2026): Agenda semanal interactiva
+
+Nueva herramienta pedida explícitamente: una agenda visual para no olvidar
+evaluaciones, actividades extraescolares, materiales, cumpleaños y notas.
+
+- **Modelo** (`types/index.ts`): `EventoAgenda` — `tipo` (uno de los 5
+  anteriores), `titulo`, `fecha`, `nota` opcional, `completado`. Colección
+  nueva en `db.ts` (`agenda_eventos`) y hooks CRUD + toggle en `queries.ts`.
+- **Vista semanal** (`features/agenda/AgendaPage.tsx`): 7 días (lunes a
+  domingo), navegación semana anterior/siguiente + botón "Hoy", cada tipo de
+  evento con su propio color e ícono (evaluación en rojo, extraescolar en
+  azul acero, material en dorado, cumpleaños en violeta, nota en azul
+  marino). Cada evento se marca como completado con un check — así no hace
+  falta borrarlo para saber que ya se resolvió, y se puede ver de un
+  vistazo qué falta. Responsive: columnas en desktop, lista apilada en
+  mobile.
+- **Conectada al resto de la app**: tarjeta "Agenda — próximos 7 días" en
+  Inicio con los pendientes más cercanos y acceso directo a la semana
+  completa. Ícono propio en el menú lateral.
+- Dos bugs reales encontrados y corregidos en la verificación: (1) el
+  diálogo "Nuevo evento" reseteaba sus campos en el callback `onOpenChange`
+  de Radix, que **no** se dispara cuando el padre reabre el diálogo de
+  forma programática (el botón "+" de cada día) — una nota quedaba pegada
+  del evento anterior. Se movió el reseteo a un `useEffect` sobre la prop
+  `open`. (2) los títulos largos se truncaban con "..." en las columnas
+  angostas de 7 días — se cambió a texto que hace salto de línea en vez de
+  cortarse.
 
 ## 🔜 Backlog
 

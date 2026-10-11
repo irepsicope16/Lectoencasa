@@ -9,6 +9,7 @@ const InicioPage = lazy(() => import('@/features/home/InicioPage'))
 const AutoperfilPage = lazy(() => import('@/features/autoperfil/AutoperfilPage'))
 const BibliotecaPage = lazy(() => import('@/features/biblioteca/BibliotecaPage'))
 const ActividadesPage = lazy(() => import('@/features/actividades/ActividadesPage'))
+const AgendaPage = lazy(() => import('@/features/agenda/AgendaPage'))
 const HerramientasPage = lazy(() => import('@/features/herramientas/HerramientasPage'))
 const CronometroPage = lazy(() => import('@/features/herramientas/CronometroPage'))
 const MapasPage = lazy(() => import('@/features/herramientas/MapasPage'))
@@ -41,6 +42,7 @@ export const router = createHashRouter([
       { path: '/autoperfil', element: <Page><AutoperfilPage /></Page> },
       { path: '/biblioteca', element: <Page><BibliotecaPage /></Page> },
       { path: '/actividades', element: <Page><ActividadesPage /></Page> },
+      { path: '/agenda', element: <Page><AgendaPage /></Page> },
       { path: '/herramientas', element: <Page><HerramientasPage /></Page> },
       { path: '/herramientas/cronometro', element: <Page><CronometroPage /></Page> },
       { path: '/herramientas/mapas', element: <Page><MapasPage /></Page> },

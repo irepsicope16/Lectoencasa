@@ -4,6 +4,7 @@ import type {
   ActividadProbada,
   DimensionSnapshot,
   EntradaMetacognicion,
+  EventoAgenda,
   Ficha,
   MapaConceptual,
   OpenAnswer,
@@ -27,6 +28,7 @@ export const db = {
   mapas: new Repository<MapaConceptual>(driver, 'mapas_conceptuales'),
   fichas: new Repository<Ficha>(driver, 'fichas'),
   diario: new Repository<EntradaMetacognicion>(driver, 'diario_metacognicion'),
+  agenda: new Repository<EventoAgenda>(driver, 'agenda_eventos'),
   clearAll: () => driver.clearAll(),
 }
 
