@@ -11,7 +11,11 @@ import { toast } from '@/components/ui/toast'
 import { cn, fechaLocal } from '@/lib/utils'
 import type { EventoAgenda, TipoEvento } from '@/types'
 
-const TIPO_EVENTO: Record<TipoEvento, { label: string; icon: typeof FileCheck2; color: string; soft: string }> = {
+/** Esta Agenda solo ofrece estos 5 tipos — los de los planificadores por nivel
+ *  (tarea/tp/parcial/final) viven en `TipoEvento` pero no se usan acá. */
+type TipoAgenda = Extract<TipoEvento, 'evaluacion' | 'extraescolar' | 'material' | 'cumpleanos' | 'nota'>
+
+const TIPO_EVENTO: Record<TipoAgenda, { label: string; icon: typeof FileCheck2; color: string; soft: string }> = {
   evaluacion: { label: 'Evaluación', icon: FileCheck2, color: 'var(--color-danger)', soft: 'var(--color-danger-soft)' },
   extraescolar: { label: 'Extraescolar', icon: Users, color: 'var(--color-secondary)', soft: 'var(--color-secondary-soft)' },
   material: { label: 'Material', icon: Backpack, color: 'var(--color-mod-organizar)', soft: 'var(--color-mod-organizar-soft)' },
@@ -134,7 +138,7 @@ export default function AgendaPage() {
                   <p className="mt-2 text-[11px] text-faint">Sin eventos</p>
                 ) : (
                   eventosDia.map((e) => {
-                    const tipo = TIPO_EVENTO[e.tipo]
+                    const tipo = TIPO_EVENTO[e.tipo as TipoAgenda]
                     const Icon = tipo.icon
                     return (
                       <div
@@ -201,7 +205,7 @@ function DialogoNuevoEvento({
   onClose: () => void
   onCrear: (data: Pick<EventoAgenda, 'tipo' | 'titulo' | 'fecha' | 'nota'>) => Promise<void>
 }) {
-  const [tipo, setTipo] = useState<TipoEvento>('evaluacion')
+  const [tipo, setTipo] = useState<TipoAgenda>('evaluacion')
   const [titulo, setTitulo] = useState('')
   const [fecha, setFecha] = useState(fechaPrellenada ?? diaISO(new Date()))
   const [nota, setNota] = useState('')
@@ -232,8 +236,8 @@ function DialogoNuevoEvento({
         <div className="space-y-3">
           <div>
             <Label>Tipo</Label>
-            <NativeSelect value={tipo} onChange={(e) => setTipo(e.target.value as TipoEvento)}>
-              {(Object.keys(TIPO_EVENTO) as TipoEvento[]).map((t) => (
+            <NativeSelect value={tipo} onChange={(e) => setTipo(e.target.value as TipoAgenda)}>
+              {(Object.keys(TIPO_EVENTO) as TipoAgenda[]).map((t) => (
                 <option key={t} value={t}>
                   {TIPO_EVENTO[t].label}
                 </option>

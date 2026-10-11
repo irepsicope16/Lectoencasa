@@ -10,6 +10,10 @@ const AutoperfilPage = lazy(() => import('@/features/autoperfil/AutoperfilPage')
 const BibliotecaPage = lazy(() => import('@/features/biblioteca/BibliotecaPage'))
 const ActividadesPage = lazy(() => import('@/features/actividades/ActividadesPage'))
 const AgendaPage = lazy(() => import('@/features/agenda/AgendaPage'))
+const AgendaAnualPage = lazy(() => import('@/features/agenda/AgendaAnualPage'))
+const PlanificadorPrincipiantePage = lazy(() => import('@/features/agenda/PlanificadorPrincipiantePage'))
+const PlanificadorSecundariaPage = lazy(() => import('@/features/agenda/PlanificadorSecundariaPage'))
+const PlanificadorSuperiorPage = lazy(() => import('@/features/agenda/PlanificadorSuperiorPage'))
 const HerramientasPage = lazy(() => import('@/features/herramientas/HerramientasPage'))
 const CronometroPage = lazy(() => import('@/features/herramientas/CronometroPage'))
 const MapasPage = lazy(() => import('@/features/herramientas/MapasPage'))
@@ -48,6 +52,10 @@ export const router = createHashRouter([
       { path: '/herramientas/mapas', element: <Page><MapasPage /></Page> },
       { path: '/herramientas/fichas', element: <Page><FichasPage /></Page> },
       { path: '/herramientas/diario', element: <Page><DiarioPage /></Page> },
+      { path: '/herramientas/agenda-anual', element: <Page><AgendaAnualPage /></Page> },
+      { path: '/herramientas/planificador-principiante', element: <Page><PlanificadorPrincipiantePage /></Page> },
+      { path: '/herramientas/planificador-secundaria', element: <Page><PlanificadorSecundariaPage /></Page> },
+      { path: '/herramientas/planificador-superior', element: <Page><PlanificadorSuperiorPage /></Page> },
       { path: '/progreso', element: <Page><ProgresoPage /></Page> },
       { path: '/ajustes', element: <Page><SettingsPage /></Page> },
     ],

@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { db } from '@/services/storage/db'
+import type { Repository } from '@/services/storage/repository'
 import { proximaCajaYFecha } from '@/lib/leitner'
 import type {
   ActividadCatalogo,
@@ -286,6 +287,49 @@ export function useEliminarEvento() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['agenda'] }),
   })
 }
+
+// ---------- Planificadores por nivel ----------
+// Mismo contrato que la Agenda, pero contra una colección propia por nivel
+// (son herramientas separadas, no comparten eventos entre sí).
+
+function crearHooksPlanificador(repo: Repository<EventoAgenda>, queryKey: string) {
+  function useEventos() {
+    return useQuery({
+      queryKey: [queryKey],
+      queryFn: async () => {
+        const rows = await repo.list()
+        return rows.sort((a, b) => a.fecha.localeCompare(b.fecha))
+      },
+    })
+  }
+  function useCrear() {
+    const qc = useQueryClient()
+    return useMutation({
+      mutationFn: (data: Omit<EventoAgenda, 'id' | 'completado' | 'createdAt' | 'updatedAt'>) =>
+        repo.create({ ...data, completado: false }),
+      onSuccess: () => qc.invalidateQueries({ queryKey: [queryKey] }),
+    })
+  }
+  function useActualizar() {
+    const qc = useQueryClient()
+    return useMutation({
+      mutationFn: ({ id, ...patch }: { id: string } & Partial<EventoAgenda>) => repo.update(id, patch),
+      onSuccess: () => qc.invalidateQueries({ queryKey: [queryKey] }),
+    })
+  }
+  function useEliminar() {
+    const qc = useQueryClient()
+    return useMutation({
+      mutationFn: (id: string) => repo.remove(id),
+      onSuccess: () => qc.invalidateQueries({ queryKey: [queryKey] }),
+    })
+  }
+  return { useEventos, useCrear, useActualizar, useEliminar }
+}
+
+export const planificadorPrincipianteHooks = crearHooksPlanificador(db.planificadorPrincipiante, 'planificador-principiante')
+export const planificadorSecundariaHooks = crearHooksPlanificador(db.planificadorSecundaria, 'planificador-secundaria')
+export const planificadorSuperiorHooks = crearHooksPlanificador(db.planificadorSuperior, 'planificador-superior')
 
 export function useEliminarEntradaDiario() {
   const qc = useQueryClient()

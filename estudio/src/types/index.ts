@@ -170,7 +170,16 @@ export interface Ficha {
 
 // ---------- Agenda (eventos semanales) ----------
 
-export type TipoEvento = 'evaluacion' | 'extraescolar' | 'material' | 'cumpleanos' | 'nota'
+export type TipoEvento =
+  | 'evaluacion'
+  | 'extraescolar'
+  | 'material'
+  | 'cumpleanos'
+  | 'nota'
+  | 'tarea' // Planificadores por nivel
+  | 'tp'
+  | 'parcial'
+  | 'final'
 
 export interface EventoAgenda {
   id: string
@@ -182,6 +191,12 @@ export interface EventoAgenda {
   createdAt: string
   updatedAt: string
 }
+
+// ---------- Planificadores por nivel (principiante / secundaria / superior) ----------
+// Misma forma que un EventoAgenda, pero en 3 colecciones separadas: cada nivel
+// es una herramienta propia, con sus propios datos (no comparten eventos entre sí
+// ni con la Agenda semanal — a diferencia de la Agenda Anual, que sí reusa esa).
+export type NivelPlanificador = 'principiante' | 'secundaria' | 'superior'
 
 // ---------- Diario de metacognición ----------
 

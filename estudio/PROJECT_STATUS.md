@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-11 (actualizado, ronda 5) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-11 (actualizado, ronda 6) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -235,6 +235,55 @@ no como otro ajuste incremental de gradientes:
   reemplaza los íconos grises sueltos junto a los títulos de tarjeta por
   un círculo de color sólido con sombra — Inicio, Herramientas y Ajustes.
   Da el efecto "sticker" de las referencias en vez de un ícono plano.
+
+## ✅ Ronda 6 (11/10/2026): Agenda anual + 3 planificadores por nivel
+
+La usuaria pidió una agenda anual mes por mes, y un planificador de tareas/
+evaluaciones/TP/materiales/cumpleaños — pero uno distinto por nivel escolar
+(principiante bien colorido, secundaria con una gama de colores, superior
+similar pero con TP/parciales/finales). Se le preguntó si prefería un solo
+planificador con selector de nivel, o tres herramientas separadas — y si la
+vista anual debía ser una pestaña de la Agenda actual o una herramienta
+aparte. En ambos casos eligió la opción **no recomendada**: tres
+planificadores separados, y la agenda anual como herramienta
+independiente. Se respetó esa decisión aunque implica algo más de código
+repetido.
+
+- **Modelo**: `TipoEvento` se amplió con `tarea`, `tp`, `parcial`, `final`
+  (además de los ya existentes). Se agregaron 3 colecciones nuevas en
+  LocalStorage (`planificador_principiante`, `planificador_secundaria`,
+  `planificador_superior`) — cada planificador guarda sus propios eventos,
+  sin mezclarse entre sí ni con la Agenda semanal original.
+- **Componente reutilizable `PlanificadorSemanal`**: evita triplicar la
+  página completa. Recibe qué tipos de evento mostrar, la paleta de color
+  por día y los hooks de datos como props; cada una de las 3 páginas de
+  nivel es un wrapper de ~20 líneas. La Agenda semanal original
+  (`AgendaPage.tsx`) se dejó intacta a propósito, sin migrarla a este
+  componente, para no arriesgar una regresión en algo que la usuaria ya vio
+  y aprobó.
+- **Principiante**: paleta arcoíris viva (la misma de la Agenda). **Secundaria**
+  y **Superior**: paleta tonal de un solo color (`gamaTonal()`, un
+  `color-mix` progresivo de blanco a color sobre `--color-secondary` y
+  `--color-primary` respectivamente) — más sobria, pensada para adolescentes
+  y jóvenes adultos en vez del arcoíris de los primeros años.
+- **Superior** reemplaza "Evaluación" por tres tipos más específicos: TP,
+  Parcial y Final (más Tarea, Material, Cumpleaños).
+- **Agenda anual**: vista de 12 mini-calendarios (uno por mes), con
+  navegación por año, punteado de color por evento en cada día y un panel
+  inferior para ver/completar/borrar y agregar eventos del día
+  seleccionado sin abrir un modal. **No es una colección de datos nueva**:
+  muestra los mismos eventos de la Agenda semanal ya existente, solo que
+  vistos mes por mes — una decisión deliberadamente distinta a la de los 3
+  planificadores, porque acá sí es la misma información bajo otra vista.
+- Acceso desde una sección nueva "Planificadores y agenda" en Herramientas.
+
+**Bug encontrado y corregido antes de publicar**: en los planificadores de
+Secundaria y Superior, los días con el tono más oscuro de la gama (viernes
+a domingo) tenían el texto de la fecha y "Sin eventos" casi invisible —
+estaban pensados para fondos claros y no se adaptaban al fondo oscuro del
+propio día. Se agregó una marca `oscuro` a cada color de día y el texto
+cambia a blanco cuando corresponde. Se verificó visualmente con capturas
+de escritorio y mobile antes de confirmar que quedó legible en los 7 días.
 
 ## 🔜 Backlog
 

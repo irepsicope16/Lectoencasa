@@ -29,6 +29,9 @@ export const db = {
   fichas: new Repository<Ficha>(driver, 'fichas'),
   diario: new Repository<EntradaMetacognicion>(driver, 'diario_metacognicion'),
   agenda: new Repository<EventoAgenda>(driver, 'agenda_eventos'),
+  planificadorPrincipiante: new Repository<EventoAgenda>(driver, 'planificador_principiante'),
+  planificadorSecundaria: new Repository<EventoAgenda>(driver, 'planificador_secundaria'),
+  planificadorSuperior: new Repository<EventoAgenda>(driver, 'planificador_superior'),
   clearAll: () => driver.clearAll(),
 }
 
