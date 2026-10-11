@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { BarChart3, BookOpen, CalendarDays, Home, ListChecks, Sparkles } from 'lucide-react'
+import { BarChart3, BookOpen, CalendarDays, CalendarRange, Home, ListChecks, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Isotipo } from '@/branding/Logo'
 
@@ -9,6 +9,7 @@ const nav = [
   { to: '/biblioteca', icon: BookOpen, label: 'Biblioteca' },
   { to: '/actividades', icon: ListChecks, label: 'Actividades' },
   { to: '/agenda', icon: CalendarDays, label: 'Agenda' },
+  { to: '/planificadores', icon: CalendarRange, label: 'Planificadores' },
   { to: '/herramientas', icon: Sparkles, label: 'Herramientas' },
   { to: '/progreso', icon: BarChart3, label: 'Mi progreso' },
 ]

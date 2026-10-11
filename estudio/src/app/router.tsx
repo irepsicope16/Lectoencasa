@@ -14,6 +14,7 @@ const AgendaAnualPage = lazy(() => import('@/features/agenda/AgendaAnualPage'))
 const PlanificadorPrincipiantePage = lazy(() => import('@/features/agenda/PlanificadorPrincipiantePage'))
 const PlanificadorSecundariaPage = lazy(() => import('@/features/agenda/PlanificadorSecundariaPage'))
 const PlanificadorSuperiorPage = lazy(() => import('@/features/agenda/PlanificadorSuperiorPage'))
+const PlanificadoresPage = lazy(() => import('@/features/agenda/PlanificadoresPage'))
 const HerramientasPage = lazy(() => import('@/features/herramientas/HerramientasPage'))
 const CronometroPage = lazy(() => import('@/features/herramientas/CronometroPage'))
 const MapasPage = lazy(() => import('@/features/herramientas/MapasPage'))
@@ -47,6 +48,7 @@ export const router = createHashRouter([
       { path: '/biblioteca', element: <Page><BibliotecaPage /></Page> },
       { path: '/actividades', element: <Page><ActividadesPage /></Page> },
       { path: '/agenda', element: <Page><AgendaPage /></Page> },
+      { path: '/planificadores', element: <Page><PlanificadoresPage /></Page> },
       { path: '/herramientas', element: <Page><HerramientasPage /></Page> },
       { path: '/herramientas/cronometro', element: <Page><CronometroPage /></Page> },
       { path: '/herramientas/mapas', element: <Page><MapasPage /></Page> },

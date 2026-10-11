@@ -182,6 +182,7 @@ export type TipoEvento =
   | 'tp'
   | 'parcial'
   | 'final'
+  | 'trabajo_grupo'
 
 export interface EventoAgenda {
   id: string

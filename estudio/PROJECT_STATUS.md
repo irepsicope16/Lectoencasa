@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-11 (actualizado, ronda 8) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-11 (actualizado, ronda 9) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -340,6 +340,39 @@ envoltorio) antes de tocar contenido pedagógico.
 - Se sumó un campo opcional `fraseSimple`/`icon` en `biblioteca.ts` y
   `icon` en `actividades.ts` (vía el tipo `ActividadCatalogo`), sin romper
   Medio/Superior ni el modal de detalle de Actividades.
+
+## ✅ Ronda 9 (11/10/2026): Planificadores como solapa propia + tipos por nivel
+
+La usuaria pidió sacar "Planificadores y agenda" de dentro de Herramientas
+y darle su propia solapa en el menú principal, con sub-solapas por nivel
+dentro. También pidió revisar los tipos de evento de cada nivel y colores
+más distinguibles entre Secundaria y Superior. Se confirmaron por
+AskUserQuestion los puntos ambiguos (nombres de sub-solapas, si
+Secundaria/Superior suman o reemplazan sus tipos anteriores, si "Entregas"
+es un tipo nuevo o lo mismo que TP) antes de tocar el modelo de datos.
+
+- **Nueva solapa de nivel superior "Planificadores"** en el menú (antes
+  vivía como una sección dentro de Herramientas). La página nueva
+  (`PlanificadoresPage.tsx`) usa el componente `Tabs` de Radix (ya estaba
+  en el sistema de diseño, sin usar hasta ahora) con 4 sub-solapas: **Nivel
+  1, Nivel 2, Nivel 3 y Agenda anual** — cada una renderiza el componente
+  ya existente correspondiente, sin duplicar código.
+- **Tipos de evento revisados por nivel** (se agregó `trabajo_grupo` al
+  modelo `TipoEvento`):
+  - Nivel 1: Tarea, TP, Evaluación, Material, Cumpleaños, **Para no
+    olvidar** (se sumaron TP y Nota).
+  - Nivel 2: Tarea, TP, Evaluación, **Trabajo en grupo**, Material,
+    Cumpleaños, Para no olvidar (se sumaron TP, Trabajo en grupo y Nota).
+  - Nivel 3: TP, Parcial, Final, Material, Cumpleaños, Para no olvidar (se
+    sacó Tarea, se sumó Nota; "Entregas" no se modeló aparte — queda
+    cubierto por TP, como se confirmó).
+- **Colores más distinguibles**: Nivel 2 pasó de una gama gris-azulada a
+  una gama **verde agua** (`--color-mod-atencion`, ya existía en el
+  sistema de diseño) y Nivel 3 a una gama **celeste**
+  (`--color-dia-mar-strong`, el mismo celeste de "martes" en la Agenda) —
+  ambos tokens ya existían, no se inventaron colores nuevos.
+- Se sacó la sección "Planificadores y agenda" de Herramientas para no
+  duplicar el acceso.
 
 ## 🔜 Backlog
 
