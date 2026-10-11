@@ -88,18 +88,13 @@ export default function ActividadesPage() {
                           </div>
                           <Badge variant={NIVEL_BADGE_VARIANT[actividad.nivel]}>{NIVEL_LABEL[actividad.nivel]}</Badge>
                         </div>
-                        <div className="mt-3 flex flex-wrap items-center gap-2">
-                          {actividad.ejemplo && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-surface px-2 py-0.5 text-[10.5px] text-muted-foreground">
-                              <Lightbulb className="h-3 w-3" /> Con ejemplo
-                            </span>
-                          )}
-                          {probadaActual && (
+                        {probadaActual && (
+                          <div className="mt-3">
                             <span className="inline-flex items-center gap-1 rounded-full bg-surface px-2 py-0.5 text-[10.5px] font-medium text-primary">
                               {probadaActual.estado === 'completada' ? 'Completada ✓' : 'En curso'}
                             </span>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </button>
                     )
                   })}

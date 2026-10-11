@@ -147,11 +147,10 @@ violando las reglas de hooks (error #310 de React) — se movió antes del
 
 ## ✅ Ronda 3 (10/10/2026): actividades interactivas, puntos e insignias
 
-1. **Ejemplo + ejercicio por actividad** (piloto en 2 rutas: Organizar para
-   empezar y Aprender y recordar, 9 actividades): cada tarjeta del catálogo
-   ahora abre un detalle con un caso resuelto ("Ejemplo") y una consigna fija
-   de práctica ("Ejercicio"). El resto de las rutas queda para una próxima
-   ronda una vez validado el estilo de contenido.
+1. **Ejemplo + ejercicio por actividad** — ahora en las 30 actividades del
+   catálogo (las 8 rutas completas; empezó como piloto en 2 rutas, aprobado
+   y extendido al resto en la misma ronda): cada tarjeta abre un detalle con
+   un caso resuelto ("Ejemplo") y una consigna fija de práctica ("Ejercicio").
 2. **Aplicá tu propio tema**: mientras una actividad está en curso, un
    cuadro de texto pregunta "¿Cómo la vas a aplicar a lo que estás
    estudiando ahora?" — se guarda en su propio registro (`aplicacionPropia`)
@@ -173,17 +172,24 @@ violando las reglas de hooks (error #310 de React) — se movió antes del
    de color en los botones principales — pensado para que se sienta más
    vivo para adolescentes, sin tocar el fondo "ladrillo" + hoja clara de la
    ronda anterior (ese esquema sigue siendo lo que protege la lectura).
+7. **Más profundidad/color en las tarjetas**: la usuaria mandó una captura
+   mostrando la app muy plana y blanca en el celular. Se agregaron
+   degradés de color a `Card` y `StatCard` (fondo + insignia del ícono con
+   sombra de color) y se aumentó el padding del marco "ladrillo" en mobile.
+   Bug real encontrado y corregido en el camino: el primer intento de
+   degradé usaba `to-accent-soft/10` (un color con 10% de **opacidad**, no
+   10% de mezcla) — el 90% transparente dejaba pasar el rojo ladrillo del
+   fondo de la página por detrás, generando un lavado rosado mucho más
+   fuerte de lo buscado. Se corrigió usando colores de degradé opacos
+   (`from-surface to-accent-soft`, sin modificador de opacidad) tanto en
+   `AppShell` como en `Card`.
 
 ## 🔜 Backlog
 
-1. Escribir ejemplo + ejercicio para las 6 rutas restantes del catálogo
-   (Sostener la atención, Comprender, Escribir, Prepararse para evaluar,
-   Regular emociones, Construir autonomía) — 21 actividades, una vez
-   validado el estilo con el piloto de esta ronda.
-2. Modelo de monetización: hoy no hay pago ni backend. Si se decide cobrar,
+1. Modelo de monetización: hoy no hay pago ni backend. Si se decide cobrar,
    evaluar aparte (no reusar el backend multi-profesional abandonado, que
    asumía un modelo de negocio distinto).
-3. Generación de fichas/preguntas con IA a partir de un archivo propio —
+2. Generación de fichas/preguntas con IA a partir de un archivo propio —
    evaluado y descartado por ahora: requeriría backend o que cada persona
    traiga su propia API key (como hace Método Brújula). Queda para cuando
    haya definición de monetización.

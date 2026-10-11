@@ -67,6 +67,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Regla de los 2 minutos + ambiente despejado',
     descripcion: 'Si algo lleva menos de 2 minutos, hacerlo ya; el celular se deja en otro ambiente, no solo en silencio.',
+    ejemplo: 'Antes de sentarse a estudiar, Nico guarda la ropa que estaba tirada en la silla (le lleva 1 minuto) y deja el celular cargando en la cocina, no en modo silencio sobre el escritorio.',
+    ejercicio: 'Antes de tu próxima sesión de estudio, hacé ya las 2 o 3 cosas sueltas que te lleven menos de 2 minutos, y dejá el celular en otro ambiente.',
     fuente: 'técnicas de estudio',
   },
   {
@@ -75,6 +77,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 2,
     titulo: 'Bloque de 25 con apagón total',
     descripcion: 'Un bloque Pomodoro con notificaciones apagadas y el celular en otro ambiente, cronometrado de punta a punta.',
+    ejemplo: 'Puse el cronómetro en 25 minutos, dejé el celular en otro cuarto y cerré las pestañas que no necesitaba. Cuando sonó la alarma, recién ahí lo miré.',
+    ejercicio: 'Programá un bloque de 25 minutos: celular en otro ambiente, notificaciones apagadas, una sola tarea. Cronometralo de punta a punta sin pausas.',
     fuente: 'método de estudio, reformulado',
   },
   {
@@ -83,6 +87,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 3,
     titulo: 'Registro y ajuste gradual de distractores',
     descripcion: 'Anotar cada corte de atención durante una semana, identificar el distractor más frecuente y extender el bloque sin interrupciones de a poco.',
+    ejemplo: 'Durante una semana anoté cada vez que corté la concentración: la mayoría de las veces fue por el celular. La semana siguiente empecé dejándolo en otro cuarto desde el minuto 1.',
+    ejercicio: 'Durante 3 días, anotá cada corte de atención y qué lo causó. Al cuarto día, elegí el distractor más frecuente y armá un plan para reducirlo.',
     fuente: 'técnicas de estudio',
   },
 
@@ -93,6 +99,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Antes de leer: observar y predecir',
     descripcion: 'Mirar el título, las imágenes y los subtítulos, y anotar dos preguntas que esperás que el texto responda.',
+    ejemplo: 'Antes de leer el capítulo sobre el Imperio Romano, miro el título, las imágenes y los subtítulos. Anoto: "¿Por qué cayó el Imperio?" y "¿Qué tuvieron que ver los bárbaros?".',
+    ejercicio: 'Antes de leer tu próximo texto de estudio, mirá título, imágenes y subtítulos, y escribí 2 preguntas que esperás que el texto responda.',
     fuente: 'método de estudio, reformulado',
   },
   {
@@ -101,6 +109,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 2,
     titulo: 'Lectura activa en 5 pasos',
     descripcion: 'De qué trata en una línea, dos preguntas propias, subrayado, explicarlo con tus palabras y resumen en 3 oraciones.',
+    ejemplo: 'De qué trata en una línea: "La fotosíntesis es cómo las plantas fabrican su alimento". Dos preguntas propias, subrayado de lo importante, lo explico con mis palabras y lo resumo en 3 oraciones.',
+    ejercicio: 'Elegí un texto corto y aplicá los 5 pasos: una línea de qué trata, 2 preguntas, subrayado, explicación con tus palabras, resumen en 3 oraciones.',
     fuente: 'método SQ3R, reformulado',
   },
   {
@@ -109,6 +119,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 3,
     titulo: 'Verificar con evidencia del texto',
     descripcion: 'Volver al texto y citar exactamente la frase que respalda cada respuesta, no solo "me parece que".',
+    ejemplo: 'Respondí que "la Revolución de Mayo fue por la crisis en España". Vuelvo al texto y busco la frase exacta que lo confirma, en vez de dejarlo en "me parece que sí".',
+    ejercicio: 'Tomá 3 respuestas que diste sobre un tema y, para cada una, buscá y citá la frase exacta del texto que la respalda.',
     fuente: 'técnicas de estudio',
   },
 
@@ -119,6 +131,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Plan en 3 viñetas antes de escribir',
     descripcion: 'Anotar 3 ideas clave en el orden en que van a aparecer, antes de escribir la primera oración.',
+    ejemplo: 'Antes de escribir sobre la Revolución Francesa, anoto: 1) causas, 2) hechos principales, 3) consecuencias. Recién ahí empiezo a escribir, siguiendo ese orden.',
+    ejercicio: 'Antes de tu próximo texto o respuesta larga, escribí 3 viñetas con las ideas clave y el orden en que van a aparecer.',
     fuente: 'técnicas de estudio',
   },
   {
@@ -127,6 +141,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 2,
     titulo: 'Resumen en 3 oraciones',
     descripcion: 'Condensar un texto ya leído en exactamente 3 oraciones, sin mirar el original mientras se escribe.',
+    ejemplo: 'Después de leer sobre el ciclo del agua, lo cierro y escribo: "El agua se evapora, forma nubes y cae como lluvia. Ese ciclo se repite sin parar. Es clave para la vida en la Tierra".',
+    ejercicio: 'Leé un texto, cerralo, y escribí un resumen de exactamente 3 oraciones sin volver a mirarlo mientras escribís.',
     fuente: 'método SQ3R, reformulado',
   },
   {
@@ -135,6 +151,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 3,
     titulo: 'De texto informal a texto académico',
     descripcion: 'Reescribir un párrafo propio reemplazando palabras cotidianas por su versión más formal.',
+    ejemplo: '"Los griegos hacían un montón de cosas copadas en política" se convierte en "Los griegos desarrollaron importantes instituciones políticas".',
+    ejercicio: 'Escribí un párrafo corto como si se lo contaras a un amigo. Después reescribilo cambiando las palabras cotidianas por su versión más formal.',
     fuente: 'técnicas de estudio',
   },
   {
@@ -143,6 +161,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 3,
     titulo: 'Taller de conectores',
     descripcion: 'Escribir un párrafo que compare dos ideas usando 4 conectores obligatorios.',
+    ejemplo: '"La fotosíntesis produce oxígeno. Sin embargo, la respiración celular lo consume. Por lo tanto, ambos procesos se equilibran. Además, dependen de la luz solar."',
+    ejercicio: 'Elegí dos ideas para comparar y escribí un párrafo usando 4 conectores distintos (por ejemplo: sin embargo, por lo tanto, además, en cambio).',
     fuente: 'técnicas de estudio',
   },
 
@@ -195,6 +215,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Calendario regresivo simple',
     descripcion: 'Contar cuántos días faltan y repartir los temas hacia atrás desde la fecha de la evaluación.',
+    ejemplo: 'Faltan 6 días para la prueba y hay 3 temas. Reparto: días 1 y 2 el tema 1, días 3 y 4 el tema 2, día 5 el tema 3, día 6 repaso general.',
+    ejercicio: 'Cuando tengas tu próxima evaluación, contá los días que faltan y repartí los temas hacia atrás desde esa fecha.',
     fuente: 'cuestionario de planificación',
   },
   {
@@ -203,6 +225,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 2,
     titulo: 'Bloque encadenado: mapa, repaso, simulacro',
     descripcion: "25' armando un mapa conceptual, descanso, 25' de repaso en voz alta, descanso, simulacro breve.",
+    ejemplo: '25 minutos armo un mapa conceptual del tema, descanso 5, 25 minutos repaso en voz alta sin mirar el mapa, descanso 5, y hago un simulacro breve de 10 minutos.',
+    ejercicio: 'Armá tu propio bloque encadenado para un tema que tengas que rendir: mapa, descanso, repaso en voz alta, descanso, simulacro.',
     fuente: 'método de estudio, reformulado',
   },
   {
@@ -211,6 +235,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 3,
     titulo: 'Simulacro cronometrado + análisis de errores',
     descripcion: 'Resolver una evaluación de práctica con tiempo real y clasificar cada error por su causa probable.',
+    ejemplo: 'Resolví un simulacro en 40 minutos cronometrados. De los errores, 2 fueron por no leer bien la consigna y 1 por no saber el contenido — así sé en qué enfocarme.',
+    ejercicio: 'Resolvé una evaluación de práctica con tiempo real. Para cada error, anotá si fue por no leer bien, por nervios o por no saber el contenido.',
     fuente: 'técnicas de estudio',
   },
 
@@ -221,6 +247,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Respiración 4-6 antes de rendir',
     descripcion: 'Inhalar contando 4, exhalar contando 6, repetir de 6 a 10 veces.',
+    ejemplo: 'Antes de entrar al examen, inhalo contando hasta 4, exhalo contando hasta 6, y lo repito 8 veces. Noto que el corazón se calma.',
+    ejercicio: 'La próxima vez que sientas nervios antes de estudiar o rendir, hacé de 6 a 10 respiraciones 4-6 (inhalar 4, exhalar 6) antes de empezar.',
     fuente: 'técnicas de estudio',
   },
   {
@@ -229,6 +257,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Grounding 5-4-3-2-1',
     descripcion: 'Nombrar 5 cosas que ves, 4 que tocás, 3 sonidos — para bajar la ansiedad antes de un examen.',
+    ejemplo: 'Antes del examen nombro: 5 cosas que veo (el pizarrón, una ventana...), 4 que toco (el banco, mi lápiz...), 3 sonidos, 2 olores, 1 cosa que puedo saborear.',
+    ejercicio: 'Cuando sientas ansiedad antes de una evaluación, hacé el ejercicio 5-4-3-2-1 completo, despacio, antes de entrar.',
     fuente: 'técnicas de estudio',
   },
   {
@@ -237,6 +267,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 2,
     titulo: 'Reencuadrar un pensamiento ansioso',
     descripcion: 'Escribir el pensamiento, buscar evidencia en contra, y redactar una versión más realista.',
+    ejemplo: 'Pensamiento: "Me va a ir mal seguro". Evidencia en contra: "Estudié 3 días y entendí los temas". Versión más realista: "Estoy nervioso, pero me preparé".',
+    ejercicio: 'Escribí un pensamiento ansioso que tengas sobre una evaluación, buscá evidencia en contra y redactá una versión más realista.',
     fuente: 'técnicas de estudio',
   },
   {
@@ -245,6 +277,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 3,
     titulo: 'Exposición gradual a la tarea temida',
     descripcion: 'Partir la materia o el tema que más se evita en pasos cada vez más largos, empezando por el más chico y tolerable.',
+    ejemplo: 'Le tengo miedo a hablar en público para la exposición oral. Empiezo practicando solo, después frente al espejo, después frente a un familiar, y recién al final frente a varios.',
+    ejercicio: 'Elegí la tarea de estudio que más evitás. Partila en 4 pasos cada vez más desafiantes y empezá hoy por el más chico.',
     fuente: 'técnicas de estudio',
   },
 
@@ -255,6 +289,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 1,
     titulo: 'Elegir con intención, no por costumbre',
     descripcion: 'Antes de empezar a estudiar, parar un momento y elegir a propósito qué herramienta usar y por qué, en vez de repetir siempre la misma por hábito.',
+    ejemplo: 'Siempre resumo todo, por costumbre. Hoy me detengo y pienso: para este tema con muchas fechas, un mapa conceptual me va a servir más que un resumen.',
+    ejercicio: 'Antes de tu próxima sesión de estudio, parate un minuto y elegí a propósito qué herramienta usar — no la de siempre, la que mejor le quede a ese tema.',
     fuente: 'criterio propio de la plataforma',
   },
   {
@@ -263,6 +299,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 2,
     titulo: 'Registrar qué tan bien funcionó',
     descripcion: 'Después de probar una herramienta nueva, anotar en una escala simple si funcionó, más o menos, o no.',
+    ejemplo: 'Probé el mapa conceptual para Biología. Anoto: "funcionó bastante bien, me ayudó a ver cómo se conectaban los temas".',
+    ejercicio: 'Después de probar una herramienta nueva, anotá en una escala simple (funcionó / más o menos / no funcionó) y por qué.',
     fuente: 'criterio propio de la plataforma',
   },
   {
@@ -271,6 +309,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 3,
     titulo: 'Transferir una herramienta a otra materia',
     descripcion: 'Usar por cuenta propia, en una materia distinta, una herramienta aprendida para otra.',
+    ejemplo: 'Aprendí a hacer resúmenes en 3 oraciones para Lengua. La semana siguiente, sin que nadie me lo pida, la uso también para repasar Historia.',
+    ejercicio: 'Elegí una herramienta que ya usaste en una materia y probala por tu cuenta en una materia distinta.',
     fuente: 'criterio propio de la plataforma',
   },
   {
@@ -279,6 +319,8 @@ export const ACTIVIDADES: ActividadCatalogo[] = [
     nivel: 3,
     titulo: 'Armar mi plan personal de herramientas',
     descripcion: 'Hacia el cierre del proceso: una lista propia de qué herramienta usar para cada tipo de tarea.',
+    ejemplo: 'Para memorizar fechas uso fichas. Para entender procesos uso mapas conceptuales. Para preparar un examen uso el calendario regresivo. Lo tengo anotado para no pensarlo cada vez.',
+    ejercicio: 'Hacé tu propia lista: para cada tipo de tarea de estudio (memorizar, comprender, prepararte para evaluar...), anotá qué herramienta de esta app te funciona mejor.',
     fuente: 'criterio propio de la plataforma',
   },
 ]

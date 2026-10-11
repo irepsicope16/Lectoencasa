@@ -51,6 +51,13 @@ export function EmptyState({
   )
 }
 
+const STAT_TONE = {
+  primario: { wash: 'var(--color-primary-soft)', badge: 'bg-primary text-primary-foreground shadow-[0_5px_12px_-4px_var(--color-primary)]', border: 'border-primary/15' },
+  acento: { wash: 'var(--color-accent-soft)', badge: 'bg-accent text-accent-foreground shadow-[0_5px_12px_-4px_var(--color-accent)]', border: 'border-accent/15' },
+  secundario: { wash: 'var(--color-secondary-soft)', badge: 'bg-secondary text-secondary-foreground shadow-[0_5px_12px_-4px_var(--color-secondary)]', border: 'border-secondary/15' },
+  neutro: { wash: 'var(--color-warning-soft)', badge: 'bg-warning text-white shadow-[0_5px_12px_-4px_var(--color-warning)]', border: 'border-warning/15' },
+} as const
+
 export function StatCard({
   icon: Icon,
   label,
@@ -62,21 +69,17 @@ export function StatCard({
   label: string
   value: React.ReactNode
   hint?: string
-  tone?: 'primario' | 'acento' | 'secundario' | 'neutro'
+  tone?: keyof typeof STAT_TONE
 }) {
+  const t = STAT_TONE[tone]
   return (
-    <div className="rounded-xl border bg-surface p-4 shadow-[0_1px_2px_rgba(16,24,32,0.04),0_4px_14px_-6px_rgba(16,24,32,0.07)]">
+    <div
+      className={cn('rounded-xl border p-4 shadow-[0_2px_6px_rgba(16,24,32,0.05),0_10px_22px_-12px_rgba(16,24,32,0.14)]', t.border)}
+      style={{ background: `linear-gradient(145deg, ${t.wash}, var(--color-surface) 65%)` }}
+    >
       <div className="flex items-center gap-2 text-muted-foreground">
-        <div
-          className={cn(
-            'flex h-7 w-7 items-center justify-center rounded-lg',
-            tone === 'primario' && 'bg-primary-soft text-primary-strong',
-            tone === 'acento' && 'bg-accent-soft text-accent-strong',
-            tone === 'secundario' && 'bg-secondary-soft text-secondary-strong',
-            tone === 'neutro' && 'bg-surface-2 text-muted-foreground',
-          )}
-        >
-          <Icon className="h-3.5 w-3.5" />
+        <div className={cn('flex h-8 w-8 items-center justify-center rounded-lg', t.badge)}>
+          <Icon className="h-4 w-4" />
         </div>
         <span className="text-[12.5px] font-medium">{label}</span>
       </div>
