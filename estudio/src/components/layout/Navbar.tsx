@@ -29,7 +29,8 @@ export function Navbar() {
     <header className="flex h-14 shrink-0 items-center justify-between gap-3 border-b bg-surface px-4 lg:px-6">
       <button
         onClick={() => setMobileNavOpen(true)}
-        className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground lg:hidden"
+        className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 text-secondary transition-colors hover:bg-secondary/10 lg:hidden"
+        style={{ borderColor: 'var(--color-secondary)', boxShadow: '0 4px 10px -4px var(--color-secondary)' }}
         aria-label="Abrir menú"
       >
         <Menu className="h-4 w-4" />
@@ -46,7 +47,8 @@ export function Navbar() {
         )}
         <button
           onClick={() => setTheme(isDark ? 'light' : 'dark')}
-          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
+          className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border-2 text-warning transition-colors hover:bg-warning/10"
+          style={{ borderColor: 'var(--color-warning)', boxShadow: '0 4px 10px -4px var(--color-warning)' }}
           aria-label="Cambiar tema"
         >
           {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}

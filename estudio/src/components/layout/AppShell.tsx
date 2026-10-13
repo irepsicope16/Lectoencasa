@@ -27,7 +27,8 @@ export function AppShell() {
             <Sidebar />
             <button
               onClick={() => setMobileNavOpen(false)}
-              className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-md bg-surface-2 text-muted-foreground"
+              className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-lg border-2 bg-surface text-accent-strong"
+              style={{ borderColor: 'var(--color-accent)', boxShadow: '0 4px 10px -4px var(--color-accent)' }}
               aria-label="Cerrar menú"
             >
               <X className="h-4 w-4" />

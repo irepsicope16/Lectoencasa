@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-11 (actualizado, ronda 17) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-13 (actualizado, ronda 18) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -594,6 +594,34 @@ realmente parezca una E.
 - Verificado con Playwright en claro, oscuro y mobile: ahora sí se lee
   claramente como una "E" con los 3 íconos (Perfil/Estrategias/
   Seguimiento) integrados en sus trazos, sin errores de consola.
+
+## ✅ Ronda 18 (13/10/2026): botones del encabezado con borde y sombra de color
+
+La usuaria pidió que los botones "de arriba, a la derecha o a la
+izquierda de la app" se vean como botones de verdad, con sombra o borde
+de colores distintos para identificarlos más rápido.
+
+- Se identificaron los 3 botones de solo ícono que vivían en el "chrome"
+  de la app (no en el contenido de cada página) sin ningún borde/sombra
+  en reposo — solo cambiaban de fondo al pasar el mouse, así que no se
+  notaba que eran clickeables a simple vista: el menú hamburguesa
+  (`Navbar.tsx`, esquina superior izquierda en mobile), el botón de
+  tema claro/oscuro (`Navbar.tsx`, esquina superior derecha) y el botón
+  de cerrar el menú lateral en mobile (`AppShell.tsx`).
+- Se les agregó borde de 2px + sombra de color, reutilizando la misma
+  paleta de "tonos" que ya usa el resto de la app (`IconBadge`):
+  hamburguesa en secundario (gris-azulado), tema en dorado (hace juego
+  con el sol/luna), cerrar menú en acento (terracota) — cada uno con un
+  color distinto, como se pidió.
+- **Alcance, para ser clara:** esto cubrió los botones del encabezado y
+  la barra lateral, no los íconos sueltos dentro de cada página (por
+  ejemplo, el tacho de borrar en las listas de Fichas/Diario/Actividades,
+  que usan la variante "ghost" del botón genérico). Si la usuaria
+  también se refería a esos, es un cambio más grande — habría que
+  decidir si todos los `ghost` del sistema pasan a tener borde, o solo
+  algunos puntuales.
+- Verificado con Playwright en escritorio y mobile (con el menú lateral
+  abierto), sin errores de consola.
 
 ## 🔜 Backlog
 
