@@ -1,18 +1,47 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 import { X } from 'lucide-react'
 import { Sidebar } from './Sidebar'
 import { Navbar } from './Navbar'
 import { useUIStore } from '@/stores/uiStore'
+import { useEstudiantesStore } from '@/stores/estudiantesStore'
+import { useHorarioCursadaStore } from '@/stores/horarioCursadaStore'
+import { useDistribucionActividadesStore } from '@/stores/distribucionActividadesStore'
+import { Bienvenida } from '@/features/estudiantes/SeleccionarEstudiantePage'
 
 export function AppShell() {
   const mobileNavOpen = useUIStore((s) => s.mobileNavOpen)
   const setMobileNavOpen = useUIStore((s) => s.setMobileNavOpen)
   const location = useLocation()
+  const activoId = useEstudiantesStore((s) => s.activoId)
+  const hayActivo = useEstudiantesStore((s) => s.estudiantes.some((e) => e.id === s.activoId))
+  const qc = useQueryClient()
 
   useEffect(() => {
     setMobileNavOpen(false)
   }, [location.pathname, setMobileNavOpen])
+
+  // Al cambiar (o elegir por primera vez) el estudiante activo, todo lo que
+  // esté cacheado o ya hidratado desde localStorage corresponde al estudiante
+  // anterior — hay que refrescarlo desde el nuevo namespace.
+  useEffect(() => {
+    if (!activoId) return
+    qc.invalidateQueries()
+    useHorarioCursadaStore.persist.rehydrate()
+    useDistribucionActividadesStore.persist.rehydrate()
+    setMobileNavOpen(false)
+  }, [activoId, qc, setMobileNavOpen])
+
+  if (!hayActivo) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center overflow-y-auto bg-background p-4">
+        <div className="w-full max-w-[640px] rounded-2xl bg-gradient-to-br from-surface via-surface to-accent-soft px-6 py-8 shadow-[0_2px_4px_rgba(16,24,32,0.06),0_16px_32px_-12px_rgba(16,24,32,0.18)] sm:px-10">
+          <Bienvenida />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background">

@@ -1,6 +1,6 @@
 import { Flame, Menu, Moon, Sun } from 'lucide-react'
 import { useUIStore } from '@/stores/uiStore'
-import { usePerfilStore } from '@/stores/perfilStore'
+import { useEstudiantesStore } from '@/stores/estudiantesStore'
 import { useActividadesProbadas, useDiario, useFichas, useSesionesEstudio } from '@/hooks/queries'
 import { calcularRacha } from '@/lib/progreso'
 
@@ -8,7 +8,7 @@ export function Navbar() {
   const theme = useUIStore((s) => s.theme)
   const setTheme = useUIStore((s) => s.setTheme)
   const setMobileNavOpen = useUIStore((s) => s.setMobileNavOpen)
-  const nombre = usePerfilStore((s) => s.nombre)
+  const nombre = useEstudiantesStore((s) => s.estudiantes.find((e) => e.id === s.activoId)?.nombre ?? '')
 
   const { data: actividades = [] } = useActividadesProbadas()
   const { data: sesiones = [] } = useSesionesEstudio()

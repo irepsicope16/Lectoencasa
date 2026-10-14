@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { crearStorageEstudiante } from './estudianteStorage'
 
 // Horario fijo semanal de cursada (distinto de la Agenda, que registra eventos
 // puntuales): una grilla simple día × horario que la persona completa una vez
@@ -28,6 +29,6 @@ export const useHorarioCursadaStore = create<HorarioCursadaState>()(
         set((s) => ({ celdas: { ...s.celdas, [`${dia}-${bloque}`]: valor } })),
       setNotas: (notas) => set({ notas }),
     }),
-    { name: 'me:horario_cursada' },
+    { name: 'horario_cursada', storage: crearStorageEstudiante() },
   ),
 )

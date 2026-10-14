@@ -63,4 +63,9 @@ export class Repository<T extends BaseRow> {
     const rows = await this.list()
     await this.driver.write(this.collection, [...rows, ...items])
   }
+
+  /** Reemplaza toda la colección (usado al importar una copia de seguridad). */
+  async replaceAll(rows: T[]): Promise<void> {
+    await this.driver.write(this.collection, rows)
+  }
 }

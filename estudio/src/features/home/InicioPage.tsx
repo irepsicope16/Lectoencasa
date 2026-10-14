@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { addDays, format, isWithinInterval, startOfDay } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { BookOpen, CalendarDays, Clock, Flame, ListChecks, Sparkles, Timer, Trophy } from 'lucide-react'
-import { usePerfilStore } from '@/stores/perfilStore'
+import { useEstudiantesStore } from '@/stores/estudiantesStore'
 import { useUIStore } from '@/stores/uiStore'
 import {
   useActividadesProbadas,
@@ -17,20 +17,17 @@ import {
 } from '@/hooks/queries'
 import { ITEMS } from '@/data/items'
 import { RUTAS } from '@/data/rutas'
-import { MENSAJES } from '@/data/mensajes'
 import { calcularRacha } from '@/lib/progreso'
 import { notificarRachaEnRiesgo } from '@/lib/recordatorios'
 import { calcularGamificacion } from '@/lib/gamificacion'
 import { fechaLocal } from '@/lib/utils'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Input, Label } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 import { AvisoOrientativo, EmptyState, FadeIn, IconBadge, InsigniasRow, PageHeader, StatCard } from '@/components/shared'
-import { BrandCover } from '@/branding/Logo'
 
 export default function InicioPage() {
-  const nombre = usePerfilStore((s) => s.nombre)
+  const nombre = useEstudiantesStore((s) => s.estudiantes.find((e) => e.id === s.activoId)?.nombre ?? '')
   const avisosNavegadorActivos = useUIStore((s) => s.avisosNavegadorActivos)
   const { data: responses = [] } = useResponses()
   const { data: snapshots = [] } = useSnapshots()
@@ -58,10 +55,6 @@ export default function InicioPage() {
     if (rachaEnRiesgo && avisosNavegadorActivos) notificarRachaEnRiesgo(racha)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rachaEnRiesgo, avisosNavegadorActivos])
-
-  if (!nombre) {
-    return <Bienvenida />
-  }
 
   const completadas = actividades.filter((a) => a.estado === 'completada')
   const minutosEstudiados = sesiones.reduce((acc, s) => acc + s.duracionMin, 0)
@@ -238,48 +231,6 @@ export default function InicioPage() {
             </Button>
           </CardContent>
         </Card>
-      </div>
-    </FadeIn>
-  )
-}
-
-export function Bienvenida() {
-  const setNombre = usePerfilStore((s) => s.setNombre)
-  const [valor, setValor] = useState('')
-
-  return (
-    <FadeIn className="flex min-h-[70vh] items-center justify-center">
-      <div className="w-full max-w-md text-center">
-        <BrandCover className="mx-auto max-w-[260px]" />
-        <h1 className="font-display mt-6 text-[22px] font-semibold tracking-tight">
-          Descubrí cómo estudiás mejor
-        </h1>
-        <p className="mt-2 text-[14px] leading-relaxed text-muted-foreground">
-          Un autoperfil, una biblioteca de técnicas y herramientas para probar qué te funciona a vos — sin
-          cuentas, sin que nadie más vea tus datos. Quedan guardados en este dispositivo.
-        </p>
-        <div className="mt-6 space-y-3 text-left">
-          <Label htmlFor="nombre">¿Cómo te llamás?</Label>
-          <Input
-            id="nombre"
-            autoFocus
-            value={valor}
-            onChange={(e) => setValor(e.target.value)}
-            placeholder="Tu nombre"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && valor.trim()) setNombre(valor.trim())
-            }}
-          />
-          <Button className="w-full" disabled={!valor.trim()} onClick={() => setNombre(valor.trim())}>
-            Empezar
-          </Button>
-        </div>
-        <p className="mt-5 text-[12px] text-faint">{MENSAJES.emergencia}</p>
-        <p className="mt-3 text-[11px] leading-relaxed text-faint">
-          Método Estudio es una herramienta creada por la Lic. Irene Morbidelli (Psicopedagoga).
-          <br />
-          Prohibida su venta o copia sin autorización.
-        </p>
       </div>
     </FadeIn>
   )

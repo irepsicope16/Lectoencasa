@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-14 (actualizado, ronda 21) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-14 (actualizado, ronda 23) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -746,6 +746,69 @@ GitHub → Settings → Pages → "Build and deployment" → Source:
 en cada ronda futura — ese sí es un link estable para compartir con
 usuarios reales, a diferencia del artifact.
 
+## ✅ Ronda 23 (14/10/2026): varios estudiantes en el mismo dispositivo
+
+La usuaria contó que lo quiere usar como Método Brújula: varios
+consultantes/pacientes, cada uno con su espacio, en el mismo dispositivo
+(su propio celular o tablet en el consultorio) — no un dispositivo por
+persona. Antes de tocar código se confirmó que esto es un cambio de
+arquitectura real, no cosmético: hasta ahora "cambiar el nombre" solo
+reetiquetaba el mismo balde de datos (confirmado leyendo el código de
+`perfilStore.ts`, cuyo propio comentario decía "app de un solo usuario
+local"), así que usarlo así con pacientes reales habría mezclado las
+respuestas de uno con las del siguiente sin avisar. Se decidió construir
+el soporte real en vez de recomendar el flujo manual de exportar/borrar/
+importar.
+
+- Nuevo store `stores/estudiantesStore.ts`: lista de estudiantes
+  (`{id, nombre, creadoEl}`) + `activoId`, persistido en `me:estudiantes`
+  (la única clave que queda fuera de cualquier namespace, a propósito).
+- **Namespacing de todo lo demás por estudiante activo**: `driver.ts`
+  (`LocalStorageDriver`) ahora prefija cada colección con
+  `me:p:<estudianteId>:data:...` en vez de `me:data:...`; los dos stores
+  de Zustand que eran "datos de una persona" (`horarioCursadaStore`,
+  `distribucionActividadesStore`) usan un `storage` adapter propio
+  (`stores/estudianteStorage.ts`) con el mismo prefijo. `theme` y el
+  throttle de avisos de racha se dejaron deliberadamente globales (son
+  preferencia del dispositivo, no del estudiante).
+- **Migración automática**: si el dispositivo ya tenía datos del modelo
+  viejo (como el de Alma, cargados antes de esta ronda), al abrir la app
+  se detectan y se mueven a un primer estudiante (con su nombre
+  recuperado de `me:perfil`) en vez de perderse. Verificado con
+  Playwright: se simuló el estado viejo de localStorage y se confirmó que
+  migra sola, sin pedir nada, y que esa persona sigue viendo su actividad
+  previa.
+- `resetAllData()` / "Borrar todos mis datos" ahora borra solo al
+  estudiante activo (antes borraba también tema y nombre al barrer todo lo
+  que empezara con `me:` — esto de paso corrige ese alcance demasiado
+  amplio). Nueva función `wipeEstudiante(id)` para eliminar a alguien de la
+  lista junto con sus datos.
+- `services/storage/backup.ts`: se agregaron 5 colecciones que faltaban en
+  el export (Agenda y los 3 Planificadores, y Guía de textos — un hueco
+  pre-existente, no introducido en esta ronda) y se corrigió el import,
+  que antes escribía directo con `localStorage.setItem` sin pasar por el
+  driver (por eso no respetaba el namespacing); ahora usa
+  `Repository.replaceAll()`. El nombre del archivo exportado incluye el
+  nombre del estudiante.
+- **UI**: pantalla de bienvenida (`features/estudiantes/
+  SeleccionarEstudiantePage.tsx`) ahora es un selector real — si ya hay
+  estudiantes, muestra la lista para elegir o agregar uno nuevo. El gate
+  se movió de `InicioPage` a `AppShell` (protege todas las rutas, no solo
+  Inicio) y se descubrió ahí mismo que sin el "sobre" (`Card`) claro que
+  usa el resto de la app, el contenido quedaba flotando directo sobre el
+  fondo "ladrillo" intenso — se corrigió envolviéndolo igual que el resto.
+  Sidebar muestra "Nombre · cambiar"; Ajustes tiene una tarjeta nueva
+  "Estudiante activo" con el nombre editable, botón "Cambiar de
+  estudiante" y una lista de todos los estudiantes con eliminar
+  individual (con confirmación).
+- Verificado con Playwright: migración desde datos viejos, aislamiento
+  real entre dos estudiantes (uno no ve nada del otro), que volver al
+  primero conserva lo suyo, y que eliminar a uno borra sus claves de
+  localStorage sin tocar las del otro. De paso se encontró y corrigió un
+  bug real: el menú lateral móvil quedaba abierto tapando la pantalla
+  después de cambiar de estudiante.
+- Se retiró `stores/perfilStore.ts` (reemplazado por `estudiantesStore`).
+
 ## 🔜 Backlog
 
 1. Modelo de monetización: hoy no hay pago ni backend. Si se decide cobrar,
@@ -758,10 +821,12 @@ usuarios reales, a diferencia del artifact.
 
 ## Decisiones técnicas clave (no revertir sin razón)
 
-- **Sin backend, sin cuentas**: todo LocalStorage, un dispositivo = una
-  persona. Decisión explícita del pivot (10/10/2026) — no reintroducir
-  roles ni multi-tenant sin una conversación nueva sobre el modelo de
-  negocio.
+- **Sin backend, sin cuentas**: todo LocalStorage. Desde la ronda 23
+  (14/10/2026) un dispositivo puede tener **varios estudiantes**, cada uno
+  con su espacio namespaced (ver `stores/estudiantesStore.ts`), pero sigue
+  sin haber servidor, login ni sincronización entre dispositivos — eso
+  seguiría siendo un cambio de modelo de negocio aparte, no algo que este
+  cambio habilite.
 - **HashRouter** y `base: './'`: hosting estático sin config de servidor,
   igual que antes.
 - **Contenido versionado en código** (`data/`): forma parte del método y se
