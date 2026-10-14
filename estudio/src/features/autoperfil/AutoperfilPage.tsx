@@ -15,7 +15,7 @@ import { Badge } from '@/components/ui/badge'
 import { AvisoOrientativo, FadeIn, PageHeader } from '@/components/shared'
 import { toast } from '@/components/ui/toast'
 import { cn } from '@/lib/utils'
-import { RUTA_COLOR, dimensionCardStyle } from '@/lib/moduleColors'
+import { DIMENSION_COLOR, RUTA_COLOR, dimensionCardStyle } from '@/lib/moduleColors'
 import type { BandaNecesidad, DimensionId } from '@/types'
 
 const DIMENSION_IDS = Object.keys(DIMENSIONES) as DimensionId[]
@@ -82,12 +82,16 @@ export default function AutoperfilPage() {
     const dimension = DIMENSION_IDS[step]
     const items = itemsDeDimension(dimension)
     const completosEnDimension = items.filter((i) => valorDe(i.codigo)).length
+    const colorArea = DIMENSION_COLOR[dimension]
 
     return (
       <FadeIn className="space-y-4">
         <PageHeader title="Mi autoperfil" subtitle="56 preguntas cortas, organizadas en 8 áreas. Podés pausar y retomar cuando quieras." />
         <AvisoOrientativo>{MENSAJES.antesDelPerfil}</AvisoOrientativo>
-        <Card className="border-t-[3px]" style={dimensionCardStyle(dimension)}>
+        <Card
+          className="border-t-[3px]"
+          style={{ borderTopColor: colorArea?.color, boxShadow: colorArea ? `0 10px 20px -14px ${colorArea.color}` : undefined }}
+        >
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>
@@ -104,8 +108,14 @@ export default function AutoperfilPage() {
             {items.map((item) => {
               const r = valorDe(item.codigo)
               return (
-                <div key={item.codigo} className="rounded-lg border bg-surface p-3">
-                  <p className="mb-2.5 text-[14.5px] font-medium leading-snug text-foreground">{item.enunciado}</p>
+                <div
+                  key={item.codigo}
+                  className="rounded-lg border-l-[3px] bg-surface p-3"
+                  style={{ borderLeftColor: colorArea?.color, backgroundColor: colorArea?.soft }}
+                >
+                  <p className="mb-2.5 text-[15.5px] font-semibold leading-snug" style={{ color: colorArea?.color }}>
+                    {item.enunciado}
+                  </p>
                   <div className="flex flex-wrap gap-1.5">
                     {ESCALA.map((op) => (
                       <button

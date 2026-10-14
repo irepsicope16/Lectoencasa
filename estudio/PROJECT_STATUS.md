@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-14 (actualizado, ronda 20) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-14 (actualizado, ronda 21) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -691,6 +691,26 @@ encabezado, no los ítems del menú lateral).
 
 Esta ronda siguió en la misma sesión/contenedor que ya había corregido
 el problema de rama de la Ronda 19 — no hizo falta repetir el fix.
+
+## ✅ Ronda 21 (14/10/2026): color en cada pregunta del autoperfil, no solo el marco
+
+La usuaria mandó capturas marcadas a mano mostrando exactamente qué
+faltaba: la Ronda 19 había coloreado el marco exterior del área
+(una franja fina arriba de la tarjeta grande), pero cada recuadro de
+pregunta individual seguía blanco/plano, y el texto de la pregunta
+seguía en el color de texto normal — no el color del área.
+
+- `AutoperfilPage.tsx`: cada recuadro de pregunta (dentro del área)
+  pasa a tener fondo tintado + borde izquierdo del color de esa área,
+  y el enunciado de la pregunta se pinta directamente con ese mismo
+  color (además de un poco más grande: `text-[15.5px] font-semibold`).
+  La tarjeta exterior se deja con un borde superior de color nada más
+  (sin fondo tintado), para que no compita visualmente con los
+  recuadros de cada pregunta, que son los que ahora llevan el color
+  fuerte.
+- Verificado con Playwright en mobile (donde ella sacó sus capturas):
+  área A en terracota, área B en dorado, cada recuadro y su texto
+  coinciden en color — visualmente igual a lo que pidió en sus fotos.
 
 ## 🔜 Backlog
 
