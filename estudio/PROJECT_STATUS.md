@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-13 (actualizado, ronda 18) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-14 (actualizado, ronda 19) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -622,6 +622,46 @@ de colores distintos para identificarlos más rápido.
   algunos puntuales.
 - Verificado con Playwright en escritorio y mobile (con el menú lateral
   abierto), sin errores de consola.
+
+## ✅ Ronda 19 (14/10/2026): color por área en el autoperfil + saca "No aplica"
+
+La usuaria pidió más contraste en el texto de las preguntas del
+autoperfil (las 8 áreas, no solo la primera), un color distinto por
+área para distinguirlas, y sacar el botón "No aplica" de todas las
+preguntas porque confundía.
+
+- `AutoperfilPage.tsx`: el enunciado de cada pregunta pasó de texto
+  chico sin peso (`text-[13px]`, sin color explícito) a `text-[14.5px]
+  font-medium` con color de primer plano explícito — se lee bien antes
+  de responder.
+- Se agregó `DIMENSION_COLOR` (en `lib/moduleColors.ts`), paralelo al
+  `RUTA_COLOR` ya existente, asignando un tono distinto a cada una de
+  las 8 dimensiones (A-H) reusando los mismos 8 tokens de color que ya
+  usan las rutas de Biblioteca/Actividades — sin sumar paleta nueva. Se
+  aplica como franja superior + fondo tintado tanto en la pantalla de
+  preguntas como en "Tus resultados".
+- Se sacó el botón "No aplica" de las 5 opciones de respuesta.
+  **Nota metodológica, para que quede registrada:** ese botón no era
+  solo UI — en `estudioEngine.ts`, "No aplica" (valor `null`) cuenta
+  como respondido para el % de completitud, pero queda fuera del
+  promedio de necesidad de la dimensión (§7 del Documento Maestro). Al
+  sacarlo de la interfaz, ya no se puede excluir un ítem puntual del
+  promedio — toda respuesta nueva es 0-3 y entra al cálculo. El motor
+  sigue soportando `valor: null` por compatibilidad con respuestas ya
+  guardadas antes de este cambio, pero nadie podrá generar una nueva
+  desde la UI. Decisión de la usuaria, no mía — lo dejo escrito acá por
+  si en el futuro hay que revisar el impacto en los resultados.
+- Verificado con Playwright (escritorio y mobile): el botón ya no
+  aparece, cada área tiene su color, sin errores de consola.
+
+**Incidente de sesión (branch), para quien retome esto:** el contenedor
+de esta ronda arrancó por error en `claude/nueva-plataforma-profesional-
+wtaimt` (la rama vieja, pre-pivot, 8+ días desactualizada — ver nota de
+Ronda 13). Se detectó antes de commitear nada ahí, se hizo stash de los
+2 archivos tocados, se cambió a `claude/mini-app-metodo-estudio` (la
+rama real) y se reaplicó el cambio ahí, verificado con diff. `node_modules`
+también tuvo que reinstalarse dos veces (una por rama). Nada de esto
+afectó el resultado final, pero vale la pena que quede documentado.
 
 ## 🔜 Backlog
 

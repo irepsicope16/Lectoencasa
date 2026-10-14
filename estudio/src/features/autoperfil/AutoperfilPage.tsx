@@ -15,7 +15,7 @@ import { Badge } from '@/components/ui/badge'
 import { AvisoOrientativo, FadeIn, PageHeader } from '@/components/shared'
 import { toast } from '@/components/ui/toast'
 import { cn } from '@/lib/utils'
-import { RUTA_COLOR } from '@/lib/moduleColors'
+import { RUTA_COLOR, dimensionCardStyle } from '@/lib/moduleColors'
 import type { BandaNecesidad, DimensionId } from '@/types'
 
 const DIMENSION_IDS = Object.keys(DIMENSIONES) as DimensionId[]
@@ -87,7 +87,7 @@ export default function AutoperfilPage() {
       <FadeIn className="space-y-4">
         <PageHeader title="Mi autoperfil" subtitle="56 preguntas cortas, organizadas en 8 áreas. Podés pausar y retomar cuando quieras." />
         <AvisoOrientativo>{MENSAJES.antesDelPerfil}</AvisoOrientativo>
-        <Card>
+        <Card className="border-t-[3px]" style={dimensionCardStyle(dimension)}>
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>
@@ -97,15 +97,15 @@ export default function AutoperfilPage() {
             </div>
             <Progress value={(completosEnDimension / items.length) * 100} className="mt-2" />
             <CardDescription className="mt-1">
-              Escala: 0 Nunca o casi nunca · 1 A veces · 2 Frecuentemente · 3 Casi siempre. Podés marcar "No aplica".
+              Escala: 0 Nunca o casi nunca · 1 A veces · 2 Frecuentemente · 3 Casi siempre.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 pt-0">
             {items.map((item) => {
               const r = valorDe(item.codigo)
               return (
-                <div key={item.codigo} className="rounded-lg border p-3">
-                  <p className="mb-2 text-[13px]">{item.enunciado}</p>
+                <div key={item.codigo} className="rounded-lg border bg-surface p-3">
+                  <p className="mb-2.5 text-[14.5px] font-medium leading-snug text-foreground">{item.enunciado}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {ESCALA.map((op) => (
                       <button
@@ -120,16 +120,6 @@ export default function AutoperfilPage() {
                         {op.valor} · {op.label}
                       </button>
                     ))}
-                    <button
-                      type="button"
-                      onClick={() => responder(item.codigo, null)}
-                      className={cn(
-                        'rounded-full border px-3 py-1 text-[12px] font-medium transition-colors',
-                        r && r.valor === null ? 'border-accent bg-accent-soft text-accent-strong' : 'hover:bg-surface-2',
-                      )}
-                    >
-                      No aplica
-                    </button>
                   </div>
                 </div>
               )
@@ -262,7 +252,7 @@ function ResultadosAutoperfil({ onVolver }: { onVolver: () => void }) {
         {ordenados.map((snap) => {
           const rutasSugeridas = RUTAS.filter((r) => r.dimensiones.includes(snap.dimension))
           return (
-            <Card key={snap.dimension}>
+            <Card key={snap.dimension} className="border-t-[3px]" style={dimensionCardStyle(snap.dimension)}>
               <CardHeader>
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <CardTitle className="text-[14px]">
