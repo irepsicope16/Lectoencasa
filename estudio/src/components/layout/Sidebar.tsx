@@ -4,14 +4,14 @@ import { cn } from '@/lib/utils'
 import { Isotipo } from '@/branding/Logo'
 
 const nav = [
-  { to: '/', icon: Home, label: 'Inicio', end: true },
-  { to: '/autoperfil', icon: Sparkles, label: 'Mi autoperfil' },
-  { to: '/biblioteca', icon: BookOpen, label: 'Biblioteca' },
-  { to: '/actividades', icon: ListChecks, label: 'Actividades' },
-  { to: '/agenda', icon: CalendarDays, label: 'Agenda' },
-  { to: '/planificadores', icon: CalendarRange, label: 'Planificadores' },
-  { to: '/herramientas', icon: Sparkles, label: 'Herramientas' },
-  { to: '/progreso', icon: BarChart3, label: 'Mi progreso' },
+  { to: '/', icon: Home, label: 'Inicio', end: true, color: 'var(--color-primary)', soft: 'var(--color-primary-soft)' },
+  { to: '/autoperfil', icon: Sparkles, label: 'Mi autoperfil', color: 'var(--color-accent)', soft: 'var(--color-accent-soft)' },
+  { to: '/biblioteca', icon: BookOpen, label: 'Biblioteca', color: 'var(--color-mod-escribir)', soft: 'var(--color-mod-escribir-soft)' },
+  { to: '/actividades', icon: ListChecks, label: 'Actividades', color: 'var(--color-mod-atencion)', soft: 'var(--color-mod-atencion-soft)' },
+  { to: '/agenda', icon: CalendarDays, label: 'Agenda', color: 'var(--color-mod-organizar)', soft: 'var(--color-mod-organizar-soft)' },
+  { to: '/planificadores', icon: CalendarRange, label: 'Planificadores', color: 'var(--color-mod-regular)', soft: 'var(--color-mod-regular-soft)' },
+  { to: '/herramientas', icon: Sparkles, label: 'Herramientas', color: 'var(--color-mod-aprender)', soft: 'var(--color-mod-aprender-soft)' },
+  { to: '/progreso', icon: BarChart3, label: 'Mi progreso', color: 'var(--color-secondary)', soft: 'var(--color-secondary-soft)' },
 ]
 
 export function Sidebar() {
@@ -35,14 +35,17 @@ export function Sidebar() {
                 end={item.end}
                 className={({ isActive }) =>
                   cn(
-                    'flex items-center gap-2.5 rounded-lg border px-2.5 py-1.5 text-[13px] font-medium transition-all',
-                    isActive
-                      ? 'border-transparent bg-accent text-accent-foreground shadow-[0_6px_14px_-6px_var(--accent)]'
-                      : 'border-transparent text-muted-foreground shadow-[0_1px_2px_rgba(16,24,32,0.03)] hover:bg-surface-2 hover:text-foreground',
+                    'flex items-center gap-2.5 rounded-lg border-l-[3px] px-2.5 py-1.5 text-[13px] font-medium transition-all',
+                    isActive ? 'font-semibold shadow-[0_1px_2px_rgba(16,24,32,0.03)]' : 'text-muted-foreground hover:bg-surface-2',
                   )
                 }
+                style={({ isActive }) => ({
+                  borderLeftColor: item.color,
+                  backgroundColor: isActive ? item.soft : undefined,
+                  color: isActive ? item.color : undefined,
+                })}
               >
-                <item.icon className="h-4 w-4 shrink-0" />
+                <item.icon className="h-4 w-4 shrink-0" style={{ color: item.color }} />
                 <span className="truncate">{item.label}</span>
               </NavLink>
             </li>

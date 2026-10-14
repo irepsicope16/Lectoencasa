@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-14 (actualizado, ronda 19) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-14 (actualizado, ronda 20) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -662,6 +662,35 @@ Ronda 13). Se detectó antes de commitear nada ahí, se hizo stash de los
 rama real) y se reaplicó el cambio ahí, verificado con diff. `node_modules`
 también tuvo que reinstalarse dos veces (una por rama). Nada de esto
 afectó el resultado final, pero vale la pena que quede documentado.
+
+## ✅ Ronda 20 (14/10/2026): color propio en cada botón del menú lateral
+
+La usuaria reportó que no veía los cambios de la Ronda 19 (color por
+área en autoperfil) y que tampoco veía color en los botones del menú
+de la izquierda — esto último era un pedido genuinamente nuevo, no
+cubierto todavía (la Ronda 18 solo coloreó los íconos sueltos del
+encabezado, no los ítems del menú lateral).
+
+- `Sidebar.tsx`: cada uno de los 8 ítems (Inicio, Mi autoperfil,
+  Biblioteca, Actividades, Agenda, Planificadores, Herramientas, Mi
+  progreso) tiene ahora su propio color — borde izquierdo + ícono
+  coloreados siempre (para identificarlo de un vistazo, incluso sin
+  estar activo), y fondo tintado + texto en negrita del mismo color
+  cuando está activo. Reusa los mismos 8 tokens de color que ya usan
+  las rutas y las dimensiones del autoperfil, sin sumar paleta nueva.
+- Se verificó con Playwright que los 8 bordes/íconos se ven distintos
+  en reposo y que el estado activo tiñe fondo+texto correctamente, sin
+  errores de consola.
+- Sobre lo de autoperfil que decía no ver: se re-verificó el código
+  fuente y el artifact publicado — ambos tienen el cambio de la Ronda
+  19 (confirmado vía hash del bundle). Es muy probable que sea una
+  cuestión de caché del lado de ella (la app es una PWA con service
+  worker, que puede tardar en actualizar un dispositivo que ya la
+  tenía abierta) — se le pidió probar con una recarga forzada o una
+  ventana privada antes de asumir que el código está mal.
+
+Esta ronda siguió en la misma sesión/contenedor que ya había corregido
+el problema de rama de la Ronda 19 — no hizo falta repetir el fix.
 
 ## 🔜 Backlog
 
