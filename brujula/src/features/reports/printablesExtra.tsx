@@ -990,6 +990,77 @@ function EncuadreTallerOVO() {
   )
 }
 
+// ---------- · Mi Ikigai ----------
+function Ikigai() {
+  const cx = 300
+  const cy = 280
+  const r = 135
+  const d = 72
+  const circulos = [
+    { cx, cy: cy - d },
+    { cx: cx + d, cy },
+    { cx, cy: cy + d },
+    { cx: cx - d, cy },
+  ]
+  const etiquetas = [
+    { x: cx, y: cy - d - r - 20, lineas: ['Aquello que', 'te GUSTA'] },
+    { x: cx + d + r + 18, y: cy, lineas: ['Aquello que el', 'mundo NECESITA'] },
+    { x: cx, y: cy + d + r + 28, lineas: ['Aquello por lo que', 'te pueden PAGAR'] },
+    { x: cx - d - r - 18, y: cy, lineas: ['Aquello que', 'se te DA BIEN'] },
+  ]
+  return (
+    <>
+      <Caja>
+        El ikigai (“razón de ser”, en japonés) es aquello que está en el cruce de cuatro preguntas: qué te
+        gusta, en qué sos bueno/a, qué necesita el mundo a tu alrededor y por qué te podrían llegar a pagar.
+        Respondé cada pregunta con calma, sin buscar la respuesta “correcta”.
+      </Caja>
+      <svg viewBox="0 0 600 580" className="mx-auto mt-5 block w-full max-w-[480px]">
+        {circulos.map((c, i) => (
+          <circle key={i} cx={c.cx} cy={c.cy} r={r} fill="none" stroke="#8b87d4" strokeWidth={1.5} opacity={0.75} />
+        ))}
+        {etiquetas.map((e, i) => (
+          <text key={i} x={e.x} y={e.y} textAnchor="middle" fontSize="11.5" fontWeight="600" fill="#1d1f24">
+            {e.lineas.map((l, j) => (
+              <tspan key={j} x={e.x} dy={j === 0 ? 0 : 14}>
+                {l}
+              </tspan>
+            ))}
+          </text>
+        ))}
+        <circle cx={cx} cy={cy} r={54} fill="#fff" stroke="#14a098" strokeWidth={2} />
+        <text x={cx} y={cy - 6} textAnchor="middle" fontSize="12" fontWeight="700" fill="#0e7f79">
+          MI IKIGAI
+        </text>
+        <text x={cx} y={cy + 14} textAnchor="middle" fontSize="10" fill="#62687a">
+          ________________
+        </text>
+      </svg>
+      <Titulo>Cuatro preguntas, cuatro respuestas</Titulo>
+      <div className="mt-2 grid grid-cols-2 gap-4">
+        {[
+          ['Lo que me gusta', '¿Qué es aquello que te gusta hacer, lo que te apasiona?'],
+          ['Lo que se me da bien', '¿En qué sos hábil? ¿Qué te sale naturalmente bien?'],
+          ['Lo que el mundo necesita', '¿Qué creés que tu entorno o la sociedad necesitan, y vos podrías ofrecer?'],
+          ['Por lo que me pueden pagar', '¿Por qué actividades creés que te podrían llegar a pagar?'],
+        ].map(([titulo, ayuda]) => (
+          <div key={titulo} className="rounded-xl border-2 border-neutral-200 p-3">
+            <p className="text-[12px] font-bold text-[#0e7f79]">{titulo}</p>
+            <p className="text-[10px] italic text-neutral-400">{ayuda}</p>
+            <Lineas n={3} gap="mt-4" />
+          </div>
+        ))}
+      </div>
+      <div className="mt-5 rounded-xl border-2 border-[#14a098] p-3">
+        <p className="text-[12px] font-bold text-[#0e7f79]">
+          Mirando las cuatro respuestas juntas: ¿dónde se cruzan? ¿Qué podría ser tu Ikigai?
+        </p>
+        <Lineas n={3} gap="mt-4" />
+      </div>
+    </>
+  )
+}
+
 export const PRINTABLES_EXTRA: Record<string, { titulo: string; componente: () => React.ReactNode }> = {
   'encuadre-proceso': { titulo: 'Encuadre del proceso', componente: EncuadreProceso },
   'consentimiento-informado': { titulo: 'Consentimiento informado (menores)', componente: ConsentimientoInformado },
@@ -1015,4 +1086,5 @@ export const PRINTABLES_EXTRA: Record<string, { titulo: string; componente: () =
   'infografia-despues-secundario': { titulo: 'Qué hacer después del secundario', componente: InfografiaDespuesSecundario },
   'infografia-temperamento-personalidad': { titulo: 'Temperamento vs. Personalidad', componente: InfografiaTemperamentoPersonalidad },
   'encuadre-taller-ovo': { titulo: 'Encuadre del Taller de OVO', componente: EncuadreTallerOVO },
+  'ikigai': { titulo: 'Mi Ikigai', componente: Ikigai },
 }
