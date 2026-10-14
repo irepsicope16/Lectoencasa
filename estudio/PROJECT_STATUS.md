@@ -712,6 +712,40 @@ seguía en el color de texto normal — no el color del área.
   área A en terracota, área B en dorado, cada recuadro y su texto
   coinciden en color — visualmente igual a lo que pidió en sus fotos.
 
+## ✅ Ronda 22 (14/10/2026): hosting real en GitHub Pages, en vez del artifact de revisión
+
+La usuaria pidió un link para compartir con familias reales, y preguntó
+si los datos de una usuaria de prueba (Alma) habían quedado guardados.
+Esto expuso que el artifact de claude.ai (usado hasta ahora solo para que
+ella revise los cambios desde este chat) **no es apto para distribuir a
+usuarios reales**: es privado por defecto (solo se hace público con el
+botón "Share" desde su cuenta de claude.ai, algo que Claude no puede
+activar por API), vive atado a esta sesión, y la documentación del propio
+sistema de artifacts advierte que el localStorage ahí no está pensado
+para persistir datos de forma confiable — justo el único lugar donde la
+app guarda todo (respuestas del autoperfil, progreso, actividades).
+
+Sobre Alma: no hay forma de confirmar desde aquí si sus datos quedaron
+guardados — la app no tiene backend, cada respuesta vive en el
+localStorage del dispositivo/navegador de quien la usa, y eso nunca es
+accesible para Claude ni para la usuaria desde otro dispositivo. Para
+confirmarlo, Alma tiene que reabrir el mismo link en el mismo
+navegador/dispositivo que usó, sin haber limpiado caché ni usado modo
+incógnito.
+
+Se agregó `.github/workflows/deploy-pages.yml`: build de `estudio/` y
+despliegue automático a GitHub Pages en cada push a `main` o a
+`claude/mini-app-metodo-estudio`. `base: './'` en `vite.config.ts` ya
+soporta cualquier subruta, así que no requirió cambios de código.
+
+**Pendiente de un paso manual de la usuaria** (Claude no tiene permiso
+para tocar configuración del repositorio): activar Pages en
+GitHub → Settings → Pages → "Build and deployment" → Source:
+"GitHub Actions". Una vez activado, la URL pública quedará en
+`https://irepsicope16.github.io/Lectoencasa/` y se va a actualizar sola
+en cada ronda futura — ese sí es un link estable para compartir con
+usuarios reales, a diferencia del artifact.
+
 ## 🔜 Backlog
 
 1. Modelo de monetización: hoy no hay pago ni backend. Si se decide cobrar,
