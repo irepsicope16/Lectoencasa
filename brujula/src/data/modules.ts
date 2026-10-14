@@ -813,12 +813,30 @@ export const MODULES: ModuleDefinition[] = [
           { id: 'q3', texto: 'Lugar y estilo de vida: ¿dónde y cómo querés vivir?', tipo: 'abierta' },
         ],
       },
+      {
+        id: 'proyecto-ikigai',
+        titulo: 'Mi Ikigai',
+        descripcion:
+          'Técnica de autoconocimiento basada en el concepto japonés del ikigai ("razón de ser"): el ikigai está en el cruce de cuatro círculos — aquello que te GUSTA, aquello que se te DA BIEN, aquello que el mundo NECESITA y aquello por lo que te pueden PAGAR. Mostrale al consultante el diagrama completo de los cuatro círculos mientras explicás los cruces: GUSTA + DA BIEN = Pasión · GUSTA + NECESITA = Misión · DA BIEN + PAGAN = Profesión · NECESITA + PAGAN = Vocación · los cuatro juntos = Ikigai. Después completá con él/ella el imprimible, que tiene solo las cuatro preguntas (sin los cruces) para que las responda con sus palabras.',
+        tipo: 'collage',
+        duracionMin: 40,
+        dimensiones: ['deseos', 'valores', 'identidad'],
+        printableId: 'ikigai',
+        preguntas: [
+          { id: 'q1', texto: '¿Qué es aquello que te gusta hacer, lo que te apasiona?', tipo: 'abierta' },
+          { id: 'q2', texto: '¿En qué sos hábil? ¿Qué se te da bien, qué te sale naturalmente bien?', tipo: 'abierta' },
+          { id: 'q3', texto: '¿Qué creés que tu entorno o la sociedad necesitan, y vos podrías ofrecer?', tipo: 'abierta' },
+          { id: 'q4', texto: '¿Por qué actividades creés que te podrían llegar a pagar?', tipo: 'abierta' },
+          { id: 'q5', texto: 'Mirando las cuatro respuestas juntas: ¿dónde se cruzan? ¿Qué podría ser tu Ikigai?', tipo: 'abierta' },
+        ],
+      },
     ],
     videos: [],
     materiales: [
       { id: 'm1', titulo: 'Plantilla: Mapa de proyecto de vida', descripcion: 'Lámina imprimible con las áreas del proyecto para completar.', tipo: 'plantilla', printableId: 'mapa-proyecto' },
       { id: 'm2', titulo: 'Plantilla: El Triángulo de mi vida', descripcion: 'Lámina imprimible de la representación simbólica personal.', tipo: 'plantilla', printableId: 'triangulo-vida' },
       { id: 'm3', titulo: 'Infografía: OV por competencias · Proyecto de vida vs. vida con proyectos', descripcion: 'Qué significa orientar por competencias y la diferencia entre tener proyectos y tener un proyecto de vida.', tipo: 'lectura', printableId: 'infografia-competencias' },
+      { id: 'm5', titulo: 'Plantilla: Mi Ikigai', descripcion: 'Lámina imprimible de los cuatro círculos del ikigai para completar.', tipo: 'plantilla', printableId: 'ikigai' },
       {
         id: 'm4',
         titulo: 'Serie de videos: Cómo elegir tu formación (Educ.ar)',
