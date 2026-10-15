@@ -1,0 +1,106 @@
+/* Marca Lic. Irene Morbidelli — se inyecta automáticamente al renderizar.
+   {{FUENTES}} lo reemplaza render.mjs por la ruta absoluta a assets/fuentes. */
+
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 300 700; src: url('{{FUENTES}}/fraunces.woff2') format('woff2'); }
+@font-face { font-family: 'Fraunces'; font-style: italic; font-weight: 300 700; src: url('{{FUENTES}}/fraunces-italic.woff2') format('woff2'); }
+@font-face { font-family: 'DM Sans'; font-style: normal; font-weight: 300 700; src: url('{{FUENTES}}/dmsans.woff2') format('woff2'); }
+@font-face { font-family: 'DM Sans'; font-style: italic; font-weight: 300 700; src: url('{{FUENTES}}/dmsans-italic.woff2') format('woff2'); }
+
+:root {
+  --agua-900: #0f5c5e; --agua-700: #1c8082; --agua-500: #3aa8a5; --agua-200: #bfe5e0; --agua-050: #ecf7f5;
+  --lila-900: #575387; --lila-700: #8a87be; --lila-500: #a8a5d5; --lila-200: #dddcf0; --lila-050: #f4f3fb;
+  --tinta-900: #23212e; --tinta-700: #4b4959; --tinta-500: #767386; --tinta-300: #b6b3c2;
+  --papel: #faf9f7; --blanco: #ffffff;
+
+  --display: 'Fraunces', Georgia, serif;
+  --texto: 'DM Sans', 'Segoe UI', sans-serif;
+  --curva: cubic-bezier(.22, .8, .3, 1);
+  --radio: 28px;
+  --margen: 88px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #e9e8e4; }
+body { font-family: var(--texto); color: var(--tinta-900); -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; }
+
+/* ── Lienzos ─────────────────────────────────────────────── */
+.lienzo {
+  position: relative; overflow: hidden;
+  width: 1080px; height: 1350px;
+  background: var(--agua-050);
+  padding: var(--margen);
+  display: flex; flex-direction: column;
+}
+.lienzo--cuadrado { height: 1080px; }
+.lienzo--vertical { height: 1920px; padding: 250px 140px 380px var(--margen); }
+.lienzo--horizontal { width: 1920px; height: 1080px; }
+.lienzo + .lienzo { margin-top: 40px; }
+
+.fondo-lila   { background: var(--lila-050); }
+.fondo-papel  { background: var(--papel); }
+.fondo-agua   { background: var(--agua-700); color: var(--blanco); }
+.fondo-noche  { background: var(--lila-900); color: var(--blanco); }
+
+/* ── Tipografía ─────────────────────────────────────────── */
+.antetitulo {
+  font: 600 30px/1 var(--texto); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--agua-700);
+}
+.titular {
+  font: 400 96px/1.04 var(--display); letter-spacing: -.02em;
+  font-variation-settings: 'opsz' 144; color: var(--agua-900);
+  text-wrap: balance;
+}
+.titular--xl { font-size: 128px; }
+.titular--m  { font-size: 76px; }
+.titular em, .acento { font-style: italic; color: var(--lila-700); }
+.fondo-agua .titular, .fondo-noche .titular { color: var(--blanco); }
+.fondo-agua .titular em, .fondo-noche .titular em { color: var(--agua-200); }
+
+.cuerpo { font: 400 44px/1.4 var(--texto); color: var(--tinta-700); text-wrap: pretty; }
+.fondo-agua .cuerpo, .fondo-noche .cuerpo { color: rgba(255,255,255,.88); }
+.nota { font: 400 30px/1.4 var(--texto); color: var(--tinta-500); }
+
+.subrayado { background: linear-gradient(transparent 62%, var(--agua-200) 62%, var(--agua-200) 92%, transparent 92%); padding: 0 .08em; }
+
+/* ── Piezas ─────────────────────────────────────────────── */
+.firma {
+  position: absolute; left: var(--margen); bottom: 56px;
+  font: 500 28px/1 var(--texto); color: var(--tinta-500); letter-spacing: .02em;
+}
+.fondo-agua .firma, .fondo-noche .firma { color: rgba(255,255,255,.7); }
+.contador { position: absolute; right: var(--margen); bottom: 56px; font: 500 28px/1 var(--texto); color: var(--tinta-300); }
+
+.tarjeta { background: var(--blanco); border-radius: var(--radio); padding: 48px 52px; box-shadow: 0 14px 44px rgba(35,33,46,.08); }
+.boton {
+  display: inline-flex; align-items: center; gap: 16px; align-self: flex-start;
+  background: var(--agua-700); color: var(--blanco); border-radius: 999px;
+  padding: 26px 46px; font: 600 36px/1 var(--texto);
+}
+.fondo-agua .boton, .fondo-noche .boton { background: var(--blanco); color: var(--agua-900); }
+
+.numero { font: italic 400 150px/1 var(--display); color: var(--lila-500); }
+
+/* Manchas decorativas: <div class="mancha" style="--x:70%;--y:-10%;--t:520px;--c:var(--lila-200)"></div> */
+.mancha {
+  position: absolute; left: var(--x, 70%); top: var(--y, -10%);
+  width: var(--t, 520px); aspect-ratio: 1; border-radius: 46% 54% 52% 48% / 55% 45% 55% 45%;
+  background: var(--c, var(--lila-200)); opacity: var(--o, .7); pointer-events: none; z-index: 0;
+}
+:where(.lienzo > :not(.mancha)) { position: relative; z-index: 1; }
+
+/* ── Animación de escenas (videos) ──────────────────────── */
+.escena { position: absolute; inset: 250px 140px 380px var(--margen); display: flex; flex-direction: column; justify-content: center; gap: 44px; }
+.escena > * {
+  opacity: 0;
+  animation:
+    entra var(--dur-entra, .7s) var(--curva) calc(var(--inicio) * 1s + var(--d, 0s)) both,
+    sale .4s ease-in calc(var(--fin) * 1s - .4s) forwards;
+}
+.escena--final > * { animation: entra var(--dur-entra, .7s) var(--curva) calc(var(--inicio) * 1s + var(--d, 0s)) both; }
+@keyframes entra { from { opacity: 0; transform: translateY(32px) scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes sale  { to { opacity: 0; transform: translateY(-20px); } }
+
+.flota { animation: flota 10s ease-in-out infinite alternate; }
+@keyframes flota { from { transform: translate(0, 0) rotate(0deg); } to { transform: translate(-40px, 50px) rotate(12deg); } }

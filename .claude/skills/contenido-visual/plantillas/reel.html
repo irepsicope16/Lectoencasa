@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Reel</title>
+<!-- duracion (segundos) activa el modo video en render.mjs -->
+<meta name="duracion" content="12">
+<!-- Cada .escena tiene --inicio y --fin en segundos. Dentro de una escena,
+     --d escalona la entrada de cada elemento. La última usa .escena--final (no sale).
+     Lógica en JS: definí window.alMomento = (t) => {…} (ver referencias/movimiento.md). -->
+<style>
+  .escena .titular { font-size: 104px; }
+  .barra {
+    position: absolute; left: 0; bottom: 0; height: 10px; width: 100%;
+    background: var(--agua-500); transform-origin: left; z-index: 2;
+    animation: avanza 12s linear both;
+  }
+  @keyframes avanza { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+</style>
+</head>
+<body>
+
+<section class="lienzo lienzo--vertical fondo-lila">
+  <div class="mancha flota" style="--x:40%;--y:-6%;--t:900px;--c:var(--agua-200);--o:.55"></div>
+  <div class="mancha flota" style="--x:-30%;--y:70%;--t:700px;--c:var(--lila-200);--o:.8;animation-duration:13s"></div>
+
+  <!-- 0–3 s · Gancho: entra en 0,3 s -->
+  <div class="escena" style="--inicio:0;--fin:3;--dur-entra:.3s">
+    <p class="antetitulo">¿Te pasa?</p>
+    <h1 class="titular">Conoce las letras… <em>pero no logra leer.</em></h1>
+  </div>
+
+  <!-- 3–6 s -->
+  <div class="escena" style="--inicio:3;--fin:6">
+    <h2 class="titular">No es falta <em>de ganas.</em></h2>
+    <p class="cuerpo" style="--d:.35s">Ni de inteligencia. Ni de esfuerzo tuyo.</p>
+  </div>
+
+  <!-- 6–9,5 s -->
+  <div class="escena" style="--inicio:6;--fin:9.5">
+    <h2 class="titular">Unir sonidos <em>se entrena.</em></h2>
+    <p class="cuerpo" style="--d:.35s">Jugando. Quince minutos por día.</p>
+  </div>
+
+  <!-- 9,5–12 s · CTA quieto -->
+  <div class="escena escena--final" style="--inicio:9.5">
+    <h2 class="titular">Te dejo los juegos <em>en el Kit gratuito.</em></h2>
+    <span class="boton" style="--d:.3s">Link en la bio</span>
+    <p class="nota" style="--d:.5s">@psicopeconire · Lic. Irene Morbidelli</p>
+  </div>
+
+  <div class="barra"></div>
+</section>
+
+</body>
+</html>

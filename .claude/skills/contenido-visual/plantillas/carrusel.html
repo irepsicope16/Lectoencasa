@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Carrusel</title>
+<!-- Cada <section class="lienzo"> es una lámina → pieza-01.png, pieza-02.png…
+     Portada = gancho · láminas intermedias = una idea cada una · última = CTA. -->
+<style>
+  .portada { justify-content: flex-end; gap: 40px; padding-bottom: 180px; }
+  .paso { justify-content: center; gap: 48px; }
+  .paso .tarjeta { display: flex; flex-direction: column; gap: 24px; }
+  .paso .cuerpo { font-size: 42px; }
+  .cierre { justify-content: center; gap: 56px; }
+  .desliza { font: 500 32px/1 var(--texto); color: var(--agua-700); }
+</style>
+</head>
+<body>
+
+<!-- 1 · Portada -->
+<section class="lienzo fondo-lila portada">
+  <div class="mancha flota" style="--x:48%;--y:-14%;--t:760px;--c:var(--agua-200);--o:.55"></div>
+  <p class="antetitulo">Para guardar</p>
+  <h1 class="titular titular--xl">3 juegos de <em>15 minutos</em> para leer mejor</h1>
+  <p class="desliza">Deslizá →</p>
+  <p class="contador">1/5</p>
+</section>
+
+<!-- 2…4 · Pasos -->
+<section class="lienzo paso">
+  <span class="numero">01</span>
+  <div class="tarjeta">
+    <h2 class="titular titular--m">Veo veo… <em>de sonidos</em></h2>
+    <p class="cuerpo">“Veo veo algo que empieza con /mmm/”. Primero el sonido, nunca el nombre de la letra.</p>
+  </div>
+  <p class="firma">@psicopeconire</p><p class="contador">2/5</p>
+</section>
+
+<section class="lienzo paso">
+  <span class="numero">02</span>
+  <div class="tarjeta">
+    <h2 class="titular titular--m">Palabras <em>en pedacitos</em></h2>
+    <p class="cuerpo">Aplaudan juntos cada sílaba: ma-ri-po-sa. ¿Cuántas palmas? ¿Cuál es la última?</p>
+  </div>
+  <p class="firma">@psicopeconire</p><p class="contador">3/5</p>
+</section>
+
+<section class="lienzo paso">
+  <span class="numero">03</span>
+  <div class="tarjeta">
+    <h2 class="titular titular--m">El robot <em>que habla raro</em></h2>
+    <p class="cuerpo">Decí una palabra separada en sonidos, /s/ /o/ /l/, y que adivine cuál es.</p>
+  </div>
+  <p class="firma">@psicopeconire</p><p class="contador">4/5</p>
+</section>
+
+<!-- 5 · CTA -->
+<section class="lienzo fondo-agua cierre">
+  <div class="mancha" style="--x:58%;--y:62%;--t:640px;--c:var(--agua-500);--o:.45"></div>
+  <h2 class="titular">Quince minutos bien acompañados <em>valen más</em> que dos horas de pelea.</h2>
+  <p class="cuerpo">En el Kit de Inicio gratuito tenés más juegos como estos.</p>
+  <span class="boton">Pedilo en el link de la bio</span>
+  <p class="firma">@psicopeconire · Lic. Irene Morbidelli</p>
+</section>
+
+</body>
+</html>

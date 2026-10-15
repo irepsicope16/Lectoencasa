@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Juega con los sonidos?</title>
+<!-- Plantilla de quiz/checklist interactivo. NO usa render.mjs: se publica como
+     Artifact (link para compartir) o como página del sitio. Editá PREGUNTAS y RESULTADOS.
+     Los resultados orientan, nunca diagnostican. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=DM+Sans:opsz,wght@9..40,400;9..40,600&display=swap">
+<style>
+  :root {
+    --agua-900: #0f5c5e; --agua-700: #1c8082; --agua-200: #bfe5e0; --agua-050: #ecf7f5;
+    --lila-700: #8a87be; --lila-200: #dddcf0; --lila-050: #f4f3fb;
+    --tinta-900: #23212e; --tinta-700: #4b4959; --tinta-500: #767386;
+    --fondo: var(--lila-050); --tarjeta: #ffffff; --linea: #eceae6;
+    --curva: cubic-bezier(.22, .8, .3, 1);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --agua-900: #bfe5e0; --agua-050: #17302f; --lila-050: #1c1b26;
+      --tinta-900: #f1f0f5; --tinta-700: #cfcdd8; --tinta-500: #a19eb0;
+      --fondo: #16151d; --tarjeta: #23212e; --linea: #34323f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --agua-900: #bfe5e0; --agua-050: #17302f; --lila-050: #1c1b26;
+    --tinta-900: #f1f0f5; --tinta-700: #cfcdd8; --tinta-500: #a19eb0;
+    --fondo: #16151d; --tarjeta: #23212e; --linea: #34323f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100dvh; display: grid; place-items: center; padding: 24px 16px;
+    background: var(--fondo); color: var(--tinta-900);
+    font: 400 18px/1.55 'DM Sans', system-ui, sans-serif;
+  }
+  main { width: min(560px, 100%); }
+  .tarjeta { background: var(--tarjeta); border-radius: 28px; padding: clamp(24px, 6vw, 44px); box-shadow: 0 14px 44px rgba(35,33,46,.08); }
+  .ante { font-weight: 600; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--agua-700); }
+  h1, h2 { font-family: 'Fraunces', Georgia, serif; font-weight: 400; color: var(--agua-900); line-height: 1.12; letter-spacing: -.01em; margin: 12px 0 16px; text-wrap: balance; }
+  h1 { font-size: clamp(30px, 8vw, 42px); } h2 { font-size: clamp(24px, 6vw, 32px); }
+  em { color: var(--lila-700); }
+  p { color: var(--tinta-700); }
+  .progreso { height: 6px; background: var(--linea); border-radius: 99px; overflow: hidden; margin-bottom: 28px; }
+  .progreso i { display: block; height: 100%; background: var(--agua-700); width: 0; transition: width .5s var(--curva); }
+  .opciones { display: grid; gap: 12px; margin-top: 24px; }
+  button {
+    font: inherit; cursor: pointer; border: 1.5px solid var(--linea); background: transparent; color: var(--tinta-900);
+    border-radius: 18px; padding: 16px 20px; min-height: 56px; text-align: left;
+    transition: border-color .2s, background .2s, transform .15s;
+  }
+  button:hover { border-color: var(--agua-700); background: var(--agua-050); }
+  button:active { transform: scale(.98); }
+  button:focus-visible { outline: 3px solid var(--agua-200); outline-offset: 2px; }
+  .principal { background: var(--agua-700); border-color: var(--agua-700); color: #fff; text-align: center; font-weight: 600; width: 100%; margin-top: 28px; }
+  .principal:hover { background: var(--agua-900); border-color: var(--agua-900); color: #fff; }
+  .enlace { display: block; text-align: center; margin-top: 14px; color: var(--agua-700); font-weight: 600; text-decoration: none; }
+  .pie { margin-top: 18px; font-size: 14px; color: var(--tinta-500); text-align: center; }
+  .pantalla { animation: entra .5s var(--curva) both; }
+  @keyframes entra { from { opacity: 0; transform: translateY(14px); } }
+  @media (prefers-reduced-motion: reduce) { .pantalla { animation: none; } .progreso i { transition: none; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="tarjeta" id="app" aria-live="polite"></div>
+  <p class="pie">Lic. Irene Morbidelli · Psicopedagogía para familias</p>
+</main>
+
+<script>
+  const INTRO = {
+    ante: 'Juego de 1 minuto',
+    titulo: '¿Tu hijo ya <em>juega con los sonidos</em>?',
+    texto: 'Cinco preguntas simples sobre cosas que pasan en casa. No es un test ni un diagnóstico: es una forma de mirar con otros ojos.',
+  };
+  const PREGUNTAS = [
+    '¿Disfruta de rimas y canciones, y a veces inventa las suyas?',
+    'Si le decís "sol", ¿puede decirte con qué sonido empieza?',
+    '¿Puede separar una palabra en sílabas aplaudiendo (ma-ri-po-sa)?',
+    'Si le decís /m/ /a/ /r/, ¿descubre que es "mar"?',
+    '¿Se anima a jugar con palabras aunque se equivoque?',
+  ];
+  const OPCIONES = [['Casi siempre', 2], ['A veces', 1], ['Todavía no', 0]];
+  const RESULTADOS = [
+    { min: 8, titulo: 'Ya está <em>jugando con los sonidos</em>', texto: 'Es una base hermosa para leer. Seguí sumando juegos cortos: quince minutos al día alcanzan.' },
+    { min: 4, titulo: 'Está <em>en camino</em>', texto: 'Algunas habilidades ya aparecen y otras se están armando. Es esperable: se entrenan jugando, sin presión.' },
+    { min: 0, titulo: 'Es un buen momento <em>para jugar más</em>', texto: 'Estas habilidades se aprenden. Si además notás que le cuesta o te preocupa, hablemos: mirar a tiempo ayuda mucho.' },
+  ];
+  const CTA = { texto: 'Quiero el Kit gratuito', url: 'https://forms.gle/hwFJ96Pm3m5fMPy97' };
+  const WHATSAPP = 'https://wa.me/5492216185376?text=' + encodeURIComponent('Hola Ire, hice el juego de los sonidos y quería consultarte.');
+
+  const app = document.getElementById('app');
+  let paso = -1, puntos = 0;
+
+  function pintar(html) { app.innerHTML = `<div class="pantalla">${html}</div>`; app.querySelector('button, a')?.focus({ preventScroll: true }); }
+
+  function intro() {
+    pintar(`<p class="ante">${INTRO.ante}</p><h1>${INTRO.titulo}</h1><p>${INTRO.texto}</p>
+      <button class="principal" data-ir="0">Empezar</button>`);
+  }
+  function pregunta(i) {
+    pintar(`<div class="progreso"><i style="width:${(i / PREGUNTAS.length) * 100}%"></i></div>
+      <p class="ante">${i + 1} de ${PREGUNTAS.length}</p><h2>${PREGUNTAS[i]}</h2>
+      <div class="opciones">${OPCIONES.map(([t, v]) => `<button data-v="${v}">${t}</button>`).join('')}</div>`);
+    requestAnimationFrame(() => { app.querySelector('.progreso i').style.width = `${((i + 1) / PREGUNTAS.length) * 100}%`; });
+  }
+  function resultado() {
+    const r = RESULTADOS.find((r) => puntos >= r.min);
+    pintar(`<p class="ante">Tu resultado</p><h2>${r.titulo}</h2><p>${r.texto}</p>
+      <a class="principal" style="display:block;text-decoration:none;border-radius:18px;padding:16px" href="${CTA.url}" target="_blank" rel="noopener">${CTA.texto}</a>
+      <a class="enlace" href="${WHATSAPP}" target="_blank" rel="noopener">Consultar por WhatsApp</a>
+      <button class="enlace" style="border:0;width:100%;text-align:center" data-reiniciar>Volver a empezar</button>`);
+  }
+
+  app.addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.reiniciar !== undefined) { paso = -1; puntos = 0; return intro(); }
+    if (b.dataset.v !== undefined) puntos += Number(b.dataset.v);
+    paso += 1;
+    paso < PREGUNTAS.length ? pregunta(paso) : resultado();
+  });
+
+  intro();
+</script>
+</body>
+</html>
