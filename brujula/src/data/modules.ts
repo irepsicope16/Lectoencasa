@@ -1,6 +1,7 @@
 import type { ModuleDefinition, ModuleId } from '@/types'
 import {
   TEST_APTITUDES,
+  TEST_CUESTIONARIO_INTERESES,
   TEST_DIFICULTADES_DECISION,
   TEST_ESTILO_PERSONAL,
   TEST_INTELIGENCIAS,
@@ -575,6 +576,7 @@ export const MODULES: ModuleDefinition[] = [
       },
       TEST_INTERESES,
       TEST_RIASEC,
+      TEST_CUESTIONARIO_INTERESES,
       {
         id: 'intereses-areas',
         titulo: 'Áreas que me llaman',
