@@ -211,6 +211,15 @@ export function ActivitiesTab({ consultant }: { consultant: Consultant }) {
                     Marcar revisada
                   </Button>
                 )}
+                {a.estado === 'revisada' && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => updateActivity.mutate({ id: a.id, patch: { estado: 'completada' } })}
+                  >
+                    Marcar como completada
+                  </Button>
+                )}
               </div>
             </div>
           ))}
