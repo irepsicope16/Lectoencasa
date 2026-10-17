@@ -1,6 +1,6 @@
 # Método Estudio — Estado del proyecto
 
-> Fecha: 2026-10-14 (actualizado, ronda 23) · Rama: `claude/mini-app-metodo-estudio`
+> Fecha: 2026-10-17 (actualizado, ronda 24) · Rama: `claude/mini-app-metodo-estudio`
 
 ## Resumen ejecutivo
 
@@ -808,6 +808,42 @@ importar.
   bug real: el menú lateral móvil quedaba abierto tapando la pantalla
   después de cambiar de estudiante.
 - Se retiró `stores/perfilStore.ts` (reemplazado por `estudiantesStore`).
+
+## ✅ Ronda 24 (17/10/2026): hosting real corregido, video de Active Recall, fusión a main
+
+**Hosting — error propio corregido.** Al armar la Ronda 22 no se tuvo en
+cuenta que el repositorio `Lectoencasa` ya alojaba, desde la raíz de
+`main`, el sitio completo de la usuaria (landing profesional, Método
+Brújula, Academia, Blog) vía GitHub Pages en modo "Deploy from a branch" —
+con Método Estudio ya anidado en `/metodo-estudio/`. Cambiar la fuente de
+Pages a "GitHub Actions" (subiendo solo `estudio/dist`) reemplazó
+temporalmente todo el sitio por únicamente la app. Se revirtió la fuente
+de Pages a "Deploy from a branch" (`main`, `/root`) y se eliminó
+`.github/workflows/deploy-pages.yml`, que ya no hace falta: el método
+original ya servía Método Estudio correctamente en
+`https://irepsicope16.github.io/Lectoencasa/metodo-estudio/`, sin
+necesidad de ningún workflow nuevo.
+
+**Video de Active Recall reemplazado.** El video anterior en Biblioteca
+("guía completa") era muy extenso; la usuaria pidió uno más corto y
+didáctico. Se investigaron alternativas por búsqueda web (sin poder
+verificar duración/calidad de forma independiente — eso requiere mirar el
+video, algo que Claude no puede hacer), se le presentaron varias opciones
+reales con sus links, y ella eligió un Short. Cambiado en
+`src/data/videos.ts` (`v-active-recall`).
+
+**Fusión a `main`.** La rama de trabajo (con "varios estudiantes" de la
+Ronda 23 y el video nuevo) y `main` habían divergido: mientras tanto,
+otra sesión de Claude había sumado directamente a `main` dos
+funcionalidades de **Método Brújula** ("Mi Ikigai" y "Cuestionario de
+Intereses", PRs #165 y #166) — no pedidas para Método Estudio, como
+aclaró la usuaria. Se confirmó que esos commits solo tocan `brujula/` y
+`metodo-brujula/`, sin superposición con `estudio/`/`metodo-estudio/`, así
+que la fusión fue limpia (sin conflictos). Se probó typecheck + build
+sobre el estado fusionado antes de pushear. `main` ahora tiene todo:
+sitio completo + Método Brújula actualizado + Método Estudio con varios
+estudiantes y el video nuevo, publicándose solo vía el método de
+siempre.
 
 ## 🔜 Backlog
 
