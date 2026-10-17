@@ -1,6 +1,7 @@
 // Videos sugeridos por ruta: links externos reales, verificados y aprobados
-// por la usuaria (14/09/2026). No se incrustan — se muestran como tarjeta con
-// link externo, igual que en Método Brújula.
+// por la usuaria (14/09/2026; Active Recall reemplazado el 17/10/2026). No se
+// incrustan — se muestran como tarjeta con link externo, igual que en Método
+// Brújula.
 
 import type { RecursoVideo } from '@/types'
 
@@ -16,9 +17,9 @@ export const VIDEOS: RecursoVideo[] = [
   {
     id: 'v-active-recall',
     rutaId: 'aprender_recordar',
-    titulo: 'Cómo utilizar el Active Recall (guía completa con ejemplos)',
-    descripcion: 'Recuperación activa: cómo ponerla en práctica paso a paso.',
-    url: 'https://www.youtube.com/watch?v=Q960hJ0hN1E',
+    titulo: 'Cómo funciona el Active Recall (Recuerdo Activo) para estudiar',
+    descripcion: 'Explicación breve y directa de la técnica, para ir al grano.',
+    url: 'https://www.youtube.com/shorts/DCFtTSdF6nI',
     duracion: '',
   },
   {
