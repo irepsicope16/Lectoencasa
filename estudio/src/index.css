@@ -1,10 +1,18 @@
 @import 'tailwindcss';
-@import '@fontsource/ibm-plex-sans/400.css';
-@import '@fontsource/ibm-plex-sans/500.css';
-@import '@fontsource/ibm-plex-sans/600.css';
-@import '@fontsource/ibm-plex-sans/700.css';
-@import '@fontsource/ibm-plex-mono/400.css';
-@import '@fontsource/ibm-plex-mono/500.css';
+/* Solo subsets latin + latin-ext (app en español) — las variantes cirílico,
+   griego y vietnamita de @fontsource infla el bundle sin usarse nunca. */
+@import '@fontsource/ibm-plex-sans/latin-400.css';
+@import '@fontsource/ibm-plex-sans/latin-ext-400.css';
+@import '@fontsource/ibm-plex-sans/latin-500.css';
+@import '@fontsource/ibm-plex-sans/latin-ext-500.css';
+@import '@fontsource/ibm-plex-sans/latin-600.css';
+@import '@fontsource/ibm-plex-sans/latin-ext-600.css';
+@import '@fontsource/ibm-plex-sans/latin-700.css';
+@import '@fontsource/ibm-plex-sans/latin-ext-700.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-ext-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+@import '@fontsource/ibm-plex-mono/latin-ext-500.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -17,7 +25,7 @@
    ============================================================ */
 
 :root {
-  --background: #f6f3ec;
+  --background: #b5452e;
   --surface: #fffdf9;
   --surface-2: #eef0e9;
   --foreground: #1f2e3d;
@@ -29,9 +37,9 @@
   --primary-soft: #e3e8ec;
   --primary-foreground: #ffffff;
 
-  --accent: #ab5246;
-  --accent-strong: #8a4038;
-  --accent-soft: #f5e4e1;
+  --accent: #c14f3a;
+  --accent-strong: #9c3a28;
+  --accent-soft: #f7ded7;
   --accent-foreground: #ffffff;
 
   --secondary: #5e7686;
@@ -61,7 +69,25 @@
   --mod-regular: #5f8a5a;
   --mod-regular-soft: #e2ecdf;
 
-  --radius: 0.65rem;
+  /* Paleta "planner" — un pastel por día de la semana, al estilo de los
+     planificadores semanales que pidió la usuaria como referencia directa:
+     cada día con personalidad propia en vez de tarjetas blancas uniformes. */
+  --dia-lun: #fcdfe6;
+  --dia-lun-strong: #d97a94;
+  --dia-mar: #dcebfb;
+  --dia-mar-strong: #5e93c4;
+  --dia-mie: #d7f1e8;
+  --dia-mie-strong: #3f9c82;
+  --dia-jue: #e4f0d6;
+  --dia-jue-strong: #74a14a;
+  --dia-vie: #fdf1cf;
+  --dia-vie-strong: #c99a2c;
+  --dia-sab: #fbe3d2;
+  --dia-sab-strong: #ca7f44;
+  --dia-dom: #ead9f7;
+  --dia-dom-strong: #8c5bb5;
+
+  --radius: 1rem;
 }
 
 .dark {
@@ -106,6 +132,21 @@
   --mod-aprender-soft: #2f2b47;
   --mod-regular: #90bd8a;
   --mod-regular-soft: #263a24;
+
+  --dia-lun: #3a2530;
+  --dia-lun-strong: #e38fa8;
+  --dia-mar: #202f3d;
+  --dia-mar-strong: #85b2dd;
+  --dia-mie: #1c3630;
+  --dia-mie-strong: #6bc3a9;
+  --dia-jue: #263420;
+  --dia-jue-strong: #9ec776;
+  --dia-vie: #3a3018;
+  --dia-vie-strong: #e3c05c;
+  --dia-sab: #392a1d;
+  --dia-sab-strong: #e2a06a;
+  --dia-dom: #2e2238;
+  --dia-dom-strong: #b793e0;
 }
 
 @theme inline {
@@ -157,6 +198,21 @@
   --color-mod-regular: var(--mod-regular);
   --color-mod-regular-soft: var(--mod-regular-soft);
 
+  --color-dia-lun: var(--dia-lun);
+  --color-dia-lun-strong: var(--dia-lun-strong);
+  --color-dia-mar: var(--dia-mar);
+  --color-dia-mar-strong: var(--dia-mar-strong);
+  --color-dia-mie: var(--dia-mie);
+  --color-dia-mie-strong: var(--dia-mie-strong);
+  --color-dia-jue: var(--dia-jue);
+  --color-dia-jue-strong: var(--dia-jue-strong);
+  --color-dia-vie: var(--dia-vie);
+  --color-dia-vie-strong: var(--dia-vie-strong);
+  --color-dia-sab: var(--dia-sab);
+  --color-dia-sab-strong: var(--dia-sab-strong);
+  --color-dia-dom: var(--dia-dom);
+  --color-dia-dom-strong: var(--dia-dom-strong);
+
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 0.25rem);
 }
@@ -171,17 +227,15 @@
     text-rendering: optimizeLegibility;
   }
   body {
-    /* Fondo moderno: un lavado de color muy sutil en las esquinas (los
-       tonos de marca, terracota y acero, a baja opacidad) sobre la base
-       cálida — no un color plano, pero sigue siendo un fondo de bajo
-       contraste y sin textura que no interfiere con la lectura. */
-    background:
-      radial-gradient(1100px 620px at 100% -8%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 60%),
-      radial-gradient(950px 520px at -8% 108%, color-mix(in srgb, var(--secondary) 10%, transparent), transparent 60%),
-      var(--background);
+    /* Fondo "ladrillo": un lienzo de color intenso detrás de la app — el
+       contenido (títulos, texto) siempre vive dentro de la "hoja" clara
+       (AppShell / tarjetas), nunca directo sobre este color, así que la
+       intensidad no compromete la lectura. Un resplandor sutil arriba le
+       da profundidad sin volverse un degradé de otro color. */
+    background: radial-gradient(1200px 700px at 50% -12%, rgba(255, 255, 255, 0.1), transparent 60%), var(--background);
     background-attachment: fixed;
     color: var(--foreground);
-    font-size: 15.5px;
+    font-size: 16.5px;
     line-height: 1.6;
     letter-spacing: 0.1px;
   }

@@ -74,7 +74,11 @@ export interface ActividadCatalogo {
   nivel: NivelActividad
   titulo: string
   descripcion: string
+  ejemplo?: string // caso concreto resuelto, para entender la técnica antes de probarla
+  ejercicio?: string // consigna de práctica fija, igual para todos
   fuente?: string // referencia interna de dónde se tomó la idea (no se muestra en la UI)
+  /** Para nivel 1: ícono propio, mostrado en la tarjeta del catálogo. */
+  icon?: import('lucide-react').LucideIcon
 }
 
 /**
@@ -94,6 +98,7 @@ export interface ActividadProbada {
   fechaCompletada?: string
   calificacion?: 1 | 2 | 3 | 4 | 5
   nota?: string
+  aplicacionPropia?: string // cómo la persona la usó con su propio tema de estudio
   createdAt: string
   updatedAt: string
 }
@@ -147,7 +152,10 @@ export interface MapaConceptual {
   updatedAt: string
 }
 
-// ---------- Fichas de repaso (flashcards) ----------
+// ---------- Fichas de repaso (flashcards, repetición espaciada tipo Leitner) ----------
+
+/** Caja 1 (recién creada o fallada) a 5 (bien afianzada) — a más caja, más espacio entre repasos. */
+export type CajaLeitner = 1 | 2 | 3 | 4 | 5
 
 export interface Ficha {
   id: string
@@ -156,9 +164,54 @@ export interface Ficha {
   respuesta: string
   vecesRepasada: number
   ultimoRepaso?: string
+  caja: CajaLeitner
+  proximoRepaso: string // ISO — hoy o antes = "para repasar hoy"
   createdAt: string
   updatedAt: string
 }
+
+// ---------- Guía de textos (seguimiento de lecturas: leído/subrayado/resumido) ----------
+
+export interface TextoGuia {
+  id: string
+  titulo: string
+  leido: boolean
+  subrayado: boolean
+  resumido: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+// ---------- Agenda (eventos semanales) ----------
+
+export type TipoEvento =
+  | 'evaluacion'
+  | 'extraescolar'
+  | 'material'
+  | 'cumpleanos'
+  | 'nota'
+  | 'tarea' // Planificadores por nivel
+  | 'tp'
+  | 'parcial'
+  | 'final'
+  | 'trabajo_grupo'
+
+export interface EventoAgenda {
+  id: string
+  tipo: TipoEvento
+  titulo: string
+  fecha: string // ISO, solo la parte de fecha importa (yyyy-mm-dd)
+  nota?: string
+  completado: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+// ---------- Planificadores por nivel (principiante / secundaria / superior) ----------
+// Misma forma que un EventoAgenda, pero en 3 colecciones separadas: cada nivel
+// es una herramienta propia, con sus propios datos (no comparten eventos entre sí
+// ni con la Agenda semanal — a diferencia de la Agenda Anual, que sí reusa esa).
+export type NivelPlanificador = 'principiante' | 'secundaria' | 'superior'
 
 // ---------- Diario de metacognición ----------
 

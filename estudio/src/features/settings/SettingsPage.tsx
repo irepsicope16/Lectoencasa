@@ -1,69 +1,134 @@
 import { useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
-import { Database, Download, Moon, Paintbrush, RefreshCcw, Sun, Upload, User } from 'lucide-react'
-import { usePerfilStore } from '@/stores/perfilStore'
+import { Bell, Database, Download, Eye, Moon, Paintbrush, RefreshCcw, Sun, Trash2, Upload, Users } from 'lucide-react'
+import { useEstudiantesStore } from '@/stores/estudiantesStore'
 import { useUIStore, type Theme } from '@/stores/uiStore'
 import { prepareBackup, importBackup, type PreparedBackup } from '@/services/storage/backup'
-import { resetAllData } from '@/services/storage/db'
+import { resetAllData, wipeEstudiante } from '@/services/storage/db'
+import { pedirPermisoNotificaciones, permisoActual, soportaNotificaciones, type PermisoNotificacion } from '@/lib/recordatorios'
 import { toast } from '@/components/ui/toast'
-import { FadeIn, PageHeader } from '@/components/shared'
+import { FadeIn, IconBadge, PageHeader } from '@/components/shared'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input, Label } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import { Switch } from '@/components/ui/misc'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
 
 export default function SettingsPage() {
   const theme = useUIStore((s) => s.theme)
   const setTheme = useUIStore((s) => s.setTheme)
+  const avisosNavegadorActivos = useUIStore((s) => s.avisosNavegadorActivos)
+  const setAvisosNavegadorActivos = useUIStore((s) => s.setAvisosNavegadorActivos)
   const qc = useQueryClient()
-  const nombre = usePerfilStore((s) => s.nombre)
-  const setNombre = usePerfilStore((s) => s.setNombre)
 
-  const [nombreEditado, setNombreEditado] = useState(nombre)
+  const estudiantes = useEstudiantesStore((s) => s.estudiantes)
+  const activoId = useEstudiantesStore((s) => s.activoId)
+  const activo = estudiantes.find((e) => e.id === activoId)
+  const renombrar = useEstudiantesStore((s) => s.renombrar)
+  const cambiarDeEstudiante = useEstudiantesStore((s) => s.cambiarDeEstudiante)
+  const eliminarEstudiante = useEstudiantesStore((s) => s.eliminar)
+
+  const [nombreEditado, setNombreEditado] = useState(activo?.nombre ?? '')
   const [nombreGuardado, setNombreGuardado] = useState(false)
 
   const [resetOpen, setResetOpen] = useState(false)
+  const [estudianteAEliminar, setEstudianteAEliminar] = useState<{ id: string; nombre: string } | null>(null)
   const importRef = useRef<HTMLInputElement>(null)
   const [backupReady, setBackupReady] = useState<PreparedBackup | null>(null)
   const [backupPreparing, setBackupPreparing] = useState(false)
+  const [permiso, setPermiso] = useState<PermisoNotificacion>(permisoActual())
+
+  async function alternarAvisos(activar: boolean) {
+    if (!activar) {
+      setAvisosNavegadorActivos(false)
+      return
+    }
+    const res = await pedirPermisoNotificaciones()
+    setPermiso(res)
+    if (res === 'granted') {
+      setAvisosNavegadorActivos(true)
+    } else {
+      setAvisosNavegadorActivos(false)
+      toast.error(res === 'denied' ? 'Bloqueaste los avisos del navegador — podés habilitarlos desde el ícono del candado.' : 'Tu navegador no admite avisos.')
+    }
+  }
 
   return (
     <FadeIn>
-      <PageHeader title="Ajustes" subtitle="Tu nombre, apariencia y datos de la app." />
+      <PageHeader title="Ajustes" subtitle="Estudiante activo, apariencia y datos de la app." />
 
       <div className="grid gap-5 lg:grid-cols-2">
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <User className="h-4 w-4 text-primary" /> Tu nombre
+              <IconBadge icon={Users} tone="primario" /> Estudiante activo
             </CardTitle>
-            <CardDescription>Se usa solo para saludarte, no sale de este dispositivo.</CardDescription>
+            <CardDescription>
+              Varios estudiantes pueden usar la app en este mismo dispositivo, cada uno con su propio espacio —
+              nada se mezcla entre ellos.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Input value={nombreEditado} onChange={(e) => setNombreEditado(e.target.value)} className="max-w-xs" />
-            <div className="flex items-center gap-3">
-              <Button
-                size="sm"
-                onClick={() => {
-                  setNombre(nombreEditado.trim())
-                  setNombreGuardado(true)
-                  setTimeout(() => setNombreGuardado(false), 1500)
-                }}
-                disabled={!nombreEditado.trim()}
-              >
-                Guardar
-              </Button>
-              {nombreGuardado && <Badge variant="primario">Guardado ✓</Badge>}
-            </div>
+            {activo && (
+              <>
+                <Input value={nombreEditado} onChange={(e) => setNombreEditado(e.target.value)} className="max-w-xs" />
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      if (!nombreEditado.trim()) return
+                      renombrar(activo.id, nombreEditado.trim())
+                      setNombreGuardado(true)
+                      setTimeout(() => setNombreGuardado(false), 1500)
+                    }}
+                    disabled={!nombreEditado.trim()}
+                  >
+                    Guardar
+                  </Button>
+                  {nombreGuardado && <Badge variant="primario">Guardado ✓</Badge>}
+                  <Button variant="outline" size="sm" onClick={cambiarDeEstudiante}>
+                    <Users /> Cambiar de estudiante
+                  </Button>
+                </div>
+              </>
+            )}
+            <Button asChild variant="outline" size="sm">
+              <Link to="/bienvenida">
+                <Eye /> Ver pantalla de bienvenida
+              </Link>
+            </Button>
+
+            {estudiantes.length > 1 && (
+              <div className="mt-2 space-y-1.5 border-t pt-3">
+                <p className="text-[12px] font-medium text-muted-foreground">Todos los estudiantes en este dispositivo</p>
+                {estudiantes.map((e) => (
+                  <div key={e.id} className="flex items-center justify-between gap-2 rounded-lg border bg-surface-2 px-3 py-2">
+                    <span className="flex items-center gap-2 text-[13px]">
+                      {e.nombre}
+                      {e.id === activoId && <Badge variant="primario">Activo</Badge>}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setEstudianteAEliminar({ id: e.id, nombre: e.nombre })}
+                      aria-label={`Eliminar a ${e.nombre}`}
+                    >
+                      <Trash2 className="text-danger" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Paintbrush className="h-4 w-4 text-primary" /> Apariencia
+              <IconBadge icon={Paintbrush} tone="secundario" /> Apariencia
             </CardTitle>
             <CardDescription>El tema se aplica al instante y queda guardado en este dispositivo.</CardDescription>
           </CardHeader>
@@ -95,9 +160,44 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Database className="h-4 w-4 text-primary" /> Datos
+              <IconBadge icon={Bell} tone="acento" /> Recordatorios
             </CardTitle>
-            <CardDescription>Todo lo que cargás se guarda localmente en este dispositivo, nada se envía a ningún servidor.</CardDescription>
+            <CardDescription>
+              Cuando tu racha está en riesgo te avisamos con un cartel dentro de la app apenas la abrís. Como no hay
+              servidor ni cuentas, no podemos mandarte avisos con la app cerrada — el aviso del navegador de acá abajo
+              solo suena si dejás una pestaña (o la app instalada) abierta.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between gap-3 rounded-lg border bg-surface-2 p-3">
+              <div>
+                <p className="text-[13px] font-medium">Aviso del navegador</p>
+                <p className="text-[11.5px] text-muted-foreground">
+                  {!soportaNotificaciones()
+                    ? 'Tu navegador no admite este tipo de aviso.'
+                    : permiso === 'denied'
+                      ? 'Bloqueado — habilitalo desde el ícono del candado en la barra de direcciones.'
+                      : 'Pide permiso una vez; después avisa cuando la app está abierta.'}
+                </p>
+              </div>
+              <Switch
+                checked={avisosNavegadorActivos}
+                onCheckedChange={alternarAvisos}
+                disabled={!soportaNotificaciones() || permiso === 'denied'}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <IconBadge icon={Database} tone="dorado" /> Datos
+            </CardTitle>
+            <CardDescription>
+              Todo lo que cargás se guarda localmente en este dispositivo, nada se envía a ningún servidor. Exportar
+              e importar afecta solo al estudiante activo{activo ? ` (${activo.nombre})` : ''}.
+            </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-wrap items-center gap-2">
             {backupReady ? (
@@ -156,7 +256,7 @@ export default function SettingsPage() {
               }}
             />
             <Button variant="ghost" size="sm" onClick={() => setResetOpen(true)}>
-              <RefreshCcw /> Borrar todos mis datos
+              <RefreshCcw /> Borrar datos de este estudiante
             </Button>
           </CardContent>
         </Card>
@@ -165,10 +265,11 @@ export default function SettingsPage() {
       <Dialog open={resetOpen} onOpenChange={setResetOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Borrar todos mis datos</DialogTitle>
+            <DialogTitle>Borrar datos del estudiante activo</DialogTitle>
             <DialogDescription>
-              Se borrará todo lo cargado en este dispositivo (autoperfil, actividades, fichas, mapas, diario). Esta
-              acción no puede deshacerse — si querés conservarlos, exportá antes una copia de seguridad.
+              Se borrará todo lo cargado de {activo?.nombre ?? 'este estudiante'} (autoperfil, actividades, fichas,
+              mapas, diario) — no afecta a otros estudiantes de este dispositivo. Esta acción no puede deshacerse —
+              si querés conservarlo, exportá antes una copia de seguridad.
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end gap-2">
@@ -185,6 +286,37 @@ export default function SettingsPage() {
               }}
             >
               Borrar todo
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!estudianteAEliminar} onOpenChange={(open) => !open && setEstudianteAEliminar(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Eliminar a {estudianteAEliminar?.nombre}</DialogTitle>
+            <DialogDescription>
+              Se borra a {estudianteAEliminar?.nombre} de la lista junto con todos sus datos en este dispositivo. Esta
+              acción no puede deshacerse — si querés conservarlos, entrá a ese estudiante y exportá antes una copia de
+              seguridad.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-2">
+            <Button variant="ghost" onClick={() => setEstudianteAEliminar(null)}>
+              Cancelar
+            </Button>
+            <Button
+              variant="danger"
+              onClick={async () => {
+                if (!estudianteAEliminar) return
+                await wipeEstudiante(estudianteAEliminar.id)
+                eliminarEstudiante(estudianteAEliminar.id)
+                await qc.invalidateQueries()
+                setEstudianteAEliminar(null)
+                toast.success('Estudiante eliminado')
+              }}
+            >
+              Eliminar
             </Button>
           </div>
         </DialogContent>

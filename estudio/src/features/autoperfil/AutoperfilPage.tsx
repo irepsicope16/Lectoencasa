@@ -15,7 +15,7 @@ import { Badge } from '@/components/ui/badge'
 import { AvisoOrientativo, FadeIn, PageHeader } from '@/components/shared'
 import { toast } from '@/components/ui/toast'
 import { cn } from '@/lib/utils'
-import { RUTA_COLOR } from '@/lib/moduleColors'
+import { DIMENSION_COLOR, RUTA_COLOR, dimensionCardStyle } from '@/lib/moduleColors'
 import type { BandaNecesidad, DimensionId } from '@/types'
 
 const DIMENSION_IDS = Object.keys(DIMENSIONES) as DimensionId[]
@@ -82,12 +82,16 @@ export default function AutoperfilPage() {
     const dimension = DIMENSION_IDS[step]
     const items = itemsDeDimension(dimension)
     const completosEnDimension = items.filter((i) => valorDe(i.codigo)).length
+    const colorArea = DIMENSION_COLOR[dimension]
 
     return (
       <FadeIn className="space-y-4">
         <PageHeader title="Mi autoperfil" subtitle="56 preguntas cortas, organizadas en 8 áreas. Podés pausar y retomar cuando quieras." />
         <AvisoOrientativo>{MENSAJES.antesDelPerfil}</AvisoOrientativo>
-        <Card>
+        <Card
+          className="border-t-[3px]"
+          style={{ borderTopColor: colorArea?.color, boxShadow: colorArea ? `0 10px 20px -14px ${colorArea.color}` : undefined }}
+        >
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>
@@ -97,15 +101,21 @@ export default function AutoperfilPage() {
             </div>
             <Progress value={(completosEnDimension / items.length) * 100} className="mt-2" />
             <CardDescription className="mt-1">
-              Escala: 0 Nunca o casi nunca · 1 A veces · 2 Frecuentemente · 3 Casi siempre. Podés marcar "No aplica".
+              Escala: 0 Nunca o casi nunca · 1 A veces · 2 Frecuentemente · 3 Casi siempre.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 pt-0">
             {items.map((item) => {
               const r = valorDe(item.codigo)
               return (
-                <div key={item.codigo} className="rounded-lg border p-3">
-                  <p className="mb-2 text-[13px]">{item.enunciado}</p>
+                <div
+                  key={item.codigo}
+                  className="rounded-lg border-l-[3px] bg-surface p-3"
+                  style={{ borderLeftColor: colorArea?.color, backgroundColor: colorArea?.soft }}
+                >
+                  <p className="mb-2.5 text-[15.5px] font-semibold leading-snug" style={{ color: colorArea?.color }}>
+                    {item.enunciado}
+                  </p>
                   <div className="flex flex-wrap gap-1.5">
                     {ESCALA.map((op) => (
                       <button
@@ -120,16 +130,6 @@ export default function AutoperfilPage() {
                         {op.valor} · {op.label}
                       </button>
                     ))}
-                    <button
-                      type="button"
-                      onClick={() => responder(item.codigo, null)}
-                      className={cn(
-                        'rounded-full border px-3 py-1 text-[12px] font-medium transition-colors',
-                        r && r.valor === null ? 'border-accent bg-accent-soft text-accent-strong' : 'hover:bg-surface-2',
-                      )}
-                    >
-                      No aplica
-                    </button>
                   </div>
                 </div>
               )
@@ -262,7 +262,7 @@ function ResultadosAutoperfil({ onVolver }: { onVolver: () => void }) {
         {ordenados.map((snap) => {
           const rutasSugeridas = RUTAS.filter((r) => r.dimensiones.includes(snap.dimension))
           return (
-            <Card key={snap.dimension}>
+            <Card key={snap.dimension} className="border-t-[3px]" style={dimensionCardStyle(snap.dimension)}>
               <CardHeader>
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <CardTitle className="text-[14px]">

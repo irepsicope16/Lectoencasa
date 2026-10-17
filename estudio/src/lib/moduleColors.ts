@@ -21,9 +21,36 @@ export const RUTA_COLOR: Record<string, ModuleColor> = {
   construir_autonomia: { color: 'var(--color-primary)', soft: 'var(--color-primary-soft)' },
 }
 
+// Color por dimensión del autoperfil (A-H): mismos 8 tokens que las rutas,
+// reasignados en otro orden — son categorías distintas (dimensiones del
+// cuestionario vs. rutas de técnicas), pero comparten paleta para no sumar
+// colores nuevos al sistema.
+export const DIMENSION_COLOR: Record<string, ModuleColor> = {
+  A: { color: 'var(--color-accent)', soft: 'var(--color-accent-soft)' },
+  B: { color: 'var(--color-mod-organizar)', soft: 'var(--color-mod-organizar-soft)' },
+  C: { color: 'var(--color-mod-atencion)', soft: 'var(--color-mod-atencion-soft)' },
+  D: { color: 'var(--color-secondary)', soft: 'var(--color-secondary-soft)' },
+  E: { color: 'var(--color-mod-escribir)', soft: 'var(--color-mod-escribir-soft)' },
+  F: { color: 'var(--color-mod-aprender)', soft: 'var(--color-mod-aprender-soft)' },
+  G: { color: 'var(--color-mod-regular)', soft: 'var(--color-mod-regular-soft)' },
+  H: { color: 'var(--color-primary)', soft: 'var(--color-primary-soft)' },
+}
+
 /** Estilo listo para aplicar a una ficha/tarjeta: franja superior de color + sombra + fondo tintado. */
 export function moduleCardStyle(rutaId: string): CSSProperties {
   const c = RUTA_COLOR[rutaId]
+  if (!c) return {}
+  return {
+    borderTopColor: c.color,
+    borderTopWidth: 3,
+    backgroundColor: c.soft,
+    boxShadow: `0 10px 20px -14px ${c.color}`,
+  }
+}
+
+/** Igual que moduleCardStyle, pero para dimensiones del autoperfil (A-H). */
+export function dimensionCardStyle(dimension: string): CSSProperties {
+  const c = DIMENSION_COLOR[dimension]
   if (!c) return {}
   return {
     borderTopColor: c.color,

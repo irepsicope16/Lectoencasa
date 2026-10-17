@@ -1,13 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { db } from '@/services/storage/db'
+import type { Repository } from '@/services/storage/repository'
+import { proximaCajaYFecha } from '@/lib/leitner'
 import type {
   ActividadCatalogo,
   ActividadProbada,
   DimensionSnapshot,
   EntradaMetacognicion,
+  EventoAgenda,
   Ficha,
   MapaConceptual,
   SesionEstudio,
+  TextoGuia,
 } from '@/types'
 
 // ---------- Autoperfil ----------
@@ -197,16 +201,24 @@ export function useCrearFicha() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: (data: { tema: string; pregunta: string; respuesta: string }) =>
-      db.fichas.create({ ...data, vecesRepasada: 0 }),
+      db.fichas.create({ ...data, vecesRepasada: 0, caja: 1, proximoRepaso: new Date().toISOString() }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['fichas'] }),
   })
 }
 
-export function useRepasarFicha() {
+/** Registra la respuesta de un repaso y reprograma la ficha (caja de Leitner). */
+export function useResponderFicha() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, vecesRepasada }: { id: string; vecesRepasada: number }) =>
-      db.fichas.update(id, { vecesRepasada: vecesRepasada + 1, ultimoRepaso: new Date().toISOString() }),
+    mutationFn: ({ id, caja, vecesRepasada, laSupo }: { id: string; caja: Ficha['caja']; vecesRepasada: number; laSupo: boolean }) => {
+      const { caja: siguienteCaja, proximoRepaso } = proximaCajaYFecha(caja, laSupo)
+      return db.fichas.update(id, {
+        caja: siguienteCaja,
+        proximoRepaso,
+        vecesRepasada: vecesRepasada + 1,
+        ultimoRepaso: new Date().toISOString(),
+      })
+    },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['fichas'] }),
   })
 }
@@ -240,10 +252,124 @@ export function useCrearEntradaDiario() {
   })
 }
 
+// ---------- Agenda ----------
+
+export function useEventosAgenda() {
+  return useQuery({
+    queryKey: ['agenda'],
+    queryFn: async () => {
+      const rows = await db.agenda.list()
+      return rows.sort((a, b) => a.fecha.localeCompare(b.fecha))
+    },
+  })
+}
+
+export function useCrearEvento() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (data: Omit<EventoAgenda, 'id' | 'completado' | 'createdAt' | 'updatedAt'>) =>
+      db.agenda.create({ ...data, completado: false }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['agenda'] }),
+  })
+}
+
+export function useActualizarEvento() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, ...patch }: { id: string } & Partial<EventoAgenda>) => db.agenda.update(id, patch),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['agenda'] }),
+  })
+}
+
+export function useEliminarEvento() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => db.agenda.remove(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['agenda'] }),
+  })
+}
+
+// ---------- Planificadores por nivel ----------
+// Mismo contrato que la Agenda, pero contra una colección propia por nivel
+// (son herramientas separadas, no comparten eventos entre sí).
+
+function crearHooksPlanificador(repo: Repository<EventoAgenda>, queryKey: string) {
+  function useEventos() {
+    return useQuery({
+      queryKey: [queryKey],
+      queryFn: async () => {
+        const rows = await repo.list()
+        return rows.sort((a, b) => a.fecha.localeCompare(b.fecha))
+      },
+    })
+  }
+  function useCrear() {
+    const qc = useQueryClient()
+    return useMutation({
+      mutationFn: (data: Omit<EventoAgenda, 'id' | 'completado' | 'createdAt' | 'updatedAt'>) =>
+        repo.create({ ...data, completado: false }),
+      onSuccess: () => qc.invalidateQueries({ queryKey: [queryKey] }),
+    })
+  }
+  function useActualizar() {
+    const qc = useQueryClient()
+    return useMutation({
+      mutationFn: ({ id, ...patch }: { id: string } & Partial<EventoAgenda>) => repo.update(id, patch),
+      onSuccess: () => qc.invalidateQueries({ queryKey: [queryKey] }),
+    })
+  }
+  function useEliminar() {
+    const qc = useQueryClient()
+    return useMutation({
+      mutationFn: (id: string) => repo.remove(id),
+      onSuccess: () => qc.invalidateQueries({ queryKey: [queryKey] }),
+    })
+  }
+  return { useEventos, useCrear, useActualizar, useEliminar }
+}
+
+export const planificadorPrincipianteHooks = crearHooksPlanificador(db.planificadorPrincipiante, 'planificador-principiante')
+export const planificadorSecundariaHooks = crearHooksPlanificador(db.planificadorSecundaria, 'planificador-secundaria')
+export const planificadorSuperiorHooks = crearHooksPlanificador(db.planificadorSuperior, 'planificador-superior')
+
 export function useEliminarEntradaDiario() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: (id: string) => db.diario.remove(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['diario'] }),
+  })
+}
+
+// ---------- Guía de textos ----------
+
+export function useTextosGuia() {
+  return useQuery({
+    queryKey: ['textosGuia'],
+    queryFn: () => db.textosGuia.list(),
+  })
+}
+
+export function useCrearTextoGuia() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (titulo: string) => db.textosGuia.create({ titulo, leido: false, subrayado: false, resumido: false }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['textosGuia'] }),
+  })
+}
+
+export function useActualizarTextoGuia() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, ...patch }: { id: string } & Partial<Pick<TextoGuia, 'leido' | 'subrayado' | 'resumido'>>) =>
+      db.textosGuia.update(id, patch),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['textosGuia'] }),
+  })
+}
+
+export function useEliminarTextoGuia() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => db.textosGuia.remove(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['textosGuia'] }),
   })
 }
