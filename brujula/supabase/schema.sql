@@ -293,6 +293,34 @@ end;
 $$;
 grant execute on function public.mb_self_register_consultant to authenticated;
 
+-- Autoedición acotada del Mapa y el Comparador de Carreras: la política
+-- consultants_own (más abajo) es SOLO de lectura a propósito — ninguna
+-- consultante puede escribir el resto de su ficha (estado, notas,
+-- profesionalId, etc.). Esta función le abre una ventana angosta: puede
+-- guardar su propio mapaCarreras y comparacionCarreras, nada más, para
+-- poder completar esas dos herramientas por su cuenta desde su portal
+-- (antes solo se podían usar en sesión con la profesional, sin forma de
+-- "compartirlas"). Mismo patrón que mb_update_own_profile.
+create or replace function public.mb_consultant_update_career_tools(
+  p_mapa_carreras jsonb default null,
+  p_comparacion_carreras jsonb default null
+)
+returns void language plpgsql security definer set search_path = public
+as $$
+begin
+  if public.mb_role() is distinct from 'consultante' then
+    raise exception 'Solo una cuenta de consultante puede usar esta función.';
+  end if;
+  update public.consultants
+  set data = data || jsonb_strip_nulls(jsonb_build_object(
+    'mapaCarreras', p_mapa_carreras,
+    'comparacionCarreras', p_comparacion_carreras
+  ))
+  where "consultantId" = public.mb_consultant_id();
+end;
+$$;
+grant execute on function public.mb_consultant_update_career_tools to authenticated;
+
 -- Políticas de profiles: cada cuenta lee su propio perfil; la dueña de la
 -- plataforma además puede ver y actualizar los de las demás profesionales
 -- (panel /pro/profesionales, para renovar membresías sin tocar Supabase).

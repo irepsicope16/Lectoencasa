@@ -43,6 +43,7 @@ const ownerNavItem: (typeof proNav)[number] = { to: '/pro/profesionales', icon: 
 
 const misNav = [
   { to: '/mi', icon: Home, label: 'Mi camino', end: true },
+  { to: '/mi/carreras', icon: Compass, label: 'Carreras' },
   { to: '/mi/actividades', icon: ListChecks, label: 'Actividades' },
   { to: '/mi/reflexiones', icon: NotebookPen, label: 'Reflexiones' },
   { to: '/mi/materiales', icon: FolderOpen, label: 'Materiales' },

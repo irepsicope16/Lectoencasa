@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input, Label, NativeSelect } from '@/components/ui/input'
 import { EmptyState } from '@/components/shared'
 import { toast } from '@/components/ui/toast'
-import { useUpdate } from '@/hooks/queries'
+import { useUpdateCareerTools } from '@/hooks/queries'
 import { cn } from '@/lib/utils'
 import type { CareerComparisonEntry, Consultant } from '@/types'
 
@@ -55,7 +55,7 @@ function Puntitos({ value, onChange }: { value: number; onChange: (v: number) =>
 }
 
 export function ComparadorTab({ consultant }: { consultant: Consultant }) {
-  const updateConsultant = useUpdate<Consultant>('consultants')
+  const updateConsultant = useUpdateCareerTools()
   const [carreras, setCarreras] = useState<CareerComparisonEntry[]>(consultant.comparacionCarreras ?? [])
   const [saving, setSaving] = useState(false)
 
@@ -106,9 +106,9 @@ export function ComparadorTab({ consultant }: { consultant: Consultant }) {
             <Scale className="h-4 w-4 text-primary" /> Comparador de Carreras
           </CardTitle>
           <CardDescription>
-            Cargá hasta 3 carreras finalistas y valoralas junto al consultante, con lo que investigó en la
-            "Ruta de Investigación de Carreras". No usa datos de mercado externos: refleja su propia mirada,
-            para que la decisión sea suya.
+            Cargá hasta 3 carreras finalistas y valoralas con tus propios criterios, usando lo que investigaste
+            en la "Ruta de Investigación de Carreras". No usa datos de mercado externos: refleja tu propia
+            mirada, para que la decisión sea tuya.
           </CardDescription>
         </CardHeader>
         <CardContent>
