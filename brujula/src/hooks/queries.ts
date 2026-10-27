@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { db, logActivity } from '@/services/storage/db'
+import { isCloudEnabled } from '@/services/cloud/config'
+import { useAuthStore } from '@/stores/authStore'
 import type {
   Activity,
   ActivityLogEntry,
@@ -106,6 +108,41 @@ export function useUpdate<T extends { id: string }>(repo: RepoName, log?: (row: 
       qc.invalidateQueries({ queryKey: keys[repo] })
       if (log) qc.invalidateQueries({ queryKey: keys.log })
     },
+  })
+}
+
+/**
+ * Guarda el Mapa o el Comparador de Carreras. Cuando lo completa la propia
+ * consultante, escribe por una función acotada en Supabase (mb_consultant_
+ * update_career_tools) en vez del update genérico de la fila completa: la
+ * política de RLS de consultants solo le permite leer su ficha, nunca
+ * escribirla entera. Cuando lo completa la profesional (en sesión), sigue
+ * el camino de siempre.
+ */
+export function useUpdateCareerTools() {
+  const qc = useQueryClient()
+  const user = useAuthStore((s) => s.user)
+  return useMutation({
+    mutationFn: async ({
+      id,
+      patch,
+    }: {
+      id: string
+      patch: Partial<Pick<Consultant, 'mapaCarreras' | 'comparacionCarreras'>>
+    }) => {
+      if (isCloudEnabled() && user?.role === 'consultante') {
+        const { getSupabase } = await import('@/services/cloud/client')
+        const sb = await getSupabase()
+        const { error } = await sb.rpc('mb_consultant_update_career_tools', {
+          p_mapa_carreras: patch.mapaCarreras ?? null,
+          p_comparacion_carreras: patch.comparacionCarreras ?? null,
+        })
+        if (error) throw new Error(error.message)
+        return patch
+      }
+      return db.consultants.update(id, patch)
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: keys.consultants }),
   })
 }
 

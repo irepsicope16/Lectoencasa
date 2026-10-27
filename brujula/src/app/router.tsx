@@ -27,6 +27,7 @@ const ProfessionalsAdminPage = lazy(() => import('@/features/settings/Profession
 
 const MyDashboard = lazy(() => import('@/features/dashboard/MyDashboard'))
 const MyModulePage = lazy(() => import('@/features/method/MyModulePage'))
+const MyCareersPage = lazy(() => import('@/features/method/MyCareersPage'))
 const MyActivitiesPage = lazy(() => import('@/features/activities/MyActivitiesPage'))
 const ActivityRunnerPage = lazy(() => import('@/features/activities/ActivityRunnerPage'))
 const MyReflectionsPage = lazy(() => import('@/features/reflections/MyReflectionsPage'))
@@ -103,6 +104,7 @@ export const router = createHashRouter([
         children: [
           { index: true, element: <Page><MyDashboard /></Page> },
           { path: 'modulos/:moduleId', element: <Page><MyModulePage /></Page> },
+          { path: 'carreras', element: <Page><MyCareersPage /></Page> },
           { path: 'actividades', element: <Page><MyActivitiesPage /></Page> },
           { path: 'actividades/:id', element: <Page><ActivityRunnerPage /></Page> },
           { path: 'reflexiones', element: <Page><MyReflectionsPage /></Page> },

@@ -3,7 +3,7 @@ import { Compass, Sparkles } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from '@/components/ui/toast'
-import { useUpdate } from '@/hooks/queries'
+import { useUpdateCareerTools } from '@/hooks/queries'
 import { cn } from '@/lib/utils'
 import { CAREER_FIELDS } from '@/data/careerFields'
 import type { CareerFieldReaction, CareerMapEntry, Consultant } from '@/types'
@@ -15,7 +15,7 @@ const REACCIONES: { valor: CareerFieldReaction; emoji: string; label: string; ac
 ]
 
 export function CareerMapTab({ consultant }: { consultant: Consultant }) {
-  const updateConsultant = useUpdate<Consultant>('consultants')
+  const updateConsultant = useUpdateCareerTools()
   const [reacciones, setReacciones] = useState<Record<string, CareerFieldReaction>>(() => {
     const map: Record<string, CareerFieldReaction> = {}
     consultant.mapaCarreras?.forEach((e) => (map[e.campoId] = e.reaccion))
