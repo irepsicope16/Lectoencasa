@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, CheckCircle2, MessageCircleHeart, Printer, Save } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { FadeIn } from '@/components/shared'
+import { appendDictado, DictationButton } from '@/components/shared/Dictation'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -113,6 +114,11 @@ export default function ActivityRunnerPage() {
   }
 
   const setValue = (qid: string, v: string) => setAnswers({ ...values, [qid]: v })
+  const appendValue = (qid: string, texto: string) =>
+    setAnswers((prev) => {
+      const base = prev ?? initial
+      return { ...base, [qid]: appendDictado(base[qid] ?? '', texto) }
+    })
 
   const toggleOption = (qid: string, opt: string) => {
     const current = (values[qid] ?? '').split(',').map((s) => s.trim()).filter(Boolean)
@@ -220,13 +226,18 @@ export default function ActivityRunnerPage() {
                   })}
                 </div>
               ) : (
-                <Textarea
-                  value={values[q.id] ?? ''}
-                  onChange={(e) => setValue(q.id, e.target.value)}
-                  disabled={readOnly}
-                  placeholder="Escribí tu respuesta con tus palabras…"
-                  className="mt-3 min-h-[110px]"
-                />
+                <>
+                  <Textarea
+                    value={values[q.id] ?? ''}
+                    onChange={(e) => setValue(q.id, e.target.value)}
+                    disabled={readOnly}
+                    placeholder="Escribí tu respuesta con tus palabras, o tocá «Dictar» y contala hablando…"
+                    className="mt-3 min-h-[110px]"
+                  />
+                  {!readOnly && (
+                    <DictationButton className="mt-2" onText={(t) => appendValue(q.id, t)} />
+                  )}
+                </>
               )}
             </CardContent>
           </Card>
