@@ -19,6 +19,8 @@ import {
   NotebookPen,
   Repeat,
   Video,
+  RefreshCw,
+  MessageCircle,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import dashboardShot from '@/assets/landing/dashboard.png'
@@ -77,6 +79,9 @@ const INCLUYE = [
   { icon: Sparkles, titulo: 'Motor Brújula + Asistente IA', desc: 'Lectura del proceso por dimensiones y borradores de informe, siempre revisados por vos.' },
   { icon: Smartphone, titulo: 'Desde cualquier dispositivo', desc: 'Funciona en celular, tablet o computadora — se puede agregar como ícono en la pantalla de inicio.' },
   { icon: UserRound, titulo: 'Acceso para tu consultante', desc: 'Cada consultante tiene su propio ingreso, para hacer actividades entre sesión y sesión.' },
+  { icon: HeartHandshake, titulo: '15 días de acompañamiento', desc: 'Te acompaño personalmente durante los primeros 15 días para que aprendas a usar la herramienta.' },
+  { icon: RefreshCw, titulo: 'Actualizaciones incluidas', desc: 'Cada mejora que se suma a la plataforma te llega sin costo extra.' },
+  { icon: MessageCircle, titulo: 'Soporte por WhatsApp', desc: 'Si te trabás con algo, me escribís directamente desde la app.' },
 ]
 
 // Los tres colores de marca, para alternar íconos sin salir de la paleta.
@@ -84,6 +89,16 @@ const TRIO = [
   { bg: 'bg-primary-soft', text: 'text-primary-strong' },
   { bg: 'bg-accent-soft', text: 'text-accent-strong' },
   { bg: 'bg-beige-soft', text: 'text-beige-strong' },
+]
+
+// Contacto directo para quien llega desde un link compartido.
+const WHATSAPP_URL =
+  'https://wa.me/5492216185376?text=Hola%20Irene%2C%20quiero%20conocer%20M%C3%A9todo%20Br%C3%BAjula.'
+
+const LECTURAS = [
+  { nivel: 'Brújula firme', desc: 'Lo que aparece con fuerza y de forma sostenida en todo el proceso.', bg: 'bg-primary-soft', text: 'text-primary-strong' },
+  { nivel: 'Rumbo posible', desc: 'Lo que asoma y vale la pena seguir mirando con el consultante.', bg: 'bg-accent-soft', text: 'text-accent-strong' },
+  { nivel: 'Para explorar', desc: 'Lo que todavía no está claro y abre preguntas para la próxima sesión.', bg: 'bg-beige-soft', text: 'text-beige-strong' },
 ]
 
 const BENEFICIOS = [
@@ -269,9 +284,14 @@ export default function LandingPage() {
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <a href="#como-funciona">Ver cómo funciona</a>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                <MessageCircle /> Escribime por WhatsApp
+              </a>
             </Button>
           </div>
+          <p className="mx-auto mt-8 max-w-md font-display text-[17px] italic leading-snug text-accent-strong">
+            “Orientar no es aplicar un test: es acompañar a alguien a encontrar su rumbo.”
+          </p>
           <p className="mt-6 text-[11.5px] text-faint">
             Creado por la Lic. Irene Morbidelli — Psicopedagoga, M.P. 260505
           </p>
@@ -343,6 +363,35 @@ export default function LandingPage() {
           </div>
           <PhoneScene />
         </div>
+      </Section>
+
+      {/* diferencial: sin porcentajes */}
+      <Section className="border-t">
+        <p className="text-center text-[12px] font-medium tracking-[0.16em] text-primary-strong uppercase">
+          Lo que hace distinto a Método Brújula
+        </p>
+        <h2 className="mt-3 text-center text-xl font-semibold tracking-tight sm:text-2xl">
+          Sin porcentajes. Con motivos.
+        </h2>
+        <p className="mx-auto mt-3 max-w-2xl text-center text-[14.5px] leading-relaxed text-muted-foreground">
+          Ningún adolescente es “78% ingeniero”. El Motor Brújula cruza las actividades, las sesiones y tus
+          observaciones, y te devuelve una lectura en tres niveles, siempre con las evidencias que la
+          sostienen. También señala las tensiones entre lo que el consultante desea y lo que siente que
+          “debería” elegir.
+        </p>
+        <div className="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-3">
+          {LECTURAS.map((l) => (
+            <div key={l.nivel} className={`rounded-xl p-5 ${l.bg}`}>
+              <Compass className={`h-5 w-5 ${l.text}`} />
+              <p className={`mt-2.5 text-[14px] font-semibold ${l.text}`}>{l.nivel}</p>
+              <p className="mt-1 text-[12.5px] leading-relaxed text-foreground/75">{l.desc}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mx-auto mt-6 max-w-xl text-center text-[13px] text-muted-foreground">
+          Al cierre, el consultante recibe su <strong className="text-foreground">Carta de Navegación</strong>:
+          un documento propio con su recorrido y los próximos pasos.
+        </p>
       </Section>
 
       {/* screenshots */}
@@ -438,6 +487,14 @@ export default function LandingPage() {
               Quiero conocer Método Brújula <ArrowRight />
             </Link>
           </Button>
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 flex items-center justify-center gap-1.5 text-[13px] font-medium text-primary-strong hover:underline"
+          >
+            <MessageCircle className="h-4 w-4" /> ¿Tenés dudas? Escribime por WhatsApp
+          </a>
         </div>
       </Section>
 
