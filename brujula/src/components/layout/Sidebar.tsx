@@ -27,6 +27,7 @@ import { cn, nombreCompleto } from '@/lib/utils'
 import { STAGES } from '@/lib/constants'
 import { MODULES } from '@/data/modules'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/misc'
+import { SidebarInstallButton } from '@/components/shared/InstallApp'
 
 const proNav = [
   { to: '/pro', icon: Home, label: 'Inicio', end: true },
@@ -170,6 +171,7 @@ export function Sidebar({ role }: { role: UserRole }) {
 
       {/* pie */}
       <div className={cn('border-t p-2', collapsed && 'flex flex-col items-center')}>
+        <SidebarInstallButton collapsed={collapsed} />
         {role === 'profesional' && (
           <a
             href="https://wa.me/5492216185376?text=Hola%20Irene%2C%20tengo%20una%20consulta%20sobre%20M%C3%A9todo%20Br%C3%BAjula."

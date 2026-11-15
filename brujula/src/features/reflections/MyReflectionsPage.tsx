@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { NotebookPen, Plus } from 'lucide-react'
 import { EmptyState, FadeIn, PageHeader } from '@/components/shared'
+import { appendDictado, DictationButton } from '@/components/shared/Dictation'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input, Label, NativeSelect, Textarea } from '@/components/ui/input'
@@ -129,12 +130,15 @@ export default function MyReflectionsPage() {
               </NativeSelect>
             </div>
             <div>
-              <Label>Tu reflexión</Label>
+              <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2">
+                <Label className="mb-0">Tu reflexión</Label>
+                <DictationButton onText={(t) => setForm((f) => ({ ...f, contenido: appendDictado(f.contenido, t) }))} />
+              </div>
               <Textarea
                 value={form.contenido}
                 onChange={(e) => setForm({ ...form, contenido: e.target.value })}
                 className="min-h-[140px]"
-                placeholder="¿Qué descubriste? ¿Qué te preocupa? ¿Qué te entusiasma?"
+                placeholder="¿Qué descubriste? ¿Qué te preocupa? ¿Qué te entusiasma? Si preferís, tocá «Dictar» y contalo hablando."
               />
             </div>
           </div>

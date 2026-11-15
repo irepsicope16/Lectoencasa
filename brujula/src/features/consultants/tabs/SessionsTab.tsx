@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CalendarPlus, Clock, MapPin, Video } from 'lucide-react'
+import { CalendarPlus, Clock, MapPin, Mic, Video } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input, Label, NativeSelect, Textarea } from '@/components/ui/input'
@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { EmptyState, StageStepper } from '@/components/shared'
+import { appendDictado, DictationButton } from '@/components/shared/Dictation'
 import { toast } from '@/components/ui/toast'
 import { useCreate, useModuleProgress, useSessions, useUpdate } from '@/hooks/queries'
 import { fechaHora, formatMonto, nombreCompleto } from '@/lib/utils'
@@ -286,12 +287,32 @@ export function SessionsTab({ consultant }: { consultant: Consultant }) {
                 })}
               </div>
             </div>
-            <div className="col-span-2">
-              <Label>Notas de la sesión</Label>
-              <Textarea value={form.notas} onChange={(e) => setForm({ ...form, notas: e.target.value })} className="min-h-[110px]" />
+            <div className="col-span-2 rounded-xl border border-primary/30 bg-primary-soft/60 p-3.5">
+              <div className="mb-2 flex flex-wrap items-start justify-between gap-2">
+                <div>
+                  <Label className="mb-0.5">Notas de la sesión</Label>
+                  <p className="flex items-center gap-1 text-[12px] text-muted-foreground">
+                    <Mic className="h-3.5 w-3.5 shrink-0 text-primary-strong" />
+                    Podés escribir o tocar «Dictar» y hablar: el texto se escribe solo.
+                  </p>
+                </div>
+                <DictationButton
+                  onText={(t) => setForm((f) => ({ ...f, notas: appendDictado(f.notas, t) }))}
+                />
+              </div>
+              <Textarea
+                value={form.notas}
+                onChange={(e) => setForm({ ...form, notas: e.target.value })}
+                className="min-h-[130px] bg-background"
+              />
             </div>
             <div className="col-span-2">
-              <Label>Próximos pasos</Label>
+              <div className="mb-1.5 flex flex-wrap items-start justify-between gap-2">
+                <Label className="mb-0">Próximos pasos</Label>
+                <DictationButton
+                  onText={(t) => setForm((f) => ({ ...f, proximosPasos: appendDictado(f.proximosPasos, t) }))}
+                />
+              </div>
               <Textarea value={form.proximosPasos} onChange={(e) => setForm({ ...form, proximosPasos: e.target.value })} className="min-h-[60px]" />
             </div>
           </div>

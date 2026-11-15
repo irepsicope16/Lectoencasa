@@ -7,6 +7,7 @@ import { Navbar } from './Navbar'
 import { CommandPalette } from './CommandPalette'
 import { useUIStore } from '@/stores/uiStore'
 import { cn } from '@/lib/utils'
+import { InstallBanner } from '@/components/shared/InstallApp'
 
 export function AppShell({ role }: { role: UserRole }) {
   const collapsed = useUIStore((s) => s.sidebarCollapsed)
@@ -66,6 +67,7 @@ export function AppShell({ role }: { role: UserRole }) {
         <Navbar role={role} />
         <main className="min-w-0 flex-1 overflow-y-auto">
           <div className={cn('mx-auto w-full px-6 py-6 lg:px-10', collapsed ? 'max-w-[1400px]' : 'max-w-[1200px]')}>
+            <InstallBanner />
             <Outlet />
           </div>
         </main>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { MessageSquarePlus, NotebookPen } from 'lucide-react'
+import { appendDictado, DictationButton } from '@/components/shared/Dictation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -158,8 +159,16 @@ export function OverviewTab({ consultant }: { consultant: Consultant }) {
               </div>
             </div>
             <div>
-              <Label>Observación</Label>
-              <Textarea value={obsText} onChange={(e) => setObsText(e.target.value)} placeholder="¿Qué observaste?" />
+              <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2">
+                <Label className="mb-0">Observación</Label>
+                <DictationButton onText={(t) => setObsText((prev) => appendDictado(prev, t))} />
+              </div>
+              <Textarea
+                value={obsText}
+                onChange={(e) => setObsText(e.target.value)}
+                placeholder="¿Qué observaste? Podés escribirlo o dictarlo."
+                className="min-h-[110px]"
+              />
             </div>
           </div>
           <DialogFooter>

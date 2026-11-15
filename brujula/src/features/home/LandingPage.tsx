@@ -21,6 +21,8 @@ import {
   Video,
   RefreshCw,
   MessageCircle,
+  Check,
+  Infinity as InfinityIcon,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import dashboardShot from '@/assets/landing/dashboard.png'
@@ -74,14 +76,14 @@ const MODALIDADES = [
 
 const INCLUYE = [
   { icon: Compass, titulo: 'El método completo', desc: 'Módulos organizados en 5 etapas, con actividades, videos y materiales para cada consultante.' },
+  { icon: InfinityIcon, titulo: 'Consultantes ilimitados', desc: 'Sumás todos los procesos que necesites: la membresía no tiene límite de consultantes.' },
   { icon: Users, titulo: 'Cuenta propia y privada', desc: 'Tu espacio queda aislado del de cualquier otra profesional: solo vos ves y trabajás con tus consultantes.' },
   { icon: FileText, titulo: 'Informes automáticos', desc: 'Profesional, Carta de Navegación, resumen para la familia y para el consultante — generados con los datos reales del proceso.' },
   { icon: Sparkles, titulo: 'Motor Brújula + Asistente IA', desc: 'Lectura del proceso por dimensiones y borradores de informe, siempre revisados por vos.' },
   { icon: Smartphone, titulo: 'Desde cualquier dispositivo', desc: 'Funciona en celular, tablet o computadora — se puede agregar como ícono en la pantalla de inicio.' },
   { icon: UserRound, titulo: 'Acceso para tu consultante', desc: 'Cada consultante tiene su propio ingreso, para hacer actividades entre sesión y sesión.' },
-  { icon: HeartHandshake, titulo: '15 días de acompañamiento', desc: 'Te acompaño personalmente durante los primeros 15 días para que aprendas a usar la herramienta.' },
   { icon: RefreshCw, titulo: 'Actualizaciones incluidas', desc: 'Cada mejora que se suma a la plataforma te llega sin costo extra.' },
-  { icon: MessageCircle, titulo: 'Soporte por WhatsApp', desc: 'Si te trabás con algo, me escribís directamente desde la app.' },
+  { icon: MessageCircle, titulo: 'Soporte por WhatsApp', desc: 'Si tenés una duda o te trabás con algo, me escribís directamente desde la app y te ayudo.' },
 ]
 
 // Los tres colores de marca, para alternar íconos sin salir de la paleta.
@@ -94,6 +96,19 @@ const TRIO = [
 // Contacto directo para quien llega desde un link compartido.
 const WHATSAPP_URL =
   'https://wa.me/5492216185376?text=Hola%20Irene%2C%20quiero%20conocer%20M%C3%A9todo%20Br%C3%BAjula.'
+
+const MEMBRESIA_INCLUYE = [
+  'Acceso completo a la plataforma durante 12 meses',
+  'Consultantes ilimitados: sin límite de procesos',
+  'Todas las actualizaciones que se sumen en el año',
+  'Consultas y soporte directo conmigo por WhatsApp',
+]
+
+const PASOS_ALTA = [
+  'Te registrás en “Quiero conocer Método Brújula”.',
+  'Me escribís por WhatsApp y coordinamos el pago.',
+  'Activo tu cuenta y ya podés empezar a trabajar.',
+]
 
 const LECTURAS = [
   { nivel: 'Brújula firme', desc: 'Lo que aparece con fuerza y de forma sostenida en todo el proceso.', bg: 'bg-primary-soft', text: 'text-primary-strong' },
@@ -144,7 +159,7 @@ const FAQ = [
   },
   {
     q: '¿Cuánto cuesta y cómo empiezo?',
-    a: 'Escribime desde el registro y coordinamos el valor y los detalles antes de activar tu cuenta — así arrancás con todas tus dudas resueltas.',
+    a: 'Es una membresía anual. Te registrás desde esta página, me escribís por WhatsApp y coordinamos el valor y el pago. Cuando lo confirmo, activo tu cuenta por 12 meses. Y si en algún momento tenés dudas, me escribís por WhatsApp.',
   },
 ]
 
@@ -475,13 +490,29 @@ export default function LandingPage() {
           <HeartHandshake className="mx-auto h-6 w-6 text-primary" />
           <h2 className="mt-3 text-lg font-semibold tracking-tight">Membresía anual</h2>
           <p className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground">
-            Acceso completo a la plataforma por un año. Las primeras profesionales que se suman acceden a un
+            Las primeras profesionales que se suman acceden a un
             <strong className="text-foreground"> precio de lanzamiento</strong>, más bajo que el valor
             regular.
           </p>
-          <p className="mt-2 text-[12.5px] text-faint">
-            Consultá el valor actual al escribir para registrarte — se coordina antes de activar la cuenta.
-          </p>
+          <ul className="mx-auto mt-5 max-w-xs space-y-2 text-left text-[13px]">
+            {MEMBRESIA_INCLUYE.map((item) => (
+              <li key={item} className="flex items-start gap-2">
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary-strong" />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <div className="mx-auto mt-6 max-w-xs rounded-xl bg-beige-soft p-4 text-left text-[12.5px] text-foreground/80">
+            <p className="mb-1.5 font-semibold text-beige-strong">Cómo empezás</p>
+            <ol className="space-y-1.5">
+              {PASOS_ALTA.map((paso, i) => (
+                <li key={paso} className="flex gap-2">
+                  <span className="font-semibold text-beige-strong">{i + 1}.</span>
+                  {paso}
+                </li>
+              ))}
+            </ol>
+          </div>
           <Button size="lg" className="mt-6" asChild>
             <Link to="/registro">
               Quiero conocer Método Brújula <ArrowRight />
@@ -493,7 +524,7 @@ export default function LandingPage() {
             rel="noopener noreferrer"
             className="mt-3 flex items-center justify-center gap-1.5 text-[13px] font-medium text-primary-strong hover:underline"
           >
-            <MessageCircle className="h-4 w-4" /> ¿Tenés dudas? Escribime por WhatsApp
+            <MessageCircle className="h-4 w-4" /> Consultá el valor por WhatsApp
           </a>
         </div>
       </Section>

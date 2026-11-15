@@ -5,6 +5,15 @@
     <link rel="icon" type="image/png" href="./favicon.png" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <link rel="manifest" href="./manifest.webmanifest" />
+    <script>
+      // La copia vieja publicada en GitHub Pages no está conectada a la base
+      // de datos real: se manda al dominio oficial, conservando la pantalla
+      // (#/...). Con ?local=1 se puede seguir abriendo esa copia, por si
+      // alguien necesita exportar datos que guardó ahí en modo local.
+      if (location.hostname.endsWith('github.io') && !/[?&]local=1(&|$)/.test(location.search)) {
+        location.replace('https://metodobrujula.ar/' + location.hash)
+      }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#f8fafa" />
     <meta name="mobile-web-app-capable" content="yes" />
