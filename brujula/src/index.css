@@ -40,6 +40,11 @@
   --rose: #b3407a;
   --rose-soft: #f9e7f0;
 
+  /* beige: tercer color de marca (landing y piezas de comunicación) */
+  --beige: #c9ad84;
+  --beige-strong: #7d5f36;
+  --beige-soft: #f4ede1;
+
   --radius: 0.75rem;
 }
 
@@ -71,6 +76,10 @@
   --warning-soft: #38301c;
   --rose: #dd7cae;
   --rose-soft: #3a2430;
+
+  --beige: #b59a72;
+  --beige-strong: #d6bf98;
+  --beige-soft: #2d281f;
 }
 
 /* ============================================================
@@ -140,6 +149,9 @@
   --color-warning-soft: var(--warning-soft);
   --color-rose: var(--rose);
   --color-rose-soft: var(--rose-soft);
+  --color-beige: var(--beige);
+  --color-beige-strong: var(--beige-strong);
+  --color-beige-soft: var(--beige-soft);
 
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 0.25rem);

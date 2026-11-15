@@ -15,6 +15,12 @@ import {
   ClipboardCheck,
   ChevronDown,
   Building2,
+  MapPin,
+  NotebookPen,
+  Repeat,
+  Video,
+  RefreshCw,
+  MessageCircle,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import dashboardShot from '@/assets/landing/dashboard.png'
@@ -24,9 +30,9 @@ import informeShot from '@/assets/landing/informe-preview.png'
 const ETAPAS = [
   { n: 1, nombre: 'Conocerte', desc: 'Tu historia, tu identidad', bg: 'bg-primary-soft', text: 'text-primary-strong' },
   { n: 2, nombre: 'Valorarte', desc: 'Valores, deseos y mandatos', bg: 'bg-accent-soft', text: 'text-accent-strong' },
-  { n: 3, nombre: 'Explorar', desc: 'Fortalezas, intereses y mundo', bg: 'bg-warning-soft', text: 'text-warning' },
-  { n: 4, nombre: 'Decidir', desc: 'Proyecto de vida y carreras', bg: 'bg-rose-soft', text: 'text-rose' },
-  { n: 5, nombre: 'Actuar', desc: 'Plan de acción concreto', bg: 'bg-danger-soft', text: 'text-danger' },
+  { n: 3, nombre: 'Explorar', desc: 'Fortalezas, intereses y mundo', bg: 'bg-beige-soft', text: 'text-beige-strong' },
+  { n: 4, nombre: 'Decidir', desc: 'Proyecto de vida y carreras', bg: 'bg-primary-soft', text: 'text-primary-strong' },
+  { n: 5, nombre: 'Actuar', desc: 'Plan de acción concreto', bg: 'bg-accent-soft', text: 'text-accent-strong' },
 ]
 
 const COMO_FUNCIONA = [
@@ -38,19 +44,32 @@ const COMO_FUNCIONA = [
     desc: 'Una sola vez: datos, foto y motivo de consulta. El acceso del consultante se crea solo.',
   },
   {
-    icon: ClipboardCheck,
+    icon: NotebookPen,
     bg: 'bg-accent-soft',
     iconColor: 'text-accent-strong',
-    titulo: '2 · Acompañás el proceso',
-    desc: 'Asignás módulos y actividades según la etapa; registrás sesiones, observaciones y evaluaciones.',
+    titulo: '2 · Registrás sesión a sesión',
+    desc: 'Después de cada encuentro sumás lo que quieras: temas, observaciones, notas y próximos pasos. Lo podés escribir o dictar con el micrófono del teclado.',
+  },
+  {
+    icon: ClipboardCheck,
+    bg: 'bg-beige-soft',
+    iconColor: 'text-beige-strong',
+    titulo: '3 · Le mandás actividades',
+    desc: 'El proceso está pensado como un taller: asignás actividades según la etapa y el consultante las responde desde su celular.',
   },
   {
     icon: FileText,
-    bg: 'bg-warning-soft',
-    iconColor: 'text-warning',
-    titulo: '3 · Generás el informe',
-    desc: 'Con un clic, armado con los datos reales del proceso. Vos revisás y ajustás lo que necesites.',
+    bg: 'bg-primary-soft',
+    iconColor: 'text-primary-strong',
+    titulo: '4 · El informe recoge todo el recorrido',
+    desc: 'Sesiones, actividades y observaciones quedan plasmadas en el informe final. Vos revisás y ajustás lo que necesites.',
   },
+]
+
+const MODALIDADES = [
+  { icon: MapPin, titulo: 'Presencial', desc: 'En el consultorio, con la app como guía de cada encuentro.' },
+  { icon: Video, titulo: 'Online', desc: 'Por videollamada, con las actividades entre sesión y sesión.' },
+  { icon: Repeat, titulo: 'Mixta', desc: 'Combinás las dos según lo que necesite cada consultante.' },
 ]
 
 const INCLUYE = [
@@ -60,12 +79,33 @@ const INCLUYE = [
   { icon: Sparkles, titulo: 'Motor Brújula + Asistente IA', desc: 'Lectura del proceso por dimensiones y borradores de informe, siempre revisados por vos.' },
   { icon: Smartphone, titulo: 'Desde cualquier dispositivo', desc: 'Funciona en celular, tablet o computadora — se puede agregar como ícono en la pantalla de inicio.' },
   { icon: UserRound, titulo: 'Acceso para tu consultante', desc: 'Cada consultante tiene su propio ingreso, para hacer actividades entre sesión y sesión.' },
+  { icon: HeartHandshake, titulo: '15 días de acompañamiento', desc: 'Te acompaño personalmente durante los primeros 15 días para que aprendas a usar la herramienta.' },
+  { icon: RefreshCw, titulo: 'Actualizaciones incluidas', desc: 'Cada mejora que se suma a la plataforma te llega sin costo extra.' },
+  { icon: MessageCircle, titulo: 'Soporte por WhatsApp', desc: 'Si te trabás con algo, me escribís directamente desde la app.' },
+]
+
+// Los tres colores de marca, para alternar íconos sin salir de la paleta.
+const TRIO = [
+  { bg: 'bg-primary-soft', text: 'text-primary-strong' },
+  { bg: 'bg-accent-soft', text: 'text-accent-strong' },
+  { bg: 'bg-beige-soft', text: 'text-beige-strong' },
+]
+
+// Contacto directo para quien llega desde un link compartido.
+const WHATSAPP_URL =
+  'https://wa.me/5492216185376?text=Hola%20Irene%2C%20quiero%20conocer%20M%C3%A9todo%20Br%C3%BAjula.'
+
+const LECTURAS = [
+  { nivel: 'Brújula firme', desc: 'Lo que aparece con fuerza y de forma sostenida en todo el proceso.', bg: 'bg-primary-soft', text: 'text-primary-strong' },
+  { nivel: 'Rumbo posible', desc: 'Lo que asoma y vale la pena seguir mirando con el consultante.', bg: 'bg-accent-soft', text: 'text-accent-strong' },
+  { nivel: 'Para explorar', desc: 'Lo que todavía no está claro y abre preguntas para la próxima sesión.', bg: 'bg-beige-soft', text: 'text-beige-strong' },
 ]
 
 const BENEFICIOS = [
   'Ahorrás las horas que lleva armar un informe a mano',
   'Todo el proceso de cada consultante queda ordenado y documentado en un solo lugar',
-  'Accedés desde cualquier lugar, en cualquier momento',
+  'Lo que registrás en cada sesión no se pierde: queda en el informe final',
+  'Trabajás presencial, online o de forma mixta, con la misma herramienta',
   'Tus consultantes avanzan con sus actividades incluso fuera de la sesión',
 ]
 
@@ -85,6 +125,10 @@ const FAQ = [
   {
     q: '¿Necesito manejar mucho la tecnología para usarlo?',
     a: 'No. Está pensado para usarse sin conocimientos técnicos — si usás el celular para lo cotidiano, ya sabés lo necesario para trabajar con Método Brújula.',
+  },
+  {
+    q: '¿Puedo trabajar online o solo de forma presencial?',
+    a: 'Las dos, y también de forma mixta. El consultante tiene la app en su propio celular o computadora, así que puede hacer las actividades entre sesión y sesión, estés en el consultorio o por videollamada.',
   },
   {
     q: '¿Sirve para Psicología, Psicopedagogía y Orientación en general?',
@@ -113,12 +157,14 @@ function Section({
   children: React.ReactNode
   className?: string
   id?: string
-  tone?: 'surface-2' | 'primary-soft' | 'accent-soft'
+  tone?: 'surface-2' | 'primary-soft' | 'accent-soft' | 'beige-soft'
 }) {
   const bg =
     tone === 'surface-2'
       ? 'bg-surface-2'
-      : tone === 'primary-soft'
+      : tone === 'beige-soft'
+        ? 'bg-beige-soft'
+        : tone === 'primary-soft'
         ? 'bg-primary-soft'
         : tone === 'accent-soft'
           ? 'bg-accent-soft'
@@ -128,6 +174,50 @@ function Section({
       <section id={id} className={`mx-auto w-full max-w-5xl px-6 py-14 sm:py-20 ${className}`}>
         {children}
       </section>
+    </div>
+  )
+}
+
+// Ilustración: un joven respondiendo una actividad del taller desde el
+// celular. La pantalla es HTML (texto nítido y en la paleta de la app);
+// la figura es un SVG plano en los tres colores de marca.
+function PhoneScene() {
+  return (
+    <div className="relative mx-auto h-[400px] w-full max-w-[360px]" aria-hidden="true">
+      <div className="absolute left-1/2 top-6 h-72 w-72 -translate-x-1/2 rounded-full bg-beige-soft" />
+      <svg viewBox="0 0 220 260" className="absolute bottom-0 left-0 w-[64%]">
+        <path d="M14 260 C14 192 58 166 110 166 C162 166 206 192 206 260 Z" className="fill-primary" />
+        <path d="M78 170 C88 196 132 196 142 170 C132 178 88 178 78 170 Z" className="fill-primary-strong" />
+        <rect x="98" y="138" width="24" height="32" rx="10" fill="#e5bd9b" />
+        <circle cx="110" cy="104" r="42" fill="#ecc8a8" />
+        <path d="M66 104 C60 58 94 46 114 48 C146 50 162 74 155 106 C150 86 134 76 112 78 C92 78 76 88 66 104 Z" fill="#3b2f2a" />
+        <path d="M95 112 q5 4 10 0 M117 112 q5 4 10 0" stroke="#3b2f2a" strokeWidth="2.4" fill="none" strokeLinecap="round" />
+        <path d="M103 126 q7 5 14 0" stroke="#b9775a" strokeWidth="2.4" fill="none" strokeLinecap="round" />
+        <circle cx="68" cy="108" r="6" className="fill-accent" />
+        <path d="M150 214 C176 206 192 196 206 182" stroke="#ecc8a8" strokeWidth="20" fill="none" strokeLinecap="round" />
+      </svg>
+      <div className="absolute right-0 top-0 w-[58%] rotate-[4deg] rounded-[2rem] border-[6px] border-foreground/85 bg-background p-3 shadow-[0_24px_48px_-20px_rgba(16,24,32,0.35)]">
+        <div className="mx-auto mb-2.5 h-1.5 w-12 rounded-full bg-foreground/15" />
+        <p className="text-[10px] font-medium tracking-[0.14em] text-accent-strong uppercase">Etapa 2 · Valorarte</p>
+        <p className="mt-1 text-[13px] font-semibold leading-snug">Hola, Valen 👋</p>
+        <div className="mt-1.5 h-1.5 w-full rounded-full bg-surface-2">
+          <div className="h-1.5 w-2/5 rounded-full bg-primary" />
+        </div>
+        <div className="mt-3 rounded-xl bg-accent-soft p-2.5">
+          <p className="text-[10.5px] font-semibold text-accent-strong">Actividad 4</p>
+          <p className="mt-1 text-[11px] leading-snug">¿Qué cosas te hacen perder la noción del tiempo?</p>
+        </div>
+        <div className="mt-2 rounded-xl border bg-surface p-2.5 text-[11px] leading-snug text-muted-foreground">
+          Cuando dibujo o edito videos para mis amigos. También cuando ayudo a mi hermano con la tarea
+          <span className="ml-0.5 inline-block h-3 w-px animate-pulse bg-foreground align-middle" />
+        </div>
+        <div className="mt-2.5 rounded-lg bg-primary py-1.5 text-center text-[11px] font-semibold text-primary-foreground">
+          Enviar a mi orientadora
+        </div>
+        <div className="mt-2 rounded-lg bg-beige-soft px-2 py-1.5 text-[10px] text-beige-strong">
+          📌 Próxima sesión: jueves 18 h · online
+        </div>
+      </div>
     </div>
   )
 }
@@ -172,6 +262,7 @@ export default function LandingPage() {
         <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute left-1/2 top-[-140px] h-80 w-80 -translate-x-1/2 rounded-full bg-primary-soft opacity-70 blur-3xl" />
           <div className="absolute right-[-60px] top-24 h-64 w-64 rounded-full bg-accent-soft opacity-60 blur-3xl" />
+          <div className="absolute bottom-[-60px] left-[-40px] h-56 w-56 rounded-full bg-beige-soft opacity-80 blur-3xl" />
         </div>
         <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <p className="text-[12px] font-medium tracking-[0.16em] text-faint uppercase">
@@ -193,9 +284,14 @@ export default function LandingPage() {
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <a href="#como-funciona">Ver cómo funciona</a>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                <MessageCircle /> Escribime por WhatsApp
+              </a>
             </Button>
           </div>
+          <p className="mx-auto mt-8 max-w-md font-display text-[17px] italic leading-snug text-accent-strong">
+            “Orientar no es aplicar un test: es acompañar a alguien a encontrar su rumbo.”
+          </p>
           <p className="mt-6 text-[11.5px] text-faint">
             Creado por la Lic. Irene Morbidelli — Psicopedagoga, M.P. 260505
           </p>
@@ -228,7 +324,7 @@ export default function LandingPage() {
       {/* cómo funciona */}
       <Section id="como-funciona" className="border-t">
         <h2 className="text-center text-xl font-semibold tracking-tight sm:text-2xl">Cómo funciona</h2>
-        <div className="mt-8 grid gap-5 sm:grid-cols-3">
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {COMO_FUNCIONA.map((s) => (
             <div key={s.titulo} className="rounded-2xl border bg-background p-6">
               <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${s.bg}`}>
@@ -241,8 +337,65 @@ export default function LandingPage() {
         </div>
       </Section>
 
+      {/* app del consultante + modalidades */}
+      <Section className="border-t" tone="accent-soft">
+        <div className="grid items-center gap-10 md:grid-cols-2">
+          <div>
+            <p className="text-[12px] font-medium tracking-[0.16em] text-accent-strong uppercase">
+              La app también es para tu consultante
+            </p>
+            <h2 className="mt-3 text-xl font-semibold tracking-tight sm:text-2xl">
+              Le compartís la app y trabaja desde su celular
+            </h2>
+            <p className="mt-3 text-[14px] leading-relaxed text-muted-foreground">
+              Cada estudiante tiene su propio ingreso. Ahí responde las actividades del taller, escribe sus
+              reflexiones y ve su recorrido. Todo lo que hace te llega a vos y suma al informe final.
+            </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              {MODALIDADES.map((m) => (
+                <div key={m.titulo} className="rounded-xl border bg-background p-4">
+                  <m.icon className="h-4.5 w-4.5 text-primary-strong" />
+                  <p className="mt-2 text-[13.5px] font-semibold">{m.titulo}</p>
+                  <p className="mt-0.5 text-[12px] leading-snug text-muted-foreground">{m.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <PhoneScene />
+        </div>
+      </Section>
+
+      {/* diferencial: sin porcentajes */}
+      <Section className="border-t">
+        <p className="text-center text-[12px] font-medium tracking-[0.16em] text-primary-strong uppercase">
+          Lo que hace distinto a Método Brújula
+        </p>
+        <h2 className="mt-3 text-center text-xl font-semibold tracking-tight sm:text-2xl">
+          Sin porcentajes. Con motivos.
+        </h2>
+        <p className="mx-auto mt-3 max-w-2xl text-center text-[14.5px] leading-relaxed text-muted-foreground">
+          Ningún adolescente es “78% ingeniero”. El Motor Brújula cruza las actividades, las sesiones y tus
+          observaciones, y te devuelve una lectura en tres niveles, siempre con las evidencias que la
+          sostienen. También señala las tensiones entre lo que el consultante desea y lo que siente que
+          “debería” elegir.
+        </p>
+        <div className="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-3">
+          {LECTURAS.map((l) => (
+            <div key={l.nivel} className={`rounded-xl p-5 ${l.bg}`}>
+              <Compass className={`h-5 w-5 ${l.text}`} />
+              <p className={`mt-2.5 text-[14px] font-semibold ${l.text}`}>{l.nivel}</p>
+              <p className="mt-1 text-[12.5px] leading-relaxed text-foreground/75">{l.desc}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mx-auto mt-6 max-w-xl text-center text-[13px] text-muted-foreground">
+          Al cierre, el consultante recibe su <strong className="text-foreground">Carta de Navegación</strong>:
+          un documento propio con su recorrido y los próximos pasos.
+        </p>
+      </Section>
+
       {/* screenshots */}
-      <Section className="border-t" tone="surface-2">
+      <Section className="border-t" tone="beige-soft">
         <h2 className="text-center text-xl font-semibold tracking-tight sm:text-2xl">Así se ve por dentro</h2>
         <p className="mx-auto mt-2 max-w-lg text-center text-[13.5px] text-muted-foreground">
           Capturas reales de la plataforma, con datos de ejemplo.
@@ -258,9 +411,9 @@ export default function LandingPage() {
               <p className="mx-auto mt-1 max-w-md text-[13px] text-muted-foreground">{s.desc}</p>
               <div className="mx-auto mt-4 max-w-3xl overflow-hidden rounded-xl border bg-background shadow-[0_1px_2px_rgba(16,24,32,0.04),0_12px_32px_-12px_rgba(16,24,32,0.14)]">
                 <div className="flex items-center gap-1.5 border-b bg-surface-2 px-3.5 py-2.5">
-                  <span className="h-2.5 w-2.5 rounded-full bg-danger/40" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-warning/40" />
                   <span className="h-2.5 w-2.5 rounded-full bg-primary/40" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-accent/40" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-beige/60" />
                 </div>
                 <img src={s.src} alt={s.alt} loading="lazy" className="w-full" />
               </div>
@@ -275,12 +428,8 @@ export default function LandingPage() {
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {INCLUYE.map((f, i) => (
             <div key={f.titulo} className="rounded-xl border bg-background p-5">
-              <div
-                className={`flex h-9 w-9 items-center justify-center rounded-lg ${
-                  i % 2 === 0 ? 'bg-primary-soft' : 'bg-accent-soft'
-                }`}
-              >
-                <f.icon className={`h-4.5 w-4.5 ${i % 2 === 0 ? 'text-primary-strong' : 'text-accent-strong'}`} />
+              <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${TRIO[i % 3].bg}`}>
+                <f.icon className={`h-4.5 w-4.5 ${TRIO[i % 3].text}`} />
               </div>
               <p className="mt-3 text-[13.5px] font-semibold">{f.titulo}</p>
               <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">{f.desc}</p>
@@ -290,13 +439,13 @@ export default function LandingPage() {
       </Section>
 
       {/* beneficios */}
-      <Section className="border-t" tone="accent-soft">
+      <Section className="border-t" tone="beige-soft">
         <div className="mx-auto max-w-2xl">
           <h2 className="text-center text-xl font-semibold tracking-tight sm:text-2xl">Por qué usarlo</h2>
           <ul className="mt-6 space-y-3">
             {BENEFICIOS.map((b) => (
               <li key={b} className="flex items-start gap-2.5 text-[14px] leading-relaxed">
-                <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-accent-strong" />
+                <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-beige-strong" />
                 {b}
               </li>
             ))}
@@ -338,6 +487,14 @@ export default function LandingPage() {
               Quiero conocer Método Brújula <ArrowRight />
             </Link>
           </Button>
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 flex items-center justify-center gap-1.5 text-[13px] font-medium text-primary-strong hover:underline"
+          >
+            <MessageCircle className="h-4 w-4" /> ¿Tenés dudas? Escribime por WhatsApp
+          </a>
         </div>
       </Section>
 
@@ -353,7 +510,7 @@ export default function LandingPage() {
             accedan a Método Brújula a un precio preferencial — con el mismo modelo simple de siempre, cuenta
             por cuenta.
           </p>
-          <Button variant="outline" size="lg" className="mt-6" asChild>
+          <Button variant="outline" size="lg" className="mt-6 h-auto whitespace-normal py-2.5" asChild>
             <Link to="/registro">
               Quiero conocer la propuesta institucional <ArrowRight />
             </Link>
