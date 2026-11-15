@@ -21,6 +21,7 @@ import {
   Video,
   RefreshCw,
   MessageCircle,
+  Check,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import dashboardShot from '@/assets/landing/dashboard.png'
@@ -95,6 +96,19 @@ const TRIO = [
 const WHATSAPP_URL =
   'https://wa.me/5492216185376?text=Hola%20Irene%2C%20quiero%20conocer%20M%C3%A9todo%20Br%C3%BAjula.'
 
+const MEMBRESIA_INCLUYE = [
+  'Acceso completo a la plataforma durante 12 meses',
+  '15 días de acompañamiento personal para aprender a usarla',
+  'Todas las actualizaciones que se sumen en el año',
+  'Soporte por WhatsApp',
+]
+
+const PASOS_ALTA = [
+  'Te registrás en “Quiero conocer Método Brújula”.',
+  'Me escribís por WhatsApp y coordinamos el pago.',
+  'Activo tu cuenta y empezamos los 15 días de acompañamiento.',
+]
+
 const LECTURAS = [
   { nivel: 'Brújula firme', desc: 'Lo que aparece con fuerza y de forma sostenida en todo el proceso.', bg: 'bg-primary-soft', text: 'text-primary-strong' },
   { nivel: 'Rumbo posible', desc: 'Lo que asoma y vale la pena seguir mirando con el consultante.', bg: 'bg-accent-soft', text: 'text-accent-strong' },
@@ -144,7 +158,7 @@ const FAQ = [
   },
   {
     q: '¿Cuánto cuesta y cómo empiezo?',
-    a: 'Escribime desde el registro y coordinamos el valor y los detalles antes de activar tu cuenta — así arrancás con todas tus dudas resueltas.',
+    a: 'Es una membresía anual. Te registrás desde esta página, me escribís por WhatsApp y coordinamos el valor y el pago. Cuando lo confirmo, activo tu cuenta por 12 meses y arrancamos con los 15 días de acompañamiento.',
   },
 ]
 
@@ -475,13 +489,29 @@ export default function LandingPage() {
           <HeartHandshake className="mx-auto h-6 w-6 text-primary" />
           <h2 className="mt-3 text-lg font-semibold tracking-tight">Membresía anual</h2>
           <p className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground">
-            Acceso completo a la plataforma por un año. Las primeras profesionales que se suman acceden a un
+            Las primeras profesionales que se suman acceden a un
             <strong className="text-foreground"> precio de lanzamiento</strong>, más bajo que el valor
             regular.
           </p>
-          <p className="mt-2 text-[12.5px] text-faint">
-            Consultá el valor actual al escribir para registrarte — se coordina antes de activar la cuenta.
-          </p>
+          <ul className="mx-auto mt-5 max-w-xs space-y-2 text-left text-[13px]">
+            {MEMBRESIA_INCLUYE.map((item) => (
+              <li key={item} className="flex items-start gap-2">
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary-strong" />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <div className="mx-auto mt-6 max-w-xs rounded-xl bg-beige-soft p-4 text-left text-[12.5px] text-foreground/80">
+            <p className="mb-1.5 font-semibold text-beige-strong">Cómo empezás</p>
+            <ol className="space-y-1.5">
+              {PASOS_ALTA.map((paso, i) => (
+                <li key={paso} className="flex gap-2">
+                  <span className="font-semibold text-beige-strong">{i + 1}.</span>
+                  {paso}
+                </li>
+              ))}
+            </ol>
+          </div>
           <Button size="lg" className="mt-6" asChild>
             <Link to="/registro">
               Quiero conocer Método Brújula <ArrowRight />
