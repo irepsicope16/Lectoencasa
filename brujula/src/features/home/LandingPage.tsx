@@ -82,9 +82,8 @@ const INCLUYE = [
   { icon: Sparkles, titulo: 'Motor Brújula + Asistente IA', desc: 'Lectura del proceso por dimensiones y borradores de informe, siempre revisados por vos.' },
   { icon: Smartphone, titulo: 'Desde cualquier dispositivo', desc: 'Funciona en celular, tablet o computadora — se puede agregar como ícono en la pantalla de inicio.' },
   { icon: UserRound, titulo: 'Acceso para tu consultante', desc: 'Cada consultante tiene su propio ingreso, para hacer actividades entre sesión y sesión.' },
-  { icon: HeartHandshake, titulo: '15 días de acompañamiento', desc: 'Te acompaño personalmente durante los primeros 15 días para que aprendas a usar la herramienta.' },
   { icon: RefreshCw, titulo: 'Actualizaciones incluidas', desc: 'Cada mejora que se suma a la plataforma te llega sin costo extra.' },
-  { icon: MessageCircle, titulo: 'Soporte por WhatsApp', desc: 'Si te trabás con algo, me escribís directamente desde la app.' },
+  { icon: MessageCircle, titulo: 'Soporte por WhatsApp', desc: 'Si tenés una duda o te trabás con algo, me escribís directamente desde la app y te ayudo.' },
 ]
 
 // Los tres colores de marca, para alternar íconos sin salir de la paleta.
@@ -101,15 +100,14 @@ const WHATSAPP_URL =
 const MEMBRESIA_INCLUYE = [
   'Acceso completo a la plataforma durante 12 meses',
   'Consultantes ilimitados: sin límite de procesos',
-  '15 días de acompañamiento personal para aprender a usarla',
   'Todas las actualizaciones que se sumen en el año',
-  'Soporte por WhatsApp',
+  'Consultas y soporte directo conmigo por WhatsApp',
 ]
 
 const PASOS_ALTA = [
   'Te registrás en “Quiero conocer Método Brújula”.',
   'Me escribís por WhatsApp y coordinamos el pago.',
-  'Activo tu cuenta y empezamos los 15 días de acompañamiento.',
+  'Activo tu cuenta y ya podés empezar a trabajar.',
 ]
 
 const LECTURAS = [
@@ -161,7 +159,7 @@ const FAQ = [
   },
   {
     q: '¿Cuánto cuesta y cómo empiezo?',
-    a: 'Es una membresía anual. Te registrás desde esta página, me escribís por WhatsApp y coordinamos el valor y el pago. Cuando lo confirmo, activo tu cuenta por 12 meses y arrancamos con los 15 días de acompañamiento.',
+    a: 'Es una membresía anual. Te registrás desde esta página, me escribís por WhatsApp y coordinamos el valor y el pago. Cuando lo confirmo, activo tu cuenta por 12 meses. Y si en algún momento tenés dudas, me escribís por WhatsApp.',
   },
 ]
 
