@@ -22,6 +22,7 @@ import {
   RefreshCw,
   MessageCircle,
   Check,
+  Infinity as InfinityIcon,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import dashboardShot from '@/assets/landing/dashboard.png'
@@ -75,6 +76,7 @@ const MODALIDADES = [
 
 const INCLUYE = [
   { icon: Compass, titulo: 'El método completo', desc: 'Módulos organizados en 5 etapas, con actividades, videos y materiales para cada consultante.' },
+  { icon: InfinityIcon, titulo: 'Consultantes ilimitados', desc: 'Sumás todos los procesos que necesites: la membresía no tiene límite de consultantes.' },
   { icon: Users, titulo: 'Cuenta propia y privada', desc: 'Tu espacio queda aislado del de cualquier otra profesional: solo vos ves y trabajás con tus consultantes.' },
   { icon: FileText, titulo: 'Informes automáticos', desc: 'Profesional, Carta de Navegación, resumen para la familia y para el consultante — generados con los datos reales del proceso.' },
   { icon: Sparkles, titulo: 'Motor Brújula + Asistente IA', desc: 'Lectura del proceso por dimensiones y borradores de informe, siempre revisados por vos.' },
@@ -98,6 +100,7 @@ const WHATSAPP_URL =
 
 const MEMBRESIA_INCLUYE = [
   'Acceso completo a la plataforma durante 12 meses',
+  'Consultantes ilimitados: sin límite de procesos',
   '15 días de acompañamiento personal para aprender a usarla',
   'Todas las actualizaciones que se sumen en el año',
   'Soporte por WhatsApp',
@@ -523,7 +526,7 @@ export default function LandingPage() {
             rel="noopener noreferrer"
             className="mt-3 flex items-center justify-center gap-1.5 text-[13px] font-medium text-primary-strong hover:underline"
           >
-            <MessageCircle className="h-4 w-4" /> ¿Tenés dudas? Escribime por WhatsApp
+            <MessageCircle className="h-4 w-4" /> Consultá el valor por WhatsApp
           </a>
         </div>
       </Section>
