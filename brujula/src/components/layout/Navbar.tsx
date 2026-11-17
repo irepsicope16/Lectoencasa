@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { iniciales, nombreCompleto } from '@/lib/utils'
+import { InstallAppButton } from './InstallAppButton'
 
 export function Navbar({ role }: { role: UserRole }) {
   const user = useAuthStore((s) => s.user)
@@ -47,6 +48,7 @@ export function Navbar({ role }: { role: UserRole }) {
       </button>
 
       <div className="flex items-center gap-1.5">
+        <InstallAppButton />
         <button
           onClick={() => setTheme(isDark ? 'light' : 'dark')}
           className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
