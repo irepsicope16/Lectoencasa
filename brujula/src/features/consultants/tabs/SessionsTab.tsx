@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/dialog'
 import { EmptyState, StageStepper } from '@/components/shared'
 import { toast } from '@/components/ui/toast'
+import { DictationButton } from '@/components/ui/dictation-button'
 import { useCreate, useModuleProgress, useSessions, useUpdate } from '@/hooks/queries'
 import { fechaHora, formatMonto, nombreCompleto } from '@/lib/utils'
 import { useAuthStore } from '@/stores/authStore'
@@ -287,11 +288,28 @@ export function SessionsTab({ consultant }: { consultant: Consultant }) {
               </div>
             </div>
             <div className="col-span-2">
-              <Label>Notas de la sesión</Label>
+              <div className="mb-1 flex items-center justify-between">
+                <Label className="mb-0">Notas de la sesión</Label>
+                <DictationButton
+                  onText={(chunk) =>
+                    setForm((f) => ({ ...f, notas: f.notas ? `${f.notas} ${chunk}` : chunk }))
+                  }
+                />
+              </div>
               <Textarea value={form.notas} onChange={(e) => setForm({ ...form, notas: e.target.value })} className="min-h-[110px]" />
             </div>
             <div className="col-span-2">
-              <Label>Próximos pasos</Label>
+              <div className="mb-1 flex items-center justify-between">
+                <Label className="mb-0">Próximos pasos</Label>
+                <DictationButton
+                  onText={(chunk) =>
+                    setForm((f) => ({
+                      ...f,
+                      proximosPasos: f.proximosPasos ? `${f.proximosPasos} ${chunk}` : chunk,
+                    }))
+                  }
+                />
+              </div>
               <Textarea value={form.proximosPasos} onChange={(e) => setForm({ ...form, proximosPasos: e.target.value })} className="min-h-[60px]" />
             </div>
           </div>
